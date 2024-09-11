@@ -27,3 +27,11 @@ export const shuffle = <T>(
     ];
   }
 };
+
+export const generateNewSeed = (seed: number, index: number) => {
+  const random = mulberry32(seed);
+  for (let i = 0; i < index; i++) {
+    random();
+  }
+  return Math.round(random() * 10e15);
+};
