@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { LevelTrack } from "./modules/LevelTrack/index.tsx";
 import PWABadge from "./PWABadge.tsx";
-import { NormalLevel } from "./modules/NormalLevel/index.tsx";
+import { Level } from "./modules/Level/index.tsx";
 
 export const App: React.FC = () => {
   const [levelNr] = useState(0);
@@ -18,7 +18,18 @@ export const App: React.FC = () => {
           }}
         />
       )}
-      {inLevel && <NormalLevel levelNr={levelNr} seed={12345678901234} />}
+      {inLevel && (
+        <Level
+          amountColors={levelNr + 7}
+          stackSize={16}
+          buffers={3}
+          bufferSizes={4}
+          extraPlacementLimits={1}
+          extraPlacementStacks={1}
+          hideBlockTypes={true}
+          seed={12345678901234}
+        />
+      )}
       <PWABadge />
     </>
   );

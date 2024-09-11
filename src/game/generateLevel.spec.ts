@@ -33,6 +33,35 @@ describe(generateLevel, () => {
       ],
     });
   });
+
+  it("can generate a hidden level", () => {
+    const random = mulberry32(TEST_SEED);
+    const level = generateLevel(random, {
+      amountColors: 2,
+      stackSize: 4,
+      extraPlacementStacks: 2,
+      hideBlockTypes: true,
+    });
+    expect(level).toEqual({
+      colors: ["black", "green"],
+      columns: [
+        createPlacementColumn(4, [
+          createBlock("green"),
+          createBlock("black", true),
+          createBlock("green", true),
+          createBlock("green", true),
+        ]),
+        createPlacementColumn(4, [
+          createBlock("black"),
+          createBlock("black", true),
+          createBlock("green", true),
+          createBlock("black", true),
+        ]),
+        createPlacementColumn(4),
+        createPlacementColumn(4),
+      ],
+    });
+  });
 });
 
 describe(generatePlayableLevel, () => {

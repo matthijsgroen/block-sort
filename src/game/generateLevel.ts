@@ -10,8 +10,9 @@ import {
 import { hasWon, isStuck } from "./state";
 import { BlockColor, Column, LevelState } from "./types";
 
-type Settings = {
+export type LevelSettings = {
   amountColors?: number;
+  hideBlockTypes?: boolean;
   stackSize?: number;
   extraPlacementStacks?: number;
   extraPlacementLimits?: number;
@@ -21,7 +22,7 @@ type Settings = {
 
 export const generatePlayableLevel = (
   random: () => number,
-  settings: Settings
+  settings: LevelSettings
 ) => {
   let attempt = 0;
 
@@ -117,7 +118,8 @@ export const generateLevel = (
     extraPlacementLimits = 0,
     buffers = 0,
     bufferSizes = 1,
-  }: Settings
+    hideBlockTypes = false,
+  }: LevelSettings
 ): LevelState => {
   // Generate level, this should be extracted
   const availableColors = BLOCK_COLORS.slice();
@@ -139,7 +141,11 @@ export const generateLevel = (
     columns: timesMap<Column>(amountBars, () =>
       createPlacementColumn(
         stackSize,
-        new Array(stackSize).fill(0).map(() => createBlock(blocks.shift()!))
+        new Array(stackSize)
+          .fill(0)
+          .map((_, i) =>
+            createBlock(blocks.shift()!, hideBlockTypes && i !== 0)
+          )
       )
     )
       .concat(
