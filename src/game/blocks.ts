@@ -11,3 +11,19 @@ export const BLOCK_COLORS = [
   "brown", // toadstool
   "pink", // animal footprint
 ] as const;
+
+export type BlockColor = (typeof BLOCK_COLORS)[number];
+
+export const shapeMapping: Record<BlockColor, string> = {
+  black: "🎵",
+  brown: "🍄",
+  darkgreen: "🟢",
+  yellow: "🟡",
+  aqua: "⚡️",
+  pink: "🐾",
+  purple: "✡️",
+  blue: "☽",
+  red: "❌",
+  white: "🔲",
+  green: "🔶",
+};

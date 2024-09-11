@@ -3,6 +3,7 @@ import { timesMap } from "../../support/timeMap";
 import { BlockColor, LevelState } from "../../game/types";
 import { generateLevel } from "../../game/generateLevel";
 import { mulberry32 } from "../../support/random";
+import { shapeMapping } from "../../game/blocks";
 
 type Props = {
   levelNr: number;
@@ -52,8 +53,12 @@ export const NormalLevel: React.FC<Props> = ({
               {bar.blocks.map((b, p) => (
                 <div
                   key={p}
-                  className={`w-8 h-8 ${colorMap[b]} rounded-md border border-black`}
-                ></div>
+                  className={`w-8 h-8 ${
+                    colorMap[b.color]
+                  } rounded-md border border-black`}
+                >
+                  {shapeMapping[b.color]}
+                </div>
               ))}
             </div>
           ))}

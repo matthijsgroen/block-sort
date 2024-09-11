@@ -1,15 +1,20 @@
-import { BLOCK_COLORS } from "./blocks";
-
-export type BlockColor = (typeof BLOCK_COLORS)[number];
+import { BlockColor } from "./blocks";
+export { type BlockColor } from "./blocks";
 
 export type LevelState = {
   colors: BlockColor[];
   columns: Column[];
 };
 
+export type Block = {
+  color: BlockColor;
+  revealed?: boolean;
+};
+
 export type Column = {
   type: "placement" | "buffer";
+  locked: boolean;
   limitColor?: BlockColor;
   columnSize: number;
-  blocks: BlockColor[];
+  blocks: Block[];
 };

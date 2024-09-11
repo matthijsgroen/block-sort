@@ -1,19 +1,6 @@
-import { BlockColor, LevelState } from "./types";
+import { shapeMapping } from "./blocks";
+import { LevelState } from "./types";
 import process from "node:process";
-
-const colorMapping: Record<BlockColor, string> = {
-  black: "🎵",
-  brown: "🍄",
-  darkgreen: "🟢",
-  yellow: "🟡",
-  aqua: "⚡️",
-  pink: "🐾",
-  purple: "✡️",
-  blue: "☽",
-  red: "❌",
-  white: "🔲",
-  green: "🔶",
-};
 
 export const debugLevel = (level: LevelState) => {
   // top of columns
@@ -22,7 +9,7 @@ export const debugLevel = (level: LevelState) => {
       process.stdout.write("┌──┐ ");
     }
     if (col.type === "buffer") {
-      process.stdout.write("│  │ ");
+      process.stdout.write("     ");
     }
   }
   process.stdout.write("\n");
@@ -31,19 +18,23 @@ export const debugLevel = (level: LevelState) => {
     0
   );
 
-  for (let i = 0; i < maxHeight + 1; i++) {
+  for (let i = 0; i < maxHeight + 2; i++) {
     for (const col of level.columns) {
       if (i < col.columnSize) {
         const block = col.blocks[col.blocks.length - col.columnSize + i];
 
         if (block === undefined) {
           if (i < col.columnSize - 1) {
-            process.stdout.write("│__│ ");
+            process.stdout.write("│﹍│ ");
           } else {
             process.stdout.write("│  │ ");
           }
         } else {
-          process.stdout.write(`│${colorMapping[block]}│ `);
+          if (block.revealed === false) {
+            process.stdout.write(`│﹖│ `);
+          } else {
+            process.stdout.write(`│${shapeMapping[block.color]}│ `);
+          }
         }
       }
 
@@ -54,7 +45,9 @@ export const debugLevel = (level: LevelState) => {
           process.stdout.write("└──┘ ");
         }
       }
-      if (i > col.columnSize) {
+      if (i === col.columnSize + 1 && col.limitColor) {
+        process.stdout.write(` ${shapeMapping[col.limitColor]}  `);
+      } else if (i > col.columnSize) {
         process.stdout.write("     ");
       }
     }
