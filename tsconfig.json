@@ -24,6 +24,6 @@
     }
   },
   "include": ["src"],
-  "exclude": ["src/game/debugLevel.ts"],
+  // "exclude": ["src/game/debugLevel.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

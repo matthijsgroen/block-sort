@@ -20,13 +20,19 @@ export type LevelSettings = {
   bufferSizes?: number;
 };
 
-export const generatePlayableLevel = (
+const MAX_PLAY_ATTEMPTS = 20;
+const MAX_GENERATE_ATTEMPTS = 50;
+const MAX_LEVEL_MOVES = 1000;
+
+const delay = async (ms: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
+export const generatePlayableLevel = async (
   random: () => number,
   settings: LevelSettings
-): LevelState => {
+): Promise<LevelState> => {
   let attempt = 0;
-
-  while (attempt < 10) {
+  while (attempt < MAX_GENERATE_ATTEMPTS) {
     attempt++;
     const level = generateLevel(random, settings);
     if (isStuck(level)) {
@@ -46,7 +52,7 @@ const isBeatable = (
 ): [beatable: boolean, moves: number] => {
   let attempt = 0;
 
-  while (attempt < 10) {
+  while (attempt < MAX_PLAY_ATTEMPTS) {
     let playLevel = level;
     let moves = 0;
 
@@ -56,6 +62,9 @@ const isBeatable = (
         break;
       } else {
         moves++;
+        if (moves > MAX_LEVEL_MOVES) {
+          break;
+        }
         playLevel = moveBlocks(playLevel, nextMove[0], nextMove[1]);
       }
       if (hasWon(playLevel)) {
@@ -86,10 +95,14 @@ const getMove = (
     const destinations = level.columns.reduce<number[]>((r, c, destination) => {
       if (destination === source) return r;
       const destBlock = c.blocks[0];
+
+      // TODO: Needs refactor for readability
+      if (destBlock?.color === block.color && c.columnSize > c.blocks.length) {
+        return r.concat(destination);
+      }
       if (
-        (destBlock?.color === block.color ||
-          (destBlock === undefined &&
-            (c.limitColor === undefined || c.limitColor === block.color))) &&
+        destBlock === undefined &&
+        (c.limitColor === undefined || c.limitColor === block.color) &&
         c.columnSize > c.blocks.length
       ) {
         return r.concat(destination);

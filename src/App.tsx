@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { LevelTrack } from "./modules/LevelTrack/index.tsx";
 import PWABadge from "./PWABadge.tsx";
-import { Level } from "./modules/Level/index.tsx";
+import { LevelLoader } from "./modules/Level/index.tsx";
 import { generateNewSeed, mulberry32 } from "./support/random.ts";
 import {
   getHardSettings,
@@ -13,7 +13,7 @@ import { isHard, isSpecial } from "./modules/LevelTrack/levelType.ts";
 const BASE_SEED = 12345678901234;
 
 export const App: React.FC = () => {
-  const [levelNr, setLevelNr] = useState(0);
+  const [levelNr, setLevelNr] = useState(7);
 
   const [levelSeed, setLevelSeed] = useState(() =>
     generateNewSeed(BASE_SEED, levelNr)
@@ -46,7 +46,7 @@ export const App: React.FC = () => {
         />
       )}
       {inLevel && (
-        <Level
+        <LevelLoader
           onComplete={(won) => {
             setInLevel(false);
             if (won) {

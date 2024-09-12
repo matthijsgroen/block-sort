@@ -14,7 +14,7 @@ export const getNormalSettings = (
   random: () => number,
   levelNr: number
 ): LevelSettings => {
-  const amountColors = levelNr === 0 ? 2 : getSetting(levelNr, 3, 9, 0, 1); // 3, 9, 4, 4
+  const amountColors = levelNr === 0 ? 2 : getSetting(levelNr, 3, 7, 4, 4);
   const stackSize = 4;
 
   return {

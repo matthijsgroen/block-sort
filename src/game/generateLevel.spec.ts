@@ -65,9 +65,9 @@ describe(generateLevel, () => {
 });
 
 describe(generatePlayableLevel, () => {
-  it("generates a simple level", () => {
+  it("generates a simple level", async () => {
     const random = mulberry32(TEST_SEED);
-    const level = generatePlayableLevel(random, {
+    const level = await generatePlayableLevel(random, {
       amountColors: 2,
       stackSize: 4,
       extraPlacementStacks: 2,
@@ -94,9 +94,9 @@ describe(generatePlayableLevel, () => {
     });
   });
 
-  it("generates a complex level", () => {
+  it("generates a complex level", async () => {
     const random = mulberry32(TEST_SEED);
-    const level = generatePlayableLevel(random, {
+    const level = await generatePlayableLevel(random, {
       amountColors: 7,
       stackSize: 4,
       extraPlacementStacks: 2,
@@ -105,9 +105,9 @@ describe(generatePlayableLevel, () => {
     expect(level.movesNeeded).toEqual(39);
   });
 
-  it("generates a complex level (buffers / force)", () => {
+  it("generates a complex level (buffers / force)", async () => {
     const random = mulberry32(TEST_SEED);
-    const level = generatePlayableLevel(random, {
+    const level = await generatePlayableLevel(random, {
       amountColors: 4,
       stackSize: 16,
       extraPlacementStacks: 1,
@@ -121,11 +121,12 @@ describe(generatePlayableLevel, () => {
 
   it("throws an error if it can't generate a playable level", () => {
     const random = mulberry32(TEST_SEED);
-    expect(() =>
-      generatePlayableLevel(random, {
-        amountColors: 1,
-        extraPlacementStacks: 0,
-      })
-    ).toThrowError("Can't generate playable level");
+    expect(
+      async () =>
+        await generatePlayableLevel(random, {
+          amountColors: 1,
+          extraPlacementStacks: 0,
+        })
+    ).rejects.toThrow("Can't generate playable level");
   });
 });
