@@ -42,7 +42,7 @@ export const getHardSettings = (levelNr: number): LevelSettings => {
 export const getSpecialSettings = (levelNr: number): LevelSettings => {
   const amountColors = levelNr === 0 ? 2 : getSetting(levelNr, 3, 7, 4, 4);
 
-  const specialIndex = Math.floor((levelNr - 6) / 10) % 4;
+  const specialIndex = Math.floor(levelNr / 10) % 4;
 
   const templates: LevelSettings[] = [
     {

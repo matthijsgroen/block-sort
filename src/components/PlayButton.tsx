@@ -13,7 +13,9 @@ export const PlayButton: React.FC<Props> = ({
 }) => (
   <button
     onClick={onClick}
-    className="inline-block w-[10rem] h-12 bg-orange-500 rounded-3xl shadow-lg font-bold pt-3"
+    className={`inline-block w-[10rem] h-12 ${
+      special ? "bg-purple-500" : "bg-orange-500"
+    } rounded-3xl shadow-lg font-bold pt-3`}
   >
     <span
       className={`block ${(hard || special) == false ? "-translate-y-1" : ""}`}

@@ -14,8 +14,8 @@ export default {
       },
       keyframes: {
         place: {
-          "0%": { transform: "translateY(-1rem)" },
-          "80%": { transform: "translateY(0.1rem)" },
+          "0%": { transform: "translateY(-2rem)" },
+          "80%": { transform: "translateY(0.2rem)" },
           "100%": { transform: "translateY(0)" },
         },
         wobble: {
