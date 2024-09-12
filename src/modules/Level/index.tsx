@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { timesMap } from "../../support/timeMap";
-import { LevelState } from "../../game/types";
-import { generatePlayableLevel, LevelSettings } from "../../game/generateLevel";
-import { mulberry32 } from "../../support/random";
-import { shapeMapping } from "../../game/blocks";
-import { moveBlocks, selectFromColumn } from "../../game/actions";
-import { hasWon, isStuck } from "../../game/state";
-import { Block } from "../../components/Block";
+import { timesMap } from "@/support/timeMap";
+import { LevelState } from "@/game/types";
+import { generatePlayableLevel, LevelSettings } from "@/game/generateLevel";
+import { mulberry32 } from "@/support/random";
+import { shapeMapping } from "@/game/blocks";
+import { moveBlocks, selectFromColumn } from "@/game/actions";
+import { hasWon, isStuck } from "@/game/state";
+import { Block } from "@/components/Block";
 
 type Props = {
   seed: number;
@@ -27,6 +27,7 @@ export const Level: React.FC<Props> = ({
   const [selectStart, setSelectStart] = useState<
     [column: number, amount: number] | null
   >(null);
+  const [moves, setMoves] = useState(0);
 
   useEffect(() => {
     if (hasWon(levelState)) {
@@ -58,24 +59,32 @@ export const Level: React.FC<Props> = ({
         </button>
         <button
           onClick={() => {
+            setPlayState("won");
+          }}
+        >
+          🎉
+        </button>
+        <button
+          onClick={() => {
             setLevelState(() => {
               const random = mulberry32(seed);
               return generatePlayableLevel(random, levelSettings);
             });
             setPlayState("busy");
+            setMoves(0);
           }}
         >
           🔄
         </button>
       </div>
-      {playState === "won" && <h1>You won!</h1>}
+      {playState === "won" && <h1>Well done!</h1>}
       {playState === "lost" && <h1>You lost!</h1>}
-      <div className="flex justify-center p-8">
-        <div className="inline-flex flex-row gap-4 mx-auto">
+      <div className="flex flex-wrap justify-center p-8">
+        <div className="inline-flex flex-row flex-wrap gap-4 mx-auto">
           {levelState.columns.map((bar, i) => (
             <div key={i}>
               <div
-                className={`border-2 border-black bg-black/20 cursor-pointer ${
+                className={`border-2 border-block-brown bg-black/20 cursor-pointer ${
                   bar.type === "buffer"
                     ? "border-t-0 rounded-b-md"
                     : "rounded-md shadow-inner"
@@ -85,6 +94,7 @@ export const Level: React.FC<Props> = ({
                     setLevelState((levelState) =>
                       moveBlocks(levelState, selectStart[0], i)
                     );
+                    setMoves((m) => m + 1);
                     setSelectStart(null);
                   } else {
                     const selection = selectFromColumn(levelState, i);
@@ -96,11 +106,11 @@ export const Level: React.FC<Props> = ({
               >
                 {timesMap(bar.columnSize - bar.blocks.length, (p, l) =>
                   p === l - 1 && bar.limitColor ? (
-                    <div key={p} className="w-8 h-8 text-center pt-2">
+                    <div key={p} className="size-10 text-center pt-2">
                       {shapeMapping[bar.limitColor]}
                     </div>
                   ) : (
-                    <div key={p} className="w-8 h-8"></div>
+                    <div key={p} className="size-10"></div>
                   )
                 )}
                 {bar.blocks.map((b, p) => {
@@ -108,7 +118,9 @@ export const Level: React.FC<Props> = ({
                     selectStart && p < selectStart[1] && i === selectStart[0];
                   return (
                     <Block
-                      key={p}
+                      key={bar.columnSize - bar.blocks.length + p}
+                      locked={bar.locked}
+                      moved={moves !== 0}
                       revealed={b.revealed}
                       color={b.color}
                       selected={isSelected}
@@ -118,6 +130,23 @@ export const Level: React.FC<Props> = ({
               </div>
             </div>
           ))}
+        </div>
+      </div>
+      <div className="p-4">
+        <h2 className="text-xl">Debug</h2>
+        {Object.entries(levelSettings).map(([k, v]) => (
+          <div>
+            <label className="font-bold">{k}:</label>
+            <output className="pl-1">
+              {v}
+              {v === true && "yes"}
+              {v === false && "no"}
+            </output>
+          </div>
+        ))}
+        <div>
+          <label className="font-bold">Beated in:</label>
+          <output className="pl-1">{levelState.movesNeeded} moves</output>
         </div>
       </div>
     </div>

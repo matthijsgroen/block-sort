@@ -90,6 +90,7 @@ describe(generatePlayableLevel, () => {
         createPlacementColumn(4),
         createPlacementColumn(4),
       ],
+      movesNeeded: 10,
     });
   });
 
@@ -101,6 +102,7 @@ describe(generatePlayableLevel, () => {
       extraPlacementStacks: 2,
     });
     expect(level.colors).toHaveLength(7);
+    expect(level.movesNeeded).toEqual(39);
   });
 
   it("generates a complex level (buffers / force)", () => {
@@ -114,6 +116,7 @@ describe(generatePlayableLevel, () => {
       bufferSizes: 4,
     });
     expect(level.colors).toHaveLength(4);
+    expect(level.movesNeeded).toEqual(259);
   });
 
   it("throws an error if it can't generate a playable level", () => {

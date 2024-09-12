@@ -1,4 +1,5 @@
 import { PlayButton } from "../../components/PlayButton";
+import { isHard, isSpecial } from "./levelType";
 
 type Props = {
   levelNr: number;
@@ -17,7 +18,7 @@ const translates = [
 ];
 
 export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
-  const startNumbering = Math.floor(levelNr / 10);
+  const startNumbering = Math.max(Math.floor(levelNr - 5), 0);
 
   const levelNrs = new Array(13).fill(0).map((_, i) => startNumbering + i);
 
@@ -34,11 +35,15 @@ export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
               className={`${translates[offset]} whitespace-nowrap leading-8 h-9 align-middle`}
             >
               {i + 1}&nbsp;
-              <span className="inline-block border w-8 h-8 align-top rounded-md text-center">
-                {i < levelNr && "✔"}
+              <span className="inline-block border w-8 h-8 align-top rounded-md text-center bg-black/30">
+                {i < levelNr && (
+                  <span className="bg-green-500 bg-clip-text text-transparent">
+                    ✔
+                  </span>
+                )}
                 {i == levelNr && "😀"}
-                {i > levelNr && (i + 1) % 10 === 6 && "⭐️"}
-                {i > levelNr && (i + 1) % 10 === 8 && "️🔥"}
+                {i > levelNr && isSpecial(i) && "⭐️"}
+                {i > levelNr && isHard(i) && "️🔥"}
               </span>
             </li>
           );
@@ -48,8 +53,8 @@ export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
         <PlayButton
           levelNr={levelNr + 1}
           onClick={onLevelStart}
-          special={(levelNr + 1) % 10 === 6}
-          hard={(levelNr + 1) % 10 === 8}
+          special={isSpecial(levelNr)}
+          hard={isHard(levelNr)}
         />
       </div>
     </div>

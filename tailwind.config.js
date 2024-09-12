@@ -4,14 +4,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        "block-red": "#ff0000",
+        "block-red": "#dd0000",
         "block-white": "#eeeeee",
-        "block-brown": "#895129",
+        "block-brown": "#A07353",
       },
       animation: {
         wobble: "wobble 1s ease-in-out both infinite",
+        place: "place 0.2s ease-in-out forwards",
       },
       keyframes: {
+        place: {
+          "0%": { transform: "translateY(-1rem)" },
+          "80%": { transform: "translateY(0.1rem)" },
+          "100%": { transform: "translateY(0)" },
+        },
         wobble: {
           "0%": { rotate: "5deg" },
           "50%": { rotate: "-5deg" },

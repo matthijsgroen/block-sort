@@ -23,43 +23,49 @@ export type LevelSettings = {
 export const generatePlayableLevel = (
   random: () => number,
   settings: LevelSettings
-) => {
+): LevelState => {
   let attempt = 0;
 
-  while (attempt < 100) {
+  while (attempt < 10) {
     attempt++;
     const level = generateLevel(random, settings);
     if (isStuck(level)) {
       continue;
     }
-    if (isBeatable(random, level)) {
-      return level;
+    const [beatable, moves] = isBeatable(random, level);
+    if (beatable) {
+      return { ...level, movesNeeded: moves };
     }
   }
   throw new Error("Can't generate playable level");
 };
 
-const isBeatable = (random: () => number, level: LevelState): boolean => {
+const isBeatable = (
+  random: () => number,
+  level: LevelState
+): [beatable: boolean, moves: number] => {
   let attempt = 0;
 
-  while (attempt < 50) {
+  while (attempt < 10) {
     let playLevel = level;
+    let moves = 0;
 
     while (!isStuck(playLevel)) {
       const nextMove = getMove(random, playLevel);
       if (!nextMove) {
         break;
       } else {
+        moves++;
         playLevel = moveBlocks(playLevel, nextMove[0], nextMove[1]);
       }
       if (hasWon(playLevel)) {
-        return true;
+        return [true, moves];
       }
     }
     attempt++;
   }
 
-  return false;
+  return [false, 0];
 };
 
 const getMove = (

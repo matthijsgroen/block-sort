@@ -4,6 +4,7 @@ export { type BlockColor } from "./blocks";
 export type LevelState = {
   colors: BlockColor[];
   columns: Column[];
+  movesNeeded?: number;
 };
 
 export type Block = {
