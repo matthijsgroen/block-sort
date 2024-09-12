@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { LevelTrack } from "./modules/LevelTrack/index.tsx";
 import PWABadge from "./PWABadge.tsx";
 import { Level } from "./modules/Level/index.tsx";
