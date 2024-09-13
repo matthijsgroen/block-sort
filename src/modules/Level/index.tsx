@@ -1,9 +1,7 @@
 import { Suspense, useMemo } from "react";
 
-import {
-  generatePlayableLevel,
-  LevelSettings,
-} from "@/game/level-creation/random-creation";
+import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
+import { generatePlayableLevel } from "@/game/level-creation/random-creation";
 import { mulberry32 } from "@/support/random";
 
 import { Level } from "./Level";
@@ -23,7 +21,7 @@ export const LevelLoader: React.FC<Props> = ({
   const level = useMemo(() => {
     const random = mulberry32(seed);
     console.log("generating level");
-    return generatePlayableLevel(random, levelSettings);
+    return generatePlayableLevel(levelSettings, random);
   }, [seed, JSON.stringify(levelSettings)]);
   console.log("render", seed, JSON.stringify(levelSettings));
 

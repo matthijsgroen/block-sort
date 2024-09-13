@@ -3,7 +3,7 @@ import { use, useEffect, useState } from "react";
 import { Block } from "@/components/Block";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { shapeMapping } from "@/game/blocks";
-import { LevelSettings } from "@/game/level-creation/random-creation";
+import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { hasWon, isStuck } from "@/game/state";
 import { LevelState } from "@/game/types";
 import { timesMap } from "@/support/timeMap";

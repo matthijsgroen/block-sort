@@ -1,4 +1,4 @@
-import { LevelSettings } from "./level-creation/random-creation";
+import { LevelSettings } from "./level-creation/generateRandomLevel";
 
 const getSetting = (
   level: number,
