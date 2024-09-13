@@ -9,6 +9,7 @@ export const createLevelState = (columns: Column[]): LevelState => {
       ),
     []
   );
+  colors.sort()
 
   return {
     colors,

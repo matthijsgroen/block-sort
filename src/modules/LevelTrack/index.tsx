@@ -1,6 +1,7 @@
 import { PlayButton } from "../../components/PlayButton";
 
 import { isHard, isSpecial } from "./levelType";
+import styles from "./levelTrack.module.css"
 
 type Props = {
   levelNr: number;
@@ -25,7 +26,7 @@ export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <h1 className="text-3xl mb-2">Block sort</h1>
+      <h1 className="text-3xl mb-2 font-extrabold mt-2">Block sort</h1>
 
       <ol className="flex flex-col-reverse w-12 mx-auto">
         {levelNrs.map((i) => {
@@ -36,9 +37,9 @@ export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
               className={`${translates[offset]} whitespace-nowrap leading-8 h-9 align-middle`}
             >
               {i + 1}&nbsp;
-              <span className="inline-block border w-8 h-8 align-top rounded-md text-center bg-black/30">
+              <span className="inline-block border border-block-brown w-8 h-8 align-top rounded-md text-center bg-black/30">
                 {i < levelNr && (
-                  <span className="bg-green-500 bg-clip-text text-transparent">
+                  <span className={`bg-green-500 bg-clip-text text-transparent ${styles.doneGlow}`}>
                     ✔
                   </span>
                 )}

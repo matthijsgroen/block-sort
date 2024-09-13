@@ -113,7 +113,7 @@ describe(moveBlocks, () => {
 
     const result = moveBlocks(level, 0, 3);
     const expected: LevelState = {
-      colors: ["white", "black", "green"],
+      colors: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, [createBlock("black"), createBlock("green")]),
         createPlacementColumn(4, [
@@ -218,7 +218,7 @@ describe(moveBlocks, () => {
 
     const result = moveBlocks(level, 0, 3);
     const expected: LevelState = {
-      colors: ["white", "black", "green"],
+      colors: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, [createBlock("black"), createBlock("green")]),
         createPlacementColumn(4, [
@@ -271,7 +271,7 @@ describe(moveBlocks, () => {
 
     const result = moveBlocks(level, 0, 3);
     const expected: LevelState = {
-      colors: ["white", "black", "green"],
+      colors: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, [
           createBlock("white"),
@@ -324,7 +324,7 @@ describe(moveBlocks, () => {
     const result = moveBlocks(level, 0, 3);
 
     const expected: LevelState = {
-      colors: ["white", "black", "green"],
+      colors: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, [
           createBlock("black"),
