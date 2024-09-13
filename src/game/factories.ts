@@ -1,4 +1,21 @@
-import { Block, BlockColor, Column } from "./types";
+import { Block, BlockColor, Column, LevelState } from "./types";
+
+export const createLevelState = (columns: Column[]): LevelState => {
+  const colors = columns.reduce<BlockColor[]>(
+    (r, c) =>
+      c.blocks.reduce<BlockColor[]>(
+        (r, b) => (r.includes(b.color) ? r : r.concat(b.color)),
+        r
+      ),
+    []
+  );
+
+  return {
+    colors,
+    columns,
+    moves: [],
+  };
+};
 
 export const createPlacementColumn = (
   size: number,

@@ -1,7 +1,7 @@
 import { use, useEffect, useState } from "react";
 import { timesMap } from "@/support/timeMap";
 import { LevelState } from "@/game/types";
-import { LevelSettings } from "@/game/generateLevel";
+import { LevelSettings } from "@/game/level-creation/random-creation";
 import { shapeMapping } from "@/game/blocks";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { hasWon, isStuck } from "@/game/state";

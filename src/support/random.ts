@@ -35,3 +35,6 @@ export const generateNewSeed = (seed: number, index: number) => {
   }
   return Math.round(random() * 10e15);
 };
+
+export const pick = <T>(list: T[], random: () => number = Math.random): T =>
+  list[Math.floor(random() * list.length)];

@@ -1,7 +1,10 @@
 import { Suspense, useMemo } from "react";
 import { mulberry32 } from "@/support/random";
 import { Level } from "./Level";
-import { generatePlayableLevel, LevelSettings } from "@/game/generateLevel";
+import {
+  generatePlayableLevel,
+  LevelSettings,
+} from "@/game/level-creation/random-creation";
 import { Settings } from "./Settings";
 
 type Props = {

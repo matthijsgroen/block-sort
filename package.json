@@ -15,6 +15,7 @@
     "react-dom": "19.0.0-rc-d6cb4e77-20240911"
   },
   "devDependencies": {
+    "@types/node": "^22.5.4",
     "@types/react": "npm:types-react@rc",
     "@types/react-dom": "npm:types-react-dom@rc",
     "@typescript-eslint/eslint-plugin": "^7.8.0",

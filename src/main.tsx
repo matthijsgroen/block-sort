@@ -8,3 +8,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <App />
   </React.StrictMode>
 );
+
+// screen.orientation.lock("portrait") // Not yet supported...

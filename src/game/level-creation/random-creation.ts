@@ -1,14 +1,14 @@
-import { shuffle } from "../support/random";
-import { timesMap } from "../support/timeMap";
-import { moveBlocks } from "./actions";
-import { BLOCK_COLORS } from "./blocks";
+import { shuffle } from "../../support/random";
+import { timesMap } from "../../support/timeMap";
+import { moveBlocks } from "../actions";
+import { BLOCK_COLORS } from "../blocks";
 import {
   createBlock,
   createBufferColumn,
   createPlacementColumn,
-} from "./factories";
-import { hasWon, isStuck } from "./state";
-import { BlockColor, Column, LevelState } from "./types";
+} from "../factories";
+import { hasWon, isStuck } from "../state";
+import { BlockColor, Column, LevelState, Move } from "../types";
 
 export type LevelSettings = {
   amountColors?: number;
@@ -24,9 +24,6 @@ const MAX_PLAY_ATTEMPTS = 20;
 const MAX_GENERATE_ATTEMPTS = 50;
 const MAX_LEVEL_MOVES = 1000;
 
-const delay = async (ms: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, ms));
-
 export const generatePlayableLevel = async (
   random: () => number,
   settings: LevelSettings
@@ -40,7 +37,7 @@ export const generatePlayableLevel = async (
     }
     const [beatable, moves] = isBeatable(random, level);
     if (beatable) {
-      return { ...level, movesNeeded: moves };
+      return { ...level, moves };
     }
   }
   throw new Error("Can't generate playable level");
@@ -49,23 +46,23 @@ export const generatePlayableLevel = async (
 const isBeatable = (
   random: () => number,
   level: LevelState
-): [beatable: boolean, moves: number] => {
+): [beatable: boolean, moves: Move[]] => {
   let attempt = 0;
 
   while (attempt < MAX_PLAY_ATTEMPTS) {
     let playLevel = level;
-    let moves = 0;
+    const moves: Move[] = [];
 
     while (!isStuck(playLevel)) {
       const nextMove = getMove(random, playLevel);
       if (!nextMove) {
         break;
       } else {
-        moves++;
-        if (moves > MAX_LEVEL_MOVES) {
+        if (moves.length > MAX_LEVEL_MOVES) {
           break;
         }
-        playLevel = moveBlocks(playLevel, nextMove[0], nextMove[1]);
+        moves.push(nextMove);
+        playLevel = moveBlocks(playLevel, nextMove.from, nextMove.to);
       }
       if (hasWon(playLevel)) {
         return [true, moves];
@@ -74,13 +71,10 @@ const isBeatable = (
     attempt++;
   }
 
-  return [false, 0];
+  return [false, []];
 };
 
-const getMove = (
-  random: () => number,
-  level: LevelState
-): [from: number, to: number] | null => {
+const getMove = (random: () => number, level: LevelState): Move | null => {
   const sourceOptions = level.columns.reduce<
     { source: number; destinations: number[] }[]
   >((r, c, source) => {
@@ -125,7 +119,7 @@ const getMove = (
     random() * (source.destinations.length - 1)
   );
 
-  return [source.source, source.destinations[pickDestination]];
+  return { from: source.source, to: source.destinations[pickDestination] };
 };
 
 export const generateLevel = (
@@ -173,5 +167,6 @@ export const generateLevel = (
         )
       )
       .concat(timesMap(buffers, () => createBufferColumn(bufferSizes))),
+    moves: [],
   };
 };

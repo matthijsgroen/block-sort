@@ -1,4 +1,4 @@
-import { LevelSettings } from "@/game/generateLevel";
+import { LevelSettings } from "@/game/level-creation/random-creation";
 import { LevelState } from "@/game/types";
 
 type Props = {
@@ -22,7 +22,7 @@ export const Settings: React.FC<Props> = ({ levelSettings, level }) => (
     {level && (
       <div>
         <label className="font-bold">Beated in:</label>
-        <output className="pl-1">{level.movesNeeded} moves</output>
+        <output className="pl-1">{level.moves.length} moves</output>
       </div>
     )}
   </div>

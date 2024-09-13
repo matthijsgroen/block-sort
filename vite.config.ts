@@ -17,10 +17,11 @@ export default defineConfig({
       },
 
       manifest: {
-        name: "block-sorting",
-        short_name: "block-sorting",
+        name: "Block Sort",
+        short_name: "Block Sort",
         description: "Sort the stacks of blocks",
-        theme_color: "#ffffff",
+        theme_color: "#a52a2a",
+        background_color: "#a52a2a",
       },
 
       workbox: {
