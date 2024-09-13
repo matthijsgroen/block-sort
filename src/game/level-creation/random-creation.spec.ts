@@ -1,7 +1,9 @@
-import { expect, it, describe } from "vitest";
-import { generateLevel, generatePlayableLevel } from "./random-creation";
+import { describe,expect, it } from "vitest";
+
 import { mulberry32 } from "../../support/random";
 import { createBlock, createPlacementColumn } from "../factories";
+
+import { generateLevel, generatePlayableLevel } from "./random-creation";
 
 const TEST_SEED = 123456789;
 

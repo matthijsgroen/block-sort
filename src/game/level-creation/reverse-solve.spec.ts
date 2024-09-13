@@ -1,7 +1,9 @@
 import { describe, it } from "vitest";
-import { generateLevel } from "./reverse-solve";
-import { mulberry32 } from "@/support/random";
+
 import { debugLevel } from "@/game/debugLevel";
+import { mulberry32 } from "@/support/random";
+
+import { generateLevel } from "./reverse-solve";
 
 const TEST_SEED = 123456789;
 

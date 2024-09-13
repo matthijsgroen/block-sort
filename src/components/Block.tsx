@@ -1,5 +1,6 @@
 import { shapeMapping } from "../game/blocks";
 import { BlockColor } from "../game/types";
+
 import styles from "./Block.module.css";
 
 export type Props = {

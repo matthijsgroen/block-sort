@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { canPlaceAmount } from "./state";
-import { LevelState } from "./types";
+
+import { moveBlocks } from "./actions";
 import {
   createBlock,
   createLevelState,
   createPlacementColumn,
 } from "./factories";
-import { moveBlocks } from "./actions";
+import { canPlaceAmount } from "./state";
+import { LevelState } from "./types";
 
 describe(canPlaceAmount, () => {
   it("returns the amount that fits", () => {

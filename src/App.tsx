@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { LevelTrack } from "./modules/LevelTrack/index.tsx";
-import PWABadge from "./PWABadge.tsx";
-import { LevelLoader } from "./modules/Level/index.tsx";
-import { generateNewSeed, mulberry32 } from "./support/random.ts";
+
 import {
   getHardSettings,
   getNormalSettings,
   getSpecialSettings,
 } from "./game/levelSettings.ts";
+import { LevelLoader } from "./modules/Level/index.tsx";
+import { LevelTrack } from "./modules/LevelTrack/index.tsx";
 import { isHard, isSpecial } from "./modules/LevelTrack/levelType.ts";
+import { generateNewSeed, mulberry32 } from "./support/random.ts";
+import PWABadge from "./PWABadge.tsx";
 
 const BASE_SEED = 12345678901234;
 
@@ -54,7 +55,7 @@ export const App: React.FC = () => {
             }
           }}
           seed={levelSeed}
-          {...settings}
+          levelSettings={settings}
         />
       )}
       <PWABadge />

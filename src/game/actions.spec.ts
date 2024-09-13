@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { selectFromColumn } from "./actions";
+
 import { mulberry32 } from "../support/random";
+
 import { generateLevel } from "./level-creation/random-creation";
+import { selectFromColumn } from "./actions";
 import {
   createBlock,
   createLevelState,

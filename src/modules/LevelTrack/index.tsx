@@ -1,4 +1,5 @@
 import { PlayButton } from "../../components/PlayButton";
+
 import { isHard, isSpecial } from "./levelType";
 
 type Props = {

@@ -1,22 +1,25 @@
 import { use, useEffect, useState } from "react";
-import { timesMap } from "@/support/timeMap";
-import { LevelState } from "@/game/types";
-import { LevelSettings } from "@/game/level-creation/random-creation";
-import { shapeMapping } from "@/game/blocks";
-import { moveBlocks, selectFromColumn } from "@/game/actions";
-import { hasWon, isStuck } from "@/game/state";
+
 import { Block } from "@/components/Block";
+import { moveBlocks, selectFromColumn } from "@/game/actions";
+import { shapeMapping } from "@/game/blocks";
+import { LevelSettings } from "@/game/level-creation/random-creation";
+import { hasWon, isStuck } from "@/game/state";
+import { LevelState } from "@/game/types";
+import { timesMap } from "@/support/timeMap";
+
 import { Settings } from "./Settings";
 
 type Props = {
   onComplete: (won: boolean) => void;
   level: Promise<LevelState>;
-} & LevelSettings;
+  levelSettings: LevelSettings;
+};
 
 export const Level: React.FC<Props> = ({
   onComplete,
   level,
-  ...levelSettings
+  levelSettings,
 }) => {
   const [playState, setPlayState] = useState<"won" | "lost" | "busy">("busy");
 

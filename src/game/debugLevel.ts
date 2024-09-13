@@ -1,6 +1,7 @@
+import process from "node:process";
+
 import { shapeMapping } from "./blocks";
 import { LevelState } from "./types";
-import process from "node:process";
 
 export const print = (text: string) => process.stdout.write(`${text}\n`);
 
