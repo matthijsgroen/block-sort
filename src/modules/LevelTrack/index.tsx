@@ -1,6 +1,7 @@
 import { PlayButton } from "../../components/PlayButton";
 
 import { isHard, isSpecial } from "./levelType";
+
 import styles from "./levelTrack.module.css"
 
 type Props = {
