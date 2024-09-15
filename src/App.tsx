@@ -28,7 +28,7 @@ export const App: React.FC = () => {
   }, [levelNr]);
 
   const special = isSpecial(levelNr);
-  const hard = isHard(levelNr);
+  const hard = !special && isHard(levelNr);
   const random = mulberry32(levelSeed);
 
   const settings = hard

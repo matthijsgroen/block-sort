@@ -48,7 +48,7 @@ export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
                 )}
                 {i == levelNr && "😀"}
                 {i > levelNr && isSpecial(i) && "⭐️"}
-                {i > levelNr && isHard(i) && "️🔥"}
+                {i > levelNr && !isSpecial(i) && isHard(i) && "️🔥"}
               </span>
             </li>
           );

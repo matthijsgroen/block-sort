@@ -84,5 +84,5 @@ export const getSpecialSettings = (
   return pick(templates, random);
 };
 
-export const isSpecial = (levelNr: number) => (levelNr + 1) % 2 === 0;
+export const isSpecial = (levelNr: number) => (levelNr + 1) % 9 === 0;
 export const isHard = (levelNr: number) => (levelNr + 1) % 7 === 0;
