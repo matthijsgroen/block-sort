@@ -27,6 +27,12 @@ export default {
           "100%": { rotate: "5deg" },
         },
       },
+      gridTemplateRows: {
+        16: "grid-template-rows: repeat(16, minmax(0, 1fr));",
+      },
+      gridRow: {
+        "span-16": "span 16 / span 16",
+      },
     },
   },
   plugins: [],

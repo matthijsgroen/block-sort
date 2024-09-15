@@ -1,7 +1,7 @@
 import { Suspense, useMemo } from "react";
 
 import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
-import { generatePlayableLevel } from "@/game/level-creation/random-creation";
+import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { mulberry32 } from "@/support/random";
 
 import { Level } from "./Level";

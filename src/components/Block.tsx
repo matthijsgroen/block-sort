@@ -11,7 +11,7 @@ export type Props = {
   locked?: boolean | null;
 };
 
-const colorMap: Record<BlockColor, string> = {
+export const colorMap: Record<BlockColor, string> = {
   red: "bg-block-red",
   white: "bg-block-white",
   yellow: "bg-yellow-500",

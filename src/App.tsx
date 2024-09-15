@@ -4,10 +4,11 @@ import {
   getHardSettings,
   getNormalSettings,
   getSpecialSettings,
+  isHard,
+  isSpecial,
 } from "./game/levelSettings.ts";
 import { LevelLoader } from "./modules/Level/index.tsx";
 import { LevelTrack } from "./modules/LevelTrack/index.tsx";
-import { isHard, isSpecial } from "./modules/LevelTrack/levelType.ts";
 import { generateNewSeed, mulberry32 } from "./support/random.ts";
 import PWABadge from "./PWABadge.tsx";
 
@@ -31,10 +32,10 @@ export const App: React.FC = () => {
   const random = mulberry32(levelSeed);
 
   const settings = hard
-    ? getHardSettings(levelNr)
+    ? getHardSettings(levelNr, random)
     : special
-    ? getSpecialSettings(levelNr)
-    : getNormalSettings(random, levelNr);
+      ? getSpecialSettings(levelNr)
+      : getNormalSettings(levelNr, random);
 
   return (
     <>

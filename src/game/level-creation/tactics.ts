@@ -12,17 +12,20 @@ import { generateRandomLevel, LevelSettings } from "./generateRandomLevel";
 
 const MAX_PLAY_ATTEMPTS = 5;
 const MAX_GENERATE_ATTEMPTS = 40;
-const MAX_LEVEL_MOVES = 100;
+const MAX_LEVEL_MOVES = 500;
 
 const tactics: Tactic[] = [randomMove, startColumn, stackColumn];
 
-export const generatePlayableLevel = (
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+export const generatePlayableLevel = async (
   settings: LevelSettings,
   random = Math.random
-): LevelState => {
+): Promise<LevelState> => {
   let attempt = 0;
   while (attempt < MAX_GENERATE_ATTEMPTS) {
     attempt++;
+    delay(4);
     const level = generateRandomLevel(settings, random);
     if (isStuck(level)) {
       continue;

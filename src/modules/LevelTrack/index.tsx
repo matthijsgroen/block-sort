@@ -1,8 +1,8 @@
+import { isHard, isSpecial } from "@/game/levelSettings";
+
 import { PlayButton } from "../../components/PlayButton";
 
-import { isHard, isSpecial } from "./levelType";
-
-import styles from "./levelTrack.module.css"
+import styles from "./levelTrack.module.css";
 
 type Props = {
   levelNr: number;
@@ -40,7 +40,9 @@ export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
               {i + 1}&nbsp;
               <span className="inline-block border border-block-brown w-8 h-8 align-top rounded-md text-center bg-black/30">
                 {i < levelNr && (
-                  <span className={`bg-green-500 bg-clip-text text-transparent ${styles.doneGlow}`}>
+                  <span
+                    className={`bg-green-500 bg-clip-text text-transparent ${styles.doneGlow}`}
+                  >
                     ✔
                   </span>
                 )}
