@@ -1,6 +1,6 @@
-import './PWABadge.css'
-
 import { useRegisterSW } from 'virtual:pwa-register/react'
+
+import './PWABadge.css'
 
 function PWABadge() {
   // periodic sync is disabled, change the value to enable it, the period is in milliseconds

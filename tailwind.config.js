@@ -3,6 +3,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      spacing: {
+        block: "2rem",
+      },
       colors: {
         "block-red": "#dd0000",
         "block-white": "#eeeeee",
@@ -23,6 +26,12 @@ export default {
           "50%": { rotate: "-5deg" },
           "100%": { rotate: "5deg" },
         },
+      },
+      gridTemplateRows: {
+        16: "grid-template-rows: repeat(16, minmax(0, 1fr));",
+      },
+      gridRow: {
+        "span-16": "span 16 / span 16",
       },
     },
   },

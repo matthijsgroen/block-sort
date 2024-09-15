@@ -1,58 +1,57 @@
 import { shapeMapping } from "./blocks";
 import { LevelState } from "./types";
-import process from "node:process";
-
-export const print = (text: string) => process.stdout.write(`${text}\n`);
 
 export const debugLevel = (level: LevelState) => {
   // top of columns
+  let lineStr = "";
   for (const col of level.columns) {
     if (col.type === "placement") {
-      process.stdout.write("┌──┐ ");
+      lineStr += "┌──┐ ";
     }
     if (col.type === "buffer") {
-      process.stdout.write("     ");
+      lineStr += "     ";
     }
   }
-  process.stdout.write("\n");
+  console.log(lineStr);
   const maxHeight = level.columns.reduce(
     (r, c) => Math.max(r, c.columnSize),
     0
   );
 
   for (let i = 0; i < maxHeight + 2; i++) {
+    lineStr = "";
     for (const col of level.columns) {
       if (i < col.columnSize) {
         const block = col.blocks[col.blocks.length - col.columnSize + i];
 
         if (block === undefined) {
           if (i < col.columnSize - 1) {
-            process.stdout.write("│﹍│ ");
+            lineStr += "│﹍│ ";
           } else {
-            process.stdout.write("│  │ ");
+            lineStr += "│  │ ";
           }
         } else {
           if (block.revealed === false) {
-            process.stdout.write(`│﹖│ `);
+            lineStr += `│﹖│ `;
           } else {
-            process.stdout.write(`│${shapeMapping[block.color]}│ `);
+            lineStr += `│${shapeMapping[block.color]}│ `;
           }
         }
       }
 
       if (i === col.columnSize) {
         if (col.type === "placement") {
-          process.stdout.write("╘══╛ ");
+          lineStr += "╘══╛ ";
         } else {
-          process.stdout.write("└──┘ ");
+          lineStr += "└──┘ ";
         }
       }
       if (i === col.columnSize + 1 && col.limitColor) {
-        process.stdout.write(` ${shapeMapping[col.limitColor]}  `);
+        lineStr += ` ${shapeMapping[col.limitColor]}  `;
       } else if (i > col.columnSize) {
-        process.stdout.write("     ");
+        lineStr += "     ";
       }
     }
-    process.stdout.write("\n");
+    console.log(lineStr);
   }
 };

@@ -9,6 +9,7 @@ export const createLevelState = (columns: Column[]): LevelState => {
       ),
     []
   );
+  colors.sort();
 
   return {
     colors,
@@ -45,3 +46,6 @@ export const createBlock = (color: BlockColor, hidden?: boolean) => ({
   color,
   revealed: hidden !== true,
 });
+
+export const createBlocks = (...color: BlockColor[]) =>
+  color.map((c) => createBlock(c));

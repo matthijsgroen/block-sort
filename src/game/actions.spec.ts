@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { selectFromColumn } from "./actions";
+
 import { mulberry32 } from "../support/random";
-import { generateLevel } from "./level-creation/random-creation";
+
+import { generateRandomLevel } from "./level-creation/generateRandomLevel";
+import { selectFromColumn } from "./actions";
 import {
   createBlock,
   createLevelState,
@@ -14,22 +16,28 @@ const TEST_SEED = 123456789;
 describe(selectFromColumn, () => {
   it("selects the top of a column with the same color", () => {
     const random = mulberry32(TEST_SEED);
-    const level = generateLevel(random, {
-      amountColors: 2,
-      stackSize: 4,
-      extraPlacementStacks: 1,
-    });
+    const level = generateRandomLevel(
+      {
+        amountColors: 2,
+        stackSize: 4,
+        extraPlacementStacks: 1,
+      },
+      random
+    );
     const blocks = selectFromColumn(level, 0);
     expect(blocks).toEqual([createBlock("green")]);
   });
 
   it("selects the top of a column with the same color (multiple)", () => {
     const random = mulberry32(TEST_SEED);
-    const level = generateLevel(random, {
-      amountColors: 2,
-      stackSize: 4,
-      extraPlacementStacks: 1,
-    });
+    const level = generateRandomLevel(
+      {
+        amountColors: 2,
+        stackSize: 4,
+        extraPlacementStacks: 1,
+      },
+      random
+    );
     const blocks = selectFromColumn(level, 1);
     expect(blocks).toEqual([createBlock("black"), createBlock("black")]);
   });
@@ -56,11 +64,14 @@ describe(selectFromColumn, () => {
 
   it("selects the top of an empty column", () => {
     const random = mulberry32(TEST_SEED);
-    const level = generateLevel(random, {
-      amountColors: 2,
-      stackSize: 4,
-      extraPlacementStacks: 1,
-    });
+    const level = generateRandomLevel(
+      {
+        amountColors: 2,
+        stackSize: 4,
+        extraPlacementStacks: 1,
+      },
+      random
+    );
     const blocks = selectFromColumn(level, 2);
     expect(blocks).toEqual([]);
   });

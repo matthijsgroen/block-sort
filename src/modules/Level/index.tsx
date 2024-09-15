@@ -1,27 +1,27 @@
 import { Suspense, useMemo } from "react";
+
+import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
+import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { mulberry32 } from "@/support/random";
+
 import { Level } from "./Level";
-import {
-  generatePlayableLevel,
-  LevelSettings,
-} from "@/game/level-creation/random-creation";
 import { Settings } from "./Settings";
 
 type Props = {
   seed: number;
   onComplete: (won: boolean) => void;
-} & LevelSettings;
+  levelSettings: LevelSettings;
+};
 
 export const LevelLoader: React.FC<Props> = ({
   seed,
   onComplete,
-  ...levelSettings
+  levelSettings,
 }) => {
   const level = useMemo(() => {
     const random = mulberry32(seed);
     console.log("generating level");
-    return generatePlayableLevel(random, levelSettings);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return generatePlayableLevel(levelSettings, random);
   }, [seed, JSON.stringify(levelSettings)]);
   console.log("render", seed, JSON.stringify(levelSettings));
 
@@ -36,7 +36,11 @@ export const LevelLoader: React.FC<Props> = ({
         </div>
       }
     >
-      <Level level={level} {...levelSettings} onComplete={onComplete} />
+      <Level
+        level={level}
+        levelSettings={levelSettings}
+        onComplete={onComplete}
+      />
     </Suspense>
   );
 };

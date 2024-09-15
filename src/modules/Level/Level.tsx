@@ -1,22 +1,41 @@
 import { use, useEffect, useState } from "react";
-import { timesMap } from "@/support/timeMap";
-import { LevelState } from "@/game/types";
-import { LevelSettings } from "@/game/level-creation/random-creation";
-import { shapeMapping } from "@/game/blocks";
+
+import { Block, colorMap } from "@/components/Block";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
+import { shapeMapping } from "@/game/blocks";
+import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { hasWon, isStuck } from "@/game/state";
-import { Block } from "@/components/Block";
+import { LevelState } from "@/game/types";
+import { timesMap } from "@/support/timeMap";
+
 import { Settings } from "./Settings";
 
 type Props = {
   onComplete: (won: boolean) => void;
   level: Promise<LevelState>;
-} & LevelSettings;
+  levelSettings: LevelSettings;
+};
+
+const rowSpans: Record<number, string> = {
+  1: "row-span-1",
+  2: "row-span-2",
+  4: "row-span-4",
+  8: "row-span-8",
+  16: "row-span-16",
+};
+
+const rowSizes: Record<number, string> = {
+  1: "grid-rows-1",
+  2: "grid-rows-2",
+  4: "grid-rows-4",
+  8: "grid-rows-8",
+  16: "grid-rows-16",
+};
 
 export const Level: React.FC<Props> = ({
   onComplete,
   level,
-  ...levelSettings
+  levelSettings,
 }) => {
   const [playState, setPlayState] = useState<"won" | "lost" | "busy">("busy");
 
@@ -42,7 +61,7 @@ export const Level: React.FC<Props> = ({
     }
     const timeOut = setTimeout(() => {
       onComplete(playState === "won");
-    }, 2000);
+    }, 20);
     return () => clearTimeout(timeOut);
   }, [playState, onComplete]);
 
@@ -76,9 +95,11 @@ export const Level: React.FC<Props> = ({
       {playState === "won" && <h1>Well done!</h1>}
       {playState === "lost" && <h1>You lost!</h1>}
       <div className="flex flex-wrap justify-center p-8">
-        <div className="inline-flex flex-row flex-wrap gap-4 mx-auto">
+        <div
+          className={`grid grid-flow-dense grid-cols-6 gap-4 ${rowSizes[levelState.columns.reduce((r, c) => Math.max(r, c.columnSize), 0)]}`}
+        >
           {levelState.columns.map((bar, i) => (
-            <div key={i}>
+            <div key={i} className={rowSpans[bar.columnSize]}>
               <div
                 className={`border-2 border-block-brown bg-black/20 cursor-pointer ${
                   bar.type === "buffer"
@@ -102,11 +123,14 @@ export const Level: React.FC<Props> = ({
               >
                 {timesMap(bar.columnSize - bar.blocks.length, (p, l) =>
                   p === l - 1 && bar.limitColor ? (
-                    <div key={p} className="size-10 text-center pt-2">
+                    <div
+                      key={p}
+                      className={`size-block text-center pt-2 ${colorMap[bar.limitColor]} bg-clip-text text-transparent`}
+                    >
                       {shapeMapping[bar.limitColor]}
                     </div>
                   ) : (
-                    <div key={p} className="size-10"></div>
+                    <div key={p} className="size-block"></div>
                   )
                 )}
                 {bar.blocks.map((b, p) => {

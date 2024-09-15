@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
-import { LevelTrack } from "./modules/LevelTrack/index.tsx";
-import PWABadge from "./PWABadge.tsx";
-import { LevelLoader } from "./modules/Level/index.tsx";
-import { generateNewSeed, mulberry32 } from "./support/random.ts";
+
 import {
   getHardSettings,
   getNormalSettings,
   getSpecialSettings,
+  isHard,
+  isSpecial,
 } from "./game/levelSettings.ts";
-import { isHard, isSpecial } from "./modules/LevelTrack/levelType.ts";
+import { LevelLoader } from "./modules/Level/index.tsx";
+import { LevelTrack } from "./modules/LevelTrack/index.tsx";
+import { generateNewSeed, mulberry32 } from "./support/random.ts";
+import PWABadge from "./PWABadge.tsx";
 
 const BASE_SEED = 12345678901234;
 
 export const App: React.FC = () => {
-  const [levelNr, setLevelNr] = useState(7);
+  const [levelNr, setLevelNr] = useState(0);
 
   const [levelSeed, setLevelSeed] = useState(() =>
     generateNewSeed(BASE_SEED, levelNr)
@@ -30,10 +32,10 @@ export const App: React.FC = () => {
   const random = mulberry32(levelSeed);
 
   const settings = hard
-    ? getHardSettings(levelNr)
+    ? getHardSettings(levelNr, random)
     : special
-    ? getSpecialSettings(levelNr)
-    : getNormalSettings(random, levelNr);
+      ? getSpecialSettings(levelNr)
+      : getNormalSettings(levelNr, random);
 
   return (
     <>
@@ -54,7 +56,7 @@ export const App: React.FC = () => {
             }
           }}
           seed={levelSeed}
-          {...settings}
+          levelSettings={settings}
         />
       )}
       <PWABadge />

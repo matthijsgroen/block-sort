@@ -1,4 +1,4 @@
-import { LevelSettings } from "@/game/level-creation/random-creation";
+import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { LevelState } from "@/game/types";
 
 type Props = {

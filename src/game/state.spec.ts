@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { canPlaceAmount } from "./state";
-import { LevelState } from "./types";
+
+import { moveBlocks } from "./actions";
 import {
   createBlock,
   createLevelState,
   createPlacementColumn,
 } from "./factories";
-import { moveBlocks } from "./actions";
+import { canPlaceAmount } from "./state";
+import { LevelState } from "./types";
 
 describe(canPlaceAmount, () => {
   it("returns the amount that fits", () => {
@@ -112,7 +113,7 @@ describe(moveBlocks, () => {
 
     const result = moveBlocks(level, 0, 3);
     const expected: LevelState = {
-      colors: ["white", "black", "green"],
+      colors: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, [createBlock("black"), createBlock("green")]),
         createPlacementColumn(4, [
@@ -217,7 +218,7 @@ describe(moveBlocks, () => {
 
     const result = moveBlocks(level, 0, 3);
     const expected: LevelState = {
-      colors: ["white", "black", "green"],
+      colors: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, [createBlock("black"), createBlock("green")]),
         createPlacementColumn(4, [
@@ -270,7 +271,7 @@ describe(moveBlocks, () => {
 
     const result = moveBlocks(level, 0, 3);
     const expected: LevelState = {
-      colors: ["white", "black", "green"],
+      colors: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, [
           createBlock("white"),
@@ -323,7 +324,7 @@ describe(moveBlocks, () => {
     const result = moveBlocks(level, 0, 3);
 
     const expected: LevelState = {
-      colors: ["white", "black", "green"],
+      colors: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, [
           createBlock("black"),

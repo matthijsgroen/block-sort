@@ -1,41 +1,25 @@
-import { shuffle } from "../../support/random";
-import { timesMap } from "../../support/timeMap";
 import { moveBlocks } from "../actions";
-import { BLOCK_COLORS } from "../blocks";
-import {
-  createBlock,
-  createBufferColumn,
-  createPlacementColumn,
-} from "../factories";
 import { hasWon, isStuck } from "../state";
-import { BlockColor, Column, LevelState, Move } from "../types";
+import { LevelState, Move } from "../types";
 
-export type LevelSettings = {
-  amountColors?: number;
-  hideBlockTypes?: boolean;
-  stackSize?: number;
-  extraPlacementStacks?: number;
-  extraPlacementLimits?: number;
-  buffers?: number;
-  bufferSizes?: number;
-};
+import { generateRandomLevel, LevelSettings } from "./generateRandomLevel";
 
-const MAX_PLAY_ATTEMPTS = 20;
-const MAX_GENERATE_ATTEMPTS = 50;
+const MAX_PLAY_ATTEMPTS = 10;
+const MAX_GENERATE_ATTEMPTS = 10;
 const MAX_LEVEL_MOVES = 1000;
 
 export const generatePlayableLevel = async (
-  random: () => number,
-  settings: LevelSettings
+  settings: LevelSettings,
+  random: () => number
 ): Promise<LevelState> => {
   let attempt = 0;
   while (attempt < MAX_GENERATE_ATTEMPTS) {
     attempt++;
-    const level = generateLevel(random, settings);
+    const level = generateRandomLevel(settings, random);
     if (isStuck(level)) {
       continue;
     }
-    const [beatable, moves] = isBeatable(random, level);
+    const [beatable, moves] = isBeatable(level, random);
     if (beatable) {
       return { ...level, moves };
     }
@@ -44,8 +28,8 @@ export const generatePlayableLevel = async (
 };
 
 const isBeatable = (
-  random: () => number,
-  level: LevelState
+  level: LevelState,
+  random = Math.random
 ): [beatable: boolean, moves: Move[]] => {
   let attempt = 0;
 
@@ -120,53 +104,4 @@ const getMove = (random: () => number, level: LevelState): Move | null => {
   );
 
   return { from: source.source, to: source.destinations[pickDestination] };
-};
-
-export const generateLevel = (
-  random: () => number,
-  {
-    amountColors = 2,
-    stackSize = 4,
-    extraPlacementStacks = 2,
-    extraPlacementLimits = 0,
-    buffers = 0,
-    bufferSizes = 1,
-    hideBlockTypes = false,
-  }: LevelSettings
-): LevelState => {
-  // Generate level, this should be extracted
-  const availableColors = BLOCK_COLORS.slice();
-  shuffle(availableColors, random);
-
-  const blockColors = availableColors.slice(0, amountColors);
-  const placementLimits =
-    extraPlacementLimits > 0 ? blockColors.slice(-extraPlacementLimits) : [];
-
-  const amountBars = Math.min(amountColors, 7);
-  const blocks: BlockColor[] = [];
-  for (const color of blockColors) {
-    blocks.push(...new Array(stackSize).fill(color));
-  }
-  shuffle(blocks, random);
-
-  return {
-    colors: blockColors,
-    columns: timesMap<Column>(amountBars, () =>
-      createPlacementColumn(
-        stackSize,
-        new Array(stackSize)
-          .fill(0)
-          .map((_, i) =>
-            createBlock(blocks.shift()!, hideBlockTypes && i !== 0)
-          )
-      )
-    )
-      .concat(
-        timesMap(extraPlacementStacks, (i) =>
-          createPlacementColumn(stackSize, [], placementLimits[i])
-        )
-      )
-      .concat(timesMap(buffers, () => createBufferColumn(bufferSizes))),
-    moves: [],
-  };
 };

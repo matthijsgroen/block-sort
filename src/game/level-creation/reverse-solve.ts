@@ -1,13 +1,15 @@
+import { produce } from "immer";
+
 import { pick, shuffle } from "@/support/random";
-import { BLOCK_COLORS, BlockColor } from "../blocks";
-import { Column, LevelState } from "../types";
 import { timesMap } from "@/support/timeMap";
+
+import { BLOCK_COLORS, BlockColor } from "../blocks";
 import {
   createBlock,
   createBufferColumn,
   createPlacementColumn,
 } from "../factories";
-import { produce } from "immer";
+import { Column, LevelState } from "../types";
 
 export type LevelSettings = {
   amountColors?: number;

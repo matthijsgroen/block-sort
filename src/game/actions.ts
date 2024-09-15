@@ -1,6 +1,7 @@
 import { produce } from "immer";
-import { Block, BlockColor, LevelState } from "./types";
+
 import { canPlaceAmount } from "./state";
+import { Block, BlockColor, LevelState } from "./types";
 
 export const selectFromColumn = (
   level: LevelState,
