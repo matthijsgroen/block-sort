@@ -1,19 +1,20 @@
-import { pickWeighted, Weighted } from "@/support/random";
+import { pickWeighted } from "@/support/random";
 
 import { moveBlocks } from "../actions";
-import { debugLevel } from "../debugLevel";
 import { hasWon, isStuck } from "../state";
 import { LevelState, Move } from "../types";
 
 import { randomMove } from "./tactics/randomMove";
-import { Tactic } from "./tactics/types";
+import { stackColumn } from "./tactics/stackColumn";
+import { startColumn } from "./tactics/startColumn";
+import { Tactic, WeightedMove } from "./tactics/types";
 import { generateRandomLevel, LevelSettings } from "./generateRandomLevel";
 
-const MAX_PLAY_ATTEMPTS = 20;
-const MAX_GENERATE_ATTEMPTS = 50;
-const MAX_LEVEL_MOVES = 1000;
+const MAX_PLAY_ATTEMPTS = 5;
+const MAX_GENERATE_ATTEMPTS = 40;
+const MAX_LEVEL_MOVES = 100;
 
-const tactics: Tactic[] = [randomMove];
+const tactics: Tactic[] = [randomMove, startColumn, stackColumn];
 
 export const generatePlayableLevel = (
   settings: LevelSettings,
@@ -26,9 +27,20 @@ export const generatePlayableLevel = (
     if (isStuck(level)) {
       continue;
     }
-    debugLevel(level);
     const [beatable, moves] = isBeatable(level, random);
     if (beatable) {
+      if (
+        settings.minimalAmountOfMoves !== undefined &&
+        moves.length < settings.minimalAmountOfMoves
+      ) {
+        continue;
+      }
+      if (
+        settings.maximalAmountOfMoves !== undefined &&
+        moves.length > settings.maximalAmountOfMoves
+      ) {
+        continue;
+      }
       return { ...level, moves };
     }
   }
@@ -46,10 +58,11 @@ const isBeatable = (
     const moves: Move[] = [];
 
     while (!isStuck(playLevel)) {
-      const potentialMoves = tactics.reduce<Weighted<{ move: Move }>[]>(
-        (r, tactic) => r.concat(tactic(level, random)),
+      const potentialMoves = tactics.reduce<WeightedMove[]>(
+        (r, tactic) => r.concat(tactic(playLevel, random)),
         []
       );
+
       const nextMove = pickWeighted(potentialMoves, random);
 
       if (!nextMove) {
@@ -58,7 +71,9 @@ const isBeatable = (
         if (moves.length > MAX_LEVEL_MOVES) {
           break;
         }
+
         moves.push(nextMove.move);
+
         playLevel = moveBlocks(playLevel, nextMove.move.from, nextMove.move.to);
       }
       if (hasWon(playLevel)) {

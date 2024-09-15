@@ -3,6 +3,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      spacing: {
+        block: "2rem",
+      },
       colors: {
         "block-red": "#dd0000",
         "block-white": "#eeeeee",

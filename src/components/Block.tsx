@@ -33,7 +33,7 @@ export const Block: React.FC<Props> = ({
   locked = false,
 }) => (
   <div
-    className={`relative size-10 text-center animate-place ${
+    className={`relative size-block text-center animate-place ${
       moved ? "" : "[animation-duration:0ms]"
     } ${
       revealed === false ? "bg-slate-500" : colorMap[color]
@@ -44,15 +44,15 @@ export const Block: React.FC<Props> = ({
         : ""
     }`}
   >
-    <div className={`absolute z-10 size-10 pt-2 rounded-md`}>
+    <div className={`absolute z-10 size-block pt-1 rounded-md`}>
       <span className={`inline-block ${styles.shape}`}>
         {revealed === false ? "?" : shapeMapping[color]}
       </span>
     </div>
-    <div className={`absolute size-10 rounded-md ${styles.texture}`}></div>
-    <div className={`absolute size-10 rounded-md ${styles.gradient}`}></div>
+    <div className={`absolute size-block rounded-md ${styles.texture}`}></div>
+    <div className={`absolute size-block rounded-md ${styles.gradient}`}></div>
     <div
-      className={`absolute size-10 -top-[2px] -left-[2px] ${
+      className={`absolute size-block -top-[2px] -left-[2px] ${
         styles.gradientLocked
       } ${locked ? "opacity-100" : "opacity-0"}`}
     ></div>

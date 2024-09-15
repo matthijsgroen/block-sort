@@ -46,8 +46,8 @@ export const pickWeighted = <T>(
   random = Math.random
 ): Weighted<T> => {
   const totalWeight = items.reduce((r, item) => r + item.weight, 0);
-
   let pick = Math.floor(totalWeight * random());
+
   const item = items.find((item) => {
     pick -= item.weight;
     return pick <= 0;

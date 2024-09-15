@@ -105,11 +105,11 @@ export const Level: React.FC<Props> = ({
               >
                 {timesMap(bar.columnSize - bar.blocks.length, (p, l) =>
                   p === l - 1 && bar.limitColor ? (
-                    <div key={p} className="size-10 text-center pt-2">
+                    <div key={p} className="size-block text-center pt-2">
                       {shapeMapping[bar.limitColor]}
                     </div>
                   ) : (
-                    <div key={p} className="size-10"></div>
+                    <div key={p} className="size-block"></div>
                   )
                 )}
                 {bar.blocks.map((b, p) => {

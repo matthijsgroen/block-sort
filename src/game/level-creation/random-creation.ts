@@ -4,8 +4,8 @@ import { LevelState, Move } from "../types";
 
 import { generateRandomLevel, LevelSettings } from "./generateRandomLevel";
 
-const MAX_PLAY_ATTEMPTS = 20;
-const MAX_GENERATE_ATTEMPTS = 50;
+const MAX_PLAY_ATTEMPTS = 10;
+const MAX_GENERATE_ATTEMPTS = 10;
 const MAX_LEVEL_MOVES = 1000;
 
 export const generatePlayableLevel = async (
@@ -19,7 +19,7 @@ export const generatePlayableLevel = async (
     if (isStuck(level)) {
       continue;
     }
-    const [beatable, moves] = isBeatable(random, level);
+    const [beatable, moves] = isBeatable(level, random);
     if (beatable) {
       return { ...level, moves };
     }
@@ -28,8 +28,8 @@ export const generatePlayableLevel = async (
 };
 
 const isBeatable = (
-  random: () => number,
-  level: LevelState
+  level: LevelState,
+  random = Math.random
 ): [beatable: boolean, moves: Move[]] => {
   let attempt = 0;
 

@@ -1,3 +1,4 @@
+import { canPlaceBlock } from "./support";
 import { Tactic } from "./types";
 
 export const randomMove: Tactic = (level, random = Math.random) => {
@@ -14,17 +15,8 @@ export const randomMove: Tactic = (level, random = Math.random) => {
 
     const destinations = level.columns.reduce<number[]>((r, c, destination) => {
       if (destination === source) return r;
-      const destBlock = c.blocks[0];
 
-      // TODO: Needs refactor for readability
-      if (destBlock?.color === block.color && c.columnSize > c.blocks.length) {
-        return r.concat(destination);
-      }
-      if (
-        destBlock === undefined &&
-        (c.limitColor === undefined || c.limitColor === block.color) &&
-        c.columnSize > c.blocks.length
-      ) {
+      if (canPlaceBlock(c, block)) {
         return r.concat(destination);
       }
 
@@ -45,5 +37,11 @@ export const randomMove: Tactic = (level, random = Math.random) => {
     random() * (source.destinations.length - 1)
   );
 
-  return  [{ move: { from: source.source, to: source.destinations[pickDestination] }, weight: 1 }]
+  return [
+    {
+      name: "randomMove",
+      move: { from: source.source, to: source.destinations[pickDestination] },
+      weight: 1,
+    },
+  ];
 };

@@ -18,6 +18,8 @@ export type LevelSettings = {
   extraPlacementLimits?: number;
   buffers?: number;
   bufferSizes?: number;
+  minimalAmountOfMoves?: number;
+  maximalAmountOfMoves?: number;
 };
 
 export const generateRandomLevel = (
@@ -40,7 +42,7 @@ export const generateRandomLevel = (
   const placementLimits =
     extraPlacementLimits > 0 ? blockColors.slice(-extraPlacementLimits) : [];
 
-  const amountBars = Math.min(amountColors, 7);
+  const amountBars = amountColors;
   const blocks: BlockColor[] = [];
   for (const color of blockColors) {
     blocks.push(...new Array(stackSize).fill(color));
