@@ -7,6 +7,7 @@ import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { hasWon, isStuck } from "@/game/state";
 import { LevelState } from "@/game/types";
 import { timesMap } from "@/support/timeMap";
+import { useGameStorage } from "@/support/useGameStorage";
 
 import { Settings } from "./Settings";
 
@@ -41,7 +42,10 @@ export const Level: React.FC<Props> = ({
 
   const initialLevelState = use(level);
 
-  const [levelState, setLevelState] = useState<LevelState>(initialLevelState);
+  const [levelState, setLevelState] = useGameStorage<LevelState>(
+    "levelState",
+    initialLevelState
+  );
   const [selectStart, setSelectStart] = useState<
     [column: number, amount: number] | null
   >(null);
@@ -94,7 +98,7 @@ export const Level: React.FC<Props> = ({
       </div>
       {playState === "won" && <h1>Well done!</h1>}
       {playState === "lost" && <h1>You lost!</h1>}
-      <div className="flex flex-wrap justify-center p-8">
+      <div className="flex flex-wrap justify-center p-4">
         <div
           className={`grid grid-flow-dense grid-cols-6 gap-4 ${rowSizes[levelState.columns.reduce((r, c) => Math.max(r, c.columnSize), 0)]}`}
         >
@@ -152,7 +156,6 @@ export const Level: React.FC<Props> = ({
           ))}
         </div>
       </div>
-      <Settings levelSettings={levelSettings} level={initialLevelState} />
     </div>
   );
 };

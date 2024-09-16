@@ -44,7 +44,7 @@ export const Block: React.FC<Props> = ({
         : ""
     }`}
   >
-    <div className={`absolute z-10 size-block pt-1 rounded-md`}>
+    <div className={`absolute z-10 size-block pt-2 rounded-md`}>
       <span className={`inline-block ${styles.shape}`}>
         {revealed === false ? "?" : shapeMapping[color]}
       </span>

@@ -6,22 +6,24 @@ import {
   getSpecialSettings,
   isHard,
   isSpecial,
-} from "./game/levelSettings.ts";
-import { LevelLoader } from "./modules/Level/index.tsx";
-import { LevelTrack } from "./modules/LevelTrack/index.tsx";
-import { generateNewSeed, mulberry32 } from "./support/random.ts";
+} from "@/game/levelSettings.ts";
+import { LevelLoader } from "@/modules/Level/index.tsx";
+import { LevelTrack } from "@/modules/LevelTrack/index.tsx";
+import { generateNewSeed, mulberry32 } from "@/support/random.ts";
+import { useGameStorage } from "@/support/useGameStorage.ts";
+
 import PWABadge from "./PWABadge.tsx";
 
 const BASE_SEED = 12345678901234;
 
 export const App: React.FC = () => {
-  const [levelNr, setLevelNr] = useState(0);
+  const [levelNr, setLevelNr] = useGameStorage("levelNr", 0);
 
   const [levelSeed, setLevelSeed] = useState(() =>
     generateNewSeed(BASE_SEED, levelNr)
   );
 
-  const [inLevel, setInLevel] = useState(false);
+  const [inLevel, setInLevel] = useGameStorage("inLevel", false);
 
   useEffect(() => {
     setLevelSeed(generateNewSeed(BASE_SEED, levelNr));

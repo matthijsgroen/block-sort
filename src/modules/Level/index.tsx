@@ -32,7 +32,6 @@ export const LevelLoader: React.FC<Props> = ({
           <p>Loading...</p>
           <label>Seed:</label>
           <output>{seed}</output>
-          <Settings levelSettings={levelSettings} />
         </div>
       }
     >
