@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       spacing: {
-        block: "2rem",
+        block: "2.5rem",
       },
       colors: {
         "block-red": "#dd0000",

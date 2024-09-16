@@ -23,13 +23,13 @@ const translates = [
 export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
   const startNumbering = Math.max(Math.floor(levelNr - 5), 0);
 
-  const levelNrs = new Array(13).fill(0).map((_, i) => startNumbering + i);
+  const levelNrs = new Array(30).fill(0).map((_, i) => startNumbering + i);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center h-screen">
       <h1 className="text-3xl mb-2 font-extrabold mt-2">Block sort</h1>
 
-      <ol className="flex flex-col-reverse w-12 mx-auto">
+      <ol className="flex flex-col-reverse w-4/5 mx-auto flex-1 overflow-y-hidden items-center">
         {levelNrs.map((i) => {
           const offset = i % 8;
           return (
@@ -54,7 +54,7 @@ export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
           );
         })}
       </ol>
-      <div className="text-center mt-4">
+      <div className="text-center py-6">
         <PlayButton
           levelNr={levelNr + 1}
           onClick={onLevelStart}

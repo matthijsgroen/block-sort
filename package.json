@@ -12,6 +12,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "localforage": "^1.10.0",
     "react": "19.0.0-rc-d6cb4e77-20240911",
     "react-dom": "19.0.0-rc-d6cb4e77-20240911"
   },

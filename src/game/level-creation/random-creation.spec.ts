@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { mulberry32 } from "../../support/random";
+import { mulberry32 } from "@/support/random";
+
 import { createBlock, createPlacementColumn } from "../factories";
 
 import { generatePlayableLevel } from "./random-creation";

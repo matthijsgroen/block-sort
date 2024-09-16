@@ -59,13 +59,16 @@ describe(generatePlayableLevel, () => {
     const level = await generatePlayableLevel(
       {
         amountColors: 10,
-        stackSize: 4,
+        stackSize: 8,
         extraPlacementStacks: 2,
+        extraPlacementLimits: 1,
+        buffers: 2,
+        bufferSizes: 1,
       },
       random
     );
     expect(level.colors).toHaveLength(10);
-    expect(level.moves).toHaveLength(36);
+    expect(level.moves).toHaveLength(94);
   });
 
   it("has around 30 of moves on average for 9 colors", async () => {

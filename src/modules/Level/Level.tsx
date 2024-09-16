@@ -7,12 +7,12 @@ import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { hasWon, isStuck } from "@/game/state";
 import { LevelState } from "@/game/types";
 import { timesMap } from "@/support/timeMap";
-
-import { Settings } from "./Settings";
+import { useGameStorage } from "@/support/useGameStorage";
 
 type Props = {
   onComplete: (won: boolean) => void;
   level: Promise<LevelState>;
+  levelNr: number;
   levelSettings: LevelSettings;
 };
 
@@ -32,16 +32,13 @@ const rowSizes: Record<number, string> = {
   16: "grid-rows-16",
 };
 
-export const Level: React.FC<Props> = ({
-  onComplete,
-  level,
-  levelSettings,
-}) => {
+export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
   const [playState, setPlayState] = useState<"won" | "lost" | "busy">("busy");
 
   const initialLevelState = use(level);
 
-  const [levelState, setLevelState] = useState<LevelState>(initialLevelState);
+  const [levelState, setLevelState, deleteLevelState] =
+    useGameStorage<LevelState>(`levelState${levelNr}`, initialLevelState);
   const [selectStart, setSelectStart] = useState<
     [column: number, amount: number] | null
   >(null);
@@ -60,8 +57,9 @@ export const Level: React.FC<Props> = ({
       return;
     }
     const timeOut = setTimeout(() => {
+      deleteLevelState();
       onComplete(playState === "won");
-    }, 20);
+    }, 2000);
     return () => clearTimeout(timeOut);
   }, [playState, onComplete]);
 
@@ -94,7 +92,7 @@ export const Level: React.FC<Props> = ({
       </div>
       {playState === "won" && <h1>Well done!</h1>}
       {playState === "lost" && <h1>You lost!</h1>}
-      <div className="flex flex-wrap justify-center p-8">
+      <div className="flex flex-wrap justify-center p-4">
         <div
           className={`grid grid-flow-dense grid-cols-6 gap-4 ${rowSizes[levelState.columns.reduce((r, c) => Math.max(r, c.columnSize), 0)]}`}
         >
@@ -152,7 +150,6 @@ export const Level: React.FC<Props> = ({
           ))}
         </div>
       </div>
-      <Settings levelSettings={levelSettings} level={initialLevelState} />
     </div>
   );
 };
