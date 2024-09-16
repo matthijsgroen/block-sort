@@ -14,6 +14,7 @@ export type LevelSettings = {
   amountColors?: number;
   hideBlockTypes?: boolean;
   stackSize?: number;
+  stacksPerColor?: number;
   extraPlacementStacks?: number;
   extraPlacementLimits?: number;
   buffers?: number;
@@ -31,6 +32,7 @@ export const generateRandomLevel = (
     buffers = 0,
     bufferSizes = 1,
     hideBlockTypes = false,
+    stacksPerColor = 1,
   }: LevelSettings,
   random: () => number
 ): LevelState => {
@@ -42,10 +44,10 @@ export const generateRandomLevel = (
   const placementLimits =
     extraPlacementLimits > 0 ? blockColors.slice(-extraPlacementLimits) : [];
 
-  const amountBars = amountColors;
+  const amountBars = amountColors * stacksPerColor;
   const blocks: BlockColor[] = [];
   for (const color of blockColors) {
-    blocks.push(...new Array(stackSize).fill(color));
+    blocks.push(...new Array(stackSize * stacksPerColor).fill(color));
   }
   shuffle(blocks, random);
 

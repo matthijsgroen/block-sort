@@ -1,46 +1,36 @@
+import { fib } from "@/support/fib";
 import { pick } from "@/support/random";
 
 import { LevelSettings } from "./level-creation/generateRandomLevel";
 
-const getSetting = (
-  level: number,
-  min: number,
-  max: number,
-  offset: number,
-  progression: number
-) =>
-  min +
-  Math.min(Math.max(Math.floor((level - offset) / progression), 0), max - min);
+export const LEVEL_SCALE = fib(3, 11);
 
-export const getNormalSettings = (
-  levelNr: number,
-  random = Math.random
-): LevelSettings => {
-  const amountColors = levelNr === 0 ? 2 : getSetting(levelNr, 3, 9, 5, 10);
-  const stackSize = 4;
+export const getDifficultyLevel = (levelNr: number): number =>
+  LEVEL_SCALE.filter((l) => l <= levelNr).length + 1;
+
+export const nextLevelAt = (levelNr: number): number | undefined =>
+  LEVEL_SCALE.find((l) => l > levelNr);
+
+export const getNormalSettings = (levelNr: number): LevelSettings => {
+  const difficulty = getDifficultyLevel(levelNr);
 
   return {
-    amountColors,
-    stackSize,
-    extraPlacementStacks: amountColors < 3 ? 1 : 2,
-    hideBlockTypes: levelNr > 10 ? random() > 0.5 : false,
+    amountColors: Math.min(1 + difficulty, 10),
+    stackSize: Math.max(difficulty - 3, 4),
+    extraPlacementStacks: difficulty < 2 ? 1 : 2,
+    extraPlacementLimits: difficulty > 9 ? 1 : undefined,
+    hideBlockTypes: false,
+    buffers: difficulty === 10 ? 6 : difficulty === 11 ? 2 : undefined,
+    bufferSizes: difficulty > 9 ? 1 : undefined,
   };
 };
 
-export const getHardSettings = (
-  levelNr: number,
-  random = Math.random
-): LevelSettings => {
-  const amountColors = levelNr === 0 ? 2 : getSetting(levelNr, 3, 10, 5, 10);
-  const stackSize = levelNr > 100 ? 5 : 4;
-  const extraPlacementLimits = levelNr > 100 && random() > 0.5 ? 1 : 0;
+export const getHardSettings = (levelNr: number): LevelSettings => {
+  const baseSettings = getNormalSettings(levelNr);
 
   return {
-    amountColors,
-    stackSize,
-    extraPlacementStacks: amountColors < 3 ? 1 : 2 + extraPlacementLimits,
-    extraPlacementLimits,
-    hideBlockTypes: levelNr > 10 ? random() > 0.5 : false,
+    ...baseSettings,
+    hideBlockTypes: true,
   };
 };
 
@@ -48,41 +38,40 @@ export const getSpecialSettings = (
   levelNr: number,
   random = Math.random
 ): LevelSettings => {
-  const amountColors = levelNr === 0 ? 2 : getSetting(levelNr, 3, 7, 4, 4);
+  const difficulty = getDifficultyLevel(levelNr);
 
   const templates: LevelSettings[] = [
     {
-      amountColors,
-      stackSize: 6,
+      amountColors: 4,
+      stackSize: 12 + Math.max(Math.round(difficulty / 6), 0),
+      extraPlacementStacks: 0,
+      buffers: 5 + Math.max(Math.round(difficulty / 8), 0),
+      bufferSizes: 3 + Math.min(Math.max(Math.round(difficulty / 3), 0), 2),
+    },
+    {
+      amountColors: 10,
+      stackSize: difficulty > 4 ? 4 : 3,
+      extraPlacementStacks: 4,
+      extraPlacementLimits: 4,
+    },
+    {
+      amountColors: 5,
+      stackSize: difficulty > 4 ? 5 : 4,
       extraPlacementStacks: 2,
-      extraPlacementLimits: 1,
     },
     {
-      amountColors: levelNr === 0 ? 2 : getSetting(levelNr, 3, 5, 4, 4),
-      stackSize: 16,
-      extraPlacementStacks: 1,
-      buffers: 2,
-      bufferSizes: 4,
-    },
-    {
-      amountColors: levelNr === 0 ? 2 : getSetting(levelNr, 3, 5, 4, 4),
-      stackSize: 16,
-      extraPlacementStacks: 1,
-      buffers: 8,
-      bufferSizes: 1,
-    },
-    {
-      amountColors,
-      stackSize: 8,
+      amountColors: 5 + Math.max(Math.round(difficulty / 8), 0),
+      stacksPerColor: 2,
+      stackSize: 3,
       extraPlacementStacks: 2,
       extraPlacementLimits: 2,
-      buffers: 3,
-      bufferSizes: 2,
+      buffers: 1,
+      bufferSizes: 1,
     },
   ];
 
   return pick(templates, random);
 };
 
-export const isSpecial = (levelNr: number) => (levelNr + 1) % 9 === 0;
-export const isHard = (levelNr: number) => (levelNr + 1) % 7 === 0;
+export const isSpecial = (levelNr: number) => (levelNr + 1) % 7 === 0;
+export const isHard = (levelNr: number) => (levelNr + 1) % 9 === 0;
