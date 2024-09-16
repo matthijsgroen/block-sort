@@ -57,6 +57,7 @@ export const App: React.FC = () => {
               setLevelNr((nr) => nr + 1);
             }
           }}
+          levelNr={levelNr}
           seed={levelSeed}
           levelSettings={settings}
         />

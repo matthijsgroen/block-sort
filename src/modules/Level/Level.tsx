@@ -12,6 +12,7 @@ import { useGameStorage } from "@/support/useGameStorage";
 type Props = {
   onComplete: (won: boolean) => void;
   level: Promise<LevelState>;
+  levelNr: number;
   levelSettings: LevelSettings;
 };
 
@@ -31,15 +32,13 @@ const rowSizes: Record<number, string> = {
   16: "grid-rows-16",
 };
 
-export const Level: React.FC<Props> = ({ onComplete, level }) => {
+export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
   const [playState, setPlayState] = useState<"won" | "lost" | "busy">("busy");
 
   const initialLevelState = use(level);
 
-  const [levelState, setLevelState] = useGameStorage<LevelState>(
-    "levelState",
-    initialLevelState
-  );
+  const [levelState, setLevelState, deleteLevelState] =
+    useGameStorage<LevelState>(`levelState${levelNr}`, initialLevelState);
   const [selectStart, setSelectStart] = useState<
     [column: number, amount: number] | null
   >(null);
@@ -58,8 +57,9 @@ export const Level: React.FC<Props> = ({ onComplete, level }) => {
       return;
     }
     const timeOut = setTimeout(() => {
+      deleteLevelState();
       onComplete(playState === "won");
-    }, 20);
+    }, 2000);
     return () => clearTimeout(timeOut);
   }, [playState, onComplete]);
 

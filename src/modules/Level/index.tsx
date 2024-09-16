@@ -10,12 +10,14 @@ type Props = {
   seed: number;
   onComplete: (won: boolean) => void;
   levelSettings: LevelSettings;
+  levelNr: number;
 };
 
 export const LevelLoader: React.FC<Props> = ({
   seed,
   onComplete,
   levelSettings,
+  levelNr,
 }) => {
   const level = useMemo(() => {
     const random = mulberry32(seed);
@@ -36,6 +38,7 @@ export const LevelLoader: React.FC<Props> = ({
     >
       <Level
         level={level}
+        levelNr={levelNr}
         levelSettings={levelSettings}
         onComplete={onComplete}
       />
