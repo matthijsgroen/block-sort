@@ -9,8 +9,6 @@ import { LevelState } from "@/game/types";
 import { timesMap } from "@/support/timeMap";
 import { useGameStorage } from "@/support/useGameStorage";
 
-import { Settings } from "./Settings";
-
 type Props = {
   onComplete: (won: boolean) => void;
   level: Promise<LevelState>;
@@ -33,11 +31,7 @@ const rowSizes: Record<number, string> = {
   16: "grid-rows-16",
 };
 
-export const Level: React.FC<Props> = ({
-  onComplete,
-  level,
-  levelSettings,
-}) => {
+export const Level: React.FC<Props> = ({ onComplete, level }) => {
   const [playState, setPlayState] = useState<"won" | "lost" | "busy">("busy");
 
   const initialLevelState = use(level);

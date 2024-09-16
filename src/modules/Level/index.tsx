@@ -5,7 +5,6 @@ import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { mulberry32 } from "@/support/random";
 
 import { Level } from "./Level";
-import { Settings } from "./Settings";
 
 type Props = {
   seed: number;
