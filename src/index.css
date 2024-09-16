@@ -5,4 +5,5 @@
 body {
   background-image: url("./components/wood-texture.png");
   background-color: #a52a2a;
+  user-select: none;
 }

@@ -5,6 +5,8 @@ export default {
     extend: {
       spacing: {
         block: "2.5rem",
+        "height-block": "3.5rem",
+        "top-block": "1rem",
       },
       height: {
         "safe-screen":
