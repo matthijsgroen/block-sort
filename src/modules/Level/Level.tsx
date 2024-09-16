@@ -94,12 +94,12 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
       {playState === "lost" && <h1>You lost!</h1>}
       <div className="flex flex-wrap justify-center p-4">
         <div
-          className={`grid grid-flow-dense grid-cols-6 gap-4 ${rowSizes[levelState.columns.reduce((r, c) => Math.max(r, c.columnSize), 0)]}`}
+          className={`grid grid-flow-dense grid-cols-6 gap-6 ${rowSizes[levelState.columns.reduce((r, c) => Math.max(r, c.columnSize), 0)]}`}
         >
           {levelState.columns.map((bar, i) => (
             <div key={i} className={rowSpans[bar.columnSize]}>
               <div
-                className={`border-2 border-block-brown bg-black/20 cursor-pointer ${
+                className={`border-2 border-block-brown bg-black/20 cursor-pointer flex flex-col-reverse ${
                   bar.type === "buffer"
                     ? "border-t-0 rounded-b-md"
                     : "rounded-md shadow-inner"
@@ -119,32 +119,37 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
                   }
                 }}
               >
-                {timesMap(bar.columnSize - bar.blocks.length, (p, l) =>
-                  p === l - 1 && bar.limitColor ? (
-                    <div
-                      key={p}
-                      className={`size-block text-center pt-2 ${colorMap[bar.limitColor]} bg-clip-text text-transparent`}
-                    >
-                      {shapeMapping[bar.limitColor]}
-                    </div>
-                  ) : (
-                    <div key={p} className="size-block"></div>
-                  )
-                )}
-                {bar.blocks.map((b, p) => {
+                {bar.blocks.map((_b, p, l) => {
+                  const index = l.length - 1 - p;
+                  const block = l[index];
                   const isSelected =
-                    selectStart && p < selectStart[1] && i === selectStart[0];
+                    selectStart &&
+                    index < selectStart[1] &&
+                    i === selectStart[0];
                   return (
                     <Block
-                      key={bar.columnSize - bar.blocks.length + p}
+                      key={bar.columnSize - bar.blocks.length + index}
                       locked={bar.locked}
                       moved={moves !== 0}
-                      revealed={b.revealed}
-                      color={b.color}
+                      revealed={block.revealed}
+                      color={block.color}
                       selected={isSelected}
                     />
                   );
                 })}
+                {timesMap(bar.columnSize - bar.blocks.length, (p, l) =>
+                  l - p === l && bar.limitColor ? (
+                    <div
+                      key={p}
+                      className={`w-block h-block text-center pt-2 ${bar.blocks.length === 0 ? "" : "-translate-y-3"} ${colorMap[bar.limitColor]} bg-clip-text text-transparent`}
+                    >
+                      {shapeMapping[bar.limitColor]}
+                    </div>
+                  ) : (
+                    <div key={p} className="w-block h-block"></div>
+                  )
+                )}
+                <div className="w-block h-top-block"></div>
               </div>
             </div>
           ))}

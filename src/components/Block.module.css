@@ -1,7 +1,8 @@
 .shape {
   text-shadow:
     0px 0px 0px #eee,
-    1px 1px 2px #000;
+    0px 0px 4px #000,
+    0px 0px 2px #000;
   color: transparent;
   opacity: 60%;
   mix-blend-mode: lighten;
@@ -16,9 +17,12 @@
 
 .gradient {
   background: linear-gradient(
-    rgba(0, 0, 0, 10%) 0%,
-    rgba(0, 0, 0, 0%) 20%,
-    rgba(0, 0, 0, 0%) 85%,
+    rgba(0, 0, 0, 50%) 0%,
+    rgba(0, 0, 0, 20%) 5%,
+    rgba(0, 0, 0, 20%) 30%,
+    rgba(255, 255, 255, 20%) 35%,
+    /* rgba(0, 0, 0, 10%) 25%, */ rgba(0, 0, 0, 0%) 40%,
+    rgba(0, 0, 0, 0%) 90%,
     rgba(0, 0, 0, 50%) 100%
   );
 }
