@@ -12,18 +12,18 @@ export type Props = {
 };
 
 export const colorMap: Record<BlockColor, string> = {
-  red: "bg-block-red",
-  white: "bg-block-white",
-  yellow: "bg-yellow-500",
-  blue: "bg-blue-500",
-  purple: "bg-purple-500",
-  black: "bg-slate-800",
-  green: "bg-green-600",
-  darkgreen: "bg-green-700",
-  darkblue: "bg-blue-800",
-  aqua: "bg-blue-200",
-  brown: "bg-block-brown",
-  pink: "bg-orange-200",
+  red: "#dd0000",
+  white: "#eeeeee",
+  yellow: "#eab308",
+  blue: "#3b82f6",
+  purple: "#a855f7",
+  black: "#29374e",
+  green: "#16a34a",
+  darkgreen: "#15803d",
+  darkblue: "#1e40af",
+  aqua: "#bfdbfe",
+  brown: "#a07353",
+  pink: "#fdba74",
 };
 
 export const Block: React.FC<Props> = ({
@@ -34,30 +34,23 @@ export const Block: React.FC<Props> = ({
   locked = false,
 }) => (
   <div
-    className={`relative h-height-block w-block text-center animate-place -mt-top-block ${
+    style={{
+      "--cube-color": revealed ? colorMap[color] : "#64748b",
+      "--cube-shape": `'${revealed ? shapeMapping[color] : "❓"}'`,
+    }}
+    className={`relative h-height-block w-block text-center ${selected ? styles.selected : locked ? "animate-locked" : "animate-place"} -mt-top-block ${
       moved ? "" : "[animation-duration:0ms]"
-    } ${
-      revealed === false ? "bg-slate-500" : colorMap[color]
-    } rounded-md border border-block-brown/80
-    ${
-      selected
-        ? "outline-2 outline-white outline -translate-y-6 ease-in-out transition-transform animate-wobble"
-        : ""
-    }`}
+    } bg-block rounded-md border border-black/80`}
   >
-    <div className={`absolute z-10 w-block h-height-block pt-6 rounded-md`}>
-      <span className={`inline-block ${styles.shape}`}>
-        {revealed === false ? "?" : shapeMapping[color]}
-      </span>
+    <div className={`${styles.layer} z-10 pt-7`}>
+      <span className={`block ${styles.shape}`}></span>
     </div>
+    {revealed && <div className={`${styles.layer} ${styles.texture}`}></div>}
     <div
-      className={`absolute w-block h-height-block rounded-md ${styles.texture}`}
+      className={`${styles.layer} ${revealed ? styles.gradient : styles.hidden}`}
     ></div>
     <div
-      className={`absolute w-block h-height-block rounded-md ${styles.gradient}`}
-    ></div>
-    <div
-      className={`absolute w-block h-height-block -top-[2px] -left-[2px] ${
+      className={`absolute w-block h-height-block transition-opacity -top-[2px] -left-[2px] ${
         styles.gradientLocked
       } ${locked ? "opacity-100" : "opacity-0"}`}
     ></div>

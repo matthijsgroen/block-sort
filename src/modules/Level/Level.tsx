@@ -9,6 +9,8 @@ import { LevelState } from "@/game/types";
 import { timesMap } from "@/support/timeMap";
 import { useGameStorage } from "@/support/useGameStorage";
 
+import styles from "./Level.module.css";
+
 type Props = {
   onComplete: (won: boolean) => void;
   level: Promise<LevelState>;
@@ -19,8 +21,16 @@ type Props = {
 const rowSpans: Record<number, string> = {
   1: "row-span-1",
   2: "row-span-2",
+  3: "row-span-3",
   4: "row-span-4",
   8: "row-span-8",
+  9: "row-span-8",
+  10: "row-span-10",
+  11: "row-span-11",
+  12: "row-span-12",
+  13: "row-span-13",
+  14: "row-span-14",
+  15: "row-span-15",
   16: "row-span-16",
 };
 
@@ -29,6 +39,9 @@ const rowSizes: Record<number, string> = {
   2: "grid-rows-2",
   4: "grid-rows-4",
   8: "grid-rows-8",
+  12: "grid-rows-12",
+  13: "grid-rows-13",
+  14: "grid-rows-14",
   16: "grid-rows-16",
 };
 
@@ -42,7 +55,13 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
   const [selectStart, setSelectStart] = useState<
     [column: number, amount: number] | null
   >(null);
-  const [moves, setMoves] = useState(0);
+
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    const cleanup = setTimeout(() => setStarted(true), 200);
+    return () => clearTimeout(cleanup);
+  }, []);
 
   useEffect(() => {
     if (hasWon(levelState)) {
@@ -63,6 +82,20 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
     return () => clearTimeout(timeOut);
   }, [playState, onComplete]);
 
+  const onColumnClick = (columnIndex: number) => () => {
+    if (selectStart) {
+      setLevelState((levelState) =>
+        moveBlocks(levelState, selectStart[0], columnIndex)
+      );
+      setSelectStart(null);
+    } else {
+      const selection = selectFromColumn(levelState, columnIndex);
+      if (selection.length > 0) {
+        setSelectStart([columnIndex, selection.length]);
+      }
+    }
+  };
+
   return (
     <div>
       <div className="flex text-lg flex-row justify-between p-2">
@@ -75,16 +108,8 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
         </button>
         <button
           onClick={() => {
-            setPlayState("won");
-          }}
-        >
-          🎉
-        </button>
-        <button
-          onClick={() => {
             setLevelState(initialLevelState);
             setPlayState("busy");
-            setMoves(0);
           }}
         >
           🔄
@@ -92,32 +117,22 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
       </div>
       {playState === "won" && <h1>Well done!</h1>}
       {playState === "lost" && <h1>You lost!</h1>}
-      <div className="flex flex-wrap justify-center p-4">
+      <div className="flex flex-wrap justify-center p-2">
         <div
-          className={`grid grid-flow-dense grid-cols-6 gap-6 ${rowSizes[levelState.columns.reduce((r, c) => Math.max(r, c.columnSize), 0)]}`}
+          className={`grid grid-flow-dense grid-cols-6 gap-y-8 w-full ${rowSizes[levelState.columns.reduce((r, c) => Math.max(r, c.columnSize), 0)]}`}
         >
           {levelState.columns.map((bar, i) => (
-            <div key={i} className={rowSpans[bar.columnSize]}>
+            <div
+              key={i}
+              className={`${rowSpans[bar.columnSize]} justify-self-center`}
+            >
               <div
-                className={`border-2 border-block-brown bg-black/20 cursor-pointer flex flex-col-reverse ${
+                className={`border-2 border-block-brown w-block box-content bg-black/20 cursor-pointer flex flex-col-reverse ${
                   bar.type === "buffer"
                     ? "border-t-0 rounded-b-md"
                     : "rounded-md shadow-inner"
-                }`}
-                onClick={() => {
-                  if (selectStart) {
-                    setLevelState((levelState) =>
-                      moveBlocks(levelState, selectStart[0], i)
-                    );
-                    setMoves((m) => m + 1);
-                    setSelectStart(null);
-                  } else {
-                    const selection = selectFromColumn(levelState, i);
-                    if (selection.length > 0) {
-                      setSelectStart([i, selection.length]);
-                    }
-                  }
-                }}
+                } ${bar.locked ? "contain-paint" : ""}`}
+                onTouchStart={onColumnClick(i)}
               >
                 {bar.blocks.map((_b, p, l) => {
                   const index = l.length - 1 - p;
@@ -130,7 +145,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
                     <Block
                       key={bar.columnSize - bar.blocks.length + index}
                       locked={bar.locked}
-                      moved={moves !== 0}
+                      moved={started}
                       revealed={block.revealed}
                       color={block.color}
                       selected={isSelected}
@@ -138,18 +153,25 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
                   );
                 })}
                 {timesMap(bar.columnSize - bar.blocks.length, (p, l) =>
-                  l - p === l && bar.limitColor ? (
+                  l - p === l && bar.limitColor !== undefined ? (
                     <div
                       key={p}
-                      className={`w-block h-block text-center pt-2 ${bar.blocks.length === 0 ? "" : "-translate-y-3"} ${colorMap[bar.limitColor]} bg-clip-text text-transparent`}
+                      className={`${p === 0 && bar.blocks.length === 0 ? styles.bottom : styles.empty} ${styles.shade}`}
                     >
-                      {shapeMapping[bar.limitColor]}
+                      <div
+                        style={{ "--cube-color": colorMap[bar.limitColor] }}
+                        className={`${styles.limit}`}
+                      >
+                        {shapeMapping[bar.limitColor]}
+                      </div>
                     </div>
                   ) : (
-                    <div key={p} className="w-block h-block"></div>
+                    <div
+                      key={p}
+                      className={`${p === 0 && bar.blocks.length === 0 ? styles.bottom : styles.empty} ${styles.shade}`}
+                    ></div>
                   )
                 )}
-                <div className="w-block h-top-block"></div>
               </div>
             </div>
           ))}
