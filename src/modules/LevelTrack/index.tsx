@@ -26,7 +26,7 @@ export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
   const levelNrs = new Array(30).fill(0).map((_, i) => startNumbering + i);
 
   return (
-    <div className="flex flex-col items-center h-safe-screen py-2">
+    <div className="flex flex-col items-center h-safe-screen py-4">
       <h1 className="text-3xl mb-2 font-extrabold mt-2">Block sort</h1>
 
       <ol className="flex flex-col-reverse w-4/5 mx-auto flex-1 overflow-y-hidden items-center">
