@@ -6,6 +6,8 @@ import { generateRandomLevel } from "./level-creation/generateRandomLevel";
 import { selectFromColumn } from "./actions";
 import {
   createBlock,
+  createBlocks,
+  createHiddenBlocks,
   createLevelState,
   createPlacementColumn,
 } from "./factories";
@@ -14,21 +16,7 @@ import { hasWon, isStuck } from "./state";
 const TEST_SEED = 123456789;
 
 describe(selectFromColumn, () => {
-  it("selects the top of a column with the same color", () => {
-    const random = mulberry32(TEST_SEED);
-    const level = generateRandomLevel(
-      {
-        amountColors: 2,
-        stackSize: 4,
-        extraPlacementStacks: 1,
-      },
-      random
-    );
-    const blocks = selectFromColumn(level, 0);
-    expect(blocks).toEqual([createBlock("green")]);
-  });
-
-  it("selects the top of a column with the same color (multiple)", () => {
+  it("selects the top of a column", () => {
     const random = mulberry32(TEST_SEED);
     const level = generateRandomLevel(
       {
@@ -39,23 +27,33 @@ describe(selectFromColumn, () => {
       random
     );
     const blocks = selectFromColumn(level, 1);
-    expect(blocks).toEqual([createBlock("black"), createBlock("black")]);
+    expect(blocks).toEqual([createBlock("darkblue")]);
   });
 
-  it("selects the top of a column with the same color (partially hidden)", () => {
+  it("selects the top of a column with multiple of the same color", () => {
+    const random = mulberry32(TEST_SEED);
+    const level = generateRandomLevel(
+      {
+        amountColors: 2,
+        stackSize: 4,
+        extraPlacementStacks: 1,
+      },
+      random
+    );
+    const blocks = selectFromColumn(level, 0);
+    expect(blocks).toEqual([createBlock("green"), createBlock("green")]);
+  });
+
+  it("selects the top of a column (partially hidden)", () => {
     const level = createLevelState([
-      createPlacementColumn(4, [
-        createBlock("green"),
-        createBlock("black", true),
-        createBlock("green", true),
-        createBlock("green", true),
-      ]),
-      createPlacementColumn(4, [
-        createBlock("black"),
-        createBlock("black", true),
-        createBlock("green", true),
-        createBlock("black", true),
-      ]),
+      createPlacementColumn(
+        4,
+        createHiddenBlocks("green", "black", "green", "green")
+      ),
+      createPlacementColumn(
+        4,
+        createHiddenBlocks("black", "black", "green", "black")
+      ),
       createPlacementColumn(4),
     ]);
     const blocks = selectFromColumn(level, 1);
@@ -80,12 +78,7 @@ describe(selectFromColumn, () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
-        [
-          createBlock("white"),
-          createBlock("white"),
-          createBlock("white"),
-          createBlock("white"),
-        ],
+        createBlocks("white", "white", "white", "white"),
         undefined,
         true
       ),
@@ -100,23 +93,13 @@ describe(hasWon, () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
-        [
-          createBlock("white"),
-          createBlock("white"),
-          createBlock("white"),
-          createBlock("white"),
-        ],
+        createBlocks("white", "white", "white", "white"),
         undefined,
         true
       ),
       createPlacementColumn(
         4,
-        [
-          createBlock("green"),
-          createBlock("green"),
-          createBlock("green"),
-          createBlock("green"),
-        ],
+        createBlocks("green", "green", "green", "green"),
         undefined,
         true
       ),
@@ -131,22 +114,17 @@ describe(hasWon, () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
-        [
-          createBlock("white"),
-          createBlock("white"),
-          createBlock("green"),
-          createBlock("white"),
-        ],
+        createBlocks("white", "white", "green", "white"),
         undefined,
         true
       ),
       createPlacementColumn(
         4,
-        [createBlock("green"), createBlock("green"), createBlock("green")],
+        createBlocks("green", "green", "green"),
         undefined,
         true
       ),
-      createPlacementColumn(4, [createBlock("white")]),
+      createPlacementColumn(4, createBlocks("white")),
       createPlacementColumn(4),
     ]);
     const result = hasWon(level);
@@ -159,22 +137,17 @@ describe(isStuck, () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
-        [
-          createBlock("white"),
-          createBlock("white"),
-          createBlock("green"),
-          createBlock("white"),
-        ],
+        createBlocks("white", "white", "green", "white"),
         undefined,
         true
       ),
       createPlacementColumn(
         4,
-        [createBlock("green"), createBlock("green"), createBlock("green")],
+        createBlocks("green", "green", "green"),
         undefined,
         true
       ),
-      createPlacementColumn(4, [createBlock("white")]),
+      createPlacementColumn(4, createBlocks("white")),
       createPlacementColumn(4),
     ]);
     const result = isStuck(level);
@@ -185,27 +158,18 @@ describe(isStuck, () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
-        [
-          createBlock("white"),
-          createBlock("white"),
-          createBlock("green"),
-          createBlock("white"),
-        ],
+        createBlocks("white", "white", "green", "white"),
         undefined,
         true
       ),
       createPlacementColumn(
         4,
-        [createBlock("white"), createBlock("green"), createBlock("green")],
+        createBlocks("white", "green", "green"),
         undefined,
         true
       ),
-      createPlacementColumn(4, [
-        createBlock("green"),
-        createBlock("red"),
-        createBlock("red"),
-      ]),
-      createPlacementColumn(4, [createBlock("red"), createBlock("red")]),
+      createPlacementColumn(4, createBlocks("green", "red", "red")),
+      createPlacementColumn(4, createBlocks("red", "red")),
     ]);
     const result = isStuck(level);
     expect(result).toBe(true);

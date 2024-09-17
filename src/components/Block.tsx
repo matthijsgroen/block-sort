@@ -19,8 +19,9 @@ export const colorMap: Record<BlockColor, string> = {
   purple: "bg-purple-500",
   black: "bg-slate-800",
   green: "bg-green-600",
-  darkgreen: "bg-green-200",
-  aqua: "bg-blue-100",
+  darkgreen: "bg-green-700",
+  darkblue: "bg-blue-800",
+  aqua: "bg-blue-200",
   brown: "bg-block-brown",
   pink: "bg-orange-200",
 };

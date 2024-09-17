@@ -10,7 +10,7 @@ export default {
       },
       height: {
         "safe-screen":
-          "calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom))",
+          "calc(100vh - env(safe-area-inset-top, 20px) - env(safe-area-inset-bottom, 20px))",
       },
       colors: {
         "block-red": "#dd0000",

@@ -8,6 +8,7 @@ export const BLOCK_COLORS = [
   "green", // diamond
   "aqua", // lightning bolt
   "darkgreen", // three circles
+  "darkblue", // star
   "brown", // toadstool
   "pink", // animal footprint
 ] as const;
@@ -17,13 +18,14 @@ export type BlockColor = (typeof BLOCK_COLORS)[number];
 export const shapeMapping: Record<BlockColor, string> = {
   black: "🎵",
   brown: "🍄",
-  darkgreen: "🟢",
+  darkgreen: "🍀",
   yellow: "🟡",
   aqua: "⚡️",
   pink: "🐾",
   purple: "️⭐️",
   blue: "🌙",
   red: "❌",
-  white: "🔲",
+  white: "◻️ ",
   green: "🔶",
+  darkblue: "✨",
 };
