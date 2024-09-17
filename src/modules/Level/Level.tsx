@@ -24,6 +24,10 @@ const determineColumns = (
     const gridColumnCount = Math.ceil(amountColumns / 2);
     return colSizes[gridColumnCount];
   }
+  if (maxColumnHeight <= 4 && amountColumns < 16) {
+    const gridColumnCount = Math.ceil(amountColumns / 3);
+    return colSizes[gridColumnCount];
+  }
 
   return "grid-cols-6";
 };
@@ -82,15 +86,26 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
     <div className="flex flex-col h-safe-screen">
       {playState === "won" && (
         <Message
+          delay={1000}
           message="You won!"
-          color="blue"
+          color="bg-green-700"
           afterShow={() => {
             deleteLevelState();
             onComplete(playState === "won");
           }}
         />
       )}
-      {playState === "lost" && <h1>You lost!</h1>}
+      {playState === "lost" && (
+        <Message
+          delay={2000}
+          color="bg-red-700"
+          message="You lost!"
+          afterShow={() => {
+            setLevelState(initialLevelState);
+            setPlayState("busy");
+          }}
+        />
+      )}
       <div className="flex text-lg flex-row justify-between p-2">
         <button
           onClick={() => {
@@ -111,7 +126,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
       <div className="flex-1 flex flex-wrap justify-center p-2">
         <div className="w-full content-center">
           <div
-            className={`grid grid-flow-dense ${cols} gap-y-8 ${rowSizes[maxColumnSize]}`}
+            className={`grid grid-flow-dense ${cols} ${rowSizes[maxColumnSize]}`}
           >
             {levelState.columns.map((bar, i) => (
               <BlockColumn

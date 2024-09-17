@@ -43,6 +43,7 @@ const RAW_RUNTIME_STATE =
           ["@vite-pwa/assets-generator", "npm:0.2.6"],\
           ["@vitejs/plugin-react", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:4.3.1"],\
           ["autoprefixer", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:10.4.20"],\
+          ["clsx", "npm:2.1.1"],\
           ["eslint", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:9.10.0"],\
           ["eslint-config-prettier", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:9.1.0"],\
           ["eslint-plugin-prettier", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:5.2.1"],\
@@ -4334,6 +4335,7 @@ const RAW_RUNTIME_STATE =
           ["@vite-pwa/assets-generator", "npm:0.2.6"],\
           ["@vitejs/plugin-react", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:4.3.1"],\
           ["autoprefixer", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:10.4.20"],\
+          ["clsx", "npm:2.1.1"],\
           ["eslint", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:9.10.0"],\
           ["eslint-config-prettier", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:9.1.0"],\
           ["eslint-plugin-prettier", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:5.2.1"],\
@@ -4584,6 +4586,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/clean-stack-npm-2.2.0-a8ce435a5c-10c0.zip/node_modules/clean-stack/",\
         "packageDependencies": [\
           ["clean-stack", "npm:2.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["clsx", [\
+      ["npm:2.1.1", {\
+        "packageLocation": "../../../.yarn/berry/cache/clsx-npm-2.1.1-96125b98be-10c0.zip/node_modules/clsx/",\
+        "packageDependencies": [\
+          ["clsx", "npm:2.1.1"]\
         ],\
         "linkType": "HARD"\
       }]\

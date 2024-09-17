@@ -1,4 +1,6 @@
-import { isHard, isSpecial } from "@/game/levelSettings";
+import clsx from "clsx";
+
+import { isHard, isSpecial, LEVEL_SCALE } from "@/game/levelSettings";
 
 import { PlayButton } from "../../components/PlayButton";
 
@@ -21,40 +23,63 @@ const translates = [
 ];
 
 export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
-  const startNumbering = Math.max(Math.floor(levelNr - 5), 0);
+  const startNumbering = Math.max(Math.floor(levelNr - 4), 0);
 
   const levelNrs = new Array(30).fill(0).map((_, i) => startNumbering + i);
 
   return (
     <div className="flex flex-col items-center h-safe-screen py-4">
-      <h1 className="text-3xl mb-2 font-extrabold mt-2">Block sort</h1>
+      <h1 className="text-3xl mb-2 font-extrabold mt-2">Block Sort</h1>
 
-      <ol className="flex flex-col-reverse w-4/5 mx-auto flex-1 overflow-y-hidden items-center">
+      <ol className="flex flex-col-reverse w-full flex-1 overflow-y-hidden">
         {levelNrs.map((i) => {
           const offset = i % 8;
+          const levelTransition = LEVEL_SCALE.includes(i);
           return (
             <li
               key={i}
-              className={`${translates[offset]} whitespace-nowrap leading-8 h-9 align-middle`}
+              className={clsx(
+                "flex align-middle items-center w-full h-height-block flex-shrink-0 justify-center",
+                {
+                  [styles.levelUp]: levelTransition,
+                }
+              )}
             >
-              {i + 1}&nbsp;
-              <span className="inline-block border border-block-brown w-8 h-8 align-top rounded-md text-center bg-black/30">
-                {i < levelNr && (
-                  <span
-                    className={`bg-green-500 bg-clip-text text-transparent ${styles.doneGlow}`}
-                  >
-                    ✔
-                  </span>
+              <div
+                className={clsx(
+                  translates[offset],
+                  "whitespace-nowrap leading-10 align-middle mx-auto"
                 )}
-                {i == levelNr && "😀"}
-                {i > levelNr && isSpecial(i) && "⭐️"}
-                {i > levelNr && !isSpecial(i) && isHard(i) && "️🔥"}
-              </span>
+              >
+                <span
+                  className={clsx("text-orange-400", {
+                    "text-green-900": i < levelNr,
+                    "font-bold": i === levelNr,
+                  })}
+                >
+                  {i + 1}&nbsp;
+                </span>
+                <span className="inline-block border border-block-brown size-block align-top rounded-md text-center bg-black/30">
+                  {i < levelNr && (
+                    <span
+                      className={clsx(
+                        "bg-green-500 bg-clip-text text-transparent",
+                        styles.doneGlow
+                      )}
+                    >
+                      ✔
+                    </span>
+                  )}
+                  {i == levelNr && "😀"}
+                  {i > levelNr && isSpecial(i) && "⭐️"}
+                  {i > levelNr && !isSpecial(i) && isHard(i) && "️🔥"}
+                </span>
+              </div>
             </li>
           );
         })}
       </ol>
-      <div className="text-center py-6">
+      <div className="text-center pb-10">
         <PlayButton
           levelNr={levelNr + 1}
           onClick={onLevelStart}

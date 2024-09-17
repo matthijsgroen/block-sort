@@ -31,15 +31,27 @@ export const hasWon = (level: LevelState): boolean =>
 export const isStuck = (level: LevelState): boolean => {
   const createSignature = (level: LevelState) =>
     level.columns.map((c) => c.blocks[0]?.color);
+
+  const countHidden = (level: LevelState) =>
+    level.columns.reduce(
+      (r, c) => r + c.blocks.filter((b) => b.revealed === true).length,
+      0
+    );
+
   const topSignature = createSignature(level);
+  const originalHidden = countHidden(level);
 
   return level.columns.every((_source, sourceIndex) => {
     const hasChanged = level.columns.some((_dest, destIndex) => {
       if (sourceIndex === destIndex) return false;
       const result = moveBlocks(level, sourceIndex, destIndex);
       const resultSig = createSignature(result);
+      const resultHidden = countHidden(result);
 
-      return resultSig.some((c, i) => c !== topSignature[i]);
+      return (
+        resultHidden !== originalHidden ||
+        resultSig.some((c, i) => c !== topSignature[i])
+      );
     });
     return !hasChanged;
   });

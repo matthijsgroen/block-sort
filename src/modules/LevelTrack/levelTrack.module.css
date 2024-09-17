@@ -1,3 +1,14 @@
 .doneGlow {
-    text-shadow: 0 0 2px lightgreen;
+  text-shadow: 0 0 2px lightgreen;
+}
+
+.levelUp {
+  background: linear-gradient(
+    #0000 0%,
+    #0000 47%,
+    #0004 49%,
+    #0004 51%,
+    #fff4 53%,
+    #fff0 55%
+  );
 }

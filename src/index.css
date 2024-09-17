@@ -3,7 +3,16 @@
 @tailwind utilities;
 
 body {
-  background-image: url("./components/wood-texture.png");
   background-color: #a52a2a;
+  background:
+    linear-gradient(#a52a2aff 0%, #a52a2a00 20%, #a52a2a00 80%, #a52a2aff 100%),
+    url("./components/wood-texture.png") repeat,
+    linear-gradient(#a52a2aff 0%, #a52a2aff 100%);
   user-select: none;
+}
+
+:root,
+html,
+body {
+  overscroll-behavior: none;
 }

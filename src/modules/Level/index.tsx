@@ -29,7 +29,7 @@ export const LevelLoader: React.FC<Props> = ({
   return (
     <Suspense
       fallback={
-        <div>
+        <div className="h-safe-screen">
           <p>Loading...</p>
           <label>Seed:</label>
           <output>{seed}</output>

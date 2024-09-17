@@ -19,7 +19,7 @@
     1px -1px 0px #eee;
   display: block;
   content: var(--cube-shape);
-  transform: translateY(-3rem) translateX(-2px) scaleY(0.6);
+  transform: translateY(-3rem) scaleY(0.6);
   background-color: #000;
   background-clip: text;
   color: transparent;

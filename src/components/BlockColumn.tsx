@@ -55,7 +55,7 @@ export const BlockColumn: React.FC<Props> = ({
   return (
     <div className={`${rowSpans[column.columnSize]} justify-self-center`}>
       <div
-        className={`border-2 border-transparent border-t-block-brown ${locked ? "contain-paint" : ""} ${column.type === "buffer" ? "rounded-b-md" : "rounded-md"} box-content pb-4`}
+        className={`border-2 border-transparent border-t-block-brown ${locked ? "contain-paint" : ""} ${column.type === "buffer" ? "rounded-b-md" : "rounded-md"} box-content pb-6`}
       >
         <div
           className={`border-2 border-block-brown w-block box-content bg-black/20 cursor-pointer flex flex-col-reverse ${

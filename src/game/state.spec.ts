@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   createBlock,
   createBlocks,
+  createHiddenBlocks,
   createLevelState,
   createPlacementColumn,
 } from "./factories";
@@ -108,7 +109,7 @@ describe(hasWon, () => {
 });
 
 describe(isStuck, () => {
-  it("returns false if a move makes a difference", () => {
+  it("returns false if a move changes the surface", () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
@@ -124,6 +125,20 @@ describe(isStuck, () => {
       ),
       createPlacementColumn(4, createBlocks("white")),
       createPlacementColumn(4),
+    ]);
+    const result = isStuck(level);
+    expect(result).toBe(false);
+  });
+
+  it("returns false if a move reveals something", () => {
+    const level = createLevelState([
+      createPlacementColumn(
+        4,
+        createHiddenBlocks("white", "white", "green", "white")
+      ),
+      createPlacementColumn(4, createHiddenBlocks("green", "green", "green")),
+      createPlacementColumn(4, createHiddenBlocks("white", "pink", "pink")),
+      createPlacementColumn(4, createHiddenBlocks("pink", "pink")),
     ]);
     const result = isStuck(level);
     expect(result).toBe(false);

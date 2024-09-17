@@ -21,7 +21,7 @@ export default {
         place: "place 0.3s ease-out forwards",
         locked: "locked 0.3s ease-in-out forwards",
         fadeIn: "fadeIn 1s ease-in-out forwards",
-        popInOut: "popInOut 4s ease-in-out forwards",
+        popInOut: "popInOut 3s ease-in-out forwards",
       },
       keyframes: {
         fadeIn: {
@@ -43,8 +43,13 @@ export default {
         },
         popInOut: {
           "0%": { scale: "0.3" },
-          "25%": { scale: "1" },
-          "75%": { scale: "1", opacity: "1" },
+          "25%": { scale: "1.1" },
+          "30%": { scale: "1", rotate: "0deg" },
+
+          "50%": { scale: "1.1", rotate: "10deg" },
+
+          "75%": { scale: "1", rotate: "0deg" },
+          "85%": { scale: "1.1", opacity: "1" },
           "100%": { scale: "0.3", opacity: "0" },
         },
         wobble: {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import clsx from "clsx";
 
 import { shapeMapping } from "../game/blocks";
 import { BlockColor } from "../game/types";
@@ -52,25 +53,40 @@ export const Block: React.FC<Props> = ({
         "--cube-color": revealed ? colorMap[color] : "#64748b",
         "--cube-shape": `'${revealed ? shapeMapping[color] : "❓"}'`,
       }}
-      className={`relative h-height-block w-block text-center ${selected ? styles.selected : isLocked ? "animate-locked" : "animate-place"} -mt-top-block ${
-        moved ? "" : "[animation-duration:0ms]"
-      } `}
+      className={clsx(
+        "relative h-height-block w-block text-center -mt-top-block",
+        {
+          [styles.selected]: selected && !isLocked,
+          "animate-locked": !selected && isLocked,
+          "animate-place": !selected && !isLocked,
+          "[animation-duration:0ms]": !moved,
+        }
+      )}
     >
       <div className={styles.shadow}></div>
       <div
-        className={`${styles.layer} bg-block rounded-md border border-black/80 ${selected ? styles.selectedOutline : ""}`}
+        className={clsx(
+          styles.layer,
+          "bg-block rounded-md border border-black/80 ",
+          { [styles.selectedOutline]: selected }
+        )}
       ></div>
-      <div className={`${styles.layer} z-10 pt-7`}>
-        <span className={`block ${styles.shape}`}></span>
+      <div className={clsx(styles.layer, "z-10 pt-7")}>
+        <span className={clsx("block", styles.shape)}></span>
       </div>
-      {revealed && <div className={`${styles.layer} ${styles.texture}`}></div>}
+      {revealed && <div className={clsx(styles.layer, styles.texture)}></div>}
       <div
-        className={`${styles.layer} ${revealed ? styles.gradient : styles.hidden}`}
+        className={clsx(styles.layer, {
+          [styles.gradient]: revealed,
+          [styles.hidden]: !revealed,
+        })}
       ></div>
       <div
-        className={`absolute w-full h-full rounded-md ${
-          styles.gradientLocked
-        } ${isLocked ? "opacity-100" : "opacity-0"}`}
+        className={clsx(
+          "absolute w-full h-full rounded-md",
+          styles.gradientLocked,
+          { ["opacity-100"]: isLocked, ["opacity-0"]: !isLocked }
+        )}
       ></div>
     </div>
   );
