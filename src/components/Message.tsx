@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
+import clsx from "clsx";
+
+import { BlockColor } from "@/game/blocks";
+
+import { Block, colorMap } from "./Block";
+
+import styles from "./Message.module.css";
 
 type Props = {
   message: string;
-  color: string;
+  color: BlockColor;
+  shape?: string;
   delay?: number;
   afterShow?: VoidFunction;
 };
@@ -11,7 +19,8 @@ export const Message: React.FC<Props> = ({
   message,
   afterShow,
   delay = 0,
-  color = "bg-green-700",
+  shape = "❤️",
+  color = "green",
 }) => {
   const [started, setStarted] = useState(false);
   useEffect(() => {
@@ -31,13 +40,40 @@ export const Message: React.FC<Props> = ({
   }, [started]);
 
   return (
-    <div className="z-50 absolute w-full h-full">
+    <div
+      className="z-50 absolute w-full h-full"
+      style={{ "--cube-color": colorMap[color] }}
+    >
       {started && (
         <>
           <div className="absolute w-full h-full bg-slate-700/60 opacity-0 animate-fadeIn"></div>
-          <div className="absolute top-1/3 w-full animate-popInOut">
+          <div className="absolute top-[46%] left-1/2 animate-flyTopLeft">
+            <Block color={color} shape={shape} moved={false} revealed={true} />
+          </div>
+          <div className="absolute top-[46%] left-1/2 animate-flyTopRight">
+            <Block color={color} shape={shape} moved={false} revealed={true} />
+          </div>
+          <div className="absolute top-[46%] left-1/2 animate-flyBottomRight">
+            <Block color={color} shape={shape} moved={false} revealed={true} />
+          </div>
+          <div className="absolute top-[46%] left-1/2 animate-flyBottomLeft">
+            <Block color={color} shape={shape} moved={false} revealed={true} />
+          </div>
+          <div className="absolute top-1/3 left-1/2 animate-popInOut">
+            <span
+              className={clsx(
+                styles.shape,
+                "block bg-block text-transparent bg-clip-text"
+              )}
+            >
+              {shape}
+            </span>
+          </div>
+          <div className="absolute top-[45%] w-full animate-popInOut">
             <div
-              className={`${color} px-6 py-3 rounded-full drop-shadow-xl w-1/2 mx-auto`}
+              className={
+                "bg-block px-6 py-3 rounded-full drop-shadow-xl w-1/2 mx-auto"
+              }
             >
               <h1 className="font-bold text-2xl text-center text-white">
                 {message}

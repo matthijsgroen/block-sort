@@ -12,6 +12,7 @@ export type Props = {
   color: BlockColor;
   selected?: boolean | null;
   locked?: boolean | null;
+  shape?: string;
 };
 
 export const colorMap: Record<BlockColor, string> = {
@@ -32,6 +33,7 @@ export const colorMap: Record<BlockColor, string> = {
 export const Block: React.FC<Props> = ({
   revealed,
   color,
+  shape,
   moved,
   selected = null,
   locked = false,
@@ -47,11 +49,13 @@ export const Block: React.FC<Props> = ({
     }
   }, [locked]);
 
+  const displayShape = shape ?? (revealed ? shapeMapping[color] : "❓");
+
   return (
     <div
       style={{
         "--cube-color": revealed ? colorMap[color] : "#64748b",
-        "--cube-shape": `'${revealed ? shapeMapping[color] : "❓"}'`,
+        "--cube-shape": `'${displayShape}'`,
       }}
       className={clsx(
         "relative h-height-block w-block text-center -mt-top-block",

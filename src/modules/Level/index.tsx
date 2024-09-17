@@ -21,21 +21,11 @@ export const LevelLoader: React.FC<Props> = ({
 }) => {
   const level = useMemo(() => {
     const random = mulberry32(seed);
-    console.log("generating level");
     return generatePlayableLevel(levelSettings, random);
   }, [seed, JSON.stringify(levelSettings)]);
-  console.log("render", seed, JSON.stringify(levelSettings));
 
   return (
-    <Suspense
-      fallback={
-        <div className="h-safe-screen">
-          <p>Loading...</p>
-          <label>Seed:</label>
-          <output>{seed}</output>
-        </div>
-      }
-    >
+    <Suspense fallback={<div className="h-safe-screen"></div>}>
       <Level
         level={level}
         levelNr={levelNr}

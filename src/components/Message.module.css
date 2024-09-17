@@ -1,0 +1,7 @@
+.shape {
+  scale: 3;
+  text-shadow:
+    0px 0px 0px color-mix(in srgb, var(--cube-color) 70%, #fff 30%),
+    0px 0px 2px #fff7,
+    0px 0px 8px color-mix(in srgb, var(--cube-color) 50%, #fff 50%);
+}

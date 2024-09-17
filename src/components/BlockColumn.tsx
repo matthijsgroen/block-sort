@@ -33,7 +33,7 @@ export const BlockColumn: React.FC<Props> = ({
     if (!locked && column.locked) {
       const clear = setTimeout(() => {
         setLocked(column.locked);
-      }, 400);
+      }, 100);
       return () => clearTimeout(clear);
     }
   }, [locked, column.locked]);
@@ -47,7 +47,7 @@ export const BlockColumn: React.FC<Props> = ({
           }
           return a + 1;
         });
-      }, 100);
+      }, 50);
       return () => clearInterval(clear);
     }
   }, [locked]);

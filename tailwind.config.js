@@ -22,8 +22,56 @@ export default {
         locked: "locked 0.3s ease-in-out forwards",
         fadeIn: "fadeIn 1s ease-in-out forwards",
         popInOut: "popInOut 3s ease-in-out forwards",
+        rotate: "rotate 2s linear infinite",
+        flyTopLeft:
+          "flyTopLeft 3s ease-in-out forwards, rotate 2s linear infinite, scale 3s ease-in-out infinite",
+        flyTopRight:
+          "flyTopRight 3s ease-in-out forwards, rotate 3s linear infinite, scale 2s ease-in-out infinite",
+        flyBottomLeft:
+          "flyBottomLeft 3s ease-in-out forwards, rotate 2s linear infinite, scale 2s ease-in-out infinite",
+        flyBottomRight:
+          "flyBottomRight 3s ease-in-out forwards, rotate 3s linear infinite, scale 3s ease-in-out infinite",
       },
       keyframes: {
+        rotate: {
+          "0%": { rotate: "0deg" },
+          "100%": { rotate: "360deg" },
+        },
+        scale: {
+          "0%": { scale: "0.2" },
+          "20%": { scale: "0.9" },
+          "50%": { scale: "0.7" },
+          "80%": { scale: "0.9" },
+          "100%": { scale: "0.2" },
+        },
+        flyTopLeft: {
+          "0%": { translate: "0 0" },
+          "30%": { translate: "-11rem -0.5rem" },
+          "40%": { translate: "-10rem -2.5rem" },
+          "90%": { translate: "-9rem -2.5rem" },
+          "100%": { translate: "0 0" },
+        },
+        flyTopRight: {
+          "0%": { translate: "0rem 0rem" },
+          "30%": { translate: "7rem -4.5rem" },
+          "40%": { translate: "6rem -3.5rem" },
+          "90%": { translate: "7rem -3.5rem" },
+          "100%": { translate: "0rem 0rem" },
+        },
+        flyBottomRight: {
+          "0%": { translate: "0rem 0rem" },
+          "30%": { translate: "7rem 4.5rem" },
+          "40%": { translate: "6rem 3.5rem" },
+          "90%": { translate: "7rem 3.5rem" },
+          "100%": { translate: "0rem 0rem" },
+        },
+        flyBottomLeft: {
+          "0%": { translate: "0rem 0rem" },
+          "30%": { translate: "-11rem 4.5rem" },
+          "40%": { translate: "-10rem 3.5rem" },
+          "90%": { translate: "-9rem 3.5rem" },
+          "100%": { translate: "0rem 0rem" },
+        },
         fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },

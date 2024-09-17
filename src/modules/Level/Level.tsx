@@ -91,7 +91,8 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
         <Message
           delay={1000}
           message="You won!"
-          color="bg-green-700"
+          color="green"
+          shape="✔️"
           afterShow={() => {
             deleteLevelState();
             onComplete(playState === "won");
@@ -101,8 +102,9 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
       {playState === "lost" && (
         <Message
           delay={2000}
-          color="bg-red-700"
+          color="red"
           message="You lost!"
+          shape="❌"
           afterShow={() => {
             setLevelState(initialLevelState);
             setPlayState("busy");
