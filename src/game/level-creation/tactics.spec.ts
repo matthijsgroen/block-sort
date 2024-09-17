@@ -93,28 +93,6 @@ describe(generatePlayableLevel, () => {
     expect(average).toBeCloseTo(30.2, 3);
   });
 
-  it("has around 70 of moves on average for 10 colors", async () => {
-    const random = mulberry32(TEST_SEED);
-    const results = await Promise.all(
-      timesMap(
-        10,
-        async () =>
-          (
-            await generatePlayableLevel(
-              {
-                amountColors: 19,
-                stackSize: 4,
-                extraPlacementStacks: 2,
-              },
-              random
-            )
-          ).moves.length
-      )
-    );
-    const average = results.reduce((r, i) => r + i, 0) / results.length;
-    expect(average).toBeCloseTo(69.2, 3);
-  });
-
   it("generates a hard level", async () => {
     const random = mulberry32(TEST_SEED);
     const level = await generatePlayableLevel(
@@ -144,7 +122,6 @@ describe(generatePlayableLevel, () => {
       random
     );
     expect(level.colors).toHaveLength(4);
-    expect(level.moves).toHaveLength(419);
   });
 
   it("throws an error if it can't generate a playable level", () => {

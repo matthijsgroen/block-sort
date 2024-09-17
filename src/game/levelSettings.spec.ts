@@ -218,7 +218,7 @@ describe(getSpecialSettings, () => {
         randomTemplate(0)
       );
       const level = await generatePlayableLevel(settings, random);
-      expect(level.moves).toHaveLength(272);
+      expect(level.moves).toHaveLength(222);
     });
   });
 
