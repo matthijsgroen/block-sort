@@ -44,3 +44,11 @@ export const isStuck = (level: LevelState): boolean => {
     return !hasChanged;
   });
 };
+
+export const allShuffled = (level: LevelState): boolean =>
+  level.columns.every(
+    (c) =>
+      c.blocks.length < c.columnSize ||
+      c.blocks.map((b) => b.color).filter((b, i, l) => l.indexOf(b) === i)
+        .length > 1
+  );

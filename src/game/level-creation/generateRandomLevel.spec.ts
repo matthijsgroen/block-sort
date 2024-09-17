@@ -2,7 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import { mulberry32 } from "@/support/random";
 
-import { createBlock, createPlacementColumn } from "../factories";
+import {
+  createBlocks,
+  createHiddenBlocks,
+  createPlacementColumn,
+} from "../factories";
 
 import { generateRandomLevel } from "./generateRandomLevel";
 
@@ -19,21 +23,17 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["black", "green"]);
+    expect(level.colors).toEqual(["darkblue", "green"]);
 
     expect(level.columns).toEqual([
-      createPlacementColumn(4, [
-        createBlock("green"),
-        createBlock("black"),
-        createBlock("green"),
-        createBlock("green"),
-      ]),
-      createPlacementColumn(4, [
-        createBlock("black"),
-        createBlock("black"),
-        createBlock("green"),
-        createBlock("black"),
-      ]),
+      createPlacementColumn(
+        4,
+        createBlocks("green", "green", "darkblue", "darkblue")
+      ),
+      createPlacementColumn(
+        4,
+        createBlocks("darkblue", "green", "green", "darkblue")
+      ),
       createPlacementColumn(4),
       createPlacementColumn(4),
     ]);
@@ -50,20 +50,16 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["black", "green"]);
+    expect(level.colors).toEqual(["darkblue", "green"]);
     expect(level.columns).toEqual([
-      createPlacementColumn(4, [
-        createBlock("green"),
-        createBlock("black", true),
-        createBlock("green", true),
-        createBlock("green", true),
-      ]),
-      createPlacementColumn(4, [
-        createBlock("black"),
-        createBlock("black", true),
-        createBlock("green", true),
-        createBlock("black", true),
-      ]),
+      createPlacementColumn(
+        4,
+        createHiddenBlocks("green", "green", "darkblue", "darkblue")
+      ),
+      createPlacementColumn(
+        4,
+        createHiddenBlocks("darkblue", "green", "green", "darkblue")
+      ),
       createPlacementColumn(4),
       createPlacementColumn(4),
     ]);

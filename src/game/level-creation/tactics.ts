@@ -1,7 +1,7 @@
 import { pickWeighted } from "@/support/random";
 
 import { moveBlocks } from "../actions";
-import { hasWon, isStuck } from "../state";
+import { allShuffled, hasWon, isStuck } from "../state";
 import { LevelState, Move } from "../types";
 
 import { randomMove } from "./tactics/randomMove";
@@ -11,8 +11,8 @@ import { Tactic, WeightedMove } from "./tactics/types";
 import { generateRandomLevel, LevelSettings } from "./generateRandomLevel";
 
 const MAX_PLAY_ATTEMPTS = 5;
-const MAX_GENERATE_ATTEMPTS = 40;
-const MAX_LEVEL_MOVES = 500;
+const MAX_GENERATE_ATTEMPTS = 50;
+const MAX_LEVEL_MOVES = 800;
 
 const tactics: Tactic[] = [randomMove, startColumn, stackColumn];
 
@@ -27,7 +27,7 @@ export const generatePlayableLevel = async (
     attempt++;
     delay(4);
     const level = generateRandomLevel(settings, random);
-    if (isStuck(level)) {
+    if (isStuck(level) || !allShuffled(level)) {
       continue;
     }
     const [beatable, moves] = isBeatable(level, random);

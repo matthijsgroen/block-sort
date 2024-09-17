@@ -35,6 +35,9 @@ export const moveBlocks = (
   endColumn: number
 ): LevelState =>
   produce<LevelState>((draft) => {
+    if (startColumn === endColumn) {
+      return;
+    }
     const blocks = selectFromColumn(draft, startColumn);
     if (blocks.length === 0) return;
     const amountToMove = canPlaceAmount(draft, endColumn, blocks);

@@ -179,7 +179,7 @@ describe(getNormalSettings, () => {
       getNormalSettings(LEVEL_SCALE.at(-1)!),
       random
     );
-    expect(level.moves).toHaveLength(94);
+    expect(level.moves).toHaveLength(121);
   });
 });
 
@@ -218,7 +218,7 @@ describe(getSpecialSettings, () => {
         randomTemplate(0)
       );
       const level = await generatePlayableLevel(settings, random);
-      expect(level.moves).toHaveLength(61);
+      expect(level.moves).toHaveLength(222);
     });
   });
 
@@ -251,7 +251,7 @@ describe(getSpecialSettings, () => {
         randomTemplate(1)
       );
       const level = await generatePlayableLevel(settings, random);
-      expect(level.moves).toHaveLength(66);
+      expect(level.moves).toHaveLength(33);
     });
   });
 
@@ -282,7 +282,7 @@ describe(getSpecialSettings, () => {
         randomTemplate(2)
       );
       const level = await generatePlayableLevel(settings, random);
-      expect(level.moves).toHaveLength(22);
+      expect(level.moves).toHaveLength(24);
     });
   });
 
@@ -321,7 +321,7 @@ describe(getSpecialSettings, () => {
         randomTemplate(3)
       );
       const level = await generatePlayableLevel(settings, random);
-      expect(level.moves).toHaveLength(284);
+      expect(level.moves).toHaveLength(261);
     });
   });
 });

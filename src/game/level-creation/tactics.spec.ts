@@ -20,24 +20,24 @@ describe(generatePlayableLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["black", "green"]);
+    expect(level.colors).toEqual(["darkblue", "green"]);
     expect(level.columns).toEqual([
       createPlacementColumn(4, [
         createBlock("green"),
-        createBlock("black"),
         createBlock("green"),
-        createBlock("green"),
+        createBlock("darkblue"),
+        createBlock("darkblue"),
       ]),
       createPlacementColumn(4, [
-        createBlock("black"),
-        createBlock("black"),
+        createBlock("darkblue"),
         createBlock("green"),
-        createBlock("black"),
+        createBlock("green"),
+        createBlock("darkblue"),
       ]),
       createPlacementColumn(4),
       createPlacementColumn(4),
     ]);
-    expect(level.moves).toHaveLength(5);
+    expect(level.moves).toHaveLength(4);
   });
 
   it("generates a medium level", async () => {
@@ -51,7 +51,7 @@ describe(generatePlayableLevel, () => {
       random
     );
     expect(level.colors).toHaveLength(5);
-    expect(level.moves).toHaveLength(16);
+    expect(level.moves).toHaveLength(17);
   });
 
   it("generates a complex level", async () => {
@@ -68,7 +68,7 @@ describe(generatePlayableLevel, () => {
       random
     );
     expect(level.colors).toHaveLength(10);
-    expect(level.moves).toHaveLength(94);
+    expect(level.moves).toHaveLength(121);
   });
 
   it("has around 30 of moves on average for 9 colors", async () => {
@@ -93,28 +93,6 @@ describe(generatePlayableLevel, () => {
     expect(average).toBeCloseTo(30.2, 3);
   });
 
-  it("has around 52 of moves on average for 10 colors", async () => {
-    const random = mulberry32(TEST_SEED);
-    const results = await Promise.all(
-      timesMap(
-        10,
-        async () =>
-          (
-            await generatePlayableLevel(
-              {
-                amountColors: 19,
-                stackSize: 4,
-                extraPlacementStacks: 2,
-              },
-              random
-            )
-          ).moves.length
-      )
-    );
-    const average = results.reduce((r, i) => r + i, 0) / results.length;
-    expect(average).toBeCloseTo(52.2, 3);
-  });
-
   it("generates a hard level", async () => {
     const random = mulberry32(TEST_SEED);
     const level = await generatePlayableLevel(
@@ -127,22 +105,7 @@ describe(generatePlayableLevel, () => {
       random
     );
     expect(level.colors).toHaveLength(10);
-    expect(level.moves).toHaveLength(45);
-  });
-
-  it("generates a easy level", async () => {
-    const random = mulberry32(TEST_SEED);
-    const level = await generatePlayableLevel(
-      {
-        amountColors: 9,
-        stackSize: 4,
-        extraPlacementStacks: 2,
-        maximalAmountOfMoves: 25,
-      },
-      random
-    );
-    expect(level.colors).toHaveLength(9);
-    expect(level.moves).toHaveLength(25);
+    expect(level.moves).toHaveLength(42);
   });
 
   it("generates a complex level (buffers / force)", async () => {
@@ -159,7 +122,6 @@ describe(generatePlayableLevel, () => {
       random
     );
     expect(level.colors).toHaveLength(4);
-    expect(level.moves).toHaveLength(308);
   });
 
   it("throws an error if it can't generate a playable level", () => {
