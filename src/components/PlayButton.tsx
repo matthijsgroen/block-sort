@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 type Props = {
   levelNr: number;
   special?: boolean;
@@ -13,9 +15,13 @@ export const PlayButton: React.FC<Props> = ({
 }) => (
   <button
     onClick={onClick}
-    className={`inline-block w-[10rem] h-12 ${
-      special ? "bg-purple-500" : "bg-orange-500"
-    } rounded-3xl shadow-lg font-bold pt-3`}
+    className={clsx(
+      "inline-block w-[10rem] h-12 rounded-3xl shadow-lg font-bold pt-3",
+      {
+        "bg-orange-500": !special,
+        "bg-purple-500": special,
+      }
+    )}
   >
     <span
       className={`block ${(hard || special) == false ? "-translate-y-1" : ""}`}

@@ -55,6 +55,7 @@ export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
                   className={clsx("text-orange-400", {
                     "text-green-900": i < levelNr,
                     "font-bold": i === levelNr,
+                    "text-purple-500": isSpecial(i) && i >= levelNr,
                   })}
                 >
                   {i + 1}&nbsp;

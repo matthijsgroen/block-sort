@@ -1,4 +1,5 @@
 import { use, useEffect, useState } from "react";
+import clsx from "clsx";
 
 import { BlockColumn } from "@/components/BlockColumn";
 import { Message } from "@/components/Message";
@@ -8,6 +9,8 @@ import { hasWon, isStuck } from "@/game/state";
 import { LevelState } from "@/game/types";
 import { colSizes, rowSizes } from "@/support/grid";
 import { useGameStorage } from "@/support/useGameStorage";
+
+import styles from "./level.module.css";
 
 type Props = {
   onComplete: (won: boolean) => void;
@@ -111,16 +114,26 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
           onClick={() => {
             onComplete(false);
           }}
+          className={clsx(
+            "text-2xl inline-block text-orange-100 size-block border border-black rounded-full drop-shadow-md",
+            styles.buttonBackground
+          )}
         >
-          &larr;
+          <span className="inline-block">&larr;</span>
         </button>
         <button
           onClick={() => {
             setLevelState(initialLevelState);
             setPlayState("busy");
           }}
+          className={clsx(
+            "text-4xl inline-block text-orange-100 size-block border border-black rounded-full drop-shadow-md",
+            styles.buttonBackground
+          )}
         >
-          🔄
+          <span className="inline-block -translate-y-[5px] -translate-x-[2px]">
+            &#10226;
+          </span>
         </button>
       </div>
       <div className="flex-1 flex flex-wrap justify-center p-2">
