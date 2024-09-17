@@ -4,10 +4,9 @@
 }
 .shape::before {
   text-shadow:
-    0px 0px 0px #eee,
+    0px 0px 0px color-mix(in srgb, var(--cube-color) 70%, #fff 30%),
     0px 0px 4px #000,
-    0px 0px 2px #000;
-  mix-blend-mode: lighten;
+    1px 1px 2px #000;
   opacity: 50%;
   color: transparent;
   display: inline;
@@ -30,27 +29,23 @@
 }
 
 .layer {
-  @apply absolute w-block h-height-block rounded-md;
-}
-
-.lockedLayer {
-  @apply absolute w-block h-block rounded-md;
+  @apply absolute w-full h-full rounded-md;
 }
 
 .texture {
   background: url("./wood-texture.png");
   mix-blend-mode: color-burn;
-  opacity: 60%;
+  @apply opacity-60;
 }
 
 .gradient {
   background: linear-gradient(
-    rgba(0, 0, 0, 50%) 0%,
-    rgba(0, 0, 0, 20%) 5%,
-    rgba(0, 0, 0, 20%) 30%,
+    rgba(0, 0, 0, 30%) 0%,
+    rgba(0, 0, 0, 0%) 5%,
+    rgba(0, 0, 0, 0%) 30%,
     rgba(255, 255, 255, 20%) 35%,
-    rgba(0, 0, 0, 0%) 40%,
-    rgba(0, 0, 0, 0%) 90%,
+    rgba(0, 0, 0, 20%) 40%,
+    rgba(0, 0, 0, 20%) 90%,
     rgba(0, 0, 0, 50%) 100%
   );
 }
@@ -71,16 +66,26 @@
 }
 
 .gradientLocked {
-  transition: opacity 1s;
+  transition: opacity 2s;
   background: linear-gradient(
-    rgba(0, 0, 0, 50%) 0%,
-    rgba(0, 0, 0, 40%) 20%,
-    rgba(0, 0, 0, 40%) 85%,
-    rgba(0, 0, 0, 60%) 100%
+    rgba(0, 0, 0, 30%) 0%,
+    rgba(0, 0, 0, 30%) 20%,
+    rgba(0, 0, 0, 30%) 85%,
+    rgba(0, 0, 0, 30%) 100%
   );
 }
 
 .selected {
-  @apply outline-2 outline-white outline -translate-y-6 ease-in-out transition-transform animate-wobble;
+  @apply -translate-y-6 ease-in-out transition-transform animate-wobble;
+}
+
+.selectedOutline {
   box-shadow: 0px 0px 4px 4px var(--cube-color);
+  @apply outline-2 outline-white outline;
+}
+
+.shadow {
+  background-color: #0008;
+  box-shadow: 4px 1px 2px 1px #0008;
+  @apply absolute w-full h-block rounded-md translate-y-top-block;
 }

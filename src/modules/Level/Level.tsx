@@ -52,8 +52,9 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
 
   const [levelState, setLevelState, deleteLevelState] =
     useGameStorage<LevelState>(`levelState${levelNr}`, initialLevelState);
+
   const [selectStart, setSelectStart] = useState<
-    [column: number, amount: number] | null
+    [column: number, amount: number, state: LevelState] | null
   >(null);
 
   const [started, setStarted] = useState(false);
@@ -68,6 +69,9 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
       setPlayState("won");
     } else if (isStuck(levelState)) {
       setPlayState("lost");
+    }
+    if (selectStart && selectStart[2] !== levelState) {
+      setSelectStart(null);
     }
   }, [levelState]);
 
@@ -87,11 +91,10 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
       setLevelState((levelState) =>
         moveBlocks(levelState, selectStart[0], columnIndex)
       );
-      setSelectStart(null);
     } else {
       const selection = selectFromColumn(levelState, columnIndex);
       if (selection.length > 0) {
-        setSelectStart([columnIndex, selection.length]);
+        setSelectStart([columnIndex, selection.length, levelState]);
       }
     }
   };
@@ -127,51 +130,60 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
               className={`${rowSpans[bar.columnSize]} justify-self-center`}
             >
               <div
-                className={`border-2 border-block-brown w-block box-content bg-black/20 cursor-pointer flex flex-col-reverse ${
-                  bar.type === "buffer"
-                    ? "border-t-0 rounded-b-md"
-                    : "rounded-md shadow-inner"
-                } ${bar.locked ? "contain-paint" : ""}`}
-                onTouchStart={onColumnClick(i)}
+                className={`
+                  border-2 border-transparent border-t-block-brown
+                  ${bar.locked ? "contain-paint" : ""}
+                    ${bar.type === "buffer" ? "rounded-b-md" : "rounded-md"}
+               box-content pb-4`}
               >
-                {bar.blocks.map((_b, p, l) => {
-                  const index = l.length - 1 - p;
-                  const block = l[index];
-                  const isSelected =
-                    selectStart &&
-                    index < selectStart[1] &&
-                    i === selectStart[0];
-                  return (
-                    <Block
-                      key={bar.columnSize - bar.blocks.length + index}
-                      locked={bar.locked}
-                      moved={started}
-                      revealed={block.revealed}
-                      color={block.color}
-                      selected={isSelected}
-                    />
-                  );
-                })}
-                {timesMap(bar.columnSize - bar.blocks.length, (p, l) =>
-                  l - p === l && bar.limitColor !== undefined ? (
-                    <div
-                      key={p}
-                      className={`${p === 0 && bar.blocks.length === 0 ? styles.bottom : styles.empty} ${styles.shade}`}
-                    >
+                <div
+                  className={`border-2 border-block-brown w-block box-content bg-black/20 cursor-pointer flex flex-col-reverse ${
+                    bar.type === "buffer"
+                      ? "border-t-0 rounded-b-md"
+                      : "border-t-0 rounded-md shadow-inner"
+                  } `}
+                  onTouchStart={onColumnClick(i)}
+                >
+                  {bar.blocks.map((_b, p, l) => {
+                    const index = l.length - 1 - p;
+                    const block = l[index];
+                    const isSelected =
+                      selectStart &&
+                      selectStart[2] === levelState &&
+                      index < selectStart[1] &&
+                      i === selectStart[0];
+                    return (
+                      <Block
+                        key={bar.columnSize - bar.blocks.length + index}
+                        locked={bar.locked}
+                        moved={started}
+                        revealed={block.revealed}
+                        color={block.color}
+                        selected={isSelected}
+                      />
+                    );
+                  })}
+                  {timesMap(bar.columnSize - bar.blocks.length, (p, l) =>
+                    l - p === l && bar.limitColor !== undefined ? (
                       <div
-                        style={{ "--cube-color": colorMap[bar.limitColor] }}
-                        className={`${styles.limit}`}
+                        key={bar.blocks.length + p}
+                        className={`${p === 0 && bar.blocks.length === 0 ? styles.bottom : styles.empty} ${styles.shade}`}
                       >
-                        {shapeMapping[bar.limitColor]}
+                        <div
+                          style={{ "--cube-color": colorMap[bar.limitColor] }}
+                          className={`${styles.limit} animate-fadeIn`}
+                        >
+                          {shapeMapping[bar.limitColor]}
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    <div
-                      key={p}
-                      className={`${p === 0 && bar.blocks.length === 0 ? styles.bottom : styles.empty} ${styles.shade}`}
-                    ></div>
-                  )
-                )}
+                    ) : (
+                      <div
+                        key={bar.blocks.length + p}
+                        className={`${p === 0 && bar.blocks.length === 0 ? styles.bottom : styles.empty} ${styles.shade}`}
+                      ></div>
+                    )
+                  )}
+                </div>
               </div>
             </div>
           ))}

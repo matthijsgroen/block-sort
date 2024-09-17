@@ -25,7 +25,7 @@ export const shapeMapping: Record<BlockColor, string> = {
   purple: "️⭐️",
   blue: "🌙",
   red: "❌",
-  white: "◻️ ",
+  white: "⬜️",
   green: "🔶",
   darkblue: "✨",
 };

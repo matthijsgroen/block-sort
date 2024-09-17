@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import { shapeMapping } from "../game/blocks";
 import { BlockColor } from "../game/types";
 
@@ -16,7 +18,7 @@ export const colorMap: Record<BlockColor, string> = {
   white: "#eeeeee",
   yellow: "#eab308",
   blue: "#3b82f6",
-  purple: "#a855f7",
+  purple: "#d80dbd",
   black: "#29374e",
   green: "#16a34a",
   darkgreen: "#15803d",
@@ -32,27 +34,42 @@ export const Block: React.FC<Props> = ({
   moved,
   selected = null,
   locked = false,
-}) => (
-  <div
-    style={{
-      "--cube-color": revealed ? colorMap[color] : "#64748b",
-      "--cube-shape": `'${revealed ? shapeMapping[color] : "❓"}'`,
-    }}
-    className={`relative h-height-block w-block text-center ${selected ? styles.selected : locked ? "animate-locked" : "animate-place"} -mt-top-block ${
-      moved ? "" : "[animation-duration:0ms]"
-    } bg-block rounded-md border border-black/80`}
-  >
-    <div className={`${styles.layer} z-10 pt-7`}>
-      <span className={`block ${styles.shape}`}></span>
+}) => {
+  const [isLocked, setIsLocked] = useState(false);
+
+  useEffect(() => {
+    if (locked) {
+      const clear = setTimeout(() => setIsLocked(locked), 10);
+      return () => clearTimeout(clear);
+    }
+  }, [locked]);
+
+  return (
+    <div
+      style={{
+        "--cube-color": revealed ? colorMap[color] : "#64748b",
+        "--cube-shape": `'${revealed ? shapeMapping[color] : "❓"}'`,
+      }}
+      className={`relative h-height-block w-block text-center ${selected ? styles.selected : isLocked ? "animate-locked" : "animate-place"} -mt-top-block ${
+        moved ? "" : "[animation-duration:0ms]"
+      } `}
+    >
+      <div className={styles.shadow}></div>
+      <div
+        className={`${styles.layer} bg-block rounded-md border border-black/80 ${selected ? styles.selectedOutline : ""}`}
+      ></div>
+      <div className={`${styles.layer} z-10 pt-7`}>
+        <span className={`block ${styles.shape}`}></span>
+      </div>
+      {revealed && <div className={`${styles.layer} ${styles.texture}`}></div>}
+      <div
+        className={`${styles.layer} ${revealed ? styles.gradient : styles.hidden}`}
+      ></div>
+      <div
+        className={`absolute w-full h-full rounded-md ${
+          styles.gradientLocked
+        } ${isLocked ? "opacity-100" : "opacity-0"}`}
+      ></div>
     </div>
-    {revealed && <div className={`${styles.layer} ${styles.texture}`}></div>}
-    <div
-      className={`${styles.layer} ${revealed ? styles.gradient : styles.hidden}`}
-    ></div>
-    <div
-      className={`absolute w-block h-height-block transition-opacity -top-[2px] -left-[2px] ${
-        styles.gradientLocked
-      } ${locked ? "opacity-100" : "opacity-0"}`}
-    ></div>
-  </div>
-);
+  );
+};

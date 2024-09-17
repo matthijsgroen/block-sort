@@ -19,9 +19,14 @@ export default {
       animation: {
         wobble: "wobble 1s ease-in-out both infinite",
         place: "place 0.2s ease-in-out forwards",
-        locked: "locked 0.2s ease-in-out forwards",
+        locked: "locked 1s ease-in-out forwards",
+        fadeIn: "fadeIn 1s ease-in-out forwards",
       },
       keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
         place: {
           "0%": { transform: "translateY(-2rem)" },
           "80%": { transform: "translateY(1.2rem)" },
@@ -29,6 +34,7 @@ export default {
         },
         locked: {
           "0%": { transform: "translateY(1rem)" },
+          "20%": { transform: "translateY(1rem)" },
           "100%": {
             transform: "translateY(0rem)",
           },
