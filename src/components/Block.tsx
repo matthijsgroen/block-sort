@@ -41,6 +41,8 @@ export const Block: React.FC<Props> = ({
     if (locked) {
       const clear = setTimeout(() => setIsLocked(locked), 10);
       return () => clearTimeout(clear);
+    } else {
+      setIsLocked(false);
     }
   }, [locked]);
 

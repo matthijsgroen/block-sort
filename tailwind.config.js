@@ -18,8 +18,8 @@ export default {
       },
       animation: {
         wobble: "wobble 1s ease-in-out both infinite",
-        place: "place 0.2s ease-in-out forwards",
-        locked: "locked 1s ease-in-out forwards",
+        place: "place 0.3s ease-out forwards",
+        locked: "locked 0.3s ease-in-out forwards",
         fadeIn: "fadeIn 1s ease-in-out forwards",
       },
       keyframes: {
@@ -28,8 +28,9 @@ export default {
           "100%": { opacity: "1" },
         },
         place: {
-          "0%": { transform: "translateY(-2rem)" },
-          "80%": { transform: "translateY(1.2rem)" },
+          "0%": { transform: "translateY(-3rem)" },
+          "70%": { transform: "translateY(1.4rem)" },
+          "90%": { transform: "translateY(0.8rem)" },
           "100%": { transform: "translateY(1rem)" },
         },
         locked: {
