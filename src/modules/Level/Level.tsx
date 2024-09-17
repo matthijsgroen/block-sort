@@ -1,6 +1,7 @@
 import { use, useEffect, useState } from "react";
 
 import { BlockColumn } from "@/components/BlockColumn";
+import { Message } from "@/components/Message";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { hasWon, isStuck } from "@/game/state";
@@ -19,7 +20,7 @@ const determineColumns = (
   maxColumnHeight: number,
   amountColumns: number
 ): string => {
-  if (maxColumnHeight <= 6 && amountColumns % 2 === 0 && amountColumns < 12) {
+  if (maxColumnHeight <= 6 && amountColumns < 12) {
     const gridColumnCount = Math.ceil(amountColumns / 2);
     return colSizes[gridColumnCount];
   }
@@ -42,7 +43,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
   const [started, setStarted] = useState(false);
 
   useEffect(() => {
-    const cleanup = setTimeout(() => setStarted(true), 200);
+    const cleanup = setTimeout(() => setStarted(true), 300);
     return () => clearTimeout(cleanup);
   }, []);
 
@@ -56,17 +57,6 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
       setSelectStart(null);
     }
   }, [levelState]);
-
-  useEffect(() => {
-    if (playState !== "won") {
-      return;
-    }
-    const timeOut = setTimeout(() => {
-      deleteLevelState();
-      onComplete(playState === "won");
-    }, 2000);
-    return () => clearTimeout(timeOut);
-  }, [playState, onComplete]);
 
   const onColumnClick = (columnIndex: number) => () => {
     if (selectStart) {
@@ -90,7 +80,16 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
 
   return (
     <div className="flex flex-col h-safe-screen">
-      {playState === "won" && <h1>Well done!</h1>}
+      {playState === "won" && (
+        <Message
+          message="You won!"
+          color="blue"
+          afterShow={() => {
+            deleteLevelState();
+            onComplete(playState === "won");
+          }}
+        />
+      )}
       {playState === "lost" && <h1>You lost!</h1>}
       <div className="flex text-lg flex-row justify-between p-2">
         <button

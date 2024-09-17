@@ -21,6 +21,7 @@ export default {
         place: "place 0.3s ease-out forwards",
         locked: "locked 0.3s ease-in-out forwards",
         fadeIn: "fadeIn 1s ease-in-out forwards",
+        popInOut: "popInOut 4s ease-in-out forwards",
       },
       keyframes: {
         fadeIn: {
@@ -39,6 +40,12 @@ export default {
           "100%": {
             transform: "translateY(0rem)",
           },
+        },
+        popInOut: {
+          "0%": { scale: "0.3" },
+          "25%": { scale: "1" },
+          "75%": { scale: "1", opacity: "1" },
+          "100%": { scale: "0.3", opacity: "0" },
         },
         wobble: {
           "0%": { rotate: "5deg" },
