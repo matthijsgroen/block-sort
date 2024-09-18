@@ -4,7 +4,7 @@ import styles from "./TopButton.module.css";
 
 type Props = {
   onClick?: VoidFunction;
-  buttonType: "restart" | "back" | "settings";
+  buttonType: "restart" | "back" | "settings" | "close";
 };
 
 export const TopButton: React.FC<Props> = ({ onClick, buttonType }) => {
@@ -13,7 +13,10 @@ export const TopButton: React.FC<Props> = ({ onClick, buttonType }) => {
       onPointerDown={onClick}
       className={clsx(
         {
-          "text-2xl": buttonType === "back",
+          "text-2xl":
+            buttonType === "back" ||
+            buttonType === "settings" ||
+            buttonType === "close",
           "text-4xl": buttonType === "restart",
         },
         "inline-block size-block border border-black rounded-full",
@@ -26,8 +29,9 @@ export const TopButton: React.FC<Props> = ({ onClick, buttonType }) => {
           &#10226;
         </span>
       )}
-      {buttonType === "settings" && (
-        <span className="inline-block scale-150">⛭</span>
+      {buttonType === "settings" && <span className="inline-block">⛭</span>}
+      {buttonType === "close" && (
+        <span className="inline-block -translate-y-[2px]">&times;</span>
       )}
     </button>
   );

@@ -8,8 +8,20 @@ let winElement: HTMLAudioElement | null = null;
 let loseElement: HTMLAudioElement | null = null;
 let placeElement: HTMLAudioElement | null = null;
 
+let musicEnabled = true;
+let soundEnabled = true;
+
 export const sound = {
+  setSoundEnabled: (state: boolean) => {
+    soundEnabled = state;
+  },
+  setMusicEnabled: (state: boolean) => {
+    musicEnabled = state;
+  },
   playMusic: () => {
+    if (!musicEnabled) {
+      return;
+    }
     musicElement ??= new Audio(music);
     musicElement.loop = true;
 
@@ -24,6 +36,10 @@ export const sound = {
     musicElement.pause();
   },
   playWin: () => {
+    if (!soundEnabled) {
+      return;
+    }
+
     winElement ??= new Audio(win);
 
     if (winElement.paused) {
@@ -31,6 +47,10 @@ export const sound = {
     }
   },
   playLose: () => {
+    if (!soundEnabled) {
+      return;
+    }
+
     loseElement ??= new Audio(lose);
 
     if (loseElement.paused) {
@@ -38,6 +58,10 @@ export const sound = {
     }
   },
   playPlace: () => {
+    if (!soundEnabled) {
+      return;
+    }
+
     placeElement ??= new Audio(place);
     placeElement.volume = 0.5;
 
@@ -46,6 +70,10 @@ export const sound = {
     }
   },
   playLock: () => {
+    if (!soundEnabled) {
+      return;
+    }
+
     placeElement ??= new Audio(place);
     placeElement.volume = 0.5;
 

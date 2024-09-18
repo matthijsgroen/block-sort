@@ -123,7 +123,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
             onComplete(false);
           }}
         />
-        <TopButton buttonType="settings" onClick={() => {}} />
+        {/* <TopButton buttonType="settings" onClick={() => {}} /> */}
         <div className="flex-1"></div>
         <TopButton
           buttonType="restart"

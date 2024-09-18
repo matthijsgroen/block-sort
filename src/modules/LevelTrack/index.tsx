@@ -10,6 +10,7 @@ import styles from "./levelTrack.module.css";
 type Props = {
   levelNr: number;
   onLevelStart: VoidFunction;
+  onOpenSettings?: VoidFunction;
 };
 
 const translates = [
@@ -23,7 +24,11 @@ const translates = [
   "-translate-x-8",
 ];
 
-export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
+export const LevelTrack: React.FC<Props> = ({
+  levelNr,
+  onLevelStart,
+  onOpenSettings,
+}) => {
   const startNumbering = Math.max(Math.floor(levelNr - 4), 0);
 
   const levelNrs = new Array(30).fill(0).map((_, i) => startNumbering + i);
@@ -31,12 +36,18 @@ export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
   return (
     <div className="flex flex-col items-center h-safe-area">
       <div className="flex flex-row p-2 gap-x-2 w-full">
-        <TopButton buttonType="settings" onClick={() => {}} />
+        {onOpenSettings && (
+          <TopButton buttonType="settings" onClick={onOpenSettings} />
+        )}
 
-        <h1 className="text-3xl mb-2 font-extrabold flex-1 text-center text-wood-brown">
+        <h1
+          className={clsx(
+            "text-3xl mb-2 font-extrabold flex-1 text-center text-orange-400"
+          )}
+        >
           Block Sort
         </h1>
-        <div className="size-block"></div>
+        {onOpenSettings && <div className="size-block"></div>}
       </div>
 
       <ol className="flex flex-col-reverse w-full flex-1 overflow-y-hidden">
