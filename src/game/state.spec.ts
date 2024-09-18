@@ -144,6 +144,27 @@ describe(isStuck, () => {
     expect(result).toBe(false);
   });
 
+  it("returns false if you can divide a stack over other columns", () => {
+    const level = createLevelState([
+      createPlacementColumn(
+        6,
+        createBlocks("white", "white", "green", "green", "green")
+      ),
+      createPlacementColumn(
+        6,
+        createBlocks("white", "white", "green", "green", "green")
+      ),
+      createPlacementColumn(
+        6,
+        createBlocks("white", "white", "pink", "pink", "pink")
+      ),
+      createPlacementColumn(6, createBlocks("pink", "pink", "pink")),
+    ]);
+    // You can divide the 2 white blocks of column 2 to column 1 and 0, to access the pink column
+    const result = isStuck(level);
+    expect(result).toBe(false);
+  });
+
   it("returns true if a move makes no difference", () => {
     const level = createLevelState([
       createPlacementColumn(

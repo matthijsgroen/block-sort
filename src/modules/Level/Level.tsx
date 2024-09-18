@@ -86,7 +86,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
   const cols = determineColumns(maxColumnSize, levelState.columns.length);
 
   return (
-    <div className="flex flex-col h-safe-screen">
+    <div className="flex flex-col h-screen p-safe-area">
       {playState === "won" && (
         <Message
           delay={1000}
