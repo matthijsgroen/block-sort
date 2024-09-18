@@ -63,8 +63,7 @@ export const BlockColumn: React.FC<Props> = ({
               ? "border-t-0 rounded-b-md"
               : "border-t-0 rounded-md shadow-inner"
           } `}
-          // onTouchStart={onColumnClick(i)}
-          onTouchStart={onClick}
+          onPointerDown={onClick}
         >
           {column.blocks.map((_b, p, l) => {
             const index = l.length - 1 - p;
