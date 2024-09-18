@@ -86,6 +86,6 @@
 
 .shadow {
   background-color: #0008;
-  box-shadow: 4px 1px 2px 1px #0008;
+  box-shadow: 6px 1px 2px 1px #0008;
   @apply absolute w-full h-block rounded-md translate-y-top-block;
 }
