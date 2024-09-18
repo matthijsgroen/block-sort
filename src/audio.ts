@@ -14,7 +14,9 @@ let soundEnabled = true;
 const loadAudio = async () => {
   const context = new AudioContext();
   const effectsGain = context.createGain();
+  effectsGain.gain.value = 0.1; // 10 %
   const musicGain = context.createGain();
+  musicGain.gain.value = 0.1; // 10 %
 
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") {
