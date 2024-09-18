@@ -42,18 +42,23 @@ export const isStuck = (level: LevelState): boolean => {
   const originalHidden = countHidden(level);
 
   return level.columns.every((_source, sourceIndex) => {
-    const hasChanged = level.columns.some((_dest, destIndex) => {
-      if (sourceIndex === destIndex) return false;
-      const result = moveBlocks(level, sourceIndex, destIndex);
-      const resultSig = createSignature(result);
-      const resultHidden = countHidden(result);
+    let didChange = false;
+    let playLevel = level;
 
-      return (
+    level.columns.forEach((_dest, destIndex) => {
+      if (sourceIndex === destIndex) return false;
+      playLevel = moveBlocks(playLevel, sourceIndex, destIndex);
+      const resultSig = createSignature(playLevel);
+      const resultHidden = countHidden(playLevel);
+      if (
         resultHidden !== originalHidden ||
         resultSig.some((c, i) => c !== topSignature[i])
-      );
+      ) {
+        didChange = true;
+      }
     });
-    return !hasChanged;
+
+    return !didChange;
   });
 };
 
