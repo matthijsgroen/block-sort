@@ -1,0 +1,41 @@
+.empty {
+  @apply w-block h-block;
+}
+.empty::after {
+  content: " ";
+  display: block;
+  background: linear-gradient(
+    #0000 0%,
+    #0000 91%,
+    #0003 91%,
+    #0003 97%,
+    #0000 97%
+  );
+  @apply w-block h-block px-2 bg-clip-content;
+}
+
+.shade {
+  background: linear-gradient(to right, #0003 0%, #0000 40%);
+}
+
+.limit {
+  text-shadow:
+    0px 0px 1px color-mix(in srgb, var(--cube-color) 70%, #fff 30%),
+    0px 0px 1px #eee7,
+    2px 2px 3px #0009;
+  @apply w-block h-block text-center pt-2 bg-block bg-clip-text text-transparent;
+}
+
+.bottom {
+  position: relative;
+  @apply w-block h-block;
+}
+.bottom::after {
+  content: " ";
+  position: absolute;
+  top: 0;
+  z-index: -1;
+  display: block;
+  background: linear-gradient(#0000 0%, #0000 51%, #0000 51%, #0003 100%);
+  @apply w-block h-block;
+}

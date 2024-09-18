@@ -3,11 +3,12 @@
 @tailwind utilities;
 
 body {
-  background-color: #a52a2a;
+  background-color: #63462d;
   background:
-    linear-gradient(#a52a2aff 0%, #a52a2a00 20%, #a52a2a00 80%, #a52a2aff 100%),
+    linear-gradient(#63462d 0%, #63462d00 20%, #63462d00 80%, #63462d 100%),
     url("./assets/wood-texture.png") repeat,
-    linear-gradient(#a52a2aff 0%, #a52a2aff 100%);
+    linear-gradient(#63462d 0%, #63462d 100%);
+  background-blend-mode: multiply;
   user-select: none;
 }
 

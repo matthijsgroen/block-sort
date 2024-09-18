@@ -1,14 +1,16 @@
 import clsx from "clsx";
 
 import { isHard, isSpecial, LEVEL_SCALE } from "@/game/levelSettings";
+import { TopButton } from "@/ui/TopButton/TopButton";
 
-import { PlayButton } from "../../components/PlayButton";
+import { PlayButton } from "../../ui/PlayButton";
 
 import styles from "./levelTrack.module.css";
 
 type Props = {
   levelNr: number;
   onLevelStart: VoidFunction;
+  onOpenSettings?: VoidFunction;
 };
 
 const translates = [
@@ -22,14 +24,31 @@ const translates = [
   "-translate-x-8",
 ];
 
-export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
+export const LevelTrack: React.FC<Props> = ({
+  levelNr,
+  onLevelStart,
+  onOpenSettings,
+}) => {
   const startNumbering = Math.max(Math.floor(levelNr - 4), 0);
 
   const levelNrs = new Array(30).fill(0).map((_, i) => startNumbering + i);
 
   return (
     <div className="flex flex-col items-center h-safe-area">
-      <h1 className="text-3xl mb-2 font-extrabold mt-2">Block Sort</h1>
+      <div className="flex flex-row p-2 gap-x-2 w-full">
+        {onOpenSettings && (
+          <TopButton buttonType="settings" onClick={onOpenSettings} />
+        )}
+
+        <h1
+          className={clsx(
+            "text-3xl mb-2 font-extrabold flex-1 text-center text-orange-400"
+          )}
+        >
+          Block Sort
+        </h1>
+        {onOpenSettings && <div className="size-block"></div>}
+      </div>
 
       <ol className="flex flex-col-reverse w-full flex-1 overflow-y-hidden">
         {levelNrs.map((i) => {
@@ -52,11 +71,15 @@ export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
                 )}
               >
                 <span
-                  className={clsx("text-orange-400", {
-                    "text-green-900": i < levelNr,
-                    "font-bold": i === levelNr,
-                    "text-purple-500": isSpecial(i) && i >= levelNr,
-                  })}
+                  className={clsx(
+                    "text-orange-400",
+                    {
+                      "text-green-900": i < levelNr,
+                      "font-bold": i === levelNr,
+                      "text-purple-500": isSpecial(i) && i >= levelNr,
+                    },
+                    styles.textShadow
+                  )}
                 >
                   {i + 1}&nbsp;
                 </span>
@@ -72,7 +95,9 @@ export const LevelTrack: React.FC<Props> = ({ onLevelStart, levelNr }) => {
                     </span>
                   )}
                   {i == levelNr && "😀"}
-                  {i > levelNr && isSpecial(i) && "⭐️"}
+                  {i > levelNr && isSpecial(i) && (
+                    <span className={styles.colorEmoji}>⭐️</span>
+                  )}
                   {i > levelNr && isHard(i) && "️🔥"}
                 </span>
               </div>

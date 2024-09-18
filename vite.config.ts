@@ -20,14 +20,15 @@ export default defineConfig({
         name: "Block Sort",
         short_name: "Block Sort",
         description: "Sort the stacks of blocks",
-        theme_color: "#a52a2a",
-        background_color: "#a52a2a",
+        theme_color: "#1d0f06",
+        background_color: "#1d0f06",
       },
 
       workbox: {
-        globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
+        globPatterns: ["**/*.{js,css,html,svg,png,ico,mp3}"],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
+        maximumFileSizeToCacheInBytes: 7_521_024,
       },
 
       devOptions: {

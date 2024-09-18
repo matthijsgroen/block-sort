@@ -6,9 +6,18 @@
   background: linear-gradient(
     #0000 0%,
     #0000 47%,
-    #0004 49%,
-    #0004 51%,
-    #fff4 53%,
+    #0001 49%,
+    #0001 51%,
+    #fff1 53%,
     #fff0 55%
   );
+}
+
+.textShadow {
+  text-shadow: 1px 1px 2px #0008;
+}
+
+.colorEmoji {
+  text-shadow: 0 0 0 #a855f7;
+  color: transparent;
 }
