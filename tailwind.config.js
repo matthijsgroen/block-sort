@@ -24,13 +24,13 @@ export default {
         popInOut: "popInOut 3s ease-in-out forwards",
         rotate: "rotate 2s linear infinite",
         flyTopLeft:
-          "flyTopLeft 3s ease-in-out forwards, rotate 4s linear infinite, scale 3s ease-in-out infinite",
+          "flyTopLeft 3s ease-in-out forwards, rotate 8s linear infinite, scale 3s ease-in-out infinite",
         flyTopRight:
-          "flyTopRight 3s ease-in-out forwards, rotate 3s linear infinite, scale 2s ease-in-out infinite",
+          "flyTopRight 3s ease-in-out forwards, rotate 6s linear infinite, scale 2s ease-in-out infinite",
         flyBottomLeft:
-          "flyBottomLeft 3s ease-in-out forwards, rotate 4s linear infinite, scale 2s ease-in-out infinite",
+          "flyBottomLeft 3s ease-in-out forwards, rotate 8s linear infinite, scale 2s ease-in-out infinite",
         flyBottomRight:
-          "flyBottomRight 3s ease-in-out forwards, rotate 3s linear infinite, scale 3s ease-in-out infinite",
+          "flyBottomRight 3s ease-in-out forwards, rotate 6s linear infinite, scale 3s ease-in-out infinite",
       },
       keyframes: {
         rotate: {
