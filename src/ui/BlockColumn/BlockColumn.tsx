@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import clsx from "clsx";
 
 import { shapeMapping } from "@/game/blocks";
 import { Column } from "@/game/types";
@@ -55,7 +56,11 @@ export const BlockColumn: React.FC<Props> = ({
   return (
     <div className={`${rowSpans[column.columnSize]} justify-self-center`}>
       <div
-        className={`border-2 border-transparent border-t-block-brown ${locked ? "contain-paint" : ""} ${column.type === "buffer" ? "rounded-b-md" : "rounded-md"} box-content pb-6`}
+        className={clsx("border-2 border-transparent box-content pb-6", {
+          "contain-paint": locked,
+          "rounded-b-md": column.type === "buffer",
+          "rounded-md border-t-block-brown": column.type === "placement",
+        })}
       >
         <div
           className={`border-2 border-block-brown w-block box-content bg-black/20 cursor-pointer flex flex-col-reverse ${

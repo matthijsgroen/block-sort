@@ -1,0 +1,18 @@
+.buttonBackground {
+  background:
+    url("../../assets/wood-texture.png") repeat,
+    linear-gradient(#63462d 0%, #63462d 100%);
+  background-blend-mode: multiply;
+  box-shadow:
+    inset -1px 1px 2px #ffedd540,
+    1px 1px 2px #0004;
+
+  text-shadow: -1px 1px 0 #000;
+  @apply text-orange-100;
+}
+.buttonBackground:active {
+  box-shadow:
+    inset 2px -2px 2px #0004,
+    1px 1px 2px #0004;
+  padding-top: 1px;
+}

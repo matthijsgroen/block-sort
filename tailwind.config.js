@@ -15,6 +15,7 @@ export default {
       colors: {
         block: "var(--cube-color)",
         "block-brown": "#A07353",
+        "wood-brown": "#63462d",
       },
       animation: {
         wobble: "wobble 1s ease-in-out both infinite",

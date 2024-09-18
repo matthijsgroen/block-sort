@@ -1,5 +1,4 @@
 import { use, useEffect, useState } from "react";
-import clsx from "clsx";
 
 import { sound } from "@/audio";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
@@ -10,8 +9,7 @@ import { colSizes, rowSizes } from "@/support/grid";
 import { useGameStorage } from "@/support/useGameStorage";
 import { BlockColumn } from "@/ui/BlockColumn/BlockColumn";
 import { Message } from "@/ui/Message/Message";
-
-import styles from "./level.module.css";
+import { TopButton } from "@/ui/TopButton/TopButton";
 
 type Props = {
   onComplete: (won: boolean) => void;
@@ -118,32 +116,22 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
           }}
         />
       )}
-      <div className="flex text-lg flex-row justify-between p-2">
-        <button
+      <div className="flex flex-row p-2 gap-x-2">
+        <TopButton
+          buttonType="back"
           onClick={() => {
             onComplete(false);
           }}
-          className={clsx(
-            "text-2xl inline-block text-orange-100 size-block border border-black rounded-full drop-shadow-md",
-            styles.buttonBackground
-          )}
-        >
-          <span className="inline-block">&larr;</span>
-        </button>
-        <button
+        />
+        <TopButton buttonType="settings" onClick={() => {}} />
+        <div className="flex-1"></div>
+        <TopButton
+          buttonType="restart"
           onClick={() => {
             setLevelState(initialLevelState);
             setPlayState("busy");
           }}
-          className={clsx(
-            "text-4xl inline-block text-orange-100 size-block border border-black rounded-full drop-shadow-md",
-            styles.buttonBackground
-          )}
-        >
-          <span className="inline-block -translate-y-[5px] -translate-x-[2px]">
-            &#10226;
-          </span>
-        </button>
+        />
       </div>
       <div className="flex-1 flex flex-wrap justify-center p-2">
         <div className="w-full content-center">
