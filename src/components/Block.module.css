@@ -33,7 +33,7 @@
 }
 
 .texture {
-  background: url("./wood-texture.png");
+  background: url("../assets/wood-texture.png");
   mix-blend-mode: color-burn;
   @apply opacity-60;
 }
