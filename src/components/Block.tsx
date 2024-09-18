@@ -13,6 +13,7 @@ export type Props = {
   selected?: boolean | null;
   locked?: boolean | null;
   shape?: string;
+  shadow?: boolean;
 };
 
 export const colorMap: Record<BlockColor, string> = {
@@ -37,6 +38,7 @@ export const Block: React.FC<Props> = ({
   moved,
   selected = null,
   locked = false,
+  shadow = true,
 }) => {
   const [isLocked, setIsLocked] = useState(false);
 
@@ -67,7 +69,7 @@ export const Block: React.FC<Props> = ({
         }
       )}
     >
-      <div className={styles.shadow}></div>
+      {shadow && <div className={styles.shadow}></div>}
       <div
         className={clsx(
           styles.layer,

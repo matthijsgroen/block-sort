@@ -24,11 +24,11 @@ export default {
         popInOut: "popInOut 3s ease-in-out forwards",
         rotate: "rotate 2s linear infinite",
         flyTopLeft:
-          "flyTopLeft 3s ease-in-out forwards, rotate 2s linear infinite, scale 3s ease-in-out infinite",
+          "flyTopLeft 3s ease-in-out forwards, rotate 4s linear infinite, scale 3s ease-in-out infinite",
         flyTopRight:
           "flyTopRight 3s ease-in-out forwards, rotate 3s linear infinite, scale 2s ease-in-out infinite",
         flyBottomLeft:
-          "flyBottomLeft 3s ease-in-out forwards, rotate 2s linear infinite, scale 2s ease-in-out infinite",
+          "flyBottomLeft 3s ease-in-out forwards, rotate 4s linear infinite, scale 2s ease-in-out infinite",
         flyBottomRight:
           "flyBottomRight 3s ease-in-out forwards, rotate 3s linear infinite, scale 3s ease-in-out infinite",
       },
@@ -48,29 +48,29 @@ export default {
           "0%": { translate: "0 0" },
           "30%": { translate: "-11rem -0.5rem" },
           "40%": { translate: "-10rem -2.5rem" },
-          "90%": { translate: "-9rem -2.5rem" },
-          "100%": { translate: "0 0" },
+          "90%": { translate: "-9rem -2.5rem", opacity: "1" },
+          "100%": { translate: "0 0", opacity: "0" },
         },
         flyTopRight: {
           "0%": { translate: "0rem 0rem" },
           "30%": { translate: "7rem -4.5rem" },
           "40%": { translate: "6rem -3.5rem" },
-          "90%": { translate: "7rem -3.5rem" },
-          "100%": { translate: "0rem 0rem" },
+          "90%": { translate: "7rem -3.5rem", opacity: "1" },
+          "100%": { translate: "0rem 0rem", opacity: "0" },
         },
         flyBottomRight: {
           "0%": { translate: "0rem 0rem" },
           "30%": { translate: "7rem 4.5rem" },
           "40%": { translate: "6rem 3.5rem" },
-          "90%": { translate: "7rem 3.5rem" },
-          "100%": { translate: "0rem 0rem" },
+          "90%": { translate: "7rem 3.5rem", opacity: "1" },
+          "100%": { translate: "0rem 0rem", opacity: "0" },
         },
         flyBottomLeft: {
           "0%": { translate: "0rem 0rem" },
           "30%": { translate: "-11rem 4.5rem" },
           "40%": { translate: "-10rem 3.5rem" },
-          "90%": { translate: "-9rem 3.5rem" },
-          "100%": { translate: "0rem 0rem" },
+          "90%": { translate: "-9rem 3.5rem", opacity: "1" },
+          "100%": { translate: "0rem 0rem", opacity: "0" },
         },
         fadeIn: {
           "0%": { opacity: "0" },

@@ -48,16 +48,40 @@ export const Message: React.FC<Props> = ({
         <>
           <div className="absolute w-full h-full bg-slate-700/60 opacity-0 animate-fadeIn"></div>
           <div className="absolute top-[46%] left-1/2 animate-flyTopLeft">
-            <Block color={color} shape={shape} moved={false} revealed={true} />
+            <Block
+              color={color}
+              shape={shape}
+              moved={false}
+              revealed={true}
+              shadow={false}
+            />
           </div>
           <div className="absolute top-[46%] left-1/2 animate-flyTopRight">
-            <Block color={color} shape={shape} moved={false} revealed={true} />
+            <Block
+              color={color}
+              shape={shape}
+              moved={false}
+              revealed={true}
+              shadow={false}
+            />
           </div>
           <div className="absolute top-[46%] left-1/2 animate-flyBottomRight">
-            <Block color={color} shape={shape} moved={false} revealed={true} />
+            <Block
+              color={color}
+              shape={shape}
+              moved={false}
+              revealed={true}
+              shadow={false}
+            />
           </div>
           <div className="absolute top-[46%] left-1/2 animate-flyBottomLeft">
-            <Block color={color} shape={shape} moved={false} revealed={true} />
+            <Block
+              color={color}
+              shape={shape}
+              moved={false}
+              revealed={true}
+              shadow={false}
+            />
           </div>
           <div className="absolute top-1/3 left-1/2 animate-popInOut">
             <span
