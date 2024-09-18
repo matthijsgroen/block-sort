@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 
+import { sound } from "@/audio";
+
 import { shapeMapping } from "../../game/blocks";
 import { BlockColor } from "../../game/types";
 
@@ -44,7 +46,10 @@ export const Block: React.FC<Props> = ({
 
   useEffect(() => {
     if (locked) {
-      const clear = setTimeout(() => setIsLocked(locked), 10);
+      const clear = setTimeout(() => {
+        setIsLocked(locked);
+        sound.playLock();
+      }, 10);
       return () => clearTimeout(clear);
     } else {
       setIsLocked(false);
@@ -52,6 +57,12 @@ export const Block: React.FC<Props> = ({
   }, [locked]);
 
   const displayShape = shape ?? (revealed ? shapeMapping[color] : "❓");
+
+  useEffect(() => {
+    if (moved && !selected && !isLocked) {
+      sound.playPlace();
+    }
+  }, []);
 
   return (
     <div

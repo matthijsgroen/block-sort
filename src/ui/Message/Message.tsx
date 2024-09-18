@@ -13,11 +13,13 @@ type Props = {
   shape?: string;
   delay?: number;
   afterShow?: VoidFunction;
+  onShow?: VoidFunction;
 };
 
 export const Message: React.FC<Props> = ({
   message,
   afterShow,
+  onShow,
   delay = 0,
   shape = "❤️",
   color = "green",
@@ -26,6 +28,7 @@ export const Message: React.FC<Props> = ({
   useEffect(() => {
     const timeOut = setTimeout(() => {
       setStarted(true);
+      onShow?.();
     }, delay);
     return () => clearTimeout(timeOut);
   }, [delay]);

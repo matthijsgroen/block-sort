@@ -12,6 +12,7 @@ import { LevelTrack } from "@/modules/LevelTrack/index.tsx";
 import { generateNewSeed } from "@/support/random.ts";
 import { useGameStorage } from "@/support/useGameStorage.ts";
 
+import { sound } from "./audio.ts";
 import PWABadge from "./PWABadge.tsx";
 
 const BASE_SEED = 12345678901234;
@@ -44,6 +45,7 @@ export const App: React.FC = () => {
         <LevelTrack
           levelNr={levelNr}
           onLevelStart={() => {
+            sound.playMusic();
             setInLevel(true);
           }}
         />

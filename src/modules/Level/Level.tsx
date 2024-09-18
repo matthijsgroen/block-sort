@@ -1,6 +1,7 @@
 import { use, useEffect, useState } from "react";
 import clsx from "clsx";
 
+import { sound } from "@/audio";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { hasWon, isStuck } from "@/game/state";
@@ -97,6 +98,9 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
             deleteLevelState();
             onComplete(playState === "won");
           }}
+          onShow={() => {
+            sound.playWin();
+          }}
         />
       )}
       {playState === "lost" && (
@@ -108,6 +112,9 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
           afterShow={() => {
             setLevelState(initialLevelState);
             setPlayState("busy");
+          }}
+          onShow={() => {
+            sound.playLose();
           }}
         />
       )}
