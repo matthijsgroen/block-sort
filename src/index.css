@@ -16,3 +16,10 @@ html,
 body {
   overscroll-behavior: none;
 }
+
+:root,
+html,
+body,
+#root {
+  height: 100%;
+}
