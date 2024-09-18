@@ -1,14 +1,14 @@
 import { use, useEffect, useState } from "react";
 import clsx from "clsx";
 
-import { BlockColumn } from "@/components/BlockColumn";
-import { Message } from "@/components/Message";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { hasWon, isStuck } from "@/game/state";
 import { LevelState } from "@/game/types";
 import { colSizes, rowSizes } from "@/support/grid";
 import { useGameStorage } from "@/support/useGameStorage";
+import { BlockColumn } from "@/ui/BlockColumn/BlockColumn";
+import { Message } from "@/ui/Message/Message";
 
 import styles from "./level.module.css";
 

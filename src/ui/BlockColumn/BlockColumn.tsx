@@ -5,7 +5,7 @@ import { Column } from "@/game/types";
 import { rowSpans } from "@/support/grid";
 import { timesMap } from "@/support/timeMap";
 
-import { Block, colorMap } from "./Block";
+import { Block, colorMap } from "../Block/Block";
 
 import styles from "./BlockColumn.module.css";
 

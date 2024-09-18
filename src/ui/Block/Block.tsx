@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 
-import { shapeMapping } from "../game/blocks";
-import { BlockColor } from "../game/types";
+import { shapeMapping } from "../../game/blocks";
+import { BlockColor } from "../../game/types";
 
 import styles from "./Block.module.css";
 

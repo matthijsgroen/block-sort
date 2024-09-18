@@ -3,7 +3,7 @@ import clsx from "clsx";
 
 import { BlockColor } from "@/game/blocks";
 
-import { Block, colorMap } from "./Block";
+import { Block, colorMap } from "../Block/Block";
 
 import styles from "./Message.module.css";
 

@@ -2,7 +2,7 @@ import clsx from "clsx";
 
 import { isHard, isSpecial, LEVEL_SCALE } from "@/game/levelSettings";
 
-import { PlayButton } from "../../components/PlayButton";
+import { PlayButton } from "../../ui/PlayButton";
 
 import styles from "./levelTrack.module.css";
 
