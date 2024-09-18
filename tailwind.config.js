@@ -8,9 +8,9 @@ export default {
         "height-block": "3.5rem",
         "top-block": "1rem",
       },
-      height: {
-        "safe-screen":
-          "calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom))",
+      padding: {
+        "safe-area":
+          "env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)",
       },
       colors: {
         block: "var(--cube-color)",
