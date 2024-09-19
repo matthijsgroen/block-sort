@@ -21,14 +21,17 @@ export const Settings: React.FC<Props> = ({
   onMusicChange,
   onClose,
 }) => {
-  const ref = useRef<HTMLDialogElement>(null);
+  const dialogElement = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    ref.current?.showModal();
+    dialogElement.current?.showModal();
   }, []);
 
   return (
-    <dialog ref={ref} className="pb-5 px-0 bg-transparent w-4/5 max-w-[300px]">
+    <dialog
+      ref={dialogElement}
+      className="pb-5 px-0 bg-transparent w-4/5 max-w-[300px]"
+    >
       <div
         className={clsx(
           "rounded-xl border border-black p-4 drop-shadow-lg animate-fadeIn [animation-duration:0.3s]",
@@ -50,7 +53,13 @@ export const Settings: React.FC<Props> = ({
         </div>
         <p className="text-xs my-3">2024, Matthijs Groen</p>
         <div className="text-center translate-y-9 -mt-9">
-          <TopButton buttonType="close" onClick={onClose} />
+          <TopButton
+            buttonType="close"
+            onClick={() => {
+              onClose?.();
+              dialogElement.current?.close();
+            }}
+          />
         </div>
       </div>
     </dialog>
