@@ -6,6 +6,13 @@ A small mobile game where you need to sort blocks
 
 [https://matthijsgroen.github.io/block-sort/](https://matthijsgroen.github.io/block-sort/)
 
+To install on an iOS device:
+
+1. Open the link in Safari
+2. Open the share menu
+3. Select 'Add to Home Screen'
+4. Confirm installation
+
 ## Development setup
 
 ```
