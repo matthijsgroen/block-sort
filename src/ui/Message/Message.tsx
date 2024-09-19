@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 
-import { BlockColor } from "@/game/blocks";
-
-import { Block, colorMap } from "../Block/Block";
+import { Block } from "../Block/Block";
 
 import styles from "./Message.module.css";
 
 type Props = {
   message: string;
-  color: BlockColor;
+  color: string;
   shape?: string;
   delay?: number;
   afterShow?: VoidFunction;
@@ -45,7 +43,7 @@ export const Message: React.FC<Props> = ({
   return (
     <div
       className="z-50 absolute w-full h-full"
-      style={{ "--cube-color": colorMap[color] }}
+      style={{ "--cube-color": color }}
     >
       {started && (
         <>

@@ -1,5 +1,6 @@
 import lose from "@/assets/lose.mp3";
 import music from "@/assets/music.mp3";
+import pickup from "@/assets/pickup.mp3";
 import place from "@/assets/place.mp3";
 import win from "@/assets/win.mp3";
 
@@ -48,6 +49,7 @@ const audioItems = {
   place: createItem("effects", place),
   lock: createItem("effects", place, { multipleInstances: true }),
   win: createItem("effects", win),
+  pickup: createItem("effects", pickup),
 };
 
 const loadAndDecodeAudio = async (
@@ -176,7 +178,10 @@ export const sound = {
     if (stream.disabled) {
       return;
     }
-    getSoundSystem().then((s) => s.play(item));
+    getSoundSystem().then((s) => {
+      s.resume();
+      s.play(item);
+    });
   },
   stop: (item: keyof typeof audioItems) => {
     getSoundSystem().then((s) => s.stop(item));

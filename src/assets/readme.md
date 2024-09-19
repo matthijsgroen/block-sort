@@ -11,3 +11,4 @@ Original link: https://pixabay.com/music/smooth-jazz-relaxing-music-tranquility-
 Win: https://freesound.org/people/LittleRobotSoundFactory/sounds/274181/
 Game over: https://mixkit.co/free-sound-effects/game-over/
 Block placement: https://freesound.org/people/JamesFarrell_97/sounds/566254/
+Pickup: https://freesound.org/people/deleted_user_6479820/sounds/390388/

@@ -1,36 +1,19 @@
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 
-import { sound } from "@/audio";
-
-import { shapeMapping } from "../../game/blocks";
-import { BlockColor } from "../../game/types";
-
 import styles from "./Block.module.css";
 
 export type Props = {
   moved: boolean;
   revealed?: boolean;
-  color: BlockColor;
+  color: string;
   selected?: boolean | null;
   locked?: boolean | null;
   shape?: string;
   shadow?: boolean;
-};
-
-export const colorMap: Record<BlockColor, string> = {
-  red: "#dd0000",
-  white: "#eeeeee",
-  yellow: "#eab308",
-  blue: "#3b82f6",
-  purple: "#d80dbd",
-  black: "#29374e",
-  green: "#16a34a",
-  darkgreen: "#15803d",
-  darkblue: "#1e40af",
-  aqua: "#bfdbfe",
-  brown: "#a07353",
-  pink: "#fdba74",
+  onPickUp?: VoidFunction;
+  onDrop?: VoidFunction;
+  onLock?: VoidFunction;
 };
 
 export const Block: React.FC<Props> = ({
@@ -38,6 +21,9 @@ export const Block: React.FC<Props> = ({
   color,
   shape,
   moved,
+  onLock,
+  onDrop,
+  onPickUp,
   selected = null,
   locked = false,
   shadow = true,
@@ -48,8 +34,7 @@ export const Block: React.FC<Props> = ({
     if (locked) {
       const clear = setTimeout(() => {
         setIsLocked(locked);
-        // TODO: Remove from code here, add life-cycle events
-        sound.play("lock");
+        onLock?.();
       }, 10);
       return () => clearTimeout(clear);
     } else {
@@ -57,19 +42,26 @@ export const Block: React.FC<Props> = ({
     }
   }, [locked]);
 
-  const displayShape = shape ?? (revealed ? shapeMapping[color] : "❓");
+  const displayShape = shape ?? "❓";
 
   useEffect(() => {
     if (moved && !selected && !isLocked) {
-      // TODO: Remove from code here, add life-cycle events
-      sound.play("place");
+      onDrop?.();
     }
   }, []);
+
+  useEffect(() => {
+    if (selected) {
+      onPickUp?.();
+    } else {
+      onDrop?.();
+    }
+  }, [selected]);
 
   return (
     <div
       style={{
-        "--cube-color": revealed ? colorMap[color] : "#64748b",
+        "--cube-color": revealed ? color : "#64748b",
         "--cube-shape": `'${displayShape}'`,
       }}
       className={clsx(

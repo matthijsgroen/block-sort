@@ -6,7 +6,8 @@ import { Column } from "@/game/types";
 import { rowSpans } from "@/support/grid";
 import { timesMap } from "@/support/timeMap";
 
-import { Block, colorMap } from "../Block/Block";
+import { Block } from "../Block/Block";
+import { colorMap } from "../Block/colormap";
 
 import styles from "./BlockColumn.module.css";
 
@@ -15,11 +16,17 @@ type Props = {
   amountSelected?: number;
   started?: boolean;
   onClick?: VoidFunction;
+  onPickUp?: VoidFunction;
+  onDrop?: VoidFunction;
+  onLock?: VoidFunction;
 };
 
 export const BlockColumn: React.FC<Props> = ({
   column,
   onClick,
+  onDrop,
+  onLock,
+  onPickUp,
   started = true,
   amountSelected = 0,
 }) => {
@@ -80,8 +87,12 @@ export const BlockColumn: React.FC<Props> = ({
                 locked={p <= blocksLocked}
                 moved={started}
                 revealed={block.revealed}
-                color={block.color}
+                color={colorMap[block.color]}
+                shape={block.revealed ? shapeMapping[block.color] : undefined}
                 selected={isSelected}
+                onDrop={onDrop}
+                onPickUp={onPickUp}
+                onLock={onLock}
               />
             );
           })}

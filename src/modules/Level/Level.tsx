@@ -7,6 +7,7 @@ import { hasWon, isStuck } from "@/game/state";
 import { LevelState } from "@/game/types";
 import { colSizes, rowSizes } from "@/support/grid";
 import { useGameStorage } from "@/support/useGameStorage";
+import { colorMap } from "@/ui/Block/colormap";
 import { BlockColumn } from "@/ui/BlockColumn/BlockColumn";
 import { Message } from "@/ui/Message/Message";
 import { TopButton } from "@/ui/TopButton/TopButton";
@@ -92,14 +93,14 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
         <Message
           delay={100}
           message="Restarting"
-          color="blue"
+          color="#888"
           shape="&#10226;"
           afterShow={() => {
             setLevelState(initialLevelState);
             setPlayState("busy");
           }}
           onShow={() => {
-            // sound.play("win");
+            sound.play("lose");
           }}
         />
       )}
@@ -107,7 +108,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
         <Message
           delay={1000}
           message="You won!"
-          color="green"
+          color={colorMap["green"]}
           shape="✔️"
           afterShow={() => {
             deleteLevelState();
@@ -121,7 +122,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
       {playState === "lost" && (
         <Message
           delay={2000}
-          color="red"
+          color={colorMap["red"]}
           message="You lost!"
           shape="❌"
           afterShow={() => {
@@ -166,6 +167,15 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
                     ? selectStart[1]
                     : 0
                 }
+                onLock={() => {
+                  sound.play("lock");
+                }}
+                onDrop={() => {
+                  sound.play("place");
+                }}
+                onPickUp={() => {
+                  sound.play("pickup");
+                }}
               />
             ))}
           </div>
