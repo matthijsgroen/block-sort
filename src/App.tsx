@@ -9,7 +9,7 @@ import {
 } from "@/game/levelSettings.ts";
 import { LevelLoader } from "@/modules/Level/index.tsx";
 import { LevelTrack } from "@/modules/LevelTrack/index.tsx";
-import { generateNewSeed } from "@/support/random.ts";
+import { generateNewSeed, mulberry32 } from "@/support/random.ts";
 import { useGameStorage } from "@/support/useGameStorage.ts";
 
 import { Settings } from "./modules/Settings/index.tsx";
@@ -47,11 +47,12 @@ export const App: React.FC = () => {
 
   const special = isSpecial(levelNr);
   const hard = !special && isHard(levelNr);
+  const random = mulberry32(levelSeed);
 
   const settings = hard
     ? getHardSettings(levelNr)
     : special
-      ? getSpecialSettings(levelNr)
+      ? getSpecialSettings(levelNr, random)
       : getNormalSettings(levelNr);
 
   return (
