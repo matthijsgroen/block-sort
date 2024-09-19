@@ -48,7 +48,8 @@ export const Block: React.FC<Props> = ({
     if (locked) {
       const clear = setTimeout(() => {
         setIsLocked(locked);
-        sound.playLock();
+        // TODO: Remove from code here, add life-cycle events
+        sound.play("lock");
       }, 10);
       return () => clearTimeout(clear);
     } else {
@@ -60,7 +61,8 @@ export const Block: React.FC<Props> = ({
 
   useEffect(() => {
     if (moved && !selected && !isLocked) {
-      sound.playPlace();
+      // TODO: Remove from code here, add life-cycle events
+      sound.play("place");
     }
   }, []);
 

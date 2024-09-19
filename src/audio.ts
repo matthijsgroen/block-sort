@@ -3,21 +3,66 @@ import music from "@/assets/music.mp3";
 import place from "@/assets/place.mp3";
 import win from "@/assets/win.mp3";
 
-let musicBuffer: AudioBuffer | null = null;
-let winBuffer: AudioBuffer | null = null;
-let loseBuffer: AudioBuffer | null = null;
-let placeBuffer: AudioBuffer | null = null;
+type StreamItem = {
+  gainNode?: GainNode;
+  gain: number;
+  disabled?: boolean;
+};
 
-let musicEnabled = true;
-let soundEnabled = true;
+type Stream = "effects" | "music";
+
+const streams: Record<Stream, StreamItem> = {
+  effects: { gain: 0.1 },
+  music: { gain: 0.1 },
+};
+
+type AudioItem = {
+  fileUrl: string;
+  audioStream: Stream;
+  buffer?: AudioBuffer;
+  /**
+   * @default false
+   */
+  loop?: boolean;
+  /**
+   * Determines if the same sound can be played multiple times at the same time
+   * @default false
+   */
+  multipleInstances?: boolean;
+};
+
+const createItem = (
+  audioStream: Stream,
+  fileUrl: string,
+  { loop = false, multipleInstances = false } = {}
+): AudioItem => ({
+  audioStream,
+  fileUrl,
+  loop,
+  multipleInstances,
+});
+
+const audioItems = {
+  music: createItem("music", music, { loop: true }),
+  lose: createItem("effects", lose),
+  place: createItem("effects", place),
+  lock: createItem("effects", place, { multipleInstances: true }),
+  win: createItem("effects", win),
+};
+
+const loadAndDecodeAudio = async (
+  context: AudioContext,
+  fileUrl: string
+): Promise<AudioBuffer> => {
+  const file = await fetch(fileUrl);
+  const buffer = await file.arrayBuffer();
+  return context.decodeAudioData(buffer);
+};
 
 const loadAudio = async () => {
   const context = new AudioContext();
-  const effectsGain = context.createGain();
-  effectsGain.gain.value = 0.1; // 10 %
-  const musicGain = context.createGain();
-  musicGain.gain.value = 0.1; // 10 %
 
+  // stop audio if game loses focus
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") {
       context.suspend();
@@ -26,41 +71,44 @@ const loadAudio = async () => {
     }
   });
 
-  effectsGain.connect(context.destination);
-  musicGain.connect(context.destination);
+  // initialize streams
+  for (const stream of Object.values(streams)) {
+    stream.gainNode = context.createGain();
+    stream.gainNode.gain.value = stream.gain;
+    stream.gainNode.connect(context.destination);
+  }
 
-  const loadAndDecodeAudio = async (fileUrl: string): Promise<AudioBuffer> => {
-    const file = await window.fetch(fileUrl);
-    const buffer = await file.arrayBuffer();
-    return context.decodeAudioData(buffer);
-  };
+  // Load audio in buffers
+  await Promise.all(
+    Object.entries(audioItems).map(async ([, v]) => {
+      if (v.buffer === undefined) {
+        v.buffer = await loadAndDecodeAudio(context, v.fileUrl);
+      }
+    })
+  );
 
-  console.log("start loading audio...");
-
-  musicBuffer = await loadAndDecodeAudio(music);
-  winBuffer = await loadAndDecodeAudio(win);
-  loseBuffer = await loadAndDecodeAudio(lose);
-  placeBuffer = await loadAndDecodeAudio(place);
-  console.log("done!");
-
-  const playBuffer = (
-    buffer: AudioBuffer,
-    gain: AudioNode,
-    loop = false,
-    singleSource = true
-  ) => {
+  const playBuffer = (item: AudioItem) => {
     let sourcePlaying: null | { stop: VoidFunction } = null;
+    const targetNode = streams[item.audioStream].gainNode;
+    if (!targetNode) {
+      throw new Error(
+        `Audio stream for ${item.audioStream} is not yet initialized`
+      );
+    }
 
     const play = (): {
       stop: VoidFunction;
     } => {
+      if (item.buffer === undefined) {
+        return { stop: () => {} };
+      }
       const source = context.createBufferSource();
-      source.loop = loop;
-      source.buffer = buffer;
+      source.loop = item.loop === true;
+      source.buffer = item.buffer;
 
-      source.connect(gain);
+      source.connect(targetNode);
       source.start(context.currentTime, 0);
-      if (!loop) {
+      if (!item.loop) {
         source.onended = () => {
           source.stop();
           source.disconnect();
@@ -78,14 +126,14 @@ const loadAudio = async () => {
 
     return {
       play: () => {
-        if (sourcePlaying !== null && singleSource) {
+        if (sourcePlaying !== null && !item.multipleInstances) {
           return sourcePlaying;
         }
         sourcePlaying = play();
         return sourcePlaying;
       },
       stop: () => {
-        if (sourcePlaying !== null && singleSource) {
+        if (sourcePlaying !== null && !item.multipleInstances) {
           sourcePlaying.stop();
           sourcePlaying = null;
         }
@@ -93,32 +141,18 @@ const loadAudio = async () => {
     };
   };
 
-  const musicPlayer = playBuffer(musicBuffer, musicGain, true);
-  const playPlacePlayer = playBuffer(placeBuffer, effectsGain);
-  const playLockPlayer = playBuffer(placeBuffer, effectsGain, false, false);
-  const playWinPlayer = playBuffer(winBuffer, effectsGain);
-  const playLosePlayer = playBuffer(loseBuffer, effectsGain);
+  const audioPlayers = Object.fromEntries(
+    Object.entries(audioItems).map(([k, v]) => [k, playBuffer(v)])
+  );
 
   return {
     suspend: () => context.suspend(),
     resume: () => context.resume(),
-    playMusic: () => {
-      musicPlayer.play();
+    play: (item: keyof typeof audioItems) => {
+      audioPlayers[item].play();
     },
-    stopMusic: () => {
-      musicPlayer.stop();
-    },
-    playPlace: () => {
-      playPlacePlayer.play();
-    },
-    playLock: () => {
-      playLockPlayer.play();
-    },
-    playWin: () => {
-      playWinPlayer.play();
-    },
-    playLose: () => {
-      playLosePlayer.play();
+    stop: (item: keyof typeof audioItems) => {
+      audioPlayers[item].stop();
     },
   };
 };
@@ -133,43 +167,18 @@ const getSoundSystem = async () => {
 };
 
 export const sound = {
-  setSoundEnabled: (state: boolean) => {
-    soundEnabled = state;
+  setStreamEnabled: (stream: Stream, enabled = true) => {
+    streams[stream].disabled = !enabled;
   },
-  setMusicEnabled: (state: boolean) => {
-    musicEnabled = state;
-  },
-  playMusic: () => {
-    if (!musicEnabled) {
+  play: (item: keyof typeof audioItems) => {
+    const itemInfo = audioItems[item];
+    const stream = streams[itemInfo.audioStream];
+    if (stream.disabled) {
       return;
     }
-    getSoundSystem().then((s) => s.playMusic());
+    getSoundSystem().then((s) => s.play(item));
   },
-  stopMusic: () => {
-    getSoundSystem().then((s) => s.stopMusic());
-  },
-  playWin: () => {
-    if (!soundEnabled) {
-      return;
-    }
-    getSoundSystem().then((s) => s.playWin());
-  },
-  playLose: () => {
-    if (!soundEnabled) {
-      return;
-    }
-    getSoundSystem().then((s) => s.playLose());
-  },
-  playPlace: () => {
-    if (!soundEnabled) {
-      return;
-    }
-    getSoundSystem().then((s) => s.playPlace());
-  },
-  playLock: () => {
-    if (!soundEnabled) {
-      return;
-    }
-    getSoundSystem().then((s) => s.playLock());
+  stop: (item: keyof typeof audioItems) => {
+    getSoundSystem().then((s) => s.stop(item));
   },
 };

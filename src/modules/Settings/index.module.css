@@ -1,0 +1,6 @@
+.woodBackground {
+  background:
+    url("../../assets/wood-texture.png") repeat,
+    linear-gradient(#e9b466 0%, #e9b466 100%);
+  background-blend-mode: multiply;
+}

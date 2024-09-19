@@ -12,7 +12,7 @@ import { LevelTrack } from "@/modules/LevelTrack/index.tsx";
 import { generateNewSeed } from "@/support/random.ts";
 import { useGameStorage } from "@/support/useGameStorage.ts";
 
-import { TopButton } from "./ui/TopButton/TopButton.tsx";
+import { Settings } from "./modules/Settings/index.tsx";
 import { sound } from "./audio.ts";
 import PWABadge from "./PWABadge.tsx";
 
@@ -32,13 +32,13 @@ export const App: React.FC = () => {
   const [musicEnabled, setMusicEnabled] = useGameStorage("musicEnabled", true);
 
   useEffect(() => {
-    sound.setMusicEnabled(musicEnabled);
+    sound.setStreamEnabled("music", musicEnabled);
     if (musicEnabled) {
-      sound.playMusic();
+      sound.play("music");
     } else {
-      sound.stopMusic();
+      sound.stop("music");
     }
-    sound.setSoundEnabled(soundEnabled);
+    sound.setStreamEnabled("effects", soundEnabled);
   }, [soundEnabled, musicEnabled]);
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export const App: React.FC = () => {
         <LevelTrack
           levelNr={levelNr}
           onLevelStart={() => {
-            sound.playMusic();
+            sound.play("music");
             setInLevel(true);
           }}
           onOpenSettings={() => {
@@ -82,39 +82,13 @@ export const App: React.FC = () => {
         />
       )}
       {settingsOpen && (
-        <div className="absolute top-1/3 left-[10%] w-4/5 bg-wood-brown mx-auto rounded-xl border border-black p-4 drop-shadow-lg">
-          <p>This dialog is still Work in progress</p>
-          <label className="text-lg p-2">
-            <input
-              type="checkbox"
-              checked={soundEnabled}
-              className="inline-block mr-2"
-              onChange={(e) => {
-                setSoundEnabled(e.target.checked);
-              }}
-            />
-            Sound Effects
-          </label>
-          <label className="text-lg p-2">
-            <input
-              type="checkbox"
-              checked={musicEnabled}
-              className="inline-block mr-2"
-              onChange={(e) => {
-                setMusicEnabled(e.target.checked);
-              }}
-            />
-            Music
-          </label>
-          <div className="text-center">
-            <TopButton
-              buttonType="close"
-              onClick={() => {
-                setSettingsOpen(false);
-              }}
-            />
-          </div>
-        </div>
+        <Settings
+          soundEnabled={soundEnabled}
+          musicEnabled={musicEnabled}
+          onSoundChange={(v) => setSoundEnabled(v)}
+          onMusicChange={(v) => setMusicEnabled(v)}
+          onClose={() => setSettingsOpen(false)}
+        />
       )}
       <PWABadge />
     </>

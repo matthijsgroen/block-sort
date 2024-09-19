@@ -35,7 +35,9 @@ const determineColumns = (
 };
 
 export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
-  const [playState, setPlayState] = useState<"won" | "lost" | "busy">("busy");
+  const [playState, setPlayState] = useState<
+    "won" | "lost" | "busy" | "restarting"
+  >("busy");
 
   const initialLevelState = use(level);
 
@@ -86,6 +88,21 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
 
   return (
     <div className="flex flex-col h-safe-area">
+      {playState === "restarting" && (
+        <Message
+          delay={100}
+          message="Restarting"
+          color="blue"
+          shape="&#10226;"
+          afterShow={() => {
+            setLevelState(initialLevelState);
+            setPlayState("busy");
+          }}
+          onShow={() => {
+            // sound.play("win");
+          }}
+        />
+      )}
       {playState === "won" && (
         <Message
           delay={1000}
@@ -97,7 +114,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
             onComplete(playState === "won");
           }}
           onShow={() => {
-            sound.playWin();
+            sound.play("win");
           }}
         />
       )}
@@ -112,7 +129,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
             setPlayState("busy");
           }}
           onShow={() => {
-            sound.playLose();
+            sound.play("lose");
           }}
         />
       )}
@@ -123,13 +140,11 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
             onComplete(false);
           }}
         />
-        {/* <TopButton buttonType="settings" onClick={() => {}} /> */}
         <div className="flex-1"></div>
         <TopButton
           buttonType="restart"
           onClick={() => {
-            setLevelState(initialLevelState);
-            setPlayState("busy");
+            setPlayState("restarting");
           }}
         />
       </div>
