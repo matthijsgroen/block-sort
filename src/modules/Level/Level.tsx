@@ -7,7 +7,7 @@ import { hasWon, isStuck } from "@/game/state";
 import { LevelState } from "@/game/types";
 import { colSizes, rowSizes } from "@/support/grid";
 import { useGameStorage } from "@/support/useGameStorage";
-import { colorMap } from "@/ui/Block/colormap";
+import { colorMap } from "@/ui/Block/colorMap";
 import { BlockColumn } from "@/ui/BlockColumn/BlockColumn";
 import { Message } from "@/ui/Message/Message";
 import { TopButton } from "@/ui/TopButton/TopButton";

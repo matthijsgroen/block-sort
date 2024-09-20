@@ -7,7 +7,7 @@ import { rowSpans } from "@/support/grid";
 import { timesMap } from "@/support/timeMap";
 
 import { Block } from "../Block/Block";
-import { colorMap } from "../Block/colormap";
+import { colorMap } from "../Block/colorMap";
 import { Tray } from "../Tray/Tray";
 
 import styles from "./BlockColumn.module.css";
