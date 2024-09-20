@@ -41,7 +41,7 @@
 }
 
 .buffer {
-  /* box-shadow: 8px 4px 4px #0007; */
+  box-shadow: 8px 4px 4px #0007;
   border-color: transparent;
   background:
     linear-gradient(to bottom, #604532, #604532) padding-box,
