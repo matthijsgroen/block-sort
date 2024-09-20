@@ -14,14 +14,16 @@ export default {
       },
       colors: {
         block: "var(--cube-color)",
-        "block-brown": "#A07353",
+        "block-brown": "#a07353",
         wood: "#63462d",
-        "light-wood": "#966F33",
+        "light-wood": "#966f33",
       },
       animation: {
-        wobble: "wobble 1s ease-in-out both infinite",
+        wobble:
+          "wobble 1s ease-in-out both infinite, smallBounce 1.3s ease-in-out both infinite",
         place: "place 0.3s ease-out forwards",
         locked: "locked 0.3s ease-in-out forwards",
+        trayLocked: "trayLocked 0.3s ease-in-out forwards",
         fadeIn: "fadeIn 1s ease-in-out forwards",
         popInOut: "popInOut 3s ease-in-out forwards",
         rotate: "rotate 2s linear infinite",
@@ -84,6 +86,13 @@ export default {
           "90%": { transform: "translateY(0.8rem)" },
           "100%": { transform: "translateY(1rem)" },
         },
+        trayLocked: {
+          "0%": { transform: "translateY(0.75rem)" },
+          "20%": { transform: "translateY(0.75rem)" },
+          "100%": {
+            transform: "translateY(0rem)",
+          },
+        },
         locked: {
           "0%": { transform: "translateY(1rem)" },
           "20%": { transform: "translateY(1rem)" },
@@ -103,9 +112,14 @@ export default {
           "100%": { scale: "0.3", opacity: "0" },
         },
         wobble: {
-          "0%": { rotate: "5deg" },
-          "50%": { rotate: "-5deg" },
-          "100%": { rotate: "5deg" },
+          "0%": { rotate: "5deg", translate: "0 -5px" },
+          "50%": { rotate: "-5deg", translate: "0 5px" },
+          "100%": { rotate: "5deg", translate: "0 -5px" },
+        },
+        smallBounce: {
+          "0%": { translate: "0 -5px" },
+          "50%": { translate: "0 5px" },
+          "100%": { translate: "0 -5px" },
         },
       },
       gridTemplateRows: {

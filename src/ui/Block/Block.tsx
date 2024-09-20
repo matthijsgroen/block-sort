@@ -78,7 +78,7 @@ export const Block: React.FC<Props> = ({
       <div
         className={clsx(
           styles.layer,
-          "bg-block rounded-md border border-black/80 ",
+          "bg-block rounded-md border border-black/10 ",
           { [styles.selectedOutline]: selected }
         )}
       ></div>

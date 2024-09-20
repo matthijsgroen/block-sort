@@ -40,12 +40,12 @@
 
 .gradient {
   background: linear-gradient(
-    rgba(0, 0, 0, 30%) 0%,
-    rgba(0, 0, 0, 0%) 5%,
-    rgba(0, 0, 0, 0%) 30%,
-    rgba(255, 255, 255, 20%) 35%,
-    rgba(0, 0, 0, 20%) 40%,
-    rgba(0, 0, 0, 20%) 90%,
+    rgba(0, 0, 0, 60%) 0%,
+    rgba(0, 0, 0, 40%) 40%,
+    rgba(0, 0, 0, 0%) 55%,
+    rgba(255, 255, 255, 20%) 70%,
+    rgba(0, 0, 0, 20%) 80%,
+    rgba(0, 0, 0, 20%) 95%,
     rgba(0, 0, 0, 50%) 100%
   );
 }
@@ -87,5 +87,5 @@
 .shadow {
   background-color: #0006;
   box-shadow: 6px 1px 2px 1px #0006;
-  @apply absolute w-full h-block rounded-md translate-y-top-block;
+  @apply absolute w-full h-5 rounded-md translate-y-4;
 }
