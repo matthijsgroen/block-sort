@@ -19,6 +19,7 @@ export type LevelSettings = {
   extraPlacementLimits?: number;
   buffers?: number;
   bufferSizes?: number;
+  bufferPlacementLimits?: number;
   minimalAmountOfMoves?: number;
   maximalAmountOfMoves?: number;
 };
@@ -31,6 +32,7 @@ export const generateRandomLevel = (
     extraPlacementLimits = 0,
     buffers = 0,
     bufferSizes = 1,
+    bufferPlacementLimits = 0,
     hideBlockTypes = false,
     stacksPerColor = 1,
   }: LevelSettings,
@@ -43,6 +45,13 @@ export const generateRandomLevel = (
   const blockColors = availableColors.slice(0, amountColors);
   const placementLimits =
     extraPlacementLimits > 0 ? blockColors.slice(-extraPlacementLimits) : [];
+  const bufPlacementLimits =
+    bufferPlacementLimits > 0
+      ? blockColors.slice(
+          -(extraPlacementLimits + bufferPlacementLimits),
+          blockColors.length - extraPlacementLimits
+        )
+      : [];
 
   const amountBars = amountColors * stacksPerColor;
   const blocks: BlockColor[] = [];
@@ -67,6 +76,10 @@ export const generateRandomLevel = (
           createPlacementColumn(stackSize, [], placementLimits[i])
         )
       )
-      .concat(timesMap(buffers, () => createBufferColumn(bufferSizes)))
+      .concat(
+        timesMap(buffers, (i) =>
+          createBufferColumn(bufferSizes, bufPlacementLimits[i])
+        )
+      )
   );
 };

@@ -47,17 +47,28 @@ export const getSpecialSettings = (
       extraPlacementStacks: 0,
       buffers: 5 + Math.max(Math.round(difficulty / 8), 0),
       bufferSizes: 3 + Math.min(Math.max(Math.round(difficulty / 3), 0), 2),
+      bufferPlacementLimits: 0 + Math.max(Math.round(difficulty / 3), 0),
     },
     {
       amountColors: 10,
       stackSize: difficulty > 4 ? 4 : 3,
-      extraPlacementStacks: 4,
-      extraPlacementLimits: 4,
+      extraPlacementStacks:
+        4 - Math.min(Math.max(Math.round(difficulty / 3), 0), 4),
+      extraPlacementLimits:
+        4 - Math.min(Math.max(Math.round(difficulty / 3), 0), 4),
+      buffers: Math.min(Math.max(Math.round(difficulty / 3), 0), 4),
+      bufferPlacementLimits: Math.min(
+        Math.max(Math.round(difficulty / 3), 0),
+        4
+      ),
+      bufferSizes: 3,
     },
     {
       amountColors: 5,
       stackSize: difficulty > 4 ? 5 : 4,
       extraPlacementStacks: 2,
+      extraPlacementLimits:
+        0 + Math.max(Math.min(Math.round(difficulty / 5), 2), 0),
     },
     {
       amountColors: 5 + Math.max(Math.round(difficulty / 8), 0),

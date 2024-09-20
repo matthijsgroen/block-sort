@@ -198,6 +198,7 @@ describe(getSpecialSettings, () => {
         extraPlacementStacks: 0,
         buffers: 5,
         bufferSizes: 3,
+        bufferPlacementLimits: 0,
       } satisfies LevelSettings);
 
       const hardResult = getSpecialSettings(LEVEL_SCALE.at(-1)!, random);
@@ -208,6 +209,7 @@ describe(getSpecialSettings, () => {
         extraPlacementStacks: 0,
         buffers: 6,
         bufferSizes: 5,
+        bufferPlacementLimits: 4,
       } satisfies LevelSettings);
     });
 
@@ -218,7 +220,7 @@ describe(getSpecialSettings, () => {
         randomTemplate(0)
       );
       const level = await generatePlayableLevel(settings, random);
-      expect(level.moves).toHaveLength(222);
+      expect(level.moves).toHaveLength(690);
     });
   });
 
@@ -232,6 +234,9 @@ describe(getSpecialSettings, () => {
         stackSize: 3,
         extraPlacementStacks: 4,
         extraPlacementLimits: 4,
+        buffers: 0,
+        bufferSizes: 3,
+        bufferPlacementLimits: 0,
       } satisfies LevelSettings);
 
       const hardResult = getSpecialSettings(LEVEL_SCALE.at(-1)!, random);
@@ -239,8 +244,11 @@ describe(getSpecialSettings, () => {
       expect(hardResult).toEqual({
         amountColors: 10,
         stackSize: 4,
-        extraPlacementStacks: 4,
-        extraPlacementLimits: 4,
+        extraPlacementStacks: 0,
+        extraPlacementLimits: 0,
+        buffers: 4,
+        bufferSizes: 3,
+        bufferPlacementLimits: 4,
       } satisfies LevelSettings);
     });
 
@@ -251,7 +259,7 @@ describe(getSpecialSettings, () => {
         randomTemplate(1)
       );
       const level = await generatePlayableLevel(settings, random);
-      expect(level.moves).toHaveLength(33);
+      expect(level.moves).toHaveLength(40);
     });
   });
 
@@ -264,6 +272,7 @@ describe(getSpecialSettings, () => {
         amountColors: 5,
         stackSize: 4,
         extraPlacementStacks: 2,
+        extraPlacementLimits: 0,
       } satisfies LevelSettings);
 
       const hardResult = getSpecialSettings(LEVEL_SCALE.at(-1)!, random);
@@ -272,6 +281,7 @@ describe(getSpecialSettings, () => {
         amountColors: 5,
         stackSize: 5,
         extraPlacementStacks: 2,
+        extraPlacementLimits: 2,
       } satisfies LevelSettings);
     });
 
