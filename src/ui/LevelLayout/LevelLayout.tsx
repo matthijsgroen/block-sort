@@ -9,7 +9,7 @@ type Props = {
   started: boolean;
   levelState: LevelState;
   selection?: [column: number, amount: number];
-  onColumnClick: Dispatch<number>;
+  onColumnClick?: Dispatch<number>;
   onPickUp?: VoidFunction;
   onDrop?: VoidFunction;
   onLock?: VoidFunction;
@@ -55,7 +55,7 @@ export const LevelLayout: React.FC<Props> = ({
             <BlockColumn
               column={bar}
               key={i}
-              onClick={() => onColumnClick(i)}
+              onClick={() => onColumnClick?.(i)}
               started={started}
               amountSelected={
                 selection && i === selection[0] ? selection[1] : 0
