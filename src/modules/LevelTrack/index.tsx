@@ -1,6 +1,10 @@
 import clsx from "clsx";
 
-import { isHard, isSpecial, LEVEL_SCALE } from "@/game/levelSettings";
+import {
+  isHard,
+  isSpecial,
+  LEVEL_SCALE,
+} from "@/game/level-settings/levelSettings";
 import { TopButton } from "@/ui/TopButton/TopButton";
 
 import { PlayButton } from "../../ui/PlayButton";

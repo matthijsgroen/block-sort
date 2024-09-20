@@ -6,7 +6,7 @@ import {
   getSpecialSettings,
   isHard,
   isSpecial,
-} from "@/game/levelSettings.ts";
+} from "@/game/level-settings/levelSettings.ts";
 import { LevelLoader } from "@/modules/Level/index.tsx";
 import { LevelTrack } from "@/modules/LevelTrack/index.tsx";
 import { generateNewSeed, mulberry32 } from "@/support/random.ts";
