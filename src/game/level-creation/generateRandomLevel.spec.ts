@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import { mulberry32 } from "@/support/random";
 
-import { debugLevel } from "../debugLevel";
 import {
   createBlocks,
   createBufferColumn,
@@ -80,7 +79,6 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    debugLevel(level);
     expect(level.colors).toEqual(["darkblue", "green"]);
     expect(level.columns).toEqual([
       createPlacementColumn(
@@ -149,7 +147,6 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    debugLevel(level);
     expect(level.colors).toEqual(["darkblue", "green", "pink", "white"]);
     expect(level.columns).toEqual([
       createPlacementColumn(
