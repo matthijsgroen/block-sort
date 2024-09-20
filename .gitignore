@@ -31,3 +31,5 @@ dev-dist
 *.njsproj
 *.sln
 *.sw?
+
+*storybook.log
