@@ -87,19 +87,23 @@ export const BlockColumn: React.FC<Props> = ({
             const block = l[index];
             const isSelected = index < amountSelected;
             return (
-              <Block
+              <div
                 key={column.columnSize - column.blocks.length + index}
-                locked={p <= blocksLocked - 1}
-                moved={started}
-                shadow={column.type === "placement" || isSelected}
-                revealed={block.revealed}
-                color={colorMap[block.color]}
-                shape={block.revealed ? shapeMapping[block.color] : undefined}
-                selected={isSelected}
-                onDrop={onDrop}
-                onPickUp={onPickUp}
-                onLock={onLock}
-              />
+                className={clsx(styles.shade)}
+              >
+                <Block
+                  locked={p <= blocksLocked - 1}
+                  moved={started}
+                  shadow={column.type === "placement" || isSelected}
+                  revealed={block.revealed}
+                  color={colorMap[block.color]}
+                  shape={block.revealed ? shapeMapping[block.color] : undefined}
+                  selected={isSelected}
+                  onDrop={onDrop}
+                  onPickUp={onPickUp}
+                  onLock={onLock}
+                />
+              </div>
             );
           })}
           {timesMap(column.columnSize - column.blocks.length, (p, l) =>
