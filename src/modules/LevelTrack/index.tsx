@@ -1,3 +1,4 @@
+import { use } from "react";
 import clsx from "clsx";
 
 import {
@@ -8,6 +9,7 @@ import {
 import { TopButton } from "@/ui/TopButton/TopButton";
 
 import { PlayButton } from "../../ui/PlayButton";
+import { BackgroundContext } from "../Layout/BackgroundContext";
 
 import styles from "./levelTrack.module.css";
 
@@ -37,8 +39,11 @@ export const LevelTrack: React.FC<Props> = ({
 
   const levelNrs = new Array(30).fill(0).map((_, i) => startNumbering + i);
 
+  const [, setTheme] = use(BackgroundContext);
+  setTheme(undefined);
+
   return (
-    <div className="flex flex-col items-center h-safe-area">
+    <div className="flex flex-col items-center h-full">
       <div className="flex flex-row p-2 gap-x-2 w-full">
         {onOpenSettings && (
           <TopButton buttonType="settings" onClick={onOpenSettings} />

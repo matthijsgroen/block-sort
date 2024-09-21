@@ -8,6 +8,9 @@ export default {
         "height-block": "3.5rem",
         "top-block": "1rem",
       },
+      backgroundImage: {
+        "wood-texture": "url('./assets/wood-texture.png')",
+      },
       height: {
         "safe-area":
           "calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom))",

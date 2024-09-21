@@ -1,7 +1,7 @@
 import { Dispatch } from "react";
 
 import { LevelState } from "@/game/types";
-import { colSizes, rowSizes } from "@/support/grid";
+import { colSizes } from "@/support/grid";
 
 import { BlockColumn } from "../BlockColumn/BlockColumn";
 
@@ -19,6 +19,10 @@ const determineColumns = (
   maxColumnHeight: number,
   amountColumns: number
 ): string => {
+  if (maxColumnHeight <= 6 && amountColumns < 6) {
+    const gridColumnCount = amountColumns;
+    return colSizes[gridColumnCount];
+  }
   if (maxColumnHeight <= 6 && amountColumns < 12) {
     const gridColumnCount = Math.ceil(amountColumns / 2);
     return colSizes[gridColumnCount];
@@ -48,9 +52,7 @@ export const LevelLayout: React.FC<Props> = ({
   return (
     <div className="flex-1 flex flex-wrap justify-center p-2">
       <div className="w-full content-center">
-        <div
-          className={`grid grid-flow-dense ${cols} ${rowSizes[maxColumnSize]}`}
-        >
+        <div className={`grid grid-flow-dense ${cols}`}>
           {levelState.columns.map((bar, i) => (
             <BlockColumn
               column={bar}

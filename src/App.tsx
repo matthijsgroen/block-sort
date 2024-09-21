@@ -12,6 +12,7 @@ import { LevelTrack } from "@/modules/LevelTrack/index.tsx";
 import { generateNewSeed, mulberry32 } from "@/support/random.ts";
 import { useGameStorage } from "@/support/useGameStorage.ts";
 
+import { BackgroundProvider } from "./modules/Layout/BackgroundContext.tsx";
 import { Settings } from "./modules/Settings/index.tsx";
 import { sound } from "./audio.ts";
 import PWABadge from "./PWABadge.tsx";
@@ -56,7 +57,7 @@ export const App: React.FC = () => {
       : getNormalSettings(levelNr);
 
   return (
-    <>
+    <BackgroundProvider>
       {!inLevel && (
         <LevelTrack
           levelNr={levelNr}
@@ -92,6 +93,6 @@ export const App: React.FC = () => {
         />
       )}
       <PWABadge />
-    </>
+    </BackgroundProvider>
   );
 };

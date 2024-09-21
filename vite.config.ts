@@ -20,8 +20,8 @@ export default defineConfig({
         name: "Block Sort",
         short_name: "Block Sort",
         description: "Sort the stacks of blocks",
-        theme_color: "#1d0f06",
-        background_color: "#1d0f06",
+        theme_color: "#63462d",
+        background_color: "#63462d",
       },
 
       workbox: {

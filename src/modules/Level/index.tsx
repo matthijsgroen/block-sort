@@ -25,7 +25,7 @@ export const LevelLoader: React.FC<Props> = ({
   }, [seed, JSON.stringify(levelSettings)]);
 
   return (
-    <Suspense fallback={<div className="h-safe-area"></div>}>
+    <Suspense fallback={<div />}>
       <Level
         level={level}
         levelNr={levelNr}

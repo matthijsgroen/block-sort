@@ -56,13 +56,13 @@ export const BlockColumn: React.FC<Props> = ({
           }
           return a + 1;
         });
-      }, 100);
+      }, 50);
       return () => clearInterval(clear);
     }
   }, [locked]);
 
   return (
-    <div className={`${rowSpans[column.columnSize]} justify-self-center`}>
+    <div className={`${rowSpans[column.columnSize + 1]} justify-self-center`}>
       <div
         className={clsx("border border-transparent box-content pb-6", {
           "contain-paint": locked,

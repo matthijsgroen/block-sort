@@ -3,6 +3,7 @@ import { use, useEffect, useState } from "react";
 import { sound } from "@/audio";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
+import { isHard, isSpecial } from "@/game/level-settings/levelSettings";
 import { hasWon, isStuck } from "@/game/state";
 import { LevelState } from "@/game/types";
 import { useGameStorage } from "@/support/useGameStorage";
@@ -11,11 +12,24 @@ import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
 import { Message } from "@/ui/Message/Message";
 import { TopButton } from "@/ui/TopButton/TopButton";
 
+import { BackgroundContext } from "../Layout/BackgroundContext";
+
 type Props = {
   onComplete: (won: boolean) => void;
   level: Promise<LevelState>;
   levelNr: number;
   levelSettings: LevelSettings;
+};
+
+const getLevelType = (nr: number): undefined | "hard" | "easy" | "special" => {
+  if (isSpecial(nr)) {
+    return "special";
+  }
+  if (isHard(nr)) {
+    return "hard";
+  }
+  // TODO: Implement easy
+  return undefined;
 };
 
 export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
@@ -63,8 +77,11 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
     }
   };
 
+  const [, setTheme] = use(BackgroundContext);
+  setTheme(getLevelType(levelNr));
+
   return (
-    <div className="flex flex-col h-safe-area">
+    <div className="flex flex-col h-full">
       {playState === "restarting" && (
         <Message
           delay={100}
