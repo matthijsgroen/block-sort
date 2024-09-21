@@ -30,7 +30,7 @@ describe.skip(generateLevel, () => {
     // ]);
   });
 
-  it.only("generates a complex level", async () => {
+  it("generates a complex level", async () => {
     // const random = mulberry32(TEST_SEED);
     // const level = generateLevel(random, {
     //   amountColors: 9,
