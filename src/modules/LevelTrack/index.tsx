@@ -2,6 +2,7 @@ import { use } from "react";
 import clsx from "clsx";
 
 import {
+  isEasy,
   isHard,
   isSpecial,
   LEVEL_SCALE,
@@ -105,9 +106,22 @@ export const LevelTrack: React.FC<Props> = ({
                   )}
                   {i == levelNr && "😀"}
                   {i > levelNr && isSpecial(i) && (
-                    <span className={styles.colorEmoji}>⭐️</span>
+                    <span
+                      style={{ "--color": "#a855f7" }}
+                      className={styles.colorEmoji}
+                    >
+                      ⭐️
+                    </span>
                   )}
                   {i > levelNr && isHard(i) && "️🔥"}
+                  {i > levelNr && isEasy(i) && (
+                    <span
+                      style={{ "--color": "#15803d" }}
+                      className={styles.colorEmoji}
+                    >
+                      ️🍀
+                    </span>
+                  )}
                 </span>
               </div>
             </li>
@@ -120,6 +134,7 @@ export const LevelTrack: React.FC<Props> = ({
           onClick={onLevelStart}
           special={isSpecial(levelNr)}
           hard={isHard(levelNr)}
+          easy={isEasy(levelNr)}
         />
       </div>
     </div>

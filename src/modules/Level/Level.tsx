@@ -3,9 +3,9 @@ import { use, useEffect, useState } from "react";
 import { sound } from "@/audio";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
-import { isHard, isSpecial } from "@/game/level-settings/levelSettings";
 import { hasWon, isStuck } from "@/game/state";
 import { LevelState } from "@/game/types";
+import { getLevelType } from "@/support/getLevelType";
 import { useGameStorage } from "@/support/useGameStorage";
 import { colorMap } from "@/ui/Block/colorMap";
 import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
@@ -19,17 +19,6 @@ type Props = {
   level: Promise<LevelState>;
   levelNr: number;
   levelSettings: LevelSettings;
-};
-
-const getLevelType = (nr: number): undefined | "hard" | "easy" | "special" => {
-  if (isSpecial(nr)) {
-    return "special";
-  }
-  if (isHard(nr)) {
-    return "hard";
-  }
-  // TODO: Implement easy
-  return undefined;
 };
 
 export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {

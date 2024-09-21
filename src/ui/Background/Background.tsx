@@ -2,7 +2,7 @@ import { PropsWithChildren } from "react";
 import clsx from "clsx";
 
 type Props = {
-  theme?: "easy" | "hard" | "special";
+  theme?: "easy" | "hard" | "special" | "normal";
 };
 
 export const Background: React.FC<PropsWithChildren<Props>> = ({
@@ -14,7 +14,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
       className={clsx(
         "h-full relative transition-all [transition-duration:1.5s] [transition-timing-function:ease-out]",
         {
-          "bg-transparent": theme === undefined,
+          "bg-transparent": theme === undefined || theme === "normal",
           "bg-purple-700/50": theme === "special",
           "bg-red-600/70": theme === "hard",
           "bg-green-600/40": theme === "easy",
