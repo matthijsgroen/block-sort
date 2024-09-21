@@ -132,7 +132,7 @@ describe(generateRandomLevel, () => {
     ]);
   });
 
-  it.only("both buffers and columns can be locked", () => {
+  it("both buffers and columns can be locked", () => {
     const random = mulberry32(TEST_SEED);
     const level = generateRandomLevel(
       {
