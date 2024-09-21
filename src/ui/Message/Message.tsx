@@ -47,7 +47,7 @@ export const Message: React.FC<Props> = ({
     >
       {started && (
         <>
-          <div className="absolute w-full h-full bg-slate-700/60 opacity-0 animate-fadeIn"></div>
+          <div className="absolute w-full h-full bg-gradient-to-b from-transparent  to-transparent via-30% via-slate-700 opacity-0 animate-fadeIn"></div>
           <div className="absolute top-[46%] left-1/2 animate-flyTopLeft">
             <Block
               color={color}
