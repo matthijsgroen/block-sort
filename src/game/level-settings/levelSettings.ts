@@ -21,6 +21,29 @@ export const nextLevelAt = (levelNr: number): number | undefined =>
 export const getNormalSettings = (levelNr: number): LevelSettings =>
   _getNormalSettings(getDifficultyLevel(levelNr));
 
+export const getEasySettings = (
+  levelNr: number,
+  random = Math.random
+): LevelSettings => {
+  const difficulty = getDifficultyLevel(levelNr);
+
+  const easyDifficulty = Math.max(
+    difficulty - Math.round(1 + random() * (difficulty - 2)),
+    2
+  );
+
+  const templates: LevelSettings[] = [
+    _getNormalSettings(easyDifficulty),
+    _getHardSettings(easyDifficulty),
+    _getSpecial1Settings(easyDifficulty),
+    _getSpecial2Settings(easyDifficulty),
+    _getSpecial3Settings(easyDifficulty),
+    _getSpecial4Settings(easyDifficulty),
+  ];
+
+  return pick(templates, random);
+};
+
 export const getHardSettings = (levelNr: number): LevelSettings =>
   _getHardSettings(getDifficultyLevel(levelNr));
 
@@ -41,5 +64,12 @@ export const getSpecialSettings = (
 };
 
 export const isSpecial = (levelNr: number) => (levelNr + 1) % 7 === 0;
+
 export const isHard = (levelNr: number) =>
   !isSpecial(levelNr) && (levelNr + 1) % 9 === 0;
+
+export const isEasy = (levelNr: number) =>
+  !isSpecial(levelNr) &&
+  !isHard(levelNr) &&
+  levelNr > 150 &&
+  (levelNr + 1) % 13 === 0;
