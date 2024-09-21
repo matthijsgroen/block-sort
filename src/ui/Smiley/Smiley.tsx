@@ -19,7 +19,7 @@ export const Smiley = () => {
       const cleanup = setTimeout(() => {
         setState("think");
         setWinkCount((c) => c + 1);
-      }, 20_000);
+      }, 15_000);
       return () => {
         clearTimeout(cleanup);
       };
@@ -32,7 +32,7 @@ export const Smiley = () => {
         } else {
           setState("grin");
         }
-      }, 500);
+      }, 1_000);
       return () => {
         clearTimeout(cleanup);
       };
@@ -41,7 +41,7 @@ export const Smiley = () => {
       const cleanup = setTimeout(() => {
         setState("yawn");
         setWinkCount((c) => c + 1);
-      }, 20_000);
+      }, 15_000);
       return () => {
         clearTimeout(cleanup);
       };
@@ -53,7 +53,7 @@ export const Smiley = () => {
         } else {
           setState("smile");
         }
-      }, 500);
+      }, 1_000);
       return () => {
         clearTimeout(cleanup);
       };
