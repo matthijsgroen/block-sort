@@ -12,7 +12,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
   return (
     <div
       className={clsx(
-        "h-safe-area relative transition-all [transition-duration:3s]",
+        "h-full relative transition-all [transition-duration:3s]",
         {
           "bg-transparent": theme === undefined,
           "bg-purple-700/50": theme === "special",
@@ -22,7 +22,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
       )}
     >
       <div className="absolute left-0 top-0 h-full w-full mix-blend-multiply bg-wood-texture"></div>
-      <div className="absolute left-0 top-0 h-full w-full">{children}</div>
+      <div className="absolute left-0 top-0 h-safe-area w-full">{children}</div>
     </div>
   );
 };
