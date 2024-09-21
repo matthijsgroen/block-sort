@@ -21,7 +21,7 @@ import PWABadge from "./PWABadge.tsx";
 const BASE_SEED = 12345678901234;
 
 export const App: React.FC = () => {
-  const [levelNr, setLevelNr] = useGameStorage("levelNr", 0);
+  const [levelNr, setLevelNr] = useGameStorage("levelNr", 158);
 
   const [levelSeed, setLevelSeed] = useState(() =>
     generateNewSeed(BASE_SEED, levelNr)

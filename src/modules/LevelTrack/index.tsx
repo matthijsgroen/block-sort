@@ -7,6 +7,7 @@ import {
   isSpecial,
   LEVEL_SCALE,
 } from "@/game/level-settings/levelSettings";
+import { Smiley } from "@/ui/Smiley/Smiley";
 import { TopButton } from "@/ui/TopButton/TopButton";
 
 import { PlayButton } from "../../ui/PlayButton";
@@ -87,13 +88,25 @@ export const LevelTrack: React.FC<Props> = ({
                       "text-green-900": i < levelNr,
                       "font-bold": i === levelNr,
                       "text-purple-500": isSpecial(i) && i >= levelNr,
+                      "text-green-700": isEasy(i) && i >= levelNr,
                     },
                     styles.textShadow
                   )}
                 >
                   {i + 1}&nbsp;
                 </span>
-                <span className="inline-block border border-block-brown size-block align-top rounded-md text-center bg-black/30">
+                <span
+                  className={clsx(
+                    "inline-block border size-block align-top rounded-md text-center bg-black/30",
+                    {
+                      "border border-block-brown":
+                        !isSpecial(i) || !isHard(i) || !isEasy(i),
+                      "border-2 border-purple-800": isSpecial(i),
+                      "border-2 border-orange-700": isHard(i),
+                      "border-2 border-green-800": isEasy(i),
+                    }
+                  )}
+                >
                   {i < levelNr && (
                     <span
                       className={clsx(
@@ -104,7 +117,7 @@ export const LevelTrack: React.FC<Props> = ({
                       ✔
                     </span>
                   )}
-                  {i == levelNr && "😀"}
+                  {i == levelNr && <Smiley />}
                   {i > levelNr && isSpecial(i) && (
                     <span
                       style={{ "--color": "#a855f7" }}
