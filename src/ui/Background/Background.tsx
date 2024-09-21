@@ -12,7 +12,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
   return (
     <div
       className={clsx(
-        "h-full relative transition-all [transition-duration:3s]",
+        "h-full relative transition-all [transition-duration:1s] [transition-timing-function:ease-out]",
         {
           "bg-transparent": theme === undefined,
           "bg-purple-700/50": theme === "special",
