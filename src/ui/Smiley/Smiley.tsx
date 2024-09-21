@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-type States = "grin" | "smile" | "wink" | "yawn" | "sleep";
+type States = "grin" | "smile" | "think" | "yawn" | "sleep";
 
 export const Smiley = () => {
   const [state, setState] = useState<States>("grin");
@@ -11,22 +11,22 @@ export const Smiley = () => {
     smile: "🙂",
     sleep: "😴",
     yawn: "🥱",
-    wink: "😉",
+    think: "🤔",
   };
 
   useEffect(() => {
     if (state === "grin") {
       const cleanup = setTimeout(() => {
-        setState("wink");
+        setState("think");
         setWinkCount((c) => c + 1);
       }, 20_000);
       return () => {
         clearTimeout(cleanup);
       };
     }
-    if (state === "wink") {
+    if (state === "think") {
       const cleanup = setTimeout(() => {
-        if (winkCount === 2) {
+        if (winkCount > 2) {
           setState("smile");
           setWinkCount(0);
         } else {
@@ -48,7 +48,7 @@ export const Smiley = () => {
     }
     if (state === "yawn") {
       const cleanup = setTimeout(() => {
-        if (winkCount === 2) {
+        if (winkCount > 2) {
           setState("sleep");
         } else {
           setState("smile");
