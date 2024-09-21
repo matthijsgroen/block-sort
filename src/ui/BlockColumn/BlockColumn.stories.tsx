@@ -6,7 +6,9 @@ import { Block, Column } from "@/game/types";
 
 import { BlockColumn } from "./BlockColumn";
 
-type PagePropsAndCustomArgs = React.ComponentProps<typeof BlockColumn> & {
+type BlockColumnPropsAndCustomArgs = React.ComponentProps<
+  typeof BlockColumn
+> & {
   type: Column["type"];
   columnSize: number;
   amountBlocks: number;
@@ -14,7 +16,7 @@ type PagePropsAndCustomArgs = React.ComponentProps<typeof BlockColumn> & {
 };
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
-const meta: Meta<PagePropsAndCustomArgs> = {
+const meta: Meta<BlockColumnPropsAndCustomArgs> = {
   title: "BlockSort/BlockColumn",
   component: BlockColumn,
   parameters: {

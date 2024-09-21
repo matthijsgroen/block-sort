@@ -3,14 +3,16 @@ import { use, useEffect, useState } from "react";
 import { sound } from "@/audio";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
+import { isHard, isSpecial } from "@/game/level-settings/levelSettings";
 import { hasWon, isStuck } from "@/game/state";
 import { LevelState } from "@/game/types";
-import { colSizes, rowSizes } from "@/support/grid";
 import { useGameStorage } from "@/support/useGameStorage";
 import { colorMap } from "@/ui/Block/colorMap";
-import { BlockColumn } from "@/ui/BlockColumn/BlockColumn";
+import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
 import { Message } from "@/ui/Message/Message";
 import { TopButton } from "@/ui/TopButton/TopButton";
+
+import { BackgroundContext } from "../Layout/BackgroundContext";
 
 type Props = {
   onComplete: (won: boolean) => void;
@@ -19,20 +21,15 @@ type Props = {
   levelSettings: LevelSettings;
 };
 
-const determineColumns = (
-  maxColumnHeight: number,
-  amountColumns: number
-): string => {
-  if (maxColumnHeight <= 6 && amountColumns < 12) {
-    const gridColumnCount = Math.ceil(amountColumns / 2);
-    return colSizes[gridColumnCount];
+const getLevelType = (nr: number): undefined | "hard" | "easy" | "special" => {
+  if (isSpecial(nr)) {
+    return "special";
   }
-  if (maxColumnHeight <= 4 && amountColumns < 16) {
-    const gridColumnCount = Math.ceil(amountColumns / 3);
-    return colSizes[gridColumnCount];
+  if (isHard(nr)) {
+    return "hard";
   }
-
-  return "grid-cols-6";
+  // TODO: Implement easy
+  return undefined;
 };
 
 export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
@@ -67,7 +64,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
     }
   }, [levelState]);
 
-  const onColumnClick = (columnIndex: number) => () => {
+  const onColumnClick = (columnIndex: number) => {
     if (selectStart) {
       setLevelState((levelState) =>
         moveBlocks(levelState, selectStart[0], columnIndex)
@@ -80,15 +77,11 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
     }
   };
 
-  const maxColumnSize = levelState.columns.reduce(
-    (r, c) => Math.max(r, c.columnSize),
-    0
-  );
-
-  const cols = determineColumns(maxColumnSize, levelState.columns.length);
+  const [, setTheme] = use(BackgroundContext);
+  setTheme(getLevelType(levelNr));
 
   return (
-    <div className="flex flex-col h-safe-area">
+    <div className="flex flex-col h-full">
       {playState === "restarting" && (
         <Message
           delay={100}
@@ -149,38 +142,25 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
           }}
         />
       </div>
-      <div className="flex-1 flex flex-wrap justify-center p-2">
-        <div className="w-full content-center">
-          <div
-            className={`grid grid-flow-dense ${cols} ${rowSizes[maxColumnSize]}`}
-          >
-            {levelState.columns.map((bar, i) => (
-              <BlockColumn
-                column={bar}
-                key={i}
-                onClick={onColumnClick(i)}
-                started={started}
-                amountSelected={
-                  selectStart &&
-                  selectStart[2] === levelState &&
-                  i === selectStart[0]
-                    ? selectStart[1]
-                    : 0
-                }
-                onLock={() => {
-                  sound.play("lock");
-                }}
-                onDrop={() => {
-                  sound.play("place");
-                }}
-                onPickUp={() => {
-                  sound.play("pickup");
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+      <LevelLayout
+        levelState={levelState}
+        started={started}
+        onColumnClick={(column) => onColumnClick(column)}
+        selection={
+          selectStart && selectStart[2] === levelState
+            ? [selectStart[0], selectStart[1]]
+            : undefined
+        }
+        onLock={() => {
+          sound.play("lock");
+        }}
+        onDrop={() => {
+          sound.play("place");
+        }}
+        onPickUp={() => {
+          sound.play("pickup");
+        }}
+      />
     </div>
   );
 };

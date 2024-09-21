@@ -94,7 +94,7 @@ describe(generateRandomLevel, () => {
     ]);
   });
 
-  it.only("can generates buffers that are locked", () => {
+  it("can generates buffers that are locked", () => {
     const random = mulberry32(TEST_SEED);
     const level = generateRandomLevel(
       {
@@ -132,7 +132,7 @@ describe(generateRandomLevel, () => {
     ]);
   });
 
-  it.only("both buffers and columns can be locked", () => {
+  it("both buffers and columns can be locked", () => {
     const random = mulberry32(TEST_SEED);
     const level = generateRandomLevel(
       {

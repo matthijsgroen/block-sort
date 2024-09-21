@@ -2,8 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import { mulberry32 } from "@/support/random";
 
-import { LevelSettings } from "./level-creation/generateRandomLevel";
-import { generatePlayableLevel } from "./level-creation/tactics";
+import { LevelSettings } from "../level-creation/generateRandomLevel";
+import { generatePlayableLevel } from "../level-creation/tactics";
+
 import {
   getDifficultyLevel,
   getHardSettings,
@@ -196,8 +197,8 @@ describe(getSpecialSettings, () => {
         amountColors: 4,
         stackSize: 12,
         extraPlacementStacks: 0,
-        buffers: 5,
-        bufferSizes: 3,
+        buffers: 6,
+        bufferSizes: 5,
         bufferPlacementLimits: 0,
       } satisfies LevelSettings);
 

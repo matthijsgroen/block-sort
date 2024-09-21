@@ -4,11 +4,6 @@
 
 body {
   background-color: #63462d;
-  background:
-    linear-gradient(#63462d 0%, #63462d00 20%, #63462d00 80%, #63462d 100%),
-    url("./assets/wood-texture.png") repeat,
-    linear-gradient(#63462d 0%, #63462d 100%);
-  background-blend-mode: multiply;
   user-select: none;
 }
 
