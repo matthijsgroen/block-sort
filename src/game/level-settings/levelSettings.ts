@@ -28,7 +28,7 @@ export const getEasySettings = (
   const difficulty = getDifficultyLevel(levelNr);
 
   const easyDifficulty = Math.max(
-    difficulty - Math.round(1 + random() * (difficulty - 4)),
+    difficulty - Math.round(1 + random() * (difficulty - 2)),
     2
   );
 
