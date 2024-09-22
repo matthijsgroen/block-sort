@@ -143,10 +143,10 @@ describe(getNormalSettings, () => {
         difficulty: 9,
         result: {
           amountColors: 10,
-          extraPlacementStacks: 2,
+          extraPlacementStacks: 1,
           extraPlacementLimits: 1,
-          buffers: 6,
-          bufferSizes: 1,
+          buffers: 2,
+          bufferSizes: 3,
           hideBlockTypes: false,
           stackSize: 7,
         },
@@ -155,10 +155,10 @@ describe(getNormalSettings, () => {
         difficulty: 10,
         result: {
           amountColors: 10,
-          extraPlacementStacks: 2,
+          extraPlacementStacks: 1,
           extraPlacementLimits: 1,
           buffers: 2,
-          bufferSizes: 1,
+          bufferSizes: 2,
           hideBlockTypes: false,
           stackSize: 8,
         },
@@ -180,7 +180,7 @@ describe(getNormalSettings, () => {
       getNormalSettings(LEVEL_SCALE.at(-1)!),
       random
     );
-    expect(level.moves).toHaveLength(121);
+    expect(level.moves).toHaveLength(102);
   });
 });
 
