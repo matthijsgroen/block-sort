@@ -9,7 +9,7 @@ describe("special 1 settings", () => {
     expect(easy).toEqual({
       amountColors: 4,
       bufferPlacementLimits: 0,
-      bufferSizes: 5,
+      bufferSizes: 4,
       buffers: 6,
       extraPlacementStacks: 0,
       stackSize: 12,
@@ -19,20 +19,20 @@ describe("special 1 settings", () => {
     expect(hard).toEqual({
       amountColors: 4,
       bufferPlacementLimits: 3,
-      bufferSizes: 5,
+      bufferSizes: 4,
       buffers: 6,
       extraPlacementStacks: 0,
-      stackSize: 14,
+      stackSize: 13,
     });
 
     const veryHard = getSettings(11);
     expect(veryHard).toEqual({
       amountColors: 4,
-      bufferPlacementLimits: 4,
-      bufferSizes: 5,
+      bufferPlacementLimits: 3,
+      bufferSizes: 4,
       buffers: 6,
       extraPlacementStacks: 0,
-      stackSize: 14,
+      stackSize: 13,
     });
   });
 
