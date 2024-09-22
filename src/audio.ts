@@ -13,14 +13,16 @@ type StreamItem = {
 type Stream = "effects" | "music";
 
 const streams: Record<Stream, StreamItem> = {
-  effects: { gain: 0.1 },
-  music: { gain: 0.1 },
+  effects: { gain: 0.5 },
+  music: { gain: 0.5 },
 };
 
 type AudioItem = {
   fileUrl: string;
   audioStream: Stream;
+  gainNode?: GainNode;
   buffer?: AudioBuffer;
+  gain?: number;
   /**
    * @default false
    */
@@ -35,21 +37,23 @@ type AudioItem = {
 const createItem = (
   audioStream: Stream,
   fileUrl: string,
+  gain = 1.0,
   { loop = false, multipleInstances = false } = {}
 ): AudioItem => ({
   audioStream,
   fileUrl,
+  gain,
   loop,
   multipleInstances,
 });
 
 const audioItems = {
-  music: createItem("music", music, { loop: true }),
-  lose: createItem("effects", lose),
+  music: createItem("music", music, 1.0, { loop: true }),
+  lose: createItem("effects", lose, 0.5),
   place: createItem("effects", place),
-  lock: createItem("effects", place, { multipleInstances: true }),
+  lock: createItem("effects", place, 1.0, { multipleInstances: true }),
   win: createItem("effects", win),
-  pickup: createItem("effects", pickup),
+  pickup: createItem("effects", pickup, 2.0),
 };
 
 const loadAndDecodeAudio = async (
@@ -91,12 +95,18 @@ const loadAudio = async () => {
 
   const playBuffer = (item: AudioItem) => {
     let sourcePlaying: null | { stop: VoidFunction } = null;
-    const targetNode = streams[item.audioStream].gainNode;
-    if (!targetNode) {
-      throw new Error(
-        `Audio stream for ${item.audioStream} is not yet initialized`
-      );
+    if (!item.gainNode) {
+      const targetNode = streams[item.audioStream].gainNode;
+      if (!targetNode) {
+        throw new Error(
+          `Audio stream for ${item.audioStream} is not yet initialized`
+        );
+      }
+      item.gainNode = context.createGain();
+      item.gainNode.gain.value = item.gain ?? 1.0;
+      item.gainNode.connect(targetNode);
     }
+    const target = item.gainNode;
 
     const play = (): {
       stop: VoidFunction;
@@ -108,7 +118,7 @@ const loadAudio = async () => {
       source.loop = item.loop === true;
       source.buffer = item.buffer;
 
-      source.connect(targetNode);
+      source.connect(target);
       source.start(context.currentTime, 0);
       if (!item.loop) {
         source.onended = () => {
@@ -173,6 +183,9 @@ export const sound = {
     streams[stream].disabled = !enabled;
   },
   play: (item: keyof typeof audioItems) => {
+    if (document.visibilityState === "hidden") {
+      return;
+    }
     const itemInfo = audioItems[item];
     const stream = streams[itemInfo.audioStream];
     if (stream.disabled) {

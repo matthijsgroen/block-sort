@@ -1,4 +1,4 @@
-import { use } from "react";
+import { use, useEffect } from "react";
 import clsx from "clsx";
 
 import {
@@ -42,7 +42,9 @@ export const LevelTrack: React.FC<Props> = ({
   const levelNrs = new Array(30).fill(0).map((_, i) => startNumbering + i);
 
   const [, setTheme] = use(BackgroundContext);
-  setTheme(undefined);
+  useEffect(() => {
+    setTheme(undefined);
+  }, []);
 
   return (
     <div className="flex flex-col items-center h-full">
