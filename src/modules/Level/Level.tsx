@@ -37,7 +37,10 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
 
   const [started, setStarted] = useState(false);
 
+  const [, setTheme] = use(BackgroundContext);
   useEffect(() => {
+    setTheme(getLevelType(levelNr));
+
     const cleanup = setTimeout(() => setStarted(true), 300);
     return () => clearTimeout(cleanup);
   }, []);
@@ -65,9 +68,6 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
       }
     }
   };
-
-  const [, setTheme] = use(BackgroundContext);
-  setTheme(getLevelType(levelNr));
 
   return (
     <div className="flex flex-col h-full">
