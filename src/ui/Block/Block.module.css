@@ -76,7 +76,7 @@
 }
 
 .selected {
-  translate: 0 -2rem;
+  transform: translateY(-2rem);
   @apply ease-in-out animate-wobble;
 }
 
