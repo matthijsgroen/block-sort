@@ -62,6 +62,7 @@ export const Settings: React.FC<Props> = ({
                     url: "https://matthijsgroen.github.io/block-sort/",
                     text: "A block sorting puzzle game. No ads, cookies, tracking or payments. Just the pure fun!",
                   });
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 } catch (e) {
                   // Nothing to do, user probably canceled the share
                 }
