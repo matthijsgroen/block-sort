@@ -60,5 +60,15 @@ export const Smiley = () => {
     }
   }, [state]);
 
-  return <span className="inline-block scale-150">{characters[state]}</span>;
+  return (
+    <span
+      className="inline-block scale-150"
+      onClick={() => {
+        setState("grin");
+        setWinkCount(0);
+      }}
+    >
+      {characters[state]}
+    </span>
+  );
 };
