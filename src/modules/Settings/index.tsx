@@ -50,6 +50,27 @@ export const Settings: React.FC<Props> = ({
             onChange={(v) => onMusicChange?.(v)}
             label="Music"
           />
+          {"share" in navigator && (
+            <button
+              className={clsx(
+                "inline-block rounded-full border border-black p-2 shadow-md bg-black bg-clip-text text-transparent"
+              )}
+              onClick={async () => {
+                try {
+                  await navigator.share({
+                    title: "Block Sort",
+                    url: "https://matthijsgroen.github.io/block-sort/",
+                    text: "A block sorting puzzle game. No ads, cookies, tracking or payments. Just the pure fun!",
+                  });
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                } catch (e) {
+                  // Nothing to do, user probably canceled the share
+                }
+              }}
+            >
+              ❤︎ Share
+            </button>
+          )}
         </div>
         <p className="text-xs my-3">2024, Matthijs Groen</p>
         <div className="text-center translate-y-9 -mt-9">
