@@ -76,7 +76,7 @@ export const Block: React.FC<Props> = ({
           [styles.selected]: selected && !isLocked,
           "animate-locked": !selected && isLocked,
           "animate-place": !selected && !isLocked,
-          "[animation-duration:0ms]": !moved,
+          // "[animation-duration:0ms]": !moved,
         }
       )}
     >
