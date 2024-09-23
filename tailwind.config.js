@@ -24,7 +24,7 @@ export default {
       animation: {
         wobble:
           "wobble 1s ease-in-out both infinite, smallBounce 1.3s ease-in-out both infinite",
-        place: "place 0.5s ease-out 2ms forwards",
+        place: "place 0.3s ease-out 2ms forwards",
         locked: "locked 0.5s ease-in-out forwards",
         trayLocked: "trayLocked 0.3s ease-in-out forwards",
         fadeIn: "fadeIn 1s ease-in-out forwards",
@@ -86,7 +86,7 @@ export default {
         place: {
           "0%": { translate: "0 -2rem" },
           "70%": { translate: "0 1.2rem" },
-          "90%": { translate: "0 0.8rem" },
+          "90%": { translate: "0 0.9rem" },
           "100%": { translate: "0 1rem" },
         },
         trayLocked: {
