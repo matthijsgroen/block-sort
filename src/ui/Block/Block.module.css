@@ -76,7 +76,8 @@
 }
 
 .selected {
-  @apply -translate-y-6 ease-in-out animate-wobble;
+  translate: 0 -2rem;
+  @apply ease-in-out animate-wobble;
 }
 
 .selectedOutline {
