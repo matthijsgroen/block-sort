@@ -8,6 +8,10 @@ export type Props = {
   revealed?: boolean;
   color: string;
   selected?: boolean | null;
+  /**
+   * Used to offset animations
+   */
+  index?: number;
   locked?: boolean | null;
   shape?: string;
   shadow?: boolean;
@@ -21,6 +25,7 @@ export const Block: React.FC<Props> = ({
   color,
   shape,
   moved,
+  index = 0,
   onLock,
   onDrop,
   onPickUp,
@@ -63,6 +68,7 @@ export const Block: React.FC<Props> = ({
       style={{
         "--cube-color": revealed ? color : "#64748b",
         "--cube-shape": `'${displayShape}'`,
+        animationDelay: !locked ? `-${index * 50}ms` : "0",
       }}
       className={clsx(
         "relative h-height-block w-block text-center -mt-top-block",

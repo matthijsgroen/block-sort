@@ -93,6 +93,7 @@ export const BlockColumn: React.FC<Props> = ({
               >
                 <Block
                   locked={p <= blocksLocked - 1}
+                  index={index}
                   moved={started}
                   shadow={column.type === "placement" || isSelected}
                   revealed={block.revealed}
