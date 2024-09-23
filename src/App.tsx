@@ -20,6 +20,7 @@ import { sound } from "./audio.ts";
 import PWABadge from "./PWABadge.tsx";
 
 const BASE_SEED = 12345678901234;
+const SCREEN_TRANSITION = 500; // ms
 
 export const App: React.FC = () => {
   const [levelNr, setLevelNr] = useGameStorage("levelNr", 0);
@@ -64,8 +65,8 @@ export const App: React.FC = () => {
       <Transition
         className={"h-full"}
         active={!inLevel}
-        startDelay={300}
-        duration={300}
+        startDelay={SCREEN_TRANSITION}
+        duration={SCREEN_TRANSITION}
       >
         <LevelTrack
           levelNr={levelNr}
@@ -81,8 +82,8 @@ export const App: React.FC = () => {
       <Transition
         className={"h-full"}
         active={inLevel}
-        startDelay={300}
-        duration={300}
+        startDelay={SCREEN_TRANSITION}
+        duration={SCREEN_TRANSITION}
       >
         <LevelLoader
           onComplete={(won) => {
@@ -90,7 +91,7 @@ export const App: React.FC = () => {
             if (won) {
               setTimeout(() => {
                 setLevelNr((nr) => nr + 1);
-              }, 500);
+              }, SCREEN_TRANSITION);
             }
           }}
           levelNr={levelNr}
