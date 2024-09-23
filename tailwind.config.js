@@ -24,7 +24,8 @@ export default {
       animation: {
         wobble:
           "wobble 1s ease-in-out both infinite, smallBounce 1.3s ease-in-out both infinite",
-        place: "place 0.3s ease-out 2ms forwards",
+        // Somehow if the place duration is 0.3s, it won't show on iPhone in app mode
+        place: "place 0.4s ease-out 2ms forwards",
         locked: "locked 0.5s ease-in-out forwards",
         trayLocked: "trayLocked 0.3s ease-in-out forwards",
         fadeIn: "fadeIn 1s ease-in-out forwards",
