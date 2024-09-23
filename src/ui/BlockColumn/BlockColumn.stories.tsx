@@ -13,6 +13,7 @@ type BlockColumnPropsAndCustomArgs = React.ComponentProps<
   columnSize: number;
   amountBlocks: number;
   locked: boolean;
+  limited: boolean;
 };
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
@@ -45,6 +46,7 @@ const meta: Meta<BlockColumnPropsAndCustomArgs> = {
     columnSize: 1,
     started: true,
     locked: false,
+    limited: false,
     column: {
       type: "placement",
       columnSize: 1,
@@ -65,12 +67,14 @@ const columnSettings = (
   type: Column["type"],
   columnSize = 1,
   locked = false,
+  limited = false,
   amountBlocks = 0
 ): Column => {
   return {
     type,
     columnSize,
     locked,
+    limitColor: limited ? "aqua" : undefined,
     blocks: Array(Math.max(Math.min(amountBlocks, columnSize), 0))
       .fill(0)
       .map<Block>(() => createBlock("aqua")),
@@ -81,8 +85,14 @@ const columnSettings = (
 export const SmallPlacementColumn: Story = {
   args: {},
   render: (args) => {
-    const { type, columnSize, locked, amountBlocks } = args;
-    const column = columnSettings(type, columnSize, locked, amountBlocks);
+    const { type, columnSize, locked, amountBlocks, limited } = args;
+    const column = columnSettings(
+      type,
+      columnSize,
+      locked,
+      limited,
+      amountBlocks
+    );
 
     return <BlockColumn {...args} column={column} />;
   },
