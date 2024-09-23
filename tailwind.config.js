@@ -84,23 +84,23 @@ export default {
           "100%": { opacity: "1" },
         },
         place: {
-          "0%": { transform: "translateY(-3rem)" },
-          "70%": { transform: "translateY(1.4rem)" },
-          "90%": { transform: "translateY(0.8rem)" },
-          "100%": { transform: "translateY(1rem)" },
+          "0%": { translate: "0 -3rem" },
+          "70%": { translate: "0 1.4rem" },
+          "90%": { translate: "0 0.8rem" },
+          "100%": { translate: "0 1rem" },
         },
         trayLocked: {
-          "0%": { transform: "translateY(0.75rem)" },
-          "20%": { transform: "translateY(0.75rem)" },
+          "0%": { translate: "0 0.75rem" },
+          "20%": { translate: "0 0.75rem" },
           "100%": {
-            transform: "translateY(0rem)",
+            translate: "0 0rem",
           },
         },
         locked: {
-          "0%": { transform: "translateY(1rem)" },
-          "20%": { transform: "translateY(1rem)" },
+          "0%": { translate: "0 1rem" },
+          "20%": { translate: "0 1rem" },
           "100%": {
-            transform: "translateY(0rem)",
+            translate: "0 0rem",
           },
         },
         popInOut: {
