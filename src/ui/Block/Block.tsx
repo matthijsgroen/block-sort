@@ -71,12 +71,11 @@ export const Block: React.FC<Props> = ({
         animationDelay: !locked ? `-${index * 50}ms` : "0",
       }}
       className={clsx(
-        "relative h-height-block w-block text-center -mt-top-block",
+        "relative transition-transform h-height-block w-block text-center -mt-top-block",
         {
           [styles.selected]: selected && !isLocked,
           "animate-locked": !selected && isLocked,
           "animate-place": !selected && !isLocked,
-          // "[animation-duration:0ms]": !moved,
         }
       )}
     >
