@@ -6,8 +6,8 @@ import {
   getNormalSettings,
   getSpecialSettings,
 } from "@/game/level-settings/levelSettings.ts";
-import { LevelLoader } from "@/modules/Level/index.tsx";
-import { LevelTrack } from "@/modules/LevelTrack/index.tsx";
+import { LevelLoader } from "@/modules/Level/LevelLoader.tsx";
+import { LevelTrack } from "@/modules/LevelTrack/LevelTrack.tsx";
 import { generateNewSeed, mulberry32 } from "@/support/random.ts";
 import { useGameStorage } from "@/support/useGameStorage.ts";
 
@@ -15,6 +15,7 @@ import { LevelSettings } from "./game/level-creation/generateRandomLevel.ts";
 import { BackgroundProvider } from "./modules/Layout/BackgroundContext.tsx";
 import { Settings } from "./modules/Settings/index.tsx";
 import { getLevelType, LevelType } from "./support/getLevelType.ts";
+import { Transition } from "./ui/Transition/Transition.tsx";
 import { sound } from "./audio.ts";
 import PWABadge from "./PWABadge.tsx";
 
@@ -60,7 +61,12 @@ export const App: React.FC = () => {
 
   return (
     <BackgroundProvider>
-      {!inLevel && (
+      <Transition
+        className={"h-full"}
+        active={!inLevel}
+        startDelay={300}
+        duration={300}
+      >
         <LevelTrack
           levelNr={levelNr}
           onLevelStart={() => {
@@ -71,20 +77,27 @@ export const App: React.FC = () => {
             setSettingsOpen(true);
           }}
         />
-      )}
-      {inLevel && (
+      </Transition>
+      <Transition
+        className={"h-full"}
+        active={inLevel}
+        startDelay={300}
+        duration={300}
+      >
         <LevelLoader
           onComplete={(won) => {
             setInLevel(false);
             if (won) {
-              setLevelNr((nr) => nr + 1);
+              setTimeout(() => {
+                setLevelNr((nr) => nr + 1);
+              }, 500);
             }
           }}
           levelNr={levelNr}
           seed={levelSeed}
           levelSettings={settings}
         />
-      )}
+      </Transition>
       {settingsOpen && (
         <Settings
           soundEnabled={soundEnabled}
