@@ -1,8 +1,10 @@
-import { Suspense, useMemo } from "react";
+import { Suspense, useMemo, useState } from "react";
 
 import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
+import { LevelState } from "@/game/types";
 import { mulberry32 } from "@/support/random";
+import { getGameValue } from "@/support/useGameStorage";
 
 import { Level } from "./Level";
 
@@ -19,10 +21,19 @@ export const LevelLoader: React.FC<Props> = ({
   levelSettings,
   levelNr,
 }) => {
+  const [locked] = useState({ levelNr, levelSettings, seed });
+
   const level = useMemo(async () => {
-    const random = mulberry32(seed);
-    return generatePlayableLevel(levelSettings, random);
-  }, [seed, JSON.stringify(levelSettings)]);
+    const random = mulberry32(locked.seed);
+    const existingState = await getGameValue<LevelState>(
+      `levelState${locked.levelNr}`
+    );
+    if (existingState !== null) {
+      return existingState;
+    }
+
+    return generatePlayableLevel(locked.levelSettings, random);
+  }, [locked.seed, JSON.stringify(locked.levelSettings)]);
 
   return (
     <Suspense

@@ -31,7 +31,7 @@ export const generatePlayableLevel = async (
     if (isStuck(level) || !allShuffled(level)) {
       continue;
     }
-    const [beatable, moves, cost] = isBeatable(level, random);
+    const [beatable, moves, cost] = await isBeatable(level, random);
     if (beatable) {
       if (
         settings.minimalAmountOfMoves !== undefined &&
@@ -114,10 +114,10 @@ const evaluateBestMove = (
   return bestMove;
 };
 
-const isBeatable = (
+const isBeatable = async (
   level: LevelState,
   random = Math.random
-): [beatable: boolean, moves: Move[], cost: number] => {
+): Promise<[beatable: boolean, moves: Move[], cost: number]> => {
   let attempt = 0;
 
   while (attempt < MAX_PLAY_ATTEMPTS) {
@@ -137,6 +137,7 @@ const isBeatable = (
         moves.push(nextMove);
 
         playLevel = moveBlocks(playLevel, nextMove.from, nextMove.to);
+        await delay(2);
       }
       if (hasWon(playLevel)) {
         return [true, moves, moves.length + MAX_LEVEL_MOVES * attempt];
