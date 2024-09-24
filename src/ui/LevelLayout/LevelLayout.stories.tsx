@@ -5,6 +5,7 @@ import {
   LevelSettings,
 } from "@/game/level-creation/generateRandomLevel";
 import { getSettings as getHardSettings } from "@/game/level-settings/hardSettings";
+import { getSettings as getNormal2Settings } from "@/game/level-settings/normal2Settings";
 import { getSettings as getNormalSettings } from "@/game/level-settings/normalSettings";
 import { getSettings as getSpecial1Settings } from "@/game/level-settings/special1Settings";
 import { getSettings as getSpecial2Settings } from "@/game/level-settings/special2Settings";
@@ -16,6 +17,7 @@ import { LevelLayout as LevelLayoutComponent } from "./LevelLayout";
 
 type LevelType =
   | "normal"
+  | "normal2"
   | "hard"
   | "special1"
   | "special2"
@@ -41,6 +43,7 @@ const meta: Meta<CustomArgs> = {
     levelType: {
       options: [
         "normal",
+        "normal2",
         "hard",
         "special1",
         "special2",
@@ -68,6 +71,7 @@ const settingProducer: Record<
   (difficulty: number) => LevelSettings
 > = {
   normal: getNormalSettings,
+  normal2: getNormal2Settings,
   hard: getHardSettings,
   special1: getSpecial1Settings,
   special2: getSpecial2Settings,

@@ -33,17 +33,23 @@ export const generatePlayableLevel = async (
     }
     const [beatable, moves, cost] = await isBeatable(level, random);
     if (beatable) {
-      if (
-        settings.minimalAmountOfMoves !== undefined &&
-        moves.length < settings.minimalAmountOfMoves
-      ) {
-        continue;
-      }
-      if (
-        settings.maximalAmountOfMoves !== undefined &&
-        moves.length > settings.maximalAmountOfMoves
-      ) {
-        continue;
+      if (settings.playMoves !== undefined) {
+        const [minMoves, maxMovesPercentage] = settings.playMoves;
+        const movesToPlay = Math.min(
+          minMoves,
+          Math.floor(maxMovesPercentage * moves.length)
+        );
+        const playedLevel = moves
+          .slice(0, movesToPlay)
+          .reduce(
+            (state, move) => moveBlocks(state, move.from, move.to),
+            level
+          );
+        return {
+          ...playedLevel,
+          moves: moves.slice(movesToPlay),
+          cost: cost + attempt * MAX_GENERATE_COST,
+        };
       }
       return { ...level, moves, cost: cost + attempt * MAX_GENERATE_COST };
     }

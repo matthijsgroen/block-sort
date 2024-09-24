@@ -1,6 +1,11 @@
-import { isEasy, isHard, isSpecial } from "@/game/level-settings/levelSettings";
+import {
+  isEasy,
+  isHard,
+  isScrambled,
+  isSpecial,
+} from "@/game/level-settings/levelSettings";
 
-export type LevelType = "normal" | "hard" | "easy" | "special";
+export type LevelType = "normal" | "hard" | "easy" | "special" | "scrambled";
 
 export const getLevelType = (nr: number): LevelType => {
   if (isSpecial(nr)) {
@@ -11,6 +16,9 @@ export const getLevelType = (nr: number): LevelType => {
   }
   if (isEasy(nr)) {
     return "easy";
+  }
+  if (isScrambled(nr)) {
+    return "scrambled";
   }
   return "normal";
 };
