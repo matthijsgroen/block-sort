@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import { mulberry32 } from "@/support/random";
 
+import { moveBlocks } from "../actions";
 import { LevelSettings } from "../level-creation/generateRandomLevel";
 import { generatePlayableLevel } from "../level-creation/tactics";
+import { hasWon } from "../state";
 
 import { LEVEL_SCALE } from "./levelSettings";
 
@@ -24,6 +26,14 @@ export const testDifficulties = (
         const random = mulberry32(TEST_SEED);
         const result = await generatePlayableLevel(settings, random);
         expect(result.moves.length).toBeGreaterThan(2);
+
+        // actual play level
+        let levelState = result;
+        for (const move of result.moves) {
+          levelState = moveBlocks(levelState, move.from, move.to);
+        }
+        const won = hasWon(levelState);
+        expect(won).toBe(true);
       }
     );
   });

@@ -38,23 +38,3 @@ export const generateNewSeed = (seed: number, index: number) => {
 
 export const pick = <T>(list: T[], random: () => number = Math.random): T =>
   list[Math.floor(random() * list.length)];
-
-export type Weighted<T> = { weight: number } & T;
-
-export const pickWeighted = <T>(
-  items: Weighted<T>[],
-  random = Math.random
-): Weighted<T> => {
-  const totalWeight = items.reduce((r, item) => r + item.weight, 0);
-  let pick = Math.floor(totalWeight * random());
-
-  const item = items.find((item) => {
-    pick -= item.weight;
-    return pick <= 0;
-  });
-
-  if (!item) {
-    throw new Error("Weighted item could not be selected");
-  }
-  return item;
-};

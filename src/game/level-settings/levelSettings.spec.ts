@@ -7,8 +7,6 @@ import { generatePlayableLevel } from "../level-creation/tactics";
 
 import {
   getDifficultyLevel,
-  getHardSettings,
-  getNormalSettings,
   getSpecialSettings,
   LEVEL_SCALE,
   nextLevelAt,
@@ -42,145 +40,6 @@ describe(getDifficultyLevel, () => {
 describe(nextLevelAt, () => {
   it("returns when the next level up will be", () => {
     expect(nextLevelAt(30)).toEqual(39);
-  });
-});
-
-describe(getNormalSettings, () => {
-  it("creates level settings based on level nr", () => {
-    const settings = getNormalSettings(0);
-    expect(settings).toEqual({
-      amountColors: 2,
-      extraPlacementStacks: 1,
-      hideBlockTypes: false,
-      stackSize: 4,
-    });
-  });
-
-  describe("increase in difficulty", () => {
-    it.each<{ difficulty: number; result: LevelSettings }>([
-      {
-        difficulty: 0,
-        result: {
-          amountColors: 2,
-          extraPlacementStacks: 1,
-          hideBlockTypes: false,
-          stackSize: 4,
-        },
-      },
-      {
-        difficulty: 1,
-        result: {
-          amountColors: 3,
-          extraPlacementStacks: 2,
-          hideBlockTypes: false,
-          stackSize: 4,
-        },
-      },
-      {
-        difficulty: 2,
-        result: {
-          amountColors: 4,
-          extraPlacementStacks: 2,
-          hideBlockTypes: false,
-          stackSize: 4,
-        },
-      },
-      {
-        difficulty: 3,
-        result: {
-          amountColors: 5,
-          extraPlacementStacks: 2,
-          hideBlockTypes: false,
-          stackSize: 4,
-        },
-      },
-      {
-        difficulty: 4,
-        result: {
-          amountColors: 6,
-          extraPlacementStacks: 2,
-          hideBlockTypes: false,
-          stackSize: 4,
-        },
-      },
-      {
-        difficulty: 5,
-        result: {
-          amountColors: 7,
-          extraPlacementStacks: 2,
-          hideBlockTypes: false,
-          stackSize: 4,
-        },
-      },
-      {
-        difficulty: 6,
-        result: {
-          amountColors: 8,
-          extraPlacementStacks: 2,
-          hideBlockTypes: false,
-          stackSize: 4,
-        },
-      },
-      {
-        difficulty: 7,
-        result: {
-          amountColors: 9,
-          extraPlacementStacks: 2,
-          hideBlockTypes: false,
-          stackSize: 5,
-        },
-      },
-      {
-        difficulty: 8,
-        result: {
-          amountColors: 10,
-          extraPlacementStacks: 2,
-          hideBlockTypes: false,
-          stackSize: 6,
-        },
-      },
-      {
-        difficulty: 9,
-        result: {
-          amountColors: 10,
-          extraPlacementStacks: 1,
-          extraPlacementLimits: 1,
-          buffers: 2,
-          bufferSizes: 3,
-          hideBlockTypes: false,
-          stackSize: 7,
-        },
-      },
-      {
-        difficulty: 10,
-        result: {
-          amountColors: 10,
-          extraPlacementStacks: 1,
-          extraPlacementLimits: 1,
-          buffers: 2,
-          bufferSizes: 2,
-          hideBlockTypes: false,
-          stackSize: 8,
-        },
-      },
-    ])("returns settings for level $difficulty", ({ difficulty, result }) => {
-      const levelNr = LEVEL_SCALE[difficulty - 1] ?? 0;
-
-      const settings = getNormalSettings(levelNr);
-      expect(settings).toEqual(result);
-
-      const hardSettings = getHardSettings(levelNr);
-      expect(hardSettings).toEqual({ ...result, hideBlockTypes: true });
-    });
-  });
-
-  it("can handle the most complex level", async () => {
-    const random = mulberry32(TEST_SEED);
-    const level = await generatePlayableLevel(
-      getNormalSettings(LEVEL_SCALE.at(-1)!),
-      random
-    );
-    expect(level.moves).toHaveLength(102);
   });
 });
 
@@ -291,7 +150,7 @@ describe(getSpecialSettings, () => {
         randomTemplate(2)
       );
       const level = await generatePlayableLevel(settings, random);
-      expect(level.moves).toHaveLength(24);
+      expect(level.moves).toHaveLength(21);
     });
   });
 

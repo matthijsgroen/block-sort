@@ -17,6 +17,7 @@ export type LevelState = {
    * moves the solver took to solve this level
    */
   moves: Move[];
+  cost: number;
 };
 
 /**
