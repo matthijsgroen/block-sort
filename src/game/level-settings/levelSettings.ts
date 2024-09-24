@@ -91,4 +91,4 @@ export const isScrambled = (levelNr: number) =>
   !isHard(levelNr) &&
   !isEasy(levelNr) &&
   levelNr > 180 &&
-  (levelNr + 2) % 9 === 0;
+  levelNr % 9 === 0;
