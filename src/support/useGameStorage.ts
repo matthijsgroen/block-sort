@@ -1,5 +1,6 @@
 import {
   getOfflineValue,
+  setOfflineValue,
   useOfflineStorage,
 } from "@/support/useOfflineStorage";
 
@@ -10,3 +11,6 @@ export const useGameStorage = <T>(key: string, initialValue: T) =>
 
 export const getGameValue = <T>(key: string) =>
   getOfflineValue<T>(key, GAME_STORE);
+
+export const setGameValue = <T>(key: string, value: T) =>
+  setOfflineValue<T>(key, value, GAME_STORE);

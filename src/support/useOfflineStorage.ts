@@ -22,6 +22,18 @@ export const getOfflineValue = <T>(
   return store.getItem<T>(key);
 };
 
+export const setOfflineValue = <T>(
+  key: string,
+  value: T,
+  storeName = "defaultStore"
+): Promise<T | null> => {
+  const store = localForage.createInstance({
+    driver: [localForage.INDEXEDDB, localForage.LOCALSTORAGE],
+    name: storeName,
+  });
+  return store.setItem<T>(key, value);
+};
+
 export const useOfflineStorage = <T>(
   key: string,
   initialValue: T,

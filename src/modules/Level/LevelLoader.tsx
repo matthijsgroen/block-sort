@@ -4,7 +4,7 @@ import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { LevelState } from "@/game/types";
 import { mulberry32 } from "@/support/random";
-import { getGameValue } from "@/support/useGameStorage";
+import { getGameValue, setGameValue } from "@/support/useGameStorage";
 
 import { Level } from "./Level";
 
@@ -26,13 +26,16 @@ export const LevelLoader: React.FC<Props> = ({
   const level = useMemo(async () => {
     const random = mulberry32(locked.seed);
     const existingState = await getGameValue<LevelState>(
-      `levelState${locked.levelNr}`
+      `initialLevelState${locked.levelNr}`
     );
     if (existingState !== null) {
       return existingState;
     }
 
-    return generatePlayableLevel(locked.levelSettings, random);
+    const level = await generatePlayableLevel(locked.levelSettings, random);
+    await setGameValue(`initialLevelState${locked.levelNr}`, level);
+
+    return level;
   }, [locked.seed, JSON.stringify(locked.levelSettings)]);
 
   return (
