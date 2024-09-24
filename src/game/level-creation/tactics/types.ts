@@ -1,7 +1,6 @@
 import { LevelState, Move } from "@/game/types";
-import { Weighted } from "@/support/random";
 
-export type WeightedMove = Weighted<{ move: Move; name: string }>;
+export type WeightedMove = { move: Move; name: string; weight: number };
 
 export type Tactic = (
   level: LevelState,
