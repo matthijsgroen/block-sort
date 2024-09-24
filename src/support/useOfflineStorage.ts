@@ -11,6 +11,17 @@ import localForage from "localforage";
 const isSetFunction = <T>(v: SetStateAction<T>): v is (prevValue: T) => T =>
   typeof v === "function";
 
+export const getOfflineValue = <T>(
+  key: string,
+  storeName = "defaultStore"
+): Promise<T | null> => {
+  const store = localForage.createInstance({
+    driver: [localForage.INDEXEDDB, localForage.LOCALSTORAGE],
+    name: storeName,
+  });
+  return store.getItem<T>(key);
+};
+
 export const useOfflineStorage = <T>(
   key: string,
   initialValue: T,

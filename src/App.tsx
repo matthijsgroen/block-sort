@@ -36,16 +36,6 @@ export const App: React.FC = () => {
   const [musicEnabled, setMusicEnabled] = useGameStorage("musicEnabled", true);
 
   useEffect(() => {
-    sound.setStreamEnabled("music", musicEnabled);
-    if (musicEnabled) {
-      sound.play("music");
-    } else {
-      sound.stop("music");
-    }
-    sound.setStreamEnabled("effects", soundEnabled);
-  }, [soundEnabled, musicEnabled]);
-
-  useEffect(() => {
     setLevelSeed(generateNewSeed(BASE_SEED, levelNr));
   }, [levelNr]);
 
@@ -89,9 +79,7 @@ export const App: React.FC = () => {
           onComplete={(won) => {
             setInLevel(false);
             if (won) {
-              setTimeout(() => {
-                setLevelNr((nr) => nr + 1);
-              }, SCREEN_TRANSITION);
+              setLevelNr((nr) => nr + 1);
             }
           }}
           levelNr={levelNr}
@@ -103,8 +91,19 @@ export const App: React.FC = () => {
         <Settings
           soundEnabled={soundEnabled}
           musicEnabled={musicEnabled}
-          onSoundChange={(v) => setSoundEnabled(v)}
-          onMusicChange={(v) => setMusicEnabled(v)}
+          onSoundChange={(effectsEnabled) => {
+            sound.setStreamEnabled("effects", effectsEnabled);
+            setSoundEnabled(effectsEnabled);
+          }}
+          onMusicChange={(musicEnabled) => {
+            sound.setStreamEnabled("music", musicEnabled);
+            if (musicEnabled) {
+              sound.play("music");
+            } else {
+              sound.stop("music");
+            }
+            setMusicEnabled(musicEnabled);
+          }}
           onClose={() => setSettingsOpen(false)}
         />
       )}
