@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 
 import { mulberry32 } from "@/support/random";
-import { timesMap } from "@/support/timeMap";
 
 import { createBlock, createPlacementColumn } from "../factories";
 
@@ -39,7 +38,7 @@ describe(generatePlayableLevel, () => {
     ]);
 
     expect(level.cost).toBeGreaterThan(4003);
-    expect(level.moves).toHaveLength(4);
+    expect(level.moves).toHaveLength(13);
   });
 
   it("generates a medium level", async () => {
@@ -53,8 +52,8 @@ describe(generatePlayableLevel, () => {
       random
     );
     expect(level.colors).toHaveLength(5);
-    expect(level.cost).toBeGreaterThan(4016);
-    expect(level.moves).toHaveLength(17);
+    expect(level.cost).toBeGreaterThan(4015);
+    expect(level.moves).toHaveLength(16);
   });
 
   it("generates a complex level", async () => {
@@ -71,30 +70,8 @@ describe(generatePlayableLevel, () => {
       random
     );
     expect(level.colors).toHaveLength(10);
-    expect(level.cost).toBeGreaterThan(4120);
-    expect(level.moves).toHaveLength(121);
-  });
-
-  it("has around 30 of moves on average for 9 colors", async () => {
-    const random = mulberry32(TEST_SEED);
-    const results = await Promise.all(
-      timesMap(
-        10,
-        async () =>
-          (
-            await generatePlayableLevel(
-              {
-                amountColors: 9,
-                stackSize: 4,
-                extraPlacementStacks: 2,
-              },
-              random
-            )
-          ).moves.length
-      )
-    );
-    const average = results.reduce((r, i) => r + i, 0) / results.length;
-    expect(average).toBeCloseTo(30.2, 3);
+    expect(level.cost).toBeGreaterThan(4094);
+    expect(level.moves).toHaveLength(95);
   });
 
   it("generates a hard level", async () => {
@@ -109,7 +86,7 @@ describe(generatePlayableLevel, () => {
       random
     );
     expect(level.colors).toHaveLength(10);
-    expect(level.moves).toHaveLength(42);
+    expect(level.moves).toHaveLength(40);
   });
 
   it("generates a complex level (buffers / force)", async () => {

@@ -150,7 +150,7 @@ describe(getSpecialSettings, () => {
         randomTemplate(2)
       );
       const level = await generatePlayableLevel(settings, random);
-      expect(level.moves).toHaveLength(24);
+      expect(level.moves).toHaveLength(21);
     });
   });
 

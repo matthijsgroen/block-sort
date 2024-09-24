@@ -25,10 +25,10 @@ describe(stackColumn, () => {
     const moves = stackColumn(level, random);
 
     expect(moves).toHaveLength(2);
-    expect(moves[0].weight).toEqual(20);
+    expect(moves[0].weight).toEqual(25);
     expect(moves[0].move.from).toEqual(2);
 
-    expect(moves[1].weight).toEqual(20);
+    expect(moves[1].weight).toEqual(30);
     expect(moves[1].move.from).toEqual(0);
   });
 
@@ -51,7 +51,7 @@ describe(stackColumn, () => {
     const moves = stackColumn(level, random);
 
     expect(moves).toHaveLength(1);
-    expect(moves[0].weight).toEqual(20);
+    expect(moves[0].weight).toEqual(30);
     expect(moves[0].move.from).toEqual(4);
   });
 });

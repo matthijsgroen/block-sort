@@ -25,7 +25,6 @@ export const testDifficulties = (
         const random = mulberry32(TEST_SEED);
         const result = await generatePlayableLevel(settings, random);
         expect(result.moves.length).toBeGreaterThan(2);
-        console.log(name, "Difficulty", difficulty, "Cost", result.cost);
       }
     );
   });

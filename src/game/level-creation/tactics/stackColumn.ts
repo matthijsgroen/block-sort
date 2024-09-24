@@ -40,30 +40,45 @@ export const stackColumn: Tactic = (level, _random = Math.random) => {
       };
     });
 
-  return potentialTargets.reduce<WeightedMove[]>((r, t) => {
-    return r.concat(
-      t.sources.map((source) => {
-        const revealedColor =
-          level.columns[source.index].blocks[source.seriesLength]?.color;
-        const hasServiceColor = level.columns.some(
-          (column, index) =>
-            column.blocks[0]?.color === revealedColor && index !== source.index
-        );
+  return potentialTargets.reduce<WeightedMove[]>(
+    (r, t) =>
+      r.concat(
+        t.sources.map((source) => {
+          const revealedColor =
+            level.columns[source.index].blocks[source.seriesLength]?.color;
+          const hasServiceColor = level.columns.some(
+            (column, index) =>
+              column.blocks[0]?.color === revealedColor &&
+              index !== source.index
+          );
 
-        let bonusPoints = 0;
-        if (revealedColor === undefined) {
-          // stack became empty!
-          bonusPoints += 10;
-        }
-        if (hasServiceColor) {
-          bonusPoints += 10;
-        }
-        return {
-          name: "stackColumn",
-          move: { from: source.index, to: t.index },
-          weight: 10 + bonusPoints,
-        };
-      })
-    );
-  }, []);
+          let bonusPoints = 0;
+          const targetData = data[t.index];
+
+          if (targetData !== undefined && targetData.spaceAvailable < 2) {
+            bonusPoints += 5; // prefer filling up columns
+          }
+          if (
+            targetData !== undefined &&
+            targetData.seriesLength === level.columns[t.index].blocks.length
+          ) {
+            bonusPoints += 10; // single color column should have top priority
+          }
+
+          if (revealedColor === undefined) {
+            // stack became empty!
+            bonusPoints += 10;
+          }
+          if (hasServiceColor) {
+            bonusPoints += 10;
+          }
+          return {
+            name: "stackColumn",
+            move: { from: source.index, to: t.index },
+            weight: 10 + bonusPoints,
+          };
+        })
+      ),
+    []
+  );
 };
