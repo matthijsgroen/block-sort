@@ -37,6 +37,8 @@ describe(generatePlayableLevel, () => {
       createPlacementColumn(4),
       createPlacementColumn(4),
     ]);
+
+    expect(level.cost).toBeGreaterThan(4003);
     expect(level.moves).toHaveLength(4);
   });
 
@@ -51,6 +53,7 @@ describe(generatePlayableLevel, () => {
       random
     );
     expect(level.colors).toHaveLength(5);
+    expect(level.cost).toBeGreaterThan(4016);
     expect(level.moves).toHaveLength(17);
   });
 
@@ -68,6 +71,7 @@ describe(generatePlayableLevel, () => {
       random
     );
     expect(level.colors).toHaveLength(10);
+    expect(level.cost).toBeGreaterThan(4120);
     expect(level.moves).toHaveLength(121);
   });
 

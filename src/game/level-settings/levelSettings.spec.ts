@@ -7,8 +7,6 @@ import { generatePlayableLevel } from "../level-creation/tactics";
 
 import {
   getDifficultyLevel,
-  getHardSettings,
-  getNormalSettings,
   getSpecialSettings,
   LEVEL_SCALE,
   nextLevelAt,

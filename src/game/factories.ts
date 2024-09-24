@@ -15,6 +15,7 @@ export const createLevelState = (columns: Column[]): LevelState => {
     colors,
     columns,
     moves: [],
+    cost: 0,
   };
 };
 

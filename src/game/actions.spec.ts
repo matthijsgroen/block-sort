@@ -124,6 +124,7 @@ describe(moveBlocks, () => {
         createPlacementColumn(4),
       ],
       moves: [],
+      cost: 0,
     };
     expect(result).toEqual(expected);
   });
@@ -207,6 +208,7 @@ describe(moveBlocks, () => {
         createPlacementColumn(4),
       ],
       moves: [],
+      cost: 0,
     };
     expect(result).toEqual(expected);
   });
@@ -246,6 +248,7 @@ describe(moveBlocks, () => {
         createPlacementColumn(4),
       ],
       moves: [],
+      cost: 0,
     };
     expect(result).toEqual(expected);
   });
@@ -282,6 +285,7 @@ describe(moveBlocks, () => {
         createPlacementColumn(4),
       ],
       moves: [],
+      cost: 0,
     };
     expect(result).toEqual(expected);
   });
@@ -329,6 +333,7 @@ describe(moveBlocks, () => {
         createPlacementColumn(4),
       ],
       moves: [],
+      cost: 0,
     };
     expect(result).toEqual(expected);
   });

@@ -10,6 +10,7 @@ import { LEVEL_SCALE } from "./levelSettings";
 const TEST_SEED = 123456789;
 
 export const testDifficulties = (
+  name: string,
   getSettings: (difficulty: number) => LevelSettings
 ) => {
   describe("playability", () => {
@@ -24,6 +25,7 @@ export const testDifficulties = (
         const random = mulberry32(TEST_SEED);
         const result = await generatePlayableLevel(settings, random);
         expect(result.moves.length).toBeGreaterThan(2);
+        console.log(name, "Difficulty", difficulty, "Cost", result.cost);
       }
     );
   });
