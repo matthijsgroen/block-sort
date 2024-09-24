@@ -6,7 +6,7 @@ import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { hasWon, isStuck } from "@/game/state";
 import { LevelState } from "@/game/types";
 import { getLevelType } from "@/support/getLevelType";
-import { useGameStorage } from "@/support/useGameStorage";
+import { deleteGameValue, useGameStorage } from "@/support/useGameStorage";
 import { colorMap } from "@/ui/Block/colorMap";
 import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
 import { Message } from "@/ui/Message/Message";
@@ -94,6 +94,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
           shape="✔️"
           afterShow={() => {
             deleteLevelState();
+            deleteGameValue(`initialLevelState${levelNr}`);
             onComplete(playState === "won");
           }}
           onShow={() => {
