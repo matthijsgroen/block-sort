@@ -4,9 +4,11 @@ import clsx from "clsx";
 import {
   isEasy,
   isHard,
+  isScrambled,
   isSpecial,
   LEVEL_SCALE,
 } from "@/game/level-settings/levelSettings";
+import { getLevelType } from "@/support/getLevelType";
 import { Smiley } from "@/ui/Smiley/Smiley";
 import { TopButton } from "@/ui/TopButton/TopButton";
 
@@ -37,7 +39,7 @@ export const LevelTrack: React.FC<Props> = ({
   onLevelStart,
   onOpenSettings,
 }) => {
-  const startNumbering = Math.max(Math.floor(levelNr - 4), 0);
+  const startNumbering = Math.max(Math.floor(levelNr - 2), 0);
 
   const levelNrs = new Array(30).fill(0).map((_, i) => startNumbering + i);
 
@@ -91,6 +93,7 @@ export const LevelTrack: React.FC<Props> = ({
                       "font-bold": i === levelNr,
                       "text-purple-500": isSpecial(i) && i >= levelNr,
                       "text-green-700": isEasy(i) && i >= levelNr,
+                      "text-slate-400": isScrambled(i) && i >= levelNr,
                     },
                     styles.textShadow
                   )}
@@ -102,10 +105,14 @@ export const LevelTrack: React.FC<Props> = ({
                     "inline-block border size-block align-top rounded-md text-center bg-black/30",
                     {
                       "border border-block-brown":
-                        !isSpecial(i) || !isHard(i) || !isEasy(i),
+                        !isSpecial(i) ||
+                        !isHard(i) ||
+                        !isEasy(i) ||
+                        isScrambled(i),
                       "border-2 border-purple-800": isSpecial(i),
                       "border-2 border-orange-700": isHard(i),
                       "border-2 border-green-800": isEasy(i),
+                      "border-2 border-slate-400": isScrambled(i),
                     }
                   )}
                 >
@@ -137,6 +144,14 @@ export const LevelTrack: React.FC<Props> = ({
                       ️🍀
                     </span>
                   )}
+                  {i > levelNr && isScrambled(i) && (
+                    <span
+                      style={{ "--color": "#94a3b8" }}
+                      className={styles.colorEmoji}
+                    >
+                      ️🧩
+                    </span>
+                  )}
                 </span>
               </div>
             </li>
@@ -147,9 +162,7 @@ export const LevelTrack: React.FC<Props> = ({
         <PlayButton
           levelNr={levelNr + 1}
           onClick={onLevelStart}
-          special={isSpecial(levelNr)}
-          hard={isHard(levelNr)}
-          easy={isEasy(levelNr)}
+          type={getLevelType(levelNr)}
         />
       </div>
     </div>

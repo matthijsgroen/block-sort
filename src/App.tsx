@@ -4,6 +4,7 @@ import {
   getEasySettings,
   getHardSettings,
   getNormalSettings,
+  getScrambledSettings,
   getSpecialSettings,
 } from "@/game/level-settings/levelSettings.ts";
 import { LevelLoader } from "@/modules/Level/LevelLoader.tsx";
@@ -44,8 +45,9 @@ export const App: React.FC = () => {
   const settingProducers: Record<LevelType, (nr: number) => LevelSettings> = {
     easy: (nr: number) => getEasySettings(nr, random),
     hard: getHardSettings,
-    normal: getNormalSettings,
+    normal: (nr: number) => getNormalSettings(nr, random),
     special: (nr: number) => getSpecialSettings(nr, random),
+    scrambled: (nr: number) => getScrambledSettings(nr),
   };
 
   const settings = settingProducers[getLevelType(levelNr)](levelNr);

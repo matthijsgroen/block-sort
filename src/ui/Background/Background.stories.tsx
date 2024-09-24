@@ -14,7 +14,7 @@ const meta = {
   tags: ["autodocs"],
   argTypes: {
     theme: {
-      options: ["none", "easy", "hard", "special"],
+      options: ["none", "easy", "hard", "special", "scrambled"],
       control: "select",
     },
   },

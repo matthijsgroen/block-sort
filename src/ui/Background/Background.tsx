@@ -2,7 +2,7 @@ import { PropsWithChildren } from "react";
 import clsx from "clsx";
 
 type Props = {
-  theme?: "easy" | "hard" | "special" | "normal";
+  theme?: "easy" | "hard" | "special" | "normal" | "scrambled";
 };
 
 export const Background: React.FC<PropsWithChildren<Props>> = ({
@@ -18,6 +18,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           "bg-purple-700/50": theme === "special",
           "bg-red-600/70": theme === "hard",
           "bg-green-600/40": theme === "easy",
+          "bg-slate-400/40": theme === "scrambled",
         }
       )}
     >

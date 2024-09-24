@@ -20,8 +20,7 @@ export type LevelSettings = {
   buffers?: number;
   bufferSizes?: number;
   bufferPlacementLimits?: number;
-  minimalAmountOfMoves?: number;
-  maximalAmountOfMoves?: number;
+  playMoves?: [minCount: number, maxPercent: number];
 };
 
 export const generateRandomLevel = (

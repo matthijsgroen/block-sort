@@ -93,10 +93,8 @@ describe("normalSettings", () => {
         difficulty: 10,
         result: {
           amountColors: 10,
-          extraPlacementStacks: 1,
+          extraPlacementStacks: 2,
           extraPlacementLimits: 1,
-          buffers: 2,
-          bufferSizes: 3,
           hideBlockTypes: false,
           stackSize: 7,
         },
@@ -105,12 +103,10 @@ describe("normalSettings", () => {
         difficulty: 11,
         result: {
           amountColors: 10,
-          extraPlacementStacks: 1,
+          extraPlacementStacks: 2,
           extraPlacementLimits: 1,
-          buffers: 2,
-          bufferSizes: 2,
           hideBlockTypes: false,
-          stackSize: 8,
+          stackSize: 7,
         },
       },
     ])("returns settings for level $difficulty", ({ difficulty, result }) => {
