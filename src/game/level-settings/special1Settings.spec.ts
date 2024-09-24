@@ -36,5 +36,5 @@ describe("special 1 settings", () => {
     });
   });
 
-  testDifficulties("Special1", getSettings);
+  testDifficulties(getSettings);
 });

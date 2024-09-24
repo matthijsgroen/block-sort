@@ -119,5 +119,5 @@ describe("normalSettings", () => {
     });
   });
 
-  testDifficulties("Normal", getSettings);
+  testDifficulties(getSettings);
 });

@@ -4,5 +4,5 @@ import { testDifficulties } from "./difficultyTester";
 import { getSettings } from "./hardSettings";
 
 describe("hard settings", () => {
-  testDifficulties("hard", getSettings);
+  testDifficulties(getSettings);
 });

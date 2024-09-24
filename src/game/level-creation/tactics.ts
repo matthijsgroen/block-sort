@@ -1,5 +1,3 @@
-import { pickWeighted } from "@/support/random";
-
 import { moveBlocks } from "../actions";
 import { allShuffled, hasWon, isStuck } from "../state";
 import { LevelState, Move } from "../types";
