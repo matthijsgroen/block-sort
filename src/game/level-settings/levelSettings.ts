@@ -32,13 +32,17 @@ export const getEasySettings = (
     2
   );
 
-  const templates: LevelSettings[] = [
-    _getNormalSettings(easyDifficulty),
-    _getHardSettings(easyDifficulty),
+  const specialTemplate: LevelSettings[] = [
     _getSpecial1Settings(easyDifficulty),
     _getSpecial2Settings(easyDifficulty),
     _getSpecial3Settings(easyDifficulty),
     _getSpecial4Settings(easyDifficulty),
+  ];
+
+  const templates: LevelSettings[] = [
+    _getNormalSettings(easyDifficulty),
+    _getHardSettings(easyDifficulty),
+    pick(specialTemplate, random),
   ];
 
   return pick(templates, random);
