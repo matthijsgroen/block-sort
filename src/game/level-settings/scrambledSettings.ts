@@ -4,5 +4,5 @@ import { getSettings as getNormalSettings } from "./normalSettings";
 
 export const getSettings = (difficulty: number): LevelSettings => ({
   ...getNormalSettings(difficulty),
-  playMoves: [10, 0.3],
+  playMoves: [7, 0.3],
 });
