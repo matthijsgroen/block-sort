@@ -94,6 +94,36 @@ describe(generateRandomLevel, () => {
     ]);
   });
 
+  it("can generates buffers of different sizes", () => {
+    const random = mulberry32(TEST_SEED);
+    const level = generateRandomLevel(
+      {
+        amountColors: 2,
+        stackSize: 4,
+        extraPlacementStacks: 0,
+        buffers: 2,
+        bufferSizes: 2,
+        extraBuffers: [{ amount: 1, size: 3, limit: 1 }],
+        hideBlockTypes: true,
+      },
+      random
+    );
+    expect(level.colors).toEqual(["darkblue", "green"]);
+    expect(level.columns).toEqual([
+      createPlacementColumn(
+        4,
+        createHiddenBlocks("green", "green", "darkblue", "darkblue")
+      ),
+      createPlacementColumn(
+        4,
+        createHiddenBlocks("darkblue", "green", "green", "darkblue")
+      ),
+      createBufferColumn(2),
+      createBufferColumn(2),
+      createBufferColumn(3, "darkblue"),
+    ]);
+  });
+
   it("can generates buffers that are locked", () => {
     const random = mulberry32(TEST_SEED);
     const level = generateRandomLevel(

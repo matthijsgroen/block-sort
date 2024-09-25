@@ -20,6 +20,7 @@ export type LevelSettings = {
   buffers?: number;
   bufferSizes?: number;
   bufferPlacementLimits?: number;
+  extraBuffers?: { size: number; amount: number; limit: number }[];
   playMoves?: [minCount: number, maxPercent: number];
 };
 
@@ -32,6 +33,7 @@ export const generateRandomLevel = (
     buffers = 0,
     bufferSizes = 1,
     bufferPlacementLimits = 0,
+    extraBuffers = [],
     hideBlockTypes = false,
     stacksPerColor = 1,
   }: LevelSettings,
@@ -41,16 +43,12 @@ export const generateRandomLevel = (
   const availableColors = BLOCK_COLORS.slice();
   shuffle(availableColors, random);
 
+  const bufferList = [
+    { amount: buffers, size: bufferSizes, limit: bufferPlacementLimits },
+  ].concat(extraBuffers);
+
   const blockColors = availableColors.slice(0, amountColors);
-  const placementLimits =
-    extraPlacementLimits > 0 ? blockColors.slice(-extraPlacementLimits) : [];
-  const bufPlacementLimits =
-    bufferPlacementLimits > 0
-      ? blockColors.slice(
-          -(extraPlacementLimits + bufferPlacementLimits),
-          blockColors.length - extraPlacementLimits
-        )
-      : [];
+  let stackLimit = blockColors.length - extraPlacementLimits;
 
   const amountBars = amountColors * stacksPerColor;
   const blocks: BlockColor[] = [];
@@ -72,13 +70,24 @@ export const generateRandomLevel = (
     )
       .concat(
         timesMap(extraPlacementStacks, (i) =>
-          createPlacementColumn(stackSize, [], placementLimits[i])
+          createPlacementColumn(
+            stackSize,
+            [],
+            i < extraPlacementLimits ? blockColors[stackLimit + i] : undefined
+          )
         )
       )
       .concat(
-        timesMap(buffers, (i) =>
-          createBufferColumn(bufferSizes, bufPlacementLimits[i])
-        )
+        bufferList.flatMap(({ amount, size, limit }) => {
+          stackLimit -= limit;
+
+          return timesMap(amount, (i) =>
+            createBufferColumn(
+              size,
+              i < limit ? blockColors[stackLimit + i] : undefined
+            )
+          );
+        })
       )
   );
 };
