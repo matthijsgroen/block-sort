@@ -57,12 +57,13 @@ export const App: React.FC = () => {
       <Transition
         className={"h-full"}
         active={!inLevel}
-        startDelay={SCREEN_TRANSITION}
+        startDelay={SCREEN_TRANSITION /* wait for level to be unmounted */}
         duration={SCREEN_TRANSITION}
       >
         <LevelTrack
           levelNr={levelNr}
           onLevelStart={() => {
+            // tie playback to user interaction
             sound.play("music");
             setInLevel(true);
           }}
@@ -74,7 +75,9 @@ export const App: React.FC = () => {
       <Transition
         className={"h-full"}
         active={inLevel}
-        startDelay={SCREEN_TRANSITION}
+        startDelay={
+          SCREEN_TRANSITION /* wait for level track to be unmounted */
+        }
         duration={SCREEN_TRANSITION}
       >
         <LevelLoader
@@ -100,6 +103,7 @@ export const App: React.FC = () => {
           onMusicChange={(musicEnabled) => {
             sound.setStreamEnabled("music", musicEnabled);
             if (musicEnabled) {
+              // tie playback to user interaction
               sound.play("music");
             } else {
               sound.stop("music");
