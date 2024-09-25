@@ -1,0 +1,75 @@
+@keyframes rotate180 {
+  0% {
+    rotate: 0deg;
+  }
+  40% {
+    rotate: 180deg;
+  }
+  100% {
+    rotate: 180deg;
+  }
+}
+
+@keyframes rotate90 {
+  0% {
+    rotate: 0deg;
+  }
+  40% {
+    rotate: 0deg;
+  }
+  60% {
+    rotate: 90deg;
+  }
+  100% {
+    rotate: 90deg;
+  }
+}
+
+@keyframes rotate180end {
+  0% {
+    rotate: 0deg;
+  }
+  60% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: 180deg;
+  }
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-1.75rem);
+  }
+}
+
+.topRight {
+  transform-origin: top right;
+}
+
+.topLeft {
+  transform-origin: top left;
+}
+
+.bottomLeft {
+  transform-origin: bottom left;
+}
+
+.degrees180 {
+  animation: rotate180 2s linear infinite;
+}
+
+.degrees90 {
+  animation: rotate90 2s linear infinite;
+}
+
+.degrees180end {
+  animation: rotate180end 2s linear infinite;
+}
+
+.slide {
+  animation: slide 2s linear infinite;
+}
