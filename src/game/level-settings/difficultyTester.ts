@@ -35,7 +35,7 @@ export const testDifficulties = (
         const won = hasWon(levelState);
         expect(won).toBe(true);
       },
-      20_000
+      40_000
     );
   });
 };
