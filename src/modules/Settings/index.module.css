@@ -4,3 +4,7 @@
     linear-gradient(#e9b466 0%, #e9b466 100%);
   background-blend-mode: multiply;
 }
+
+.title {
+  letter-spacing: 3px;
+}

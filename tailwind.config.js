@@ -3,6 +3,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        "block-sort": ["LuckiestGuy", "serif"],
+      },
       spacing: {
         block: "2.5rem",
         "height-block": "3.5rem",

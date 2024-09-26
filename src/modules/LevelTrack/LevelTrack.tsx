@@ -57,7 +57,8 @@ export const LevelTrack: React.FC<Props> = ({
 
         <h1
           className={clsx(
-            "text-3xl mb-2 font-extrabold flex-1 text-center text-orange-400"
+            "text-3xl mb-2 font-extrabold flex-1 text-center text-orange-400 font-block-sort",
+            styles.header
           )}
         >
           Block Sort
