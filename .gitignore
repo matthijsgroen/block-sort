@@ -33,3 +33,6 @@ dev-dist
 *.sw?
 
 *storybook.log
+
+# GIMP project file for open graph image
+og-image.xcf 

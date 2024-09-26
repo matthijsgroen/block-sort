@@ -83,7 +83,8 @@ export const getSpecialSettings = (
 export const getScrambledSettings = (levelNr: number): LevelSettings =>
   _getScrambledSettings(getDifficultyLevel(levelNr));
 
-export const isSpecial = (levelNr: number) => (levelNr + 1) % 7 === 0;
+export const isSpecial = (levelNr: number) =>
+  (levelNr + 1) % 7 === 0 || (levelNr + 1) % 25 === 0;
 
 export const isHard = (levelNr: number) =>
   !isSpecial(levelNr) && (levelNr + 1) % 9 === 0;
