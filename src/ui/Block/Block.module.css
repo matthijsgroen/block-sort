@@ -7,7 +7,7 @@
     0px 0px 0px color-mix(in srgb, var(--cube-color) 70%, #fff 30%),
     0px 0px 4px #000,
     1px 1px 2px #000;
-  opacity: 50%;
+  opacity: var(--cube-shape-opacity, 50%);
   color: transparent;
   display: inline;
   content: var(--cube-shape);
@@ -23,7 +23,7 @@
   background-color: #000;
   background-clip: text;
   color: transparent;
-  opacity: 30%;
+  opacity: calc(var(--cube-shape-opacity, 50%) * 0.6);
 
   @apply w-block;
 }
@@ -35,7 +35,7 @@
 .texture {
   background: url("../../assets/wood-texture.png");
   mix-blend-mode: color-burn;
-  @apply opacity-60;
+  @apply opacity-70;
 }
 
 .gradient {
@@ -57,10 +57,12 @@
     rgba(0, 0, 0, 20%) 25%,
     rgba(0, 0, 0, 20%) 30%,
     rgba(0, 0, 0, 0%) 35%,
-    rgba(0, 0, 0, 40%) 35%,
-    rgba(0, 0, 0, 40%) 60%,
-    rgba(0, 0, 0, 20%) 80%,
-    rgba(0, 0, 0, 10%) 90%,
+    rgba(0, 0, 0, 55%) 35%,
+    rgba(0, 0, 0, 55%) 60%,
+    rgba(0, 0, 0, 30%) 65%,
+    rgba(0, 0, 0, 43%) 80%,
+    rgba(0, 0, 0, 40%) 85%,
+    rgba(0, 0, 0, 5%) 95%,
     rgba(0, 0, 0, 50%) 100%
   );
 }
@@ -89,4 +91,10 @@
   background-color: #0006;
   box-shadow: 6px 1px 2px 1px #0006;
   @apply absolute w-full h-block rounded-md translate-y-top-block;
+}
+
+@property --cube-color {
+  syntax: "<color>";
+  initial-value: 0;
+  inherits: false;
 }

@@ -67,6 +67,7 @@ export const Block: React.FC<Props> = ({
     <div
       style={{
         "--cube-color": revealed ? color : "#64748b",
+        "--cube-shape-opacity": revealed ? "50%" : "100%",
         "--cube-shape": `'${displayShape}'`,
         animationDelay: !locked ? `-${index * 50}ms` : "0",
       }}
@@ -83,7 +84,7 @@ export const Block: React.FC<Props> = ({
       <div
         className={clsx(
           styles.layer,
-          "bg-block rounded-md border border-black/10 ",
+          "bg-block rounded-md border border-black/10 transition-colors [transition-duration:500ms]",
           { [styles.selectedOutline]: selected }
         )}
       ></div>

@@ -9,6 +9,7 @@ import {
   LEVEL_SCALE,
 } from "@/game/level-settings/levelSettings";
 import { getLevelType } from "@/support/getLevelType";
+import { Block } from "@/ui/Block/Block";
 import { Smiley } from "@/ui/Smiley/Smiley";
 import { TopButton } from "@/ui/TopButton/TopButton";
 
@@ -25,13 +26,13 @@ type Props = {
 
 const translates = [
   "",
-  "translate-x-8",
-  "translate-x-16",
-  "translate-x-8",
+  "translate-x-10",
+  "translate-x-20",
+  "translate-x-10",
   "",
-  "-translate-x-8",
-  "-translate-x-16",
-  "-translate-x-8",
+  "-translate-x-10",
+  "-translate-x-20",
+  "-translate-x-10",
 ];
 
 export const LevelTrack: React.FC<Props> = ({
@@ -57,10 +58,19 @@ export const LevelTrack: React.FC<Props> = ({
 
         <h1
           className={clsx(
-            "text-3xl mb-2 font-extrabold flex-1 text-center text-orange-400"
+            "text-3xl mb-2 font-extrabold flex-1 text-center text-orange-400 font-block-sort",
+            styles.header
           )}
         >
-          Block Sort
+          Bl
+          <div className="inline-block text-sm scale-50 -mx-2 translate-y-1">
+            <Block moved={true} color="#fb923c" shape="️⭐️" revealed />
+          </div>
+          ck S
+          <div className="inline-block text-sm scale-50 -mx-2 translate-y-1">
+            <Block moved={true} color="#fb923c" shape="️🧩" revealed />
+          </div>
+          rt
         </h1>
         {onOpenSettings && <div className="size-block"></div>}
       </div>

@@ -47,7 +47,7 @@ export const Message: React.FC<Props> = ({
     >
       {started && (
         <>
-          <div className="absolute w-full h-full bg-gradient-to-b from-transparent  to-transparent via-30% via-slate-700 opacity-0 animate-fadeIn"></div>
+          <div className="absolute w-full h-full bg-gradient-to-b from-transparent to-transparent via-30% via-slate-700 opacity-0 animate-fadeIn"></div>
           <div className="absolute top-[46%] left-1/2 animate-flyTopLeft">
             <Block
               color={color}
@@ -97,7 +97,7 @@ export const Message: React.FC<Props> = ({
           <div className="absolute top-[45%] w-full animate-popInOut">
             <div
               className={
-                "bg-block px-6 py-3 rounded-full drop-shadow-xl w-1/2 mx-auto"
+                "bg-block px-6 py-3 rounded-full drop-shadow-xl w-1/2 max-w-[500px] mx-auto"
               }
             >
               <h1 className="font-bold text-2xl text-center text-white">

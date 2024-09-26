@@ -38,7 +38,9 @@ export const Settings: React.FC<Props> = ({
           styles.woodBackground
         )}
       >
-        <h1 className="mb-2 font-bold">BlockSort, v0.1</h1>
+        <h1 className={clsx("mb-2 font-bold font-block-sort", styles.title)}>
+          BlockSort, v0.4
+        </h1>
         <div className="flex flex-col gap-3">
           <Checkbox
             value={soundEnabled}

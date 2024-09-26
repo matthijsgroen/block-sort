@@ -1,7 +1,12 @@
 import { describe, expect, it } from "vitest";
 
 import { testDifficulties } from "./difficultyTester";
-import { getSpecial1Settings, getSpecial2Settings } from "./specialSettings";
+import {
+  getSpecial1Settings,
+  getSpecial2Settings,
+  getSpecial3Settings,
+  getSpecial4Settings,
+} from "./specialSettings";
 
 describe(getSpecial1Settings, () => {
   it("returns settings based on difficulty", () => {
@@ -41,4 +46,12 @@ describe(getSpecial1Settings, () => {
 
 describe(getSpecial2Settings, () => {
   testDifficulties(getSpecial2Settings);
+});
+
+describe(getSpecial3Settings, () => {
+  testDifficulties(getSpecial3Settings);
+});
+
+describe(getSpecial4Settings, () => {
+  testDifficulties(getSpecial4Settings);
 });

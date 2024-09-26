@@ -19,10 +19,10 @@ describe(generatePlayableLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["green", "pink"]);
+    expect(level.colors).toEqual(["blue", "white"]);
     expect(level.columns).toEqual([
-      createPlacementColumn(4, createBlocks("green", "pink", "green", "green")),
-      createPlacementColumn(4, createBlocks("pink", "pink", "green", "pink")),
+      createPlacementColumn(4, createBlocks("white", "white", "blue", "blue")),
+      createPlacementColumn(4, createBlocks("blue", "white", "white", "blue")),
       createPlacementColumn(4),
       createPlacementColumn(4),
     ]);

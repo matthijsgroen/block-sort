@@ -4,17 +4,17 @@ import {
   generateRandomLevel,
   LevelSettings,
 } from "@/game/level-creation/generateRandomLevel";
-import { getSettings as getHardSettings } from "@/game/level-settings/hardSettings";
+import { getHardSettings as getHardSettings } from "@/game/level-settings/hardSettings";
 import {
-  getAlternativeSettings as getNormal3Settings,
-  getSettings as getNormal2Settings,
-} from "@/game/level-settings/normal2Settings";
-import { getSettings as getNormalSettings } from "@/game/level-settings/normalSettings";
-import { getSettings as getSpecial3Settings } from "@/game/level-settings/special3Settings";
-import { getSettings as getSpecial4Settings } from "@/game/level-settings/special4Settings";
+  getNormal2Settings,
+  getNormal3Settings,
+  getNormalSettings,
+} from "@/game/level-settings/normalSettings";
 import {
   getSpecial1Settings,
   getSpecial2Settings,
+  getSpecial3Settings,
+  getSpecial4Settings,
 } from "@/game/level-settings/specialSettings";
 import { mulberry32 } from "@/support/random";
 

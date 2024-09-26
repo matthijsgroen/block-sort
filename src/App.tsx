@@ -37,6 +37,16 @@ export const App: React.FC = () => {
   const [musicEnabled, setMusicEnabled] = useGameStorage("musicEnabled", true);
 
   useEffect(() => {
+    sound.setStreamEnabled("effects", soundEnabled);
+    sound.setStreamEnabled("music", musicEnabled);
+    if (musicEnabled) {
+      sound.play("music");
+    } else {
+      sound.stop("music");
+    }
+  }, [soundEnabled, musicEnabled]);
+
+  useEffect(() => {
     setLevelSeed(generateNewSeed(BASE_SEED, levelNr));
   }, [levelNr]);
 

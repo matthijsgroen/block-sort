@@ -1,4 +1,4 @@
-import { BlockColor } from "@/game/types";
+import { type BlockColor } from "@/game/types";
 
 export const colorMap: Record<BlockColor, string> = {
   red: "#dd0000",

@@ -19,3 +19,21 @@ export const getSpecial2Settings = (difficulty: number): LevelSettings => ({
     0
   ),
 });
+
+export const getSpecial3Settings = (difficulty: number): LevelSettings => ({
+  amountColors: 5,
+  stackSize: difficulty > 4 ? 5 : 4,
+  extraPlacementStacks: 2,
+  extraPlacementLimits:
+    0 + Math.max(Math.min(Math.round(difficulty / 5), 2), 0),
+});
+
+export const getSpecial4Settings = (difficulty: number): LevelSettings => ({
+  amountColors: 5 + Math.max(Math.round(difficulty / 8), 0),
+  stacksPerColor: 2,
+  stackSize: 3,
+  extraPlacementStacks: 2,
+  extraPlacementLimits: 2,
+  buffers: 1,
+  bufferSizes: 1,
+});

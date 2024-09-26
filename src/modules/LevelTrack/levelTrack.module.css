@@ -23,3 +23,8 @@
   background-clip: text;
   color: transparent;
 }
+
+.header {
+  letter-spacing: 5px;
+  text-shadow: 1px 1px 4px #0008;
+}

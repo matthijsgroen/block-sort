@@ -6,6 +6,7 @@ import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { hasWon, isStuck } from "@/game/state";
 import { LevelState } from "@/game/types";
 import { getLevelType } from "@/support/getLevelType";
+import { mulberry32, pick } from "@/support/random";
 import { deleteGameValue, useGameStorage } from "@/support/useGameStorage";
 import { colorMap } from "@/ui/Block/colorMap";
 import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
@@ -27,6 +28,8 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
   >("busy");
 
   const initialLevelState = use(level);
+
+  const localRandom = mulberry32(levelNr * 386);
 
   const [levelState, setLevelState, deleteLevelState] =
     useGameStorage<LevelState>(`levelState${levelNr}`, initialLevelState);
@@ -89,7 +92,21 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
       {playState === "won" && (
         <Message
           delay={1000}
-          message="You won!"
+          message={pick(
+            [
+              "You won!",
+              "Great work!",
+              "Fantastic!",
+              "Amazing!",
+              "Terrific!",
+              "Awesome!",
+              "Incredible!",
+              "Unbelievable!",
+              "Stupendous!",
+              "Spectacular!",
+            ],
+            localRandom
+          )}
           color={colorMap["green"]}
           shape="✔️"
           afterShow={() => {
@@ -106,7 +123,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
         <Message
           delay={2000}
           color={colorMap["red"]}
-          message="You lost!"
+          message="Blocked!"
           shape="❌"
           afterShow={() => {
             setLevelState(initialLevelState);
