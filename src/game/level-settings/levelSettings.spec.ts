@@ -89,25 +89,19 @@ describe(getSpecialSettings, () => {
       const result = getSpecialSettings(0, random);
 
       expect(result).toEqual({
-        amountColors: 10,
+        amountColors: 11,
         stackSize: 3,
-        extraPlacementStacks: 4,
-        extraPlacementLimits: 4,
-        buffers: 0,
-        bufferSizes: 3,
-        bufferPlacementLimits: 0,
+        extraPlacementStacks: 3,
+        extraPlacementLimits: 2,
       } satisfies LevelSettings);
 
       const hardResult = getSpecialSettings(LEVEL_SCALE.at(-1)!, random);
 
       expect(hardResult).toEqual({
-        amountColors: 10,
-        stackSize: 4,
-        extraPlacementStacks: 0,
+        amountColors: 16,
+        stackSize: 3,
+        extraPlacementStacks: 2,
         extraPlacementLimits: 0,
-        buffers: 4,
-        bufferSizes: 3,
-        bufferPlacementLimits: 4,
       } satisfies LevelSettings);
     });
 
@@ -150,7 +144,7 @@ describe(getSpecialSettings, () => {
         randomTemplate(2)
       );
       const level = await generatePlayableLevel(settings, random);
-      expect(level.moves).toHaveLength(21);
+      expect(level.moves).toHaveLength(19);
     });
   });
 

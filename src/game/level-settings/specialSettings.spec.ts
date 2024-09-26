@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import { testDifficulties } from "./difficultyTester";
-import { getSettings } from "./special1Settings";
+import { getSpecial1Settings, getSpecial2Settings } from "./specialSettings";
 
-describe("special 1 settings", () => {
+describe(getSpecial1Settings, () => {
   it("returns settings based on difficulty", () => {
-    const easy = getSettings(1);
+    const easy = getSpecial1Settings(1);
     expect(easy).toEqual({
       amountColors: 4,
       bufferPlacementLimits: 0,
@@ -15,7 +15,7 @@ describe("special 1 settings", () => {
       stackSize: 12,
     });
 
-    const hard = getSettings(10);
+    const hard = getSpecial1Settings(10);
     expect(hard).toEqual({
       amountColors: 4,
       bufferPlacementLimits: 3,
@@ -25,7 +25,7 @@ describe("special 1 settings", () => {
       stackSize: 13,
     });
 
-    const veryHard = getSettings(11);
+    const veryHard = getSpecial1Settings(11);
     expect(veryHard).toEqual({
       amountColors: 4,
       bufferPlacementLimits: 3,
@@ -36,5 +36,9 @@ describe("special 1 settings", () => {
     });
   });
 
-  testDifficulties(getSettings);
+  testDifficulties(getSpecial1Settings);
+});
+
+describe(getSpecial2Settings, () => {
+  testDifficulties(getSpecial2Settings);
 });

@@ -82,15 +82,11 @@ export const Transition: React.FC<PropsWithChildren<Props>> = ({
   );
 
   useEffect(() => {
-    if (!active) {
-      setState("exitStart");
-    }
-    if (active) {
-      setState("delayStart");
-    }
+    setState(active ? "delayStart" : "exitStart");
   }, [active]);
 
   if (state === "exitEnd" || state === "delayStart") {
+    // Unmount the component if we are after the end or before the start
     return null;
   }
 

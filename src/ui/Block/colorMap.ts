@@ -13,4 +13,8 @@ export const colorMap: Record<BlockColor, string> = {
   aqua: "#bfdbfe",
   brown: "#a07353",
   pink: "#fdba74",
+  turquoise: "#06b6d4",
+  orange: "#f97316",
+  lightyellow: "#f9c74f",
+  gray: "#718096",
 };

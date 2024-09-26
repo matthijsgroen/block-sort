@@ -26,12 +26,12 @@ export const generatePlayableLevel = async (
   let attempt = 0;
   while (attempt < MAX_GENERATE_ATTEMPTS) {
     attempt++;
-    delay(4);
     const level = generateRandomLevel(settings, random);
     if (isStuck(level) || !allShuffled(level)) {
       continue;
     }
     const [beatable, moves, cost] = await isBeatable(level, random);
+    const generationCost = cost + attempt * MAX_GENERATE_COST;
     if (beatable) {
       if (settings.playMoves !== undefined) {
         const [minMoves, maxMovesPercentage] = settings.playMoves;
@@ -48,10 +48,10 @@ export const generatePlayableLevel = async (
         return {
           ...playedLevel,
           moves: moves.slice(movesToPlay),
-          cost: cost + attempt * MAX_GENERATE_COST,
+          cost: generationCost,
         };
       }
-      return { ...level, moves, cost: cost + attempt * MAX_GENERATE_COST };
+      return { ...level, moves, cost: generationCost };
     }
   }
   throw new Error("Can't generate playable level");
@@ -143,7 +143,9 @@ const isBeatable = async (
         moves.push(nextMove);
 
         playLevel = moveBlocks(playLevel, nextMove.from, nextMove.to);
-        await delay(2);
+        if (moves.length % 10 === 0) {
+          await delay(1);
+        }
       }
       if (hasWon(playLevel)) {
         return [true, moves, moves.length + MAX_LEVEL_MOVES * attempt];

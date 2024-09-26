@@ -5,6 +5,7 @@ import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { LevelState } from "@/game/types";
 import { mulberry32 } from "@/support/random";
 import { getGameValue, setGameValue } from "@/support/useGameStorage";
+import { Loading } from "@/ui/Loading/Loading";
 
 import { Level } from "./Level";
 
@@ -42,6 +43,7 @@ export const LevelLoader: React.FC<Props> = ({
     <Suspense
       fallback={
         <div className="h-full flex flex-col justify-center items-center text-light-wood font-bold text-2xl opacity-0 animate-fadeIn [animation-delay:1s]">
+          <Loading />
           <p>Loading...</p>
         </div>
       }

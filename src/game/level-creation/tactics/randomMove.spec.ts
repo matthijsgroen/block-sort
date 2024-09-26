@@ -23,7 +23,7 @@ describe(randomMove, () => {
 
     expect(moves).toHaveLength(1);
     expect(moves[0].weight).toEqual(1);
-    expect(moves[0].move).toEqual({ from: 3, to: 4 });
+    expect(moves[0].move).toEqual({ from: 1, to: 4 });
   });
 
   it("will return a different move each time", () => {
@@ -41,6 +41,6 @@ describe(randomMove, () => {
 
     expect(moves).toHaveLength(1);
     expect(moves[0].weight).toEqual(1);
-    expect(moves[0].move).toEqual({ from: 3, to: 4 });
+    expect(moves[0].move).toEqual({ from: 0, to: 4 });
   });
 });

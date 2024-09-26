@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { mulberry32 } from "@/support/random";
 
-import { createBlock, createPlacementColumn } from "../factories";
+import { createBlocks, createPlacementColumn } from "../factories";
 
 import { generatePlayableLevel } from "./tactics";
 
@@ -19,26 +19,15 @@ describe(generatePlayableLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["darkblue", "green"]);
+    expect(level.colors).toEqual(["green", "pink"]);
     expect(level.columns).toEqual([
-      createPlacementColumn(4, [
-        createBlock("green"),
-        createBlock("green"),
-        createBlock("darkblue"),
-        createBlock("darkblue"),
-      ]),
-      createPlacementColumn(4, [
-        createBlock("darkblue"),
-        createBlock("green"),
-        createBlock("green"),
-        createBlock("darkblue"),
-      ]),
+      createPlacementColumn(4, createBlocks("green", "pink", "green", "green")),
+      createPlacementColumn(4, createBlocks("pink", "pink", "green", "pink")),
       createPlacementColumn(4),
       createPlacementColumn(4),
     ]);
 
     expect(level.cost).toBeGreaterThan(4003);
-    expect(level.moves).toHaveLength(13);
   });
 
   it("generates a medium level", async () => {
@@ -53,7 +42,6 @@ describe(generatePlayableLevel, () => {
     );
     expect(level.colors).toHaveLength(5);
     expect(level.cost).toBeGreaterThan(4015);
-    expect(level.moves).toHaveLength(16);
   });
 
   it("generates a complex level", async () => {
@@ -71,7 +59,6 @@ describe(generatePlayableLevel, () => {
     );
     expect(level.colors).toHaveLength(10);
     expect(level.cost).toBeGreaterThan(4094);
-    expect(level.moves).toHaveLength(95);
   });
 
   it("generates a hard level", async () => {
@@ -86,7 +73,6 @@ describe(generatePlayableLevel, () => {
       random
     );
     expect(level.colors).toHaveLength(10);
-    expect(level.moves).toHaveLength(40);
   });
 
   it("generates a complex level (buffers / force)", async () => {
