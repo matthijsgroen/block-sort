@@ -75,7 +75,7 @@ describe(generatePlayableLevel, () => {
     expect(level.colors).toHaveLength(10);
   });
 
-  it.only("generates a complex level (buffers / force)", async () => {
+  it("generates a complex level (buffers / force)", async () => {
     const random = mulberry32(TEST_SEED);
     const level = await generatePlayableLevel(
       {
