@@ -4,13 +4,18 @@ import { pick } from "@/support/random";
 import { LevelSettings } from "../level-creation/generateRandomLevel";
 
 import { getSettings as _getHardSettings } from "./hardSettings";
-import { getSettings as _getNormal2Settings } from "./normal2Settings";
+import {
+  getAlternativeSettings as _getNormal3Settings,
+  getSettings as _getNormal2Settings,
+} from "./normal2Settings";
 import { getSettings as _getNormalSettings } from "./normalSettings";
 import { getSettings as _getScrambledSettings } from "./scrambledSettings";
-import { getSettings as _getSpecial1Settings } from "./special1Settings";
-import { getSettings as _getSpecial2Settings } from "./special2Settings";
 import { getSettings as _getSpecial3Settings } from "./special3Settings";
 import { getSettings as _getSpecial4Settings } from "./special4Settings";
+import {
+  getSpecial1Settings as _getSpecial1Settings,
+  getSpecial2Settings as _getSpecial2Settings,
+} from "./specialSettings";
 
 export const LEVEL_SCALE = fib(3, 11);
 
@@ -27,7 +32,10 @@ export const getNormalSettings = (
   const difficulty = getDifficultyLevel(levelNr);
   const templates: LevelSettings[] = [_getNormalSettings(difficulty)];
   if (levelNr > 160) {
-    templates.push(_getNormal2Settings(difficulty));
+    templates.push(
+      _getNormal2Settings(difficulty),
+      _getNormal3Settings(difficulty)
+    );
   }
   return pick(templates, random);
 };

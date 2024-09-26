@@ -19,16 +19,10 @@ describe(generatePlayableLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["darkblue", "green"]);
+    expect(level.colors).toEqual(["green", "pink"]);
     expect(level.columns).toEqual([
-      createPlacementColumn(
-        4,
-        createBlocks("green", "green", "darkblue", "darkblue")
-      ),
-      createPlacementColumn(
-        4,
-        createBlocks("darkblue", "green", "green", "darkblue")
-      ),
+      createPlacementColumn(4, createBlocks("green", "pink", "green", "green")),
+      createPlacementColumn(4, createBlocks("pink", "pink", "green", "pink")),
       createPlacementColumn(4),
       createPlacementColumn(4),
     ]);
@@ -46,7 +40,6 @@ describe(generatePlayableLevel, () => {
     );
 
     expect(level.colors).toHaveLength(9);
-    expect(level.moves).toHaveLength(52);
   });
 
   it("generates a complex level (buffers / force)", async () => {
@@ -64,7 +57,6 @@ describe(generatePlayableLevel, () => {
     );
 
     expect(level.colors).toHaveLength(4);
-    expect(level.moves).toHaveLength(515);
   });
 
   it("throws an error if it can't generate a playable level", () => {

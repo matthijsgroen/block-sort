@@ -56,38 +56,35 @@ export const generateRandomLevel = (
     blocks.push(...new Array(stackSize * stacksPerColor).fill(color));
   }
   shuffle(blocks, random);
-
-  return createLevelState(
-    timesMap<Column>(amountBars, () =>
-      createPlacementColumn(
-        stackSize,
-        new Array(stackSize)
-          .fill(0)
-          .map((_, i) =>
-            createBlock(blocks.shift()!, hideBlockTypes && i !== 0)
-          )
-      )
+  const columns = timesMap<Column>(amountBars, () =>
+    createPlacementColumn(
+      stackSize,
+      new Array(stackSize)
+        .fill(0)
+        .map((_, i) => createBlock(blocks.shift()!, hideBlockTypes && i !== 0))
     )
-      .concat(
-        timesMap(extraPlacementStacks, (i) =>
-          createPlacementColumn(
-            stackSize,
-            [],
-            i < extraPlacementLimits ? blockColors[stackLimit + i] : undefined
-          )
+  )
+    .concat(
+      timesMap(extraPlacementStacks, (i) =>
+        createPlacementColumn(
+          stackSize,
+          [],
+          i < extraPlacementLimits ? blockColors[stackLimit + i] : undefined
         )
       )
-      .concat(
-        bufferList.flatMap(({ amount, size, limit }) => {
-          stackLimit -= limit;
+    )
+    .concat(
+      bufferList.flatMap(({ amount, size, limit }) => {
+        stackLimit -= limit;
 
-          return timesMap(amount, (i) =>
-            createBufferColumn(
-              size,
-              i < limit ? blockColors[stackLimit + i] : undefined
-            )
-          );
-        })
-      )
-  );
+        return timesMap(amount, (i) =>
+          createBufferColumn(
+            size,
+            i < limit ? blockColors[stackLimit + i] : undefined
+          )
+        );
+      })
+    );
+
+  return createLevelState(columns);
 };

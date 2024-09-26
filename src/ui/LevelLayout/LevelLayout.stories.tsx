@@ -5,12 +5,17 @@ import {
   LevelSettings,
 } from "@/game/level-creation/generateRandomLevel";
 import { getSettings as getHardSettings } from "@/game/level-settings/hardSettings";
-import { getSettings as getNormal2Settings } from "@/game/level-settings/normal2Settings";
+import {
+  getAlternativeSettings as getNormal3Settings,
+  getSettings as getNormal2Settings,
+} from "@/game/level-settings/normal2Settings";
 import { getSettings as getNormalSettings } from "@/game/level-settings/normalSettings";
-import { getSettings as getSpecial1Settings } from "@/game/level-settings/special1Settings";
-import { getSettings as getSpecial2Settings } from "@/game/level-settings/special2Settings";
 import { getSettings as getSpecial3Settings } from "@/game/level-settings/special3Settings";
 import { getSettings as getSpecial4Settings } from "@/game/level-settings/special4Settings";
+import {
+  getSpecial1Settings,
+  getSpecial2Settings,
+} from "@/game/level-settings/specialSettings";
 import { mulberry32 } from "@/support/random";
 
 import { LevelLayout as LevelLayoutComponent } from "./LevelLayout";
@@ -18,6 +23,7 @@ import { LevelLayout as LevelLayoutComponent } from "./LevelLayout";
 type LevelType =
   | "normal"
   | "normal2"
+  | "normal3"
   | "hard"
   | "special1"
   | "special2"
@@ -44,6 +50,7 @@ const meta: Meta<CustomArgs> = {
       options: [
         "normal",
         "normal2",
+        "normal3",
         "hard",
         "special1",
         "special2",
@@ -72,6 +79,7 @@ const settingProducer: Record<
 > = {
   normal: getNormalSettings,
   normal2: getNormal2Settings,
+  normal3: getNormal3Settings,
   hard: getHardSettings,
   special1: getSpecial1Settings,
   special2: getSpecial2Settings,

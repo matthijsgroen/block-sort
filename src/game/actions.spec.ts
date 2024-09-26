@@ -4,6 +4,7 @@ import { mulberry32 } from "../support/random";
 
 import { generateRandomLevel } from "./level-creation/generateRandomLevel";
 import { moveBlocks, selectFromColumn } from "./actions";
+import { debugLevel } from "./debugLevel";
 import {
   createBlock,
   createBlocks,
@@ -26,8 +27,8 @@ describe(selectFromColumn, () => {
       },
       random
     );
-    const blocks = selectFromColumn(level, 1);
-    expect(blocks).toEqual([createBlock("darkblue")]);
+    const blocks = selectFromColumn(level, 0);
+    expect(blocks).toEqual([createBlock("green")]);
   });
 
   it("selects the top of a column with multiple of the same color", () => {
@@ -40,8 +41,8 @@ describe(selectFromColumn, () => {
       },
       random
     );
-    const blocks = selectFromColumn(level, 0);
-    expect(blocks).toEqual([createBlock("green"), createBlock("green")]);
+    const blocks = selectFromColumn(level, 1);
+    expect(blocks).toEqual([createBlock("pink"), createBlock("pink")]);
   });
 
   it("selects the top of a column (partially hidden)", () => {
