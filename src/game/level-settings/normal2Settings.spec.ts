@@ -41,7 +41,7 @@ describe("normal2Settings", () => {
   testDifficulties(getSettings);
 });
 
-describe.only("normal3Settings", () => {
+describe("normal3Settings", () => {
   describe("increase in difficulty", () => {
     it.each<{ difficulty: number; result: LevelSettings }>([
       {
