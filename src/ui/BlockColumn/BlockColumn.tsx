@@ -5,10 +5,9 @@ import { shapeMapping } from "@/game/blocks";
 import { Column } from "@/game/types";
 import { rowSpans } from "@/support/grid";
 import { timesMap } from "@/support/timeMap";
-
-import { Block } from "../Block/Block";
-import { colorMap } from "../Block/colorMap";
-import { Tray } from "../Tray/Tray";
+import { Block } from "@/ui/Block/Block";
+import { colorMap } from "@/ui/Block/colorMap";
+import { Tray } from "@/ui/Tray/Tray";
 
 import styles from "./BlockColumn.module.css";
 

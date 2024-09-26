@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   If a level has 4 colors, it always picks from the first 4 colors.
   If it has 6 colors, it picks from the first 8.
 
+### Fixed
+
+- Audio started playing when disabled
+
 ## Version 0.3 - 2024-09-26
 
 ### Added
