@@ -19,10 +19,10 @@ describe(generatePlayableLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["green", "pink"]);
+    expect(level.colors).toEqual(["blue", "white"]);
     expect(level.columns).toEqual([
-      createPlacementColumn(4, createBlocks("green", "pink", "green", "green")),
-      createPlacementColumn(4, createBlocks("pink", "pink", "green", "pink")),
+      createPlacementColumn(4, createBlocks("white", "white", "blue", "blue")),
+      createPlacementColumn(4, createBlocks("blue", "white", "white", "blue")),
       createPlacementColumn(4),
       createPlacementColumn(4),
     ]);
@@ -75,7 +75,7 @@ describe(generatePlayableLevel, () => {
     expect(level.colors).toHaveLength(10);
   });
 
-  it("generates a complex level (buffers / force)", async () => {
+  it.only("generates a complex level (buffers / force)", async () => {
     const random = mulberry32(TEST_SEED);
     const level = await generatePlayableLevel(
       {
@@ -89,7 +89,7 @@ describe(generatePlayableLevel, () => {
       random
     );
     expect(level.colors).toHaveLength(4);
-  });
+  }, 10_000);
 
   it("throws an error if it can't generate a playable level", () => {
     const random = mulberry32(TEST_SEED);

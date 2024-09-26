@@ -39,9 +39,15 @@ export const generateRandomLevel = (
   }: LevelSettings,
   random: () => number
 ): LevelState => {
+  // This results in gradually reveal new colors as you progress
+  const colorPool = Math.ceil(amountColors / 4) * 4;
   // Generate level, this should be extracted
-  const availableColors = BLOCK_COLORS.slice();
+  const availableColors = BLOCK_COLORS.slice(0, colorPool);
   shuffle(availableColors, random);
+
+  // This simulates having 12 colors for the first few levels,
+  // resulting in a better level design
+  timesMap(Math.max(12 - colorPool, 0), () => random());
 
   const bufferList = [
     { amount: buffers, size: bufferSizes, limit: bufferPlacementLimits },

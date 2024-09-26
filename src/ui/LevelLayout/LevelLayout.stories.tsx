@@ -6,12 +6,12 @@ import {
 } from "@/game/level-creation/generateRandomLevel";
 import { getSettings as getHardSettings } from "@/game/level-settings/hardSettings";
 import {
-  getAlternativeSettings as getNormal3Settings,
-  getSettings as getNormal2Settings,
+  getNormal3Settings as getNormal3Settings,
+  getNormal2Settings as getNormal2Settings,
 } from "@/game/level-settings/normal2Settings";
-import { getSettings as getNormalSettings } from "@/game/level-settings/normalSettings";
-import { getSettings as getSpecial3Settings } from "@/game/level-settings/special3Settings";
-import { getSettings as getSpecial4Settings } from "@/game/level-settings/special4Settings";
+import { getNormalSettings as getNormalSettings } from "@/game/level-settings/normalSettings";
+import { getSpecial3Settings as getSpecial3Settings } from "@/game/level-settings/special3Settings";
+import { getSpecial4Settings as getSpecial4Settings } from "@/game/level-settings/special4Settings";
 import {
   getSpecial1Settings,
   getSpecial2Settings,

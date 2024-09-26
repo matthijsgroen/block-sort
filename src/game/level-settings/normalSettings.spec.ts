@@ -3,9 +3,13 @@ import { describe, expect, it } from "vitest";
 import { LevelSettings } from "../level-creation/generateRandomLevel";
 
 import { testDifficulties } from "./difficultyTester";
-import { getSettings } from "./normalSettings";
+import {
+  getNormal2Settings,
+  getNormal3Settings,
+  getNormalSettings,
+} from "./normalSettings";
 
-describe("normalSettings", () => {
+describe(getNormalSettings, () => {
   describe("increase in difficulty", () => {
     it.each<{ difficulty: number; result: LevelSettings }>([
       {
@@ -110,10 +114,83 @@ describe("normalSettings", () => {
         },
       },
     ])("returns settings for level $difficulty", ({ difficulty, result }) => {
-      const settings = getSettings(difficulty);
+      const settings = getNormalSettings(difficulty);
       expect(settings).toEqual(result);
     });
   });
 
-  testDifficulties(getSettings);
+  testDifficulties(getNormalSettings);
+});
+
+describe(getNormal2Settings, () => {
+  describe("increase in difficulty", () => {
+    it.each<{ difficulty: number; result: LevelSettings }>([
+      {
+        difficulty: 10,
+        result: {
+          amountColors: 10,
+          extraPlacementStacks: 1,
+          extraPlacementLimits: 1,
+          buffers: 2,
+          bufferSizes: 3,
+          hideBlockTypes: false,
+          stackSize: 7,
+        },
+      },
+      {
+        difficulty: 11,
+        result: {
+          amountColors: 10,
+          extraPlacementStacks: 1,
+          extraPlacementLimits: 1,
+          buffers: 2,
+          bufferSizes: 2,
+          hideBlockTypes: false,
+          stackSize: 7,
+        },
+      },
+    ])("returns settings for level $difficulty", ({ difficulty, result }) => {
+      const settings = getNormal2Settings(difficulty);
+      expect(settings).toEqual(result);
+    });
+  });
+
+  testDifficulties(getNormal2Settings);
+});
+
+describe(getNormal3Settings, () => {
+  describe("increase in difficulty", () => {
+    it.each<{ difficulty: number; result: LevelSettings }>([
+      {
+        difficulty: 10,
+        result: {
+          amountColors: 10,
+          extraPlacementStacks: 1,
+          extraPlacementLimits: 1,
+          buffers: 2,
+          bufferSizes: 2,
+          hideBlockTypes: false,
+          stackSize: 7,
+          extraBuffers: [{ size: 1, amount: 1, limit: 0 }],
+        },
+      },
+      {
+        difficulty: 11,
+        result: {
+          amountColors: 10,
+          extraPlacementStacks: 1,
+          extraPlacementLimits: 1,
+          buffers: 2,
+          bufferSizes: 2,
+          hideBlockTypes: false,
+          stackSize: 7,
+        },
+      },
+    ])("returns settings for level $difficulty", ({ difficulty, result }) => {
+      const settings = getNormal3Settings(difficulty);
+      expect(settings).toEqual(result);
+    });
+  });
+
+  testDifficulties(getNormal3Settings);
 });

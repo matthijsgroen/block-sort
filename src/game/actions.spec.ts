@@ -26,8 +26,8 @@ describe(selectFromColumn, () => {
       },
       random
     );
-    const blocks = selectFromColumn(level, 0);
-    expect(blocks).toEqual([createBlock("green")]);
+    const blocks = selectFromColumn(level, 1);
+    expect(blocks).toEqual([createBlock("blue")]);
   });
 
   it("selects the top of a column with multiple of the same color", () => {
@@ -40,8 +40,8 @@ describe(selectFromColumn, () => {
       },
       random
     );
-    const blocks = selectFromColumn(level, 1);
-    expect(blocks).toEqual([createBlock("pink"), createBlock("pink")]);
+    const blocks = selectFromColumn(level, 0);
+    expect(blocks).toEqual([createBlock("white"), createBlock("white")]);
   });
 
   it("selects the top of a column (partially hidden)", () => {

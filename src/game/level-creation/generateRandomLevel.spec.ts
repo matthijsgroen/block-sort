@@ -24,11 +24,10 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["green", "pink"]);
-
+    expect(level.colors).toEqual(["blue", "white"]);
     expect(level.columns).toEqual([
-      createPlacementColumn(4, createBlocks("green", "pink", "green", "green")),
-      createPlacementColumn(4, createBlocks("pink", "pink", "green", "pink")),
+      createPlacementColumn(4, createBlocks("white", "white", "blue", "blue")),
+      createPlacementColumn(4, createBlocks("blue", "white", "white", "blue")),
       createPlacementColumn(4),
       createPlacementColumn(4),
     ]);
@@ -45,15 +44,15 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["green", "pink"]);
+    expect(level.colors).toEqual(["blue", "white"]);
     expect(level.columns).toEqual([
       createPlacementColumn(
         4,
-        createHiddenBlocks("green", "pink", "green", "green")
+        createHiddenBlocks("white", "white", "blue", "blue")
       ),
       createPlacementColumn(
         4,
-        createHiddenBlocks("pink", "pink", "green", "pink")
+        createHiddenBlocks("blue", "white", "white", "blue")
       ),
       createPlacementColumn(4),
       createPlacementColumn(4),
@@ -73,15 +72,15 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["green", "pink"]);
+    expect(level.colors).toEqual(["blue", "white"]);
     expect(level.columns).toEqual([
       createPlacementColumn(
         4,
-        createHiddenBlocks("green", "pink", "green", "green")
+        createHiddenBlocks("white", "white", "blue", "blue")
       ),
       createPlacementColumn(
         4,
-        createHiddenBlocks("pink", "pink", "green", "pink")
+        createHiddenBlocks("blue", "white", "white", "blue")
       ),
       createBufferColumn(2),
       createBufferColumn(2),
@@ -102,19 +101,19 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["green", "pink"]);
+    expect(level.colors).toEqual(["blue", "white"]);
     expect(level.columns).toEqual([
       createPlacementColumn(
         4,
-        createHiddenBlocks("green", "pink", "green", "green")
+        createHiddenBlocks("white", "white", "blue", "blue")
       ),
       createPlacementColumn(
         4,
-        createHiddenBlocks("pink", "pink", "green", "pink")
+        createHiddenBlocks("blue", "white", "white", "blue")
       ),
       createBufferColumn(2),
       createBufferColumn(2),
-      createBufferColumn(3, "pink"),
+      createBufferColumn(3, "blue"),
     ]);
   });
 
@@ -132,27 +131,27 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["darkblue", "gray", "green", "pink"]);
+    expect(level.colors).toEqual(["blue", "red", "white", "yellow"]);
     expect(level.columns).toEqual([
       createPlacementColumn(
         4,
-        createHiddenBlocks("gray", "gray", "darkblue", "gray")
+        createHiddenBlocks("white", "yellow", "blue", "white")
       ),
       createPlacementColumn(
         4,
-        createHiddenBlocks("green", "green", "pink", "darkblue")
+        createHiddenBlocks("red", "red", "red", "white")
       ),
       createPlacementColumn(
         4,
-        createHiddenBlocks("green", "pink", "pink", "green")
+        createHiddenBlocks("red", "yellow", "blue", "blue")
       ),
       createPlacementColumn(
         4,
-        createHiddenBlocks("gray", "darkblue", "pink", "darkblue")
+        createHiddenBlocks("yellow", "blue", "white", "yellow")
       ),
 
-      createBufferColumn(2, "darkblue"),
-      createBufferColumn(2, "gray"),
+      createBufferColumn(2, "yellow"),
+      createBufferColumn(2, "red"),
     ]);
   });
 
@@ -171,27 +170,27 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["darkblue", "gray", "green", "pink"]);
+    expect(level.colors).toEqual(["blue", "red", "white", "yellow"]);
     expect(level.columns).toEqual([
       createPlacementColumn(
         4,
-        createHiddenBlocks("gray", "gray", "darkblue", "gray")
+        createHiddenBlocks("white", "yellow", "blue", "white")
       ),
       createPlacementColumn(
         4,
-        createHiddenBlocks("green", "green", "pink", "darkblue")
+        createHiddenBlocks("red", "red", "red", "white")
       ),
       createPlacementColumn(
         4,
-        createHiddenBlocks("green", "pink", "pink", "green")
+        createHiddenBlocks("red", "yellow", "blue", "blue")
       ),
       createPlacementColumn(
         4,
-        createHiddenBlocks("gray", "darkblue", "pink", "darkblue")
+        createHiddenBlocks("yellow", "blue", "white", "yellow")
       ),
 
-      createPlacementColumn(4, [], "gray"),
-      createBufferColumn(2, "darkblue"),
+      createPlacementColumn(4, [], "red"),
+      createBufferColumn(2, "yellow"),
     ]);
   });
 });

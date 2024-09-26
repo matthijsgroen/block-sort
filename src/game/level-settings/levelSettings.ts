@@ -5,16 +5,16 @@ import { LevelSettings } from "../level-creation/generateRandomLevel";
 
 import { getSettings as _getHardSettings } from "./hardSettings";
 import {
-  getAlternativeSettings as _getNormal3Settings,
-  getSettings as _getNormal2Settings,
-} from "./normal2Settings";
-import { getSettings as _getNormalSettings } from "./normalSettings";
+  getNormal2Settings as _getNormal2Settings,
+  getNormal3Settings as _getNormal3Settings,
+  getNormalSettings as _getNormalSettings,
+} from "./normalSettings";
 import { getSettings as _getScrambledSettings } from "./scrambledSettings";
-import { getSettings as _getSpecial3Settings } from "./special3Settings";
-import { getSettings as _getSpecial4Settings } from "./special4Settings";
 import {
   getSpecial1Settings as _getSpecial1Settings,
   getSpecial2Settings as _getSpecial2Settings,
+  getSpecial3Settings as _getSpecial3Settings,
+  getSpecial4Settings as _getSpecial4Settings,
 } from "./specialSettings";
 
 export const LEVEL_SCALE = fib(3, 11);
