@@ -4,7 +4,6 @@ import { mulberry32 } from "../support/random";
 
 import { generateRandomLevel } from "./level-creation/generateRandomLevel";
 import { moveBlocks, selectFromColumn } from "./actions";
-import { debugLevel } from "./debugLevel";
 import {
   createBlock,
   createBlocks,
