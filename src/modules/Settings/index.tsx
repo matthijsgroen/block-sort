@@ -39,7 +39,7 @@ export const Settings: React.FC<Props> = ({
         )}
       >
         <h1 className={clsx("mb-2 font-bold font-block-sort", styles.title)}>
-          BlockSort, v0.3
+          BlockSort, v0.4
         </h1>
         <div className="flex flex-col gap-3">
           <Checkbox

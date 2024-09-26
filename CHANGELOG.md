@@ -5,7 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Version 0.3
+## Version 0.4 - 2024-09-27
+
+### Added
+
+- Updated styling of hidden block, to offset them better against normal blocks
+- Added fade animation when block gets revealed
+
+### Changed
+
+- Colors are now added in batches of 4.
+  If a level has 4 colors, it always picks from the first 4 colors.
+  If it has 6 colors, it picks from the first 8.
+
+## Version 0.3 - 2024-09-26
 
 ### Added
 
@@ -14,6 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   all 16 colors
 - Added a loading indicator animation
 
-### Updated
+### Changed
 
 - Loading of levels should be a lot faster now

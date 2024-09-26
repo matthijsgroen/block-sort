@@ -3,7 +3,7 @@ import { pick } from "@/support/random";
 
 import { LevelSettings } from "../level-creation/generateRandomLevel";
 
-import { getSettings as _getHardSettings } from "./hardSettings";
+import { getHardSettings as _getHardSettings } from "./hardSettings";
 import {
   getNormal2Settings as _getNormal2Settings,
   getNormal3Settings as _getNormal3Settings,

@@ -1,8 +1,8 @@
 import { describe } from "vitest";
 
 import { testDifficulties } from "./difficultyTester";
-import { getSettings } from "./hardSettings";
+import { getHardSettings } from "./hardSettings";
 
-describe("hard settings", () => {
-  testDifficulties(getSettings);
+describe(getHardSettings, () => {
+  testDifficulties(getHardSettings);
 });
