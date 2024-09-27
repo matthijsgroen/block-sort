@@ -5,13 +5,15 @@ export const hasSpace = (column: Column): boolean =>
 
 export const canPlaceBlock = (column: Column, block: Block): boolean => {
   const destBlock = column.blocks[0];
-  if (destBlock?.color === block.color && hasSpace(column)) {
+  if (!hasSpace(column)) {
+    return false;
+  }
+  if (destBlock?.color === block.color) {
     return true;
   }
   if (
     destBlock === undefined &&
-    (column.limitColor === undefined || column.limitColor === block.color) &&
-    hasSpace(column)
+    (column.limitColor === undefined || column.limitColor === block.color)
   ) {
     return true;
   }

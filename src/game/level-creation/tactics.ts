@@ -60,7 +60,7 @@ export const generatePlayableLevel = async (
 const generatePossibleMoves = (
   state: LevelState,
   random = Math.random
-): Move[] => {
+): WeightedMove[] => {
   return tactics
     .reduce<WeightedMove[]>(
       (r, tactic) =>
@@ -71,7 +71,7 @@ const generatePossibleMoves = (
         ),
       []
     )
-    .map((move) => move.move);
+    .map((move) => move);
 };
 
 const lookahead = (
@@ -90,7 +90,7 @@ const lookahead = (
 
   let bestScore = -Infinity;
   for (const move of moves) {
-    const newState = moveBlocks(state, move.from, move.to);
+    const newState = moveBlocks(state, move.move.from, move.move.to);
     const score = lookahead(newState, depth - 1, random); // Recursive lookahead
     bestScore = Math.max(bestScore, score); // Track the best score
   }
@@ -101,14 +101,14 @@ const lookahead = (
 const evaluateBestMove = (
   initialState: LevelState,
   random = Math.random
-): Move | null => {
+): WeightedMove | null => {
   const possibleMoves = generatePossibleMoves(initialState, random);
 
-  let bestMove: Move | null = null;
+  let bestMove: WeightedMove | null = null;
   let bestScore = -Infinity;
 
   for (const move of possibleMoves) {
-    const nextState = moveBlocks(initialState, move.from, move.to);
+    const nextState = moveBlocks(initialState, move.move.from, move.move.to);
     const moveScore = lookahead(nextState, 2, random); // Look 1 move ahead (so total of 2 moves including this one)
 
     if (moveScore > bestScore) {
@@ -140,11 +140,15 @@ const isBeatable = async (
           break;
         }
 
-        moves.push(nextMove);
+        moves.push({
+          from: nextMove.move.from,
+          to: nextMove.move.to,
+          tactic: nextMove.name,
+        });
 
-        playLevel = moveBlocks(playLevel, nextMove.from, nextMove.to);
+        playLevel = moveBlocks(playLevel, nextMove.move.from, nextMove.move.to);
         if (moves.length % 10 === 0) {
-          await delay(1);
+          await delay(2);
         }
       }
       if (hasWon(playLevel)) {

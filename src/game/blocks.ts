@@ -7,7 +7,7 @@ export const BLOCK_COLORS = [
   "black", // music note?
   "green", // diamond
   "aqua", // lightning bolt
-  "darkgreen", // three circles
+  "darkgreen", // clover
   "darkblue", // star
   "brown", // toadstool
   "pink", // animal footprint

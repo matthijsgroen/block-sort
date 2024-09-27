@@ -33,35 +33,40 @@ export const startColumn: Tactic = (level, random = Math.random) => {
     {}
   );
 
-  return Object.entries(colorCount).reduce<WeightedMove[]>(
-    (r, [, positions]) =>
-      positions.length > 1
-        ? positions.reduce(
-            (r, pos) =>
-              emptyColumns.reduce(
-                (r, emptyCol) =>
-                  r.concat({
-                    name: "startColumn",
-                    move: {
-                      from: pos,
-                      to: emptyCol.index,
-                    },
-                    weight:
-                      positions.length * 4 +
-                      // Prefer placement columns
-                      (emptyCol.type === "placement" ? 2 : 0) +
-                      // Prefer columns with the same color as the limit color
-                      (emptyCol.limitColor ===
-                      level.columns[pos].blocks[0]?.color
-                        ? 2
-                        : 0),
-                  }),
-
-                r
-              ),
-            r
-          )
-        : r,
-    []
-  );
+  return Object.entries(colorCount)
+    .reduce<WeightedMove[]>(
+      (r, [, positions]) =>
+        positions.length > 1
+          ? positions.reduce(
+              (r, pos) =>
+                emptyColumns.reduce(
+                  (r, emptyCol) =>
+                    r.concat({
+                      name: "startColumn",
+                      move: {
+                        from: pos,
+                        to: emptyCol.index,
+                      },
+                      weight:
+                        emptyCol.limitColor !== undefined &&
+                        level.columns[pos].blocks[0]?.color !==
+                          emptyCol.limitColor
+                          ? -2000
+                          : positions.length * 4 +
+                            // Prefer placement columns
+                            (emptyCol.type === "placement" ? 2 : 0) +
+                            // Prefer columns with the same color as the limit color
+                            (emptyCol.limitColor ===
+                            level.columns[pos].blocks[0]?.color
+                              ? 4
+                              : 0),
+                    }),
+                  r
+                ),
+              r
+            )
+          : r,
+      []
+    )
+    .filter((m) => m.weight > 0);
 };
