@@ -26,6 +26,7 @@ export type LevelState = {
  * move back the ones that do not.
  */
 export type Move = {
+  tactic?: string;
   /**
    * Index of the source column
    */

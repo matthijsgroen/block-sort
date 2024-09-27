@@ -1,0 +1,18 @@
+.PWABadgeContainer {
+  padding: 0;
+  margin: 0;
+  width: 0;
+  height: 0;
+}
+.PWABadgeToast {
+  @apply z-10 fixed right-0 bottom-0 text-left m-4;
+
+  background:
+    url("./assets/wood-texture.png") repeat,
+    linear-gradient(#e9b466 0%, #e9b466 100%);
+  background-blend-mode: multiply;
+  @apply rounded-xl border border-black p-4 drop-shadow-lg animate-fadeIn [animation-duration:0.3s];
+}
+.PWABadgeToastMessage {
+  margin-bottom: 8px;
+}
