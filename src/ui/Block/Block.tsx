@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import clsx from "clsx";
+
+import { useDelayedToggle } from "@/support/useDelayedToggle";
 
 import styles from "./Block.module.css";
 
@@ -12,7 +14,7 @@ export type Props = {
    * Used to offset animations
    */
   index?: number;
-  locked?: boolean | null;
+  locked?: boolean;
   shape?: string;
   shadow?: boolean;
   onPickUp?: VoidFunction;
@@ -21,7 +23,7 @@ export type Props = {
 };
 
 export const Block: React.FC<Props> = ({
-  revealed,
+  revealed = true,
   color,
   shape,
   moved,
@@ -33,21 +35,14 @@ export const Block: React.FC<Props> = ({
   locked = false,
   shadow = true,
 }) => {
-  const [isLocked, setIsLocked] = useState(false);
+  const isLocked = useDelayedToggle(locked, {
+    initialValue: false,
+    onDelay: 10,
+    onOn: onLock,
+  });
+  const isRevealed = useDelayedToggle(revealed, { onDelay: 10 });
 
-  useEffect(() => {
-    if (locked) {
-      const clear = setTimeout(() => {
-        setIsLocked(locked);
-        onLock?.();
-      }, 10);
-      return () => clearTimeout(clear);
-    } else {
-      setIsLocked(false);
-    }
-  }, [locked]);
-
-  const displayShape = shape ?? "❓";
+  const displayShape = (revealed ? shape : undefined) ?? "❓";
 
   useEffect(() => {
     if (moved && !selected && !isLocked) {
@@ -84,8 +79,12 @@ export const Block: React.FC<Props> = ({
       <div
         className={clsx(
           styles.layer,
-          "bg-block rounded-md border border-black/10 transition-colors [transition-duration:500ms]",
-          { [styles.selectedOutline]: selected }
+          "bg-block rounded-md border border-black/10 transition-colors",
+          {
+            [styles.selectedOutline]: selected,
+            "[transition-duration:0ms]": isRevealed,
+            "[transition-duration:500ms]": !isRevealed,
+          }
         )}
       ></div>
       <div className={clsx(styles.layer, "z-10 pt-7")}>
