@@ -12,6 +12,7 @@ import { colorMap } from "@/ui/Block/colorMap";
 import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
 import { Message } from "@/ui/Message/Message";
 import { TopButton } from "@/ui/TopButton/TopButton";
+import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
 
@@ -20,6 +21,15 @@ type Props = {
   level: Promise<LevelState>;
   levelNr: number;
   levelSettings: LevelSettings;
+};
+
+const MIN_LOSE_COUNT = 10;
+
+const getAutoMoveCount = (lostCounter: number) => {
+  if (lostCounter < MIN_LOSE_COUNT) {
+    return 0;
+  }
+  return Math.min(3 + Math.round((lostCounter - MIN_LOSE_COUNT) / 2), 20);
 };
 
 export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
@@ -33,6 +43,8 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
 
   const [levelState, setLevelState, deleteLevelState] =
     useGameStorage<LevelState>(`levelState${levelNr}`, initialLevelState);
+  const [lostCounter, setLostCounter] = useGameStorage("lostCounter", 0);
+  const [autoMoves, setAutoMoves] = useGameStorage("autoMoves", 10);
 
   const [selectStart, setSelectStart] = useState<
     [column: number, amount: number, state: LevelState] | null
@@ -51,8 +63,11 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
   useEffect(() => {
     if (hasWon(levelState)) {
       setPlayState("won");
+      setLostCounter(0);
     } else if (isStuck(levelState)) {
       setPlayState("lost");
+      setLostCounter((a) => a + 1);
+      setAutoMoves(getAutoMoveCount(lostCounter + 1));
     }
     if (selectStart && selectStart[2] !== levelState) {
       setSelectStart(null);
@@ -64,6 +79,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
       setLevelState((levelState) =>
         moveBlocks(levelState, selectStart[0], columnIndex)
       );
+      setAutoMoves(0);
     } else {
       const selection = selectFromColumn(levelState, columnIndex);
       if (selection.length > 0) {
@@ -82,6 +98,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
           shape="&#10226;"
           afterShow={() => {
             setLevelState(initialLevelState);
+            setAutoMoves(getAutoMoveCount(lostCounter));
             setPlayState("busy");
           }}
           onShow={() => {
@@ -141,6 +158,36 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
             onComplete(false);
           }}
         />
+        <div className="flex-1"></div>
+        {autoMoves > 0 && (
+          <WoodButton
+            onClick={() => {
+              const moveIndex = getAutoMoveCount(lostCounter) - autoMoves;
+              setAutoMoves((a) => a - 1);
+              const move = initialLevelState.moves[moveIndex];
+              if (move) {
+                const selection = selectFromColumn(levelState, move.from);
+                if (selection.length > 0) {
+                  setSelectStart([move.from, selection.length, levelState]);
+                }
+                setTimeout(() => {
+                  setLevelState((levelState) =>
+                    moveBlocks(levelState, move.from, move.to)
+                  );
+                }, 200);
+              }
+            }}
+          >
+            <>
+              <span className={"text-lg pt-[4px] inline-block px-2"}>
+                Automove
+              </span>
+              <span className="inline-block bg-black/20 p-1 text-xs rounded-md mr-1">
+                {autoMoves}
+              </span>
+            </>
+          </WoodButton>
+        )}
         <div className="flex-1"></div>
         <TopButton
           buttonType="restart"
