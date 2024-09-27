@@ -47,7 +47,7 @@ export const Block: React.FC<Props> = ({
     }
   }, [locked]);
 
-  const displayShape = shape ?? "❓";
+  const displayShape = (revealed ? shape : undefined) ?? "❓";
 
   useEffect(() => {
     if (moved && !selected && !isLocked) {
@@ -84,8 +84,12 @@ export const Block: React.FC<Props> = ({
       <div
         className={clsx(
           styles.layer,
-          "bg-block rounded-md border border-black/10 transition-colors [transition-duration:500ms]",
-          { [styles.selectedOutline]: selected }
+          "bg-block rounded-md border border-black/10 transition-colors",
+          {
+            [styles.selectedOutline]: selected,
+            "[transition-duration:500ms]": revealed,
+            "[transition-duration:0ms]": !revealed,
+          }
         )}
       ></div>
       <div className={clsx(styles.layer, "z-10 pt-7")}>
