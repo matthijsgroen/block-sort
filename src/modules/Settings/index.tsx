@@ -1,6 +1,7 @@
 import { Dispatch, useEffect, useRef } from "react";
 import clsx from "clsx";
 
+import info from "@/../package.json";
 import { Checkbox } from "@/ui/Checkbox";
 import { TopButton } from "@/ui/TopButton/TopButton";
 
@@ -39,7 +40,7 @@ export const Settings: React.FC<Props> = ({
         )}
       >
         <h1 className={clsx("mb-2 font-bold font-block-sort", styles.title)}>
-          BlockSort, v0.5
+          BlockSort, v{info.version}
         </h1>
         <div className="flex flex-col gap-3">
           <Checkbox

@@ -44,7 +44,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
   const [levelState, setLevelState, deleteLevelState] =
     useGameStorage<LevelState>(`levelState${levelNr}`, initialLevelState);
   const [lostCounter, setLostCounter] = useGameStorage("lostCounter", 0);
-  const [autoMoves, setAutoMoves] = useGameStorage("autoMoves", 10);
+  const [autoMoves, setAutoMoves] = useGameStorage("autoMoves", 0);
 
   const [selectStart, setSelectStart] = useState<
     [column: number, amount: number, state: LevelState] | null
@@ -67,7 +67,6 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
     } else if (isStuck(levelState)) {
       setPlayState("lost");
       setLostCounter((a) => a + 1);
-      setAutoMoves(getAutoMoveCount(lostCounter + 1));
     }
     if (selectStart && selectStart[2] !== levelState) {
       setSelectStart(null);
@@ -144,6 +143,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
           shape="❌"
           afterShow={() => {
             setLevelState(initialLevelState);
+            setAutoMoves(getAutoMoveCount(lostCounter));
             setPlayState("busy");
           }}
           onShow={() => {
