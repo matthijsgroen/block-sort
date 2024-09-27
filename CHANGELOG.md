@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 0.5 - 2024-09-27
+
+### Changed
+
+- App logo
+- Solver now has only one try per generated level, this speeds up level loading
+- Colors only fade if going from hidden to revealed
+
 ## Version 0.4 - 2024-09-27
 
 ### Added
