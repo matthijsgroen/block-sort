@@ -29,7 +29,7 @@ const getAutoMoveCount = (lostCounter: number) => {
   if (lostCounter < MIN_LOSE_COUNT) {
     return 0;
   }
-  return Math.min(3 + Math.round((lostCounter - MIN_LOSE_COUNT) / 2), 20);
+  return 5 + Math.floor((lostCounter - MIN_LOSE_COUNT) / 2) * 5;
 };
 
 export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
@@ -44,7 +44,11 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
   const [levelState, setLevelState, deleteLevelState] =
     useGameStorage<LevelState>(`levelState${levelNr}`, initialLevelState);
   const [lostCounter, setLostCounter] = useGameStorage("lostCounter", 0);
-  const [autoMoves, setAutoMoves] = useGameStorage("autoMoves", 10);
+  const [autoMoves, setAutoMoves] = useGameStorage("autoMoves", 0);
+  const autoMoveLimit = Math.min(
+    getAutoMoveCount(lostCounter),
+    Math.floor(initialLevelState.moves.length * 0.66)
+  );
 
   const [selectStart, setSelectStart] = useState<
     [column: number, amount: number, state: LevelState] | null
@@ -67,7 +71,6 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
     } else if (isStuck(levelState)) {
       setPlayState("lost");
       setLostCounter((a) => a + 1);
-      setAutoMoves(getAutoMoveCount(lostCounter + 1));
     }
     if (selectStart && selectStart[2] !== levelState) {
       setSelectStart(null);
@@ -98,7 +101,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
           shape="&#10226;"
           afterShow={() => {
             setLevelState(initialLevelState);
-            setAutoMoves(getAutoMoveCount(lostCounter));
+            setAutoMoves(autoMoveLimit);
             setPlayState("busy");
           }}
           onShow={() => {
@@ -144,6 +147,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
           shape="❌"
           afterShow={() => {
             setLevelState(initialLevelState);
+            setAutoMoves(autoMoveLimit);
             setPlayState("busy");
           }}
           onShow={() => {
@@ -162,7 +166,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
         {autoMoves > 0 && (
           <WoodButton
             onClick={() => {
-              const moveIndex = getAutoMoveCount(lostCounter) - autoMoves;
+              const moveIndex = autoMoveLimit - autoMoves;
               setAutoMoves((a) => a - 1);
               const move = initialLevelState.moves[moveIndex];
               if (move) {
