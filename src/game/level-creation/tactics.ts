@@ -9,7 +9,7 @@ import { Tactic, WeightedMove } from "./tactics/types";
 import { generateRandomLevel, LevelSettings } from "./generateRandomLevel";
 import { scoreState } from "./scoreState";
 
-const MAX_PLAY_ATTEMPTS = 5;
+const MAX_PLAY_ATTEMPTS = 1;
 const MAX_GENERATE_ATTEMPTS = 50;
 const MAX_LEVEL_MOVES = 800;
 
