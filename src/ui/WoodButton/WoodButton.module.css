@@ -1,0 +1,29 @@
+.woodBackground {
+  background-color: #805c3c;
+  box-shadow:
+    inset -1px 1px 2px #ffedd540,
+    1px 1px 2px #0004;
+  @apply relative contain-paint text-transparent;
+}
+
+.woodTexture {
+  background: url("../../assets/wood-texture.png") repeat;
+  mix-blend-mode: multiply;
+  @apply absolute inset-0;
+}
+
+.woodLabel {
+  text-shadow: -1px 1px 0 #000;
+  @apply text-orange-200;
+  @apply absolute inset-0;
+}
+
+.woodBackground:active {
+  box-shadow:
+    inset 2px -2px 2px #0004,
+    1px 1px 2px #0004;
+}
+
+.woodBackground:active .woodLabel {
+  padding-top: 1px;
+}
