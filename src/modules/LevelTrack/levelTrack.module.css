@@ -3,6 +3,7 @@
 }
 
 .levelUp {
+  position: relative;
   background: linear-gradient(
     #0000 0%,
     #0000 47%,
@@ -11,6 +12,11 @@
     #fff1 53%,
     #fff0 55%
   );
+}
+
+.levelUp::after {
+  content: "💪🏼 " var(--levelNr, "0");
+  @apply mr-4 text-transparent bg-black/30 bg-clip-text opacity-80;
 }
 
 .textShadow {

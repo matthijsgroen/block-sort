@@ -82,6 +82,7 @@ export const LevelTrack: React.FC<Props> = ({
           return (
             <li
               key={i}
+              style={{ "--levelNr": `'${LEVEL_SCALE.indexOf(i) + 1}'` }}
               className={clsx(
                 "flex align-middle items-center w-full h-height-block flex-shrink-0 justify-center",
                 {
