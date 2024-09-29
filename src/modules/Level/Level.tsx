@@ -16,20 +16,13 @@ import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
 
+import { getAutoMoveCount } from "./autoMove";
+
 type Props = {
   onComplete: (won: boolean) => void;
   level: Promise<LevelState>;
   levelNr: number;
   levelSettings: LevelSettings;
-};
-
-const MIN_LOSE_COUNT = 10;
-
-const getAutoMoveCount = (lostCounter: number) => {
-  if (lostCounter < MIN_LOSE_COUNT) {
-    return 0;
-  }
-  return 5 + Math.floor((lostCounter - MIN_LOSE_COUNT) / 2) * 5;
 };
 
 export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
