@@ -5,7 +5,7 @@ import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { hasWon } from "@/game/state";
 import { LevelState } from "@/game/types";
-import { mulberry32 } from "@/support/random";
+import { generateNewSeed, mulberry32 } from "@/support/random";
 import {
   deleteGameValue,
   getGameValue,
@@ -62,10 +62,11 @@ export const LevelLoader: React.FC<Props> = ({
     }
     const won = hasWon(levelState);
     if (!won) {
+      const newSeed = generateNewSeed(locked.seed, 2);
       // Level content is botched, retry
       await deleteGameValue(`initialLevelState${locked.levelNr}`);
       const level = await generateLevelContent(
-        locked.seed,
+        newSeed,
         locked.levelNr,
         locked.levelSettings
       );
