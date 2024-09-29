@@ -40,7 +40,7 @@ describe(generateRandomLevel, () => {
         amountColors: 2,
         stackSize: 4,
         extraPlacementStacks: 2,
-        hideBlockTypes: true,
+        hideBlockTypes: "all",
       },
       random
     );
@@ -68,7 +68,7 @@ describe(generateRandomLevel, () => {
         extraPlacementStacks: 0,
         buffers: 2,
         bufferSizes: 2,
-        hideBlockTypes: true,
+        hideBlockTypes: "all",
       },
       random
     );
@@ -97,7 +97,7 @@ describe(generateRandomLevel, () => {
         buffers: 2,
         bufferSizes: 2,
         extraBuffers: [{ amount: 1, size: 3, limit: 1 }],
-        hideBlockTypes: true,
+        hideBlockTypes: "all",
       },
       random
     );
@@ -127,7 +127,7 @@ describe(generateRandomLevel, () => {
         buffers: 2,
         bufferSizes: 2,
         bufferPlacementLimits: 2,
-        hideBlockTypes: true,
+        hideBlockTypes: "all",
       },
       random
     );
@@ -166,7 +166,7 @@ describe(generateRandomLevel, () => {
         buffers: 1,
         bufferSizes: 2,
         bufferPlacementLimits: 1,
-        hideBlockTypes: true,
+        hideBlockTypes: "all",
       },
       random
     );

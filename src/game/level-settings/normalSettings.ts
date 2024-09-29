@@ -5,7 +5,7 @@ export const getNormalSettings = (difficulty: number): LevelSettings => ({
   stackSize: Math.min(Math.max(difficulty - 3, 4), 7),
   extraPlacementStacks: difficulty < 2 ? 1 : 2,
   extraPlacementLimits: difficulty > 9 ? 1 : undefined,
-  hideBlockTypes: false,
+  hideBlockTypes: "none",
 });
 
 export const getNormal2Settings = (difficulty: number): LevelSettings => ({
@@ -13,7 +13,7 @@ export const getNormal2Settings = (difficulty: number): LevelSettings => ({
   stackSize: Math.min(Math.max(difficulty - 3, 4), 7),
   extraPlacementStacks: difficulty < 2 || difficulty > 9 ? 1 : 2,
   extraPlacementLimits: difficulty > 9 ? 1 : undefined,
-  hideBlockTypes: false,
+  hideBlockTypes: "none",
   buffers: difficulty > 9 ? 2 : undefined,
   bufferSizes: difficulty === 10 ? 3 : difficulty === 11 ? 2 : undefined,
 });
@@ -23,7 +23,7 @@ export const getNormal3Settings = (difficulty: number): LevelSettings => ({
   stackSize: Math.min(Math.max(difficulty - 3, 4), 7),
   extraPlacementStacks: difficulty < 2 || difficulty > 9 ? 1 : 2,
   extraPlacementLimits: difficulty > 9 ? 1 : undefined,
-  hideBlockTypes: false,
+  hideBlockTypes: "none",
   buffers: difficulty > 9 ? 2 : undefined,
   bufferSizes: difficulty === 10 ? 2 : difficulty === 11 ? 2 : undefined,
   extraBuffers:

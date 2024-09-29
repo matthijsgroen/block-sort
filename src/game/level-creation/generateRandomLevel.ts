@@ -12,7 +12,7 @@ import { Column, LevelState } from "../types";
 
 export type LevelSettings = {
   amountColors?: number;
-  hideBlockTypes?: boolean;
+  hideBlockTypes?: "none" | "all" | "checker";
   stackSize?: number;
   stacksPerColor?: number;
   extraPlacementStacks?: number;
@@ -34,7 +34,7 @@ export const generateRandomLevel = (
     bufferSizes = 1,
     bufferPlacementLimits = 0,
     extraBuffers = [],
-    hideBlockTypes = false,
+    hideBlockTypes = "none",
     stacksPerColor = 1,
   }: LevelSettings,
   random: () => number
@@ -62,12 +62,19 @@ export const generateRandomLevel = (
     blocks.push(...new Array(stackSize * stacksPerColor).fill(color));
   }
   shuffle(blocks, random);
-  const columns = timesMap<Column>(amountBars, () =>
+  const columns = timesMap<Column>(amountBars, (ci) =>
     createPlacementColumn(
       stackSize,
       new Array(stackSize)
         .fill(0)
-        .map((_, i) => createBlock(blocks.shift()!, hideBlockTypes && i !== 0))
+        .map((_, i) =>
+          createBlock(
+            blocks.shift()!,
+            (hideBlockTypes === "all" ||
+              (hideBlockTypes === "checker" && (i + (ci % 2)) % 2 === 0)) &&
+              i !== 0
+          )
+        )
     )
   )
     .concat(

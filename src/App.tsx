@@ -54,7 +54,7 @@ export const App: React.FC = () => {
 
   const settingProducers: Record<LevelType, (nr: number) => LevelSettings> = {
     easy: (nr: number) => getEasySettings(nr, random),
-    hard: getHardSettings,
+    hard: (nr: number) => getHardSettings(nr, random),
     normal: (nr: number) => getNormalSettings(nr, random),
     special: (nr: number) => getSpecialSettings(nr, random),
     scrambled: (nr: number) => getScrambledSettings(nr),
