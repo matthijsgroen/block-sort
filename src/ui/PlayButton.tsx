@@ -12,7 +12,7 @@ export const PlayButton: React.FC<Props> = ({ levelNr, onClick, type }) => (
   <button
     onClick={onClick}
     className={clsx(
-      "inline-block w-[10rem] h-12 rounded-3xl shadow-lg font-bold pt-3",
+      "inline-block w-[10rem] h-12 rounded-3xl shadow-lg font-bold pt-3 active:scale-90 transition-transform",
       {
         "bg-orange-500": type === "normal" || type === "hard",
         "bg-purple-500": type === "special",
