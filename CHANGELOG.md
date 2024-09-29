@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 0.7.0 - UNRELEASED
+
+### Added
+
+- Pressed state for play button
+- Hard levels are now either fully hidden, or hidden in checkerboard going from level 102 and up
+- Special levels can now contain checkerboard hidden blocks from level 200 going up
+
 ## Version 0.6.1 - 2024-09-27
 
 ### Added

@@ -96,7 +96,20 @@ export const getSpecialSettings = (
     _getSpecial4Settings(difficulty),
   ];
 
-  return pick(templates, random);
+  const baseSettings = pick(templates, random);
+
+  if (levelNr >= 199) {
+    return pick(
+      [
+        baseSettings,
+        baseSettings,
+        { ...baseSettings, hideBlockTypes: "checker" },
+      ],
+      random
+    );
+  }
+
+  return baseSettings;
 };
 
 export const getScrambledSettings = (levelNr: number): LevelSettings =>
