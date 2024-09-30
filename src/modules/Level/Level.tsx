@@ -16,7 +16,7 @@ import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
 
-import { getAutoMoveCount } from "./autoMove";
+import { getAutoMoveCount, MAX_SOLVE_PERCENTAGE } from "./autoMove";
 
 type Props = {
   onComplete: (won: boolean) => void;
@@ -40,7 +40,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
   const [autoMoves, setAutoMoves] = useGameStorage("autoMoves", 0);
   const autoMoveLimit = Math.min(
     getAutoMoveCount(lostCounter),
-    Math.floor(initialLevelState.moves.length * 0.66)
+    Math.floor(initialLevelState.moves.length * MAX_SOLVE_PERCENTAGE)
   );
 
   const [selectStart, setSelectStart] = useState<
