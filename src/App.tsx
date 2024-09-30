@@ -26,7 +26,7 @@ const BASE_SEED = 12345678901234;
 const SCREEN_TRANSITION = 500; // ms
 
 export const App: React.FC = () => {
-  const [levelNr, setLevelNr] = useGameStorage("levelNr", 280);
+  const [levelNr, setLevelNr] = useGameStorage("levelNr", 0);
 
   const [levelSeed, setLevelSeed] = useState(() =>
     generateNewSeed(BASE_SEED, levelNr)
