@@ -1,5 +1,11 @@
 import { use, useEffect, useState } from "react";
 
+import { colorMap } from "@/ui/Block/colorMap";
+import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
+import { Message } from "@/ui/Message/Message";
+import { TopButton } from "@/ui/TopButton/TopButton";
+import { WoodButton } from "@/ui/WoodButton/WoodButton";
+
 import { sound } from "@/audio";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
@@ -8,15 +14,11 @@ import { LevelState } from "@/game/types";
 import { getLevelType } from "@/support/getLevelType";
 import { mulberry32, pick } from "@/support/random";
 import { useGameStorage } from "@/support/useGameStorage";
-import { colorMap } from "@/ui/Block/colorMap";
-import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
-import { Message } from "@/ui/Message/Message";
-import { TopButton } from "@/ui/TopButton/TopButton";
-import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
 
 import { getAutoMoveCount, MAX_SOLVE_PERCENTAGE } from "./autoMove";
+import { WIN_SENTENCES } from "./winSentences";
 
 type Props = {
   onComplete: (won: boolean) => void;
@@ -113,21 +115,7 @@ export const Level: React.FC<Props> = ({
       {playState === "won" && (
         <Message
           delay={1000}
-          message={pick(
-            [
-              "You won!",
-              "Great work!",
-              "Fantastic!",
-              "Amazing!",
-              "Terrific!",
-              "Awesome!",
-              "Incredible!",
-              "Unbelievable!",
-              "Stupendous!",
-              "Spectacular!",
-            ],
-            localRandom
-          )}
+          message={pick(WIN_SENTENCES, localRandom)}
           color={colorMap["green"]}
           shape="✔️"
           afterShow={() => {

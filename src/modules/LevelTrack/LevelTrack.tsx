@@ -1,6 +1,11 @@
 import { use, useEffect } from "react";
 import clsx from "clsx";
 
+import { GameTitle } from "@/ui/GameTitle/GameTitle";
+import { Smiley } from "@/ui/Smiley/Smiley";
+import { TopButton } from "@/ui/TopButton/TopButton";
+import { ZenButton } from "@/ui/ZenButton";
+
 import {
   isEasy,
   isHard,
@@ -9,10 +14,6 @@ import {
   LEVEL_SCALE,
 } from "@/game/level-settings/levelSettings";
 import { getLevelType } from "@/support/getLevelType";
-import { GameTitle } from "@/ui/GameTitle/GameTitle";
-import { Smiley } from "@/ui/Smiley/Smiley";
-import { TopButton } from "@/ui/TopButton/TopButton";
-import { ZenButton } from "@/ui/ZenButton";
 
 import { PlayButton } from "../../ui/PlayButton";
 import { BackgroundContext } from "../Layout/BackgroundContext";

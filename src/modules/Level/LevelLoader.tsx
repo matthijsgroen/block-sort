@@ -1,5 +1,7 @@
 import { Suspense, useMemo, useState } from "react";
 
+import { Loading } from "@/ui/Loading/Loading";
+
 import { moveBlocks } from "@/game/actions";
 import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
@@ -11,7 +13,6 @@ import {
   getGameValue,
   setGameValue,
 } from "@/support/useGameStorage";
-import { Loading } from "@/ui/Loading/Loading";
 
 import { Level } from "./Level";
 

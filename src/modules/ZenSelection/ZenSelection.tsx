@@ -1,11 +1,12 @@
 import { use, useEffect, useState } from "react";
 import clsx from "clsx";
 
-import { LevelType } from "@/support/getLevelType";
 import { GameTitle } from "@/ui/GameTitle/GameTitle";
 import { PlayButton } from "@/ui/PlayButton";
 import { TopButton } from "@/ui/TopButton/TopButton";
 import { WoodButton } from "@/ui/WoodButton/WoodButton";
+
+import { LevelType } from "@/support/getLevelType";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
 
@@ -13,7 +14,7 @@ import styles from "./ZenSelection.module.css";
 
 type Props = {
   levelNr: number;
-  onLevelStart: VoidFunction;
+  onLevelStart: (levelType: LevelType, difficulty: [number, number]) => void;
   onZenModeEnd?: VoidFunction;
   onOpenSettings?: VoidFunction;
 };
@@ -171,7 +172,12 @@ export const ZenSelection: React.FC<Props> = ({
         />
         <div className={clsx("block transition-opacity opacity-0")}>
           <button
-            onClick={() => {}}
+            onClick={() => {
+              onLevelStart(
+                selectedLevelType.levelType,
+                selectedDifficulty.levelRange
+              );
+            }}
             className={clsx(
               "inline-block h-12 rounded-3xl shadow-lg font-bold pt-3 px-6 bg-orange-500",
               "invisible"

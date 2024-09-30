@@ -1,9 +1,10 @@
 import { Dispatch, useEffect, useRef } from "react";
 import clsx from "clsx";
 
-import info from "@/../package.json";
 import { Checkbox } from "@/ui/Checkbox";
 import { TopButton } from "@/ui/TopButton/TopButton";
+
+import info from "@/../package.json";
 
 import styles from "./index.module.css";
 
