@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pressed state for play button
 - Hard levels are now either fully hidden, or hidden in checkerboard going from level 102 and up
 - Special levels can now contain checkerboard hidden blocks from level 200 going up
+- Level number visible in level, by request from users
 
 ### Changed
 
