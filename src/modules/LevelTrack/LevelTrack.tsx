@@ -155,7 +155,7 @@ export const LevelTrack: React.FC<Props> = ({
       </ol>
       <div className="text-center pb-10">
         <PlayButton
-          levelNr={levelNr + 1}
+          label={`Label ${levelNr + 1}`}
           onClick={onLevelStart}
           type={getLevelType(levelNr)}
         />

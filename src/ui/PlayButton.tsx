@@ -3,26 +3,32 @@ import clsx from "clsx";
 import { LevelType } from "@/support/getLevelType";
 
 type Props = {
-  levelNr: number;
+  label: string;
+  disabled?: boolean;
   type: LevelType;
   onClick: VoidFunction;
 };
 
-export const PlayButton: React.FC<Props> = ({ levelNr, onClick, type }) => (
+export const PlayButton: React.FC<Props> = ({
+  label,
+  onClick,
+  type,
+  disabled,
+}) => (
   <button
     onClick={onClick}
-    className={clsx(
-      "inline-block w-[10rem] h-12 rounded-3xl shadow-lg font-bold pt-3 active:scale-90 transition-transform",
-      {
-        "bg-orange-500": type === "normal" || type === "hard",
-        "bg-purple-500": type === "special",
-        "bg-green-700": type === "easy",
-        "bg-slate-400": type === "scrambled",
-      }
-    )}
+    disabled={disabled}
+    className={clsx("inline-block w-[10rem] h-12 rounded-3xl font-bold pt-3", {
+      "bg-orange-500": type === "normal" || type === "hard",
+      "bg-purple-500": type === "special",
+      "bg-green-700": type === "easy",
+      "bg-slate-400": type === "scrambled",
+      "opacity-50": disabled,
+      "active:scale-90 transition-transform shadow-lg": !disabled,
+    })}
   >
     <span className={`block ${type === "normal" ? "-translate-y-1" : ""}`}>
-      Level {levelNr}
+      {label}
     </span>
     {type === "special" && (
       <span className="inline-block text-xs translate-y-1 bg-purple-400 px-2 py-1 shadow rounded-md">
