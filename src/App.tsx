@@ -15,16 +15,18 @@ import { useGameStorage } from "@/support/useGameStorage.ts";
 import { LevelSettings } from "./game/level-creation/generateRandomLevel.ts";
 import { BackgroundProvider } from "./modules/Layout/BackgroundContext.tsx";
 import { Settings } from "./modules/Settings/index.tsx";
+import { ZenSelection } from "./modules/ZenSelection/ZenSelection.tsx";
 import { getLevelType, LevelType } from "./support/getLevelType.ts";
 import { Transition } from "./ui/Transition/Transition.tsx";
 import { sound } from "./audio.ts";
+import { ZEN_MODE } from "./featureFlags.ts";
 import PWABadge from "./PWABadge.tsx";
 
 const BASE_SEED = 12345678901234;
 const SCREEN_TRANSITION = 500; // ms
 
 export const App: React.FC = () => {
-  const [levelNr, setLevelNr] = useGameStorage("levelNr", 0);
+  const [levelNr, setLevelNr] = useGameStorage("levelNr", 280);
 
   const [levelSeed, setLevelSeed] = useState(() =>
     generateNewSeed(BASE_SEED, levelNr)
@@ -33,6 +35,7 @@ export const App: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const [inLevel, setInLevel] = useGameStorage("inLevel", false);
+  const [inZenMode, setInZenMode] = useGameStorage("inZenMode", false);
   const [soundEnabled, setSoundEnabled] = useGameStorage("soundEnabled", true);
   const [musicEnabled, setMusicEnabled] = useGameStorage("musicEnabled", true);
 
@@ -66,12 +69,13 @@ export const App: React.FC = () => {
     <BackgroundProvider>
       <Transition
         className={"h-full"}
-        active={!inLevel}
+        active={!inLevel && !inZenMode}
         startDelay={SCREEN_TRANSITION /* wait for level to be unmounted */}
         duration={SCREEN_TRANSITION}
       >
         <LevelTrack
           levelNr={levelNr}
+          hasZenMode={levelNr >= 49 && ZEN_MODE}
           onLevelStart={() => {
             // tie playback to user interaction
             sound.play("music");
@@ -80,11 +84,14 @@ export const App: React.FC = () => {
           onOpenSettings={() => {
             setSettingsOpen(true);
           }}
+          onZenModeStart={() => {
+            setInZenMode(true);
+          }}
         />
       </Transition>
       <Transition
         className={"h-full"}
-        active={inLevel}
+        active={inLevel && !inZenMode}
         startDelay={
           SCREEN_TRANSITION /* wait for level track to be unmounted */
         }
@@ -100,6 +107,28 @@ export const App: React.FC = () => {
           levelNr={levelNr}
           seed={levelSeed}
           levelSettings={settings}
+          title={`Level ${levelNr + 1}`}
+        />
+      </Transition>
+      <Transition
+        className={"h-full"}
+        active={!inLevel && inZenMode}
+        startDelay={SCREEN_TRANSITION /* wait for level to be unmounted */}
+        duration={SCREEN_TRANSITION}
+      >
+        <ZenSelection
+          levelNr={levelNr}
+          onLevelStart={() => {
+            // tie playback to user interaction
+            sound.play("music");
+            setInLevel(true);
+          }}
+          onOpenSettings={() => {
+            setSettingsOpen(true);
+          }}
+          onZenModeEnd={() => {
+            setInZenMode(false);
+          }}
         />
       </Transition>
       {settingsOpen && (

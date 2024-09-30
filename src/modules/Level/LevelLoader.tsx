@@ -20,23 +20,24 @@ type Props = {
   onComplete: (won: boolean) => void;
   levelSettings: LevelSettings;
   levelNr: number;
+  title: string;
+  initialStorageKey?: string;
+  progressStorageKey?: string;
 };
 
 const generateLevelContent = async (
   seed: number,
-  levelNr: number,
+  storageKey: string,
   levelSettings: LevelSettings
 ): Promise<LevelState> => {
   const random = mulberry32(seed);
-  const existingState = await getGameValue<LevelState>(
-    `initialLevelState${levelNr}`
-  );
+  const existingState = await getGameValue<LevelState>(storageKey);
   if (existingState !== null) {
     return existingState;
   }
 
   const level = await generatePlayableLevel(levelSettings, random);
-  await setGameValue(`initialLevelState${levelNr}`, level);
+  await setGameValue(storageKey, level);
 
   return level;
 };
@@ -46,13 +47,16 @@ export const LevelLoader: React.FC<Props> = ({
   onComplete,
   levelSettings,
   levelNr,
+  title,
+  initialStorageKey = `initialLevelState${levelNr}`,
+  progressStorageKey = `levelState${levelNr}`,
 }) => {
   const [locked] = useState({ levelNr, levelSettings, seed });
 
   const level = useMemo(async () => {
     const level = await generateLevelContent(
       locked.seed,
-      locked.levelNr,
+      initialStorageKey,
       locked.levelSettings
     );
     // Verify level content
@@ -64,10 +68,10 @@ export const LevelLoader: React.FC<Props> = ({
     if (!won) {
       const newSeed = generateNewSeed(locked.seed, 2);
       // Level content is botched, retry
-      await deleteGameValue(`initialLevelState${locked.levelNr}`);
+      await deleteGameValue(initialStorageKey);
       const level = await generateLevelContent(
         newSeed,
-        locked.levelNr,
+        initialStorageKey,
         locked.levelSettings
       );
       return level;
@@ -87,9 +91,16 @@ export const LevelLoader: React.FC<Props> = ({
     >
       <Level
         level={level}
+        title={title}
+        storageKey={progressStorageKey}
         levelNr={levelNr}
         levelSettings={levelSettings}
-        onComplete={onComplete}
+        onComplete={(won) => {
+          if (won) {
+            deleteGameValue(initialStorageKey);
+          }
+          onComplete(won);
+        }}
       />
     </Suspense>
   );

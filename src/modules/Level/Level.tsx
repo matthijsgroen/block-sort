@@ -7,7 +7,7 @@ import { hasWon, isStuck } from "@/game/state";
 import { LevelState } from "@/game/types";
 import { getLevelType } from "@/support/getLevelType";
 import { mulberry32, pick } from "@/support/random";
-import { deleteGameValue, useGameStorage } from "@/support/useGameStorage";
+import { useGameStorage } from "@/support/useGameStorage";
 import { colorMap } from "@/ui/Block/colorMap";
 import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
 import { Message } from "@/ui/Message/Message";
@@ -21,11 +21,19 @@ import { getAutoMoveCount, MAX_SOLVE_PERCENTAGE } from "./autoMove";
 type Props = {
   onComplete: (won: boolean) => void;
   level: Promise<LevelState>;
+  title: string;
   levelNr: number;
   levelSettings: LevelSettings;
+  storageKey: string;
 };
 
-export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
+export const Level: React.FC<Props> = ({
+  onComplete,
+  level,
+  title,
+  levelNr,
+  storageKey,
+}) => {
   const [playState, setPlayState] = useState<
     "won" | "lost" | "busy" | "restarting"
   >("busy");
@@ -35,7 +43,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
   const localRandom = mulberry32(levelNr * 386);
 
   const [levelState, setLevelState, deleteLevelState] =
-    useGameStorage<LevelState>(`levelState${levelNr}`, initialLevelState);
+    useGameStorage<LevelState>(storageKey, initialLevelState);
   const [lostCounter, setLostCounter] = useGameStorage("lostCounter", 0);
   const [autoMoves, setAutoMoves] = useGameStorage("autoMoves", 0);
   const autoMoveLimit = Math.min(
@@ -124,7 +132,6 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
           shape="✔️"
           afterShow={() => {
             deleteLevelState();
-            deleteGameValue(`initialLevelState${levelNr}`);
             onComplete(playState === "won");
           }}
           onShow={() => {
@@ -148,7 +155,7 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
           }}
         />
       )}
-      <div className="flex flex-row p-2 gap-x-2">
+      <div className="flex flex-row pt-2 pl-safeLeft pr-safeRight gap-x-2">
         <TopButton
           buttonType="back"
           onClick={() => {
@@ -192,6 +199,9 @@ export const Level: React.FC<Props> = ({ onComplete, level, levelNr }) => {
             setPlayState("restarting");
           }}
         />
+      </div>
+      <div className="font-block-sort text-center text-orange-400 tracking-widest">
+        {title}
       </div>
       <LevelLayout
         levelState={levelState}

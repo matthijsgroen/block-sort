@@ -1,0 +1,13 @@
+.text {
+  letter-spacing: 5px;
+  @apply text-center font-bold font-block-sort  text-xl;
+}
+
+.enabled {
+  text-shadow: 1px 1px 4px #0008;
+  @apply text-orange-400;
+}
+
+.disabled {
+  @apply text-black/30;
+}
