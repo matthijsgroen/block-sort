@@ -3,7 +3,10 @@ import { pick } from "@/support/random";
 
 import { LevelSettings } from "../level-creation/generateRandomLevel";
 
-import { getHardSettings as _getHardSettings } from "./hardSettings";
+import {
+  getHard2Settings as _getHard2Settings,
+  getHardSettings as _getHardSettings,
+} from "./hardSettings";
 import {
   getNormal2Settings as _getNormal2Settings,
   getNormal3Settings as _getNormal3Settings,
@@ -61,8 +64,24 @@ export const getEasySettings = (
   return pick(templates, random);
 };
 
-export const getHardSettings = (levelNr: number): LevelSettings =>
-  _getHardSettings(getDifficultyLevel(levelNr));
+export const getHardSettings = (
+  levelNr: number,
+  random = Math.random
+): LevelSettings => {
+  const difficulty = getDifficultyLevel(levelNr);
+
+  if (difficulty > 8) {
+    return pick(
+      [
+        _getHard2Settings(getDifficultyLevel(levelNr)),
+        _getHardSettings(getDifficultyLevel(levelNr)),
+      ],
+      random
+    );
+  }
+
+  return _getHardSettings(getDifficultyLevel(levelNr));
+};
 
 export const getSpecialSettings = (
   levelNr: number,
@@ -77,7 +96,20 @@ export const getSpecialSettings = (
     _getSpecial4Settings(difficulty),
   ];
 
-  return pick(templates, random);
+  const baseSettings = pick(templates, random);
+
+  if (levelNr >= 199) {
+    return pick(
+      [
+        baseSettings,
+        baseSettings,
+        { ...baseSettings, hideBlockTypes: "checker" },
+      ],
+      random
+    );
+  }
+
+  return baseSettings;
 };
 
 export const getScrambledSettings = (levelNr: number): LevelSettings =>

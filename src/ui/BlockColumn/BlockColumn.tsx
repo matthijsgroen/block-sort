@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 
+import { Block } from "@/ui/Block/Block";
+import { colorMap } from "@/ui/Block/colorMap";
+import { Tray } from "@/ui/Tray/Tray";
+
 import { shapeMapping } from "@/game/blocks";
 import { Column } from "@/game/types";
 import { rowSpans } from "@/support/grid";
 import { timesMap } from "@/support/timeMap";
-import { Block } from "@/ui/Block/Block";
-import { colorMap } from "@/ui/Block/colorMap";
-import { Tray } from "@/ui/Tray/Tray";
 
 import styles from "./BlockColumn.module.css";
 

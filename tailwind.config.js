@@ -18,6 +18,10 @@ export default {
         "safe-area":
           "calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom))",
       },
+      padding: {
+        safeLeft: "max(env(safe-area-inset-left, 0.5rem), 0.5rem)",
+        safeRight: "max(env(safe-area-inset-right, 0.5rem), 0.5rem)",
+      },
       colors: {
         block: "var(--cube-color)",
         "block-brown": "#a07353",

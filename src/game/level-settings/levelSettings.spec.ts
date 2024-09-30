@@ -169,6 +169,7 @@ describe(getSpecialSettings, () => {
         stackSize: 3,
         extraPlacementStacks: 2,
         extraPlacementLimits: 2,
+        hideBlockTypes: "checker",
         buffers: 1,
         bufferSizes: 1,
         stacksPerColor: 2,

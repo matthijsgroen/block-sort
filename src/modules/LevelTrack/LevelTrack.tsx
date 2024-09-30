@@ -1,6 +1,11 @@
 import { use, useEffect } from "react";
 import clsx from "clsx";
 
+import { GameTitle } from "@/ui/GameTitle/GameTitle";
+import { Smiley } from "@/ui/Smiley/Smiley";
+import { TopButton } from "@/ui/TopButton/TopButton";
+import { ZenButton } from "@/ui/ZenButton";
+
 import {
   isEasy,
   isHard,
@@ -9,9 +14,6 @@ import {
   LEVEL_SCALE,
 } from "@/game/level-settings/levelSettings";
 import { getLevelType } from "@/support/getLevelType";
-import { Block } from "@/ui/Block/Block";
-import { Smiley } from "@/ui/Smiley/Smiley";
-import { TopButton } from "@/ui/TopButton/TopButton";
 
 import { PlayButton } from "../../ui/PlayButton";
 import { BackgroundContext } from "../Layout/BackgroundContext";
@@ -20,7 +22,9 @@ import styles from "./levelTrack.module.css";
 
 type Props = {
   levelNr: number;
+  hasZenMode?: boolean;
   onLevelStart: VoidFunction;
+  onZenModeStart?: VoidFunction;
   onOpenSettings?: VoidFunction;
 };
 
@@ -37,6 +41,8 @@ const translates = [
 
 export const LevelTrack: React.FC<Props> = ({
   levelNr,
+  hasZenMode = false,
+  onZenModeStart,
   onLevelStart,
   onOpenSettings,
 }) => {
@@ -51,27 +57,11 @@ export const LevelTrack: React.FC<Props> = ({
 
   return (
     <div className="flex flex-col items-center h-full">
-      <div className="flex flex-row p-2 gap-x-2 w-full">
+      <div className="flex flex-row pt-2 pl-safeLeft pr-safeRight gap-x-2 w-full">
         {onOpenSettings && (
           <TopButton buttonType="settings" onClick={onOpenSettings} />
         )}
-
-        <h1
-          className={clsx(
-            "text-3xl mb-2 font-extrabold flex-1 text-center text-orange-400 font-block-sort",
-            styles.header
-          )}
-        >
-          Bl
-          <div className="inline-block text-sm scale-50 -mx-2 translate-y-1">
-            <Block moved={true} color="#fb923c" shape="️⭐️" revealed />
-          </div>
-          ck S
-          <div className="inline-block text-sm scale-50 -mx-2 translate-y-1">
-            <Block moved={true} color="#fb923c" shape="️🧩" revealed />
-          </div>
-          rt
-        </h1>
+        <GameTitle />
         {onOpenSettings && <div className="size-block"></div>}
       </div>
 
@@ -82,6 +72,7 @@ export const LevelTrack: React.FC<Props> = ({
           return (
             <li
               key={i}
+              style={{ "--levelNr": `'${LEVEL_SCALE.indexOf(i) + 1}'` }}
               className={clsx(
                 "flex align-middle items-center w-full h-height-block flex-shrink-0 justify-center",
                 {
@@ -168,12 +159,34 @@ export const LevelTrack: React.FC<Props> = ({
           );
         })}
       </ol>
-      <div className="text-center pb-10">
+      <div className="text-center pb-10 flex flex-row justify-between w-full px-5">
+        <button
+          onClick={() => {}}
+          className={clsx(
+            "inline-block h-12 rounded-3xl shadow-lg font-bold pt-3 px-6 bg-orange-500",
+            "invisible"
+          )}
+        >
+          <span className={"block -translate-y-1 scale-150"}>🧘‍♂️ ▸</span>
+        </button>
         <PlayButton
-          levelNr={levelNr + 1}
+          label={`Label ${levelNr + 1}`}
           onClick={onLevelStart}
           type={getLevelType(levelNr)}
         />
+        <div
+          className={clsx("block transition-opacity", {
+            ["opacity-0"]: !hasZenMode,
+            ["opacity-100"]: hasZenMode,
+          })}
+        >
+          <ZenButton
+            onClick={() => {
+              if (!hasZenMode) return;
+              onZenModeStart?.();
+            }}
+          />
+        </div>
       </div>
     </div>
   );

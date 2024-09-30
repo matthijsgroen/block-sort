@@ -43,6 +43,7 @@ export default [
             // Packages `react` related packages come first.
             ["^react", "^@?\\w"],
             // Internal packages.
+            ["^(@/ui)(/.*|$)"],
             ["^(@|components)(/.*|$)"],
             // Side effect imports.
             ["^\\u0000"],
