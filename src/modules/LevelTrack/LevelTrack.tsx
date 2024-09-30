@@ -9,7 +9,7 @@ import {
   LEVEL_SCALE,
 } from "@/game/level-settings/levelSettings";
 import { getLevelType } from "@/support/getLevelType";
-import { Block } from "@/ui/Block/Block";
+import { GameTitle } from "@/ui/GameTitle/GameTitle";
 import { Smiley } from "@/ui/Smiley/Smiley";
 import { TopButton } from "@/ui/TopButton/TopButton";
 
@@ -55,23 +55,7 @@ export const LevelTrack: React.FC<Props> = ({
         {onOpenSettings && (
           <TopButton buttonType="settings" onClick={onOpenSettings} />
         )}
-
-        <h1
-          className={clsx(
-            "text-3xl mb-2 font-extrabold flex-1 text-center text-orange-400 font-block-sort",
-            styles.header
-          )}
-        >
-          Bl
-          <div className="inline-block text-sm scale-50 -mx-2 translate-y-1">
-            <Block moved={true} color="#fb923c" shape="️⭐️" revealed />
-          </div>
-          ck S
-          <div className="inline-block text-sm scale-50 -mx-2 translate-y-1">
-            <Block moved={true} color="#fb923c" shape="️🧩" revealed />
-          </div>
-          rt
-        </h1>
+        <GameTitle />
         {onOpenSettings && <div className="size-block"></div>}
       </div>
 
