@@ -4,12 +4,12 @@ import { pick } from "@/support/random";
 import { LevelSettings } from "../level-creation/generateRandomLevel";
 
 import { getHard2Settings, getHardSettings } from "./hardSettings";
-import { getScrambledSettings } from "./levelSettings";
 import {
   getNormal2Settings,
   getNormal3Settings,
   getNormalSettings,
 } from "./normalSettings";
+import { getSettings as getScrambledSettings } from "./scrambledSettings";
 import {
   getSpecial1Settings,
   getSpecial2Settings,
