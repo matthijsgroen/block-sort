@@ -1,4 +1,4 @@
-import { shapeMapping } from "./blocks";
+import { shapeMapping } from "./themes/default";
 import { LevelState } from "./types";
 
 export const debugLevel = (level: LevelState) => {
