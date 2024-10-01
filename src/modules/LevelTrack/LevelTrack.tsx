@@ -170,7 +170,7 @@ export const LevelTrack: React.FC<Props> = ({
           <span className={"block -translate-y-1 scale-150"}>🧘‍♂️ ▸</span>
         </button>
         <PlayButton
-          label={`Label ${levelNr + 1}`}
+          label={`Level ${levelNr + 1}`}
           onClick={onLevelStart}
           type={getLevelType(levelNr)}
         />
