@@ -31,7 +31,7 @@ export const NormalMode: React.FC<Props> = ({
   onOpenSettings,
   onZenModeStart,
 }) => {
-  const [levelNr, setLevelNr] = useGameStorage("levelNr", 49);
+  const [levelNr, setLevelNr] = useGameStorage("levelNr", 0);
   const [levelSeed, setLevelSeed] = useState(() =>
     generateNewSeed(BASE_SEED, levelNr)
   );
