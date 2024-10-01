@@ -1,1 +1,1 @@
-export const ZEN_MODE = false;
+export const ZEN_MODE = true;

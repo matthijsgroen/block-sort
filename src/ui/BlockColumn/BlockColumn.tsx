@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import clsx from "clsx";
 
 import { Block } from "@/ui/Block/Block";
-import { colorMap } from "@/ui/Block/colorMap";
 import { Tray } from "@/ui/Tray/Tray";
 
-import { shapeMapping } from "@/game/blocks";
+import { BlockTheme, getColorMapping, getShapeMapping } from "@/game/themes";
 import { Column } from "@/game/types";
 import { rowSpans } from "@/support/grid";
 import { timesMap } from "@/support/timeMap";
@@ -16,6 +15,7 @@ type Props = {
   column: Column;
   amountSelected?: number;
   started?: boolean;
+  theme?: BlockTheme;
   onClick?: VoidFunction;
   onPickUp?: VoidFunction;
   onDrop?: VoidFunction;
@@ -28,6 +28,7 @@ export const BlockColumn: React.FC<Props> = ({
   onDrop,
   onLock,
   onPickUp,
+  theme = "default",
   started = true,
   amountSelected = 0,
 }) => {
@@ -60,6 +61,9 @@ export const BlockColumn: React.FC<Props> = ({
       return () => clearInterval(clear);
     }
   }, [locked]);
+
+  const activeShapeMap = getShapeMapping(theme);
+  const activeColorMap = getColorMapping(theme);
 
   return (
     <div className={`${rowSpans[column.columnSize + 1]} justify-self-center`}>
@@ -97,8 +101,10 @@ export const BlockColumn: React.FC<Props> = ({
                   moved={started}
                   shadow={column.type === "placement" || isSelected}
                   revealed={block.revealed}
-                  color={colorMap[block.color]}
-                  shape={block.revealed ? shapeMapping[block.color] : undefined}
+                  color={activeColorMap[block.color]}
+                  shape={
+                    block.revealed ? activeShapeMap[block.color] : undefined
+                  }
                   selected={isSelected}
                   onDrop={onDrop}
                   onPickUp={onPickUp}
@@ -114,10 +120,10 @@ export const BlockColumn: React.FC<Props> = ({
                 className={`${p === 0 && column.blocks.length === 0 ? styles.bottom : styles.empty} ${styles.shade}`}
               >
                 <div
-                  style={{ "--cube-color": colorMap[column.limitColor] }}
+                  style={{ "--cube-color": activeColorMap[column.limitColor] }}
                   className={`${styles.limit} animate-fadeIn`}
                 >
-                  {amountSelected === 0 && shapeMapping[column.limitColor]}
+                  {amountSelected === 0 && activeShapeMap[column.limitColor]}
                 </div>
               </div>
             ) : (

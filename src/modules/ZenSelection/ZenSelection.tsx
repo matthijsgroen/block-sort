@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, use, useEffect } from "react";
 import clsx from "clsx";
 
 import { GameTitle } from "@/ui/GameTitle/GameTitle";
@@ -8,46 +8,28 @@ import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { LevelType } from "@/support/getLevelType";
 
+import { DIFFICULTY_LEVELS, LEVEL_TYPES } from "../GameModi/zenModeConstants";
 import { BackgroundContext } from "../Layout/BackgroundContext";
 
 import styles from "./ZenSelection.module.css";
 
 type Props = {
   levelNr: number;
-  onLevelStart: (levelType: LevelType, difficulty: [number, number]) => void;
+  difficultyIndex: number;
+  setDifficultyIndex: Dispatch<SetStateAction<number>>;
+  levelTypeIndex: number;
+  setLevelTypeIndex: Dispatch<SetStateAction<number>>;
+  onLevelStart: (levelType: LevelType, difficulty: number) => void;
   onZenModeEnd?: VoidFunction;
   onOpenSettings?: VoidFunction;
 };
 
-type DifficultyLevel = {
-  name: string;
-  unlocksAtLevel: number;
-  levelRange: [number, number];
-};
-
-type UnlockableLevelType = {
-  name: string;
-  levelType: LevelType;
-  unlocksAtLevel: number;
-};
-
-export const DIFFICULTY_LEVELS: DifficultyLevel[] = [
-  { name: "Starter", unlocksAtLevel: 50, levelRange: [0, 2] },
-  { name: "Junior", unlocksAtLevel: 50, levelRange: [3, 4] },
-  { name: "Expert", unlocksAtLevel: 75, levelRange: [5, 6] },
-  { name: "Master", unlocksAtLevel: 200, levelRange: [7, 8] },
-  { name: "Wizard", unlocksAtLevel: 300, levelRange: [9, 10] },
-];
-
-export const LEVEL_TYPES: UnlockableLevelType[] = [
-  { name: "Normal", levelType: "normal", unlocksAtLevel: 0 },
-  { name: "Special", levelType: "special", unlocksAtLevel: 75 },
-  { name: "Hard", levelType: "hard", unlocksAtLevel: 100 },
-  { name: "Scrambled", levelType: "scrambled", unlocksAtLevel: 200 },
-];
-
 export const ZenSelection: React.FC<Props> = ({
   levelNr,
+  difficultyIndex,
+  setDifficultyIndex,
+  levelTypeIndex,
+  setLevelTypeIndex,
   onZenModeEnd,
   onLevelStart,
   onOpenSettings,
@@ -58,8 +40,6 @@ export const ZenSelection: React.FC<Props> = ({
   }, []);
 
   // Synch with offline state
-  const [difficultyIndex, setDifficultyIndex] = useState(0);
-  const [levelTypeIndex, setLevelTypeIndex] = useState(0);
 
   const selectedDifficulty = DIFFICULTY_LEVELS[difficultyIndex];
   const selectedLevelType = LEVEL_TYPES[levelTypeIndex];
@@ -163,7 +143,9 @@ export const ZenSelection: React.FC<Props> = ({
         </div>
         <PlayButton
           label={selectedDifficulty.name}
-          onClick={() => {}}
+          onClick={() => {
+            onLevelStart(selectedLevelType.levelType, difficultyIndex);
+          }}
           type={selectedLevelType.levelType}
           disabled={
             levelNr < selectedDifficulty.unlocksAtLevel - 1 ||
@@ -172,12 +154,7 @@ export const ZenSelection: React.FC<Props> = ({
         />
         <div className={clsx("block transition-opacity opacity-0")}>
           <button
-            onClick={() => {
-              onLevelStart(
-                selectedLevelType.levelType,
-                selectedDifficulty.levelRange
-              );
-            }}
+            onClick={() => {}}
             className={clsx(
               "inline-block h-12 rounded-3xl shadow-lg font-bold pt-3 px-6 bg-orange-500",
               "invisible"
