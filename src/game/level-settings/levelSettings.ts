@@ -21,6 +21,7 @@ import {
 } from "./specialSettings";
 
 export const LEVEL_SCALE = fib(3, 11);
+// 0: 3, 1: 6, 2: 9, 3: 15, 4: 24, 5: 39, 6: 63, 7: 102, 8: 165, 9: 267
 
 export const getDifficultyLevel = (levelNr: number): number =>
   LEVEL_SCALE.filter((l) => l <= levelNr).length + 1;
@@ -72,15 +73,12 @@ export const getHardSettings = (
 
   if (difficulty > 8) {
     return pick(
-      [
-        _getHard2Settings(getDifficultyLevel(levelNr)),
-        _getHardSettings(getDifficultyLevel(levelNr)),
-      ],
+      [_getHard2Settings(difficulty), _getHardSettings(difficulty)],
       random
     );
   }
 
-  return _getHardSettings(getDifficultyLevel(levelNr));
+  return _getHardSettings(difficulty);
 };
 
 export const getSpecialSettings = (

@@ -62,33 +62,35 @@ export const useOfflineStorage = <T>(
       driver: [localForage.INDEXEDDB, localForage.LOCALSTORAGE],
       name: storeName,
     });
-    store.current.getItem<T>(key).then((value) => {
+    const storage = store.current;
+    storage.getItem<T>(key).then((value) => {
       if (value !== null) {
         setLocalState(value);
+      } else {
+        if (initialValue !== null) {
+          storage.setItem<T>(key, initialValue);
+        }
       }
     });
   }, []);
 
   const setValue = useCallback(
-    (value: SetStateAction<T>) => {
+    async (value: SetStateAction<T>) => {
       if (isSetFunction(value)) {
-        store.current?.getItem<T>(key).then((previousValue) => {
-          const nextValue = value(previousValue ?? localState);
-          store.current?.setItem<T>(key, nextValue).then(() => {
-            setLocalState(nextValue);
-          });
-        });
+        const previousValue = await store.current?.getItem<T>(key);
+        const nextValue = value(previousValue ?? localState);
+        await store.current?.setItem<T>(key, nextValue);
+        setLocalState(nextValue);
       } else {
-        store.current?.setItem<T>(key, value).then(() => {
-          setLocalState(value);
-        });
+        await store.current?.setItem<T>(key, value);
+        setLocalState(value);
       }
     },
     [key]
   );
 
-  const deleteValue = useCallback(() => {
-    store.current?.removeItem(key);
+  const deleteValue = useCallback(async () => {
+    await store.current?.removeItem(key);
   }, [key]);
 
   return [localState, setValue, deleteValue];

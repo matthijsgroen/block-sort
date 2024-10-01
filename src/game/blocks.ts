@@ -18,22 +18,3 @@ export const BLOCK_COLORS = [
 ] as const;
 
 export type BlockColor = (typeof BLOCK_COLORS)[number];
-
-export const shapeMapping: Record<BlockColor, string> = {
-  black: "🎵",
-  brown: "🍄",
-  darkgreen: "🍀",
-  yellow: "🟡",
-  aqua: "⚡️",
-  pink: "🐾",
-  purple: "️⭐️",
-  blue: "🌙",
-  red: "❌",
-  white: "⬜️",
-  green: "🔶",
-  darkblue: "✨",
-  turquoise: "🔺",
-  orange: "🦋",
-  lightyellow: "☀️",
-  gray: "🐟",
-};

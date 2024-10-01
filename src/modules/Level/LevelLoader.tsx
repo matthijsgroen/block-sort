@@ -7,6 +7,7 @@ import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { hasWon } from "@/game/state";
 import { LevelState } from "@/game/types";
+import { LevelType } from "@/support/getLevelType";
 import { generateNewSeed, mulberry32 } from "@/support/random";
 import {
   deleteGameValue,
@@ -22,8 +23,8 @@ type Props = {
   levelSettings: LevelSettings;
   levelNr: number;
   title: string;
-  initialStorageKey?: string;
-  progressStorageKey?: string;
+  levelType: LevelType;
+  storagePrefix?: string;
 };
 
 const generateLevelContent = async (
@@ -49,15 +50,15 @@ export const LevelLoader: React.FC<Props> = ({
   levelSettings,
   levelNr,
   title,
-  initialStorageKey = `initialLevelState${levelNr}`,
-  progressStorageKey = `levelState${levelNr}`,
+  levelType,
+  storagePrefix = "",
 }) => {
-  const [locked] = useState({ levelNr, levelSettings, seed });
+  const [locked] = useState({ levelNr, levelSettings, seed, title });
 
   const level = useMemo(async () => {
     const level = await generateLevelContent(
       locked.seed,
-      initialStorageKey,
+      `${storagePrefix}initialLevelState${locked.levelNr}`,
       locked.levelSettings
     );
     // Verify level content
@@ -69,10 +70,12 @@ export const LevelLoader: React.FC<Props> = ({
     if (!won) {
       const newSeed = generateNewSeed(locked.seed, 2);
       // Level content is botched, retry
-      await deleteGameValue(initialStorageKey);
+      await deleteGameValue(
+        `${storagePrefix}initialLevelState${locked.levelNr}`
+      );
       const level = await generateLevelContent(
         newSeed,
-        initialStorageKey,
+        `${storagePrefix}initialLevelState${locked.levelNr}`,
         locked.levelSettings
       );
       return level;
@@ -92,13 +95,17 @@ export const LevelLoader: React.FC<Props> = ({
     >
       <Level
         level={level}
-        title={title}
-        storageKey={progressStorageKey}
+        title={locked.title}
+        storageKey={`${storagePrefix}levelState${locked.levelNr}`}
+        storagePrefix={storagePrefix}
         levelNr={levelNr}
         levelSettings={levelSettings}
+        levelType={levelType}
         onComplete={(won) => {
           if (won) {
-            deleteGameValue(initialStorageKey);
+            deleteGameValue(
+              `${storagePrefix}initialLevelState${locked.levelNr}`
+            );
           }
           onComplete(won);
         }}

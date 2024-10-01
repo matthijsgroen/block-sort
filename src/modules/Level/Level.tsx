@@ -1,6 +1,5 @@
 import { use, useEffect, useState } from "react";
 
-import { colorMap } from "@/ui/Block/colorMap";
 import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
 import { Message } from "@/ui/Message/Message";
 import { TopButton } from "@/ui/TopButton/TopButton";
@@ -10,8 +9,9 @@ import { sound } from "@/audio";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { hasWon, isStuck } from "@/game/state";
+import { colorMap } from "@/game/themes/default";
 import { LevelState } from "@/game/types";
-import { getLevelType } from "@/support/getLevelType";
+import { LevelType } from "@/support/getLevelType";
 import { mulberry32, pick } from "@/support/random";
 import { useGameStorage } from "@/support/useGameStorage";
 
@@ -25,16 +25,20 @@ type Props = {
   level: Promise<LevelState>;
   title: string;
   levelNr: number;
+  levelType: LevelType;
   levelSettings: LevelSettings;
   storageKey: string;
+  storagePrefix?: string;
 };
 
 export const Level: React.FC<Props> = ({
   onComplete,
   level,
   title,
+  levelType,
   levelNr,
   storageKey,
+  storagePrefix = "",
 }) => {
   const [playState, setPlayState] = useState<
     "won" | "lost" | "busy" | "restarting"
@@ -46,8 +50,14 @@ export const Level: React.FC<Props> = ({
 
   const [levelState, setLevelState, deleteLevelState] =
     useGameStorage<LevelState>(storageKey, initialLevelState);
-  const [lostCounter, setLostCounter] = useGameStorage("lostCounter", 0);
-  const [autoMoves, setAutoMoves] = useGameStorage("autoMoves", 0);
+  const [lostCounter, setLostCounter] = useGameStorage(
+    `${storagePrefix}lostCounter`,
+    0
+  );
+  const [autoMoves, setAutoMoves] = useGameStorage(
+    `${storagePrefix}autoMoves`,
+    0
+  );
   const autoMoveLimit = Math.min(
     getAutoMoveCount(lostCounter),
     Math.floor(initialLevelState.moves.length * MAX_SOLVE_PERCENTAGE)
@@ -61,7 +71,7 @@ export const Level: React.FC<Props> = ({
 
   const [, setTheme] = use(BackgroundContext);
   useEffect(() => {
-    setTheme(getLevelType(levelNr));
+    setTheme(levelType);
 
     const cleanup = setTimeout(() => setStarted(true), 300);
     return () => clearTimeout(cleanup);
@@ -143,7 +153,7 @@ export const Level: React.FC<Props> = ({
           }}
         />
       )}
-      <div className="flex flex-row pt-2 pl-safeLeft pr-safeRight gap-x-2">
+      <div className="flex flex-row pt-2 pl-safeLeft pr-safeRight gap-x-2 items-center">
         <TopButton
           buttonType="back"
           onClick={() => {
@@ -180,6 +190,11 @@ export const Level: React.FC<Props> = ({
             </>
           </WoodButton>
         )}
+        {autoMoves === 0 && (
+          <div className="font-block-sort text-center text-orange-400 tracking-widest">
+            {title}
+          </div>
+        )}
         <div className="flex-1"></div>
         <TopButton
           buttonType="restart"
@@ -187,9 +202,6 @@ export const Level: React.FC<Props> = ({
             setPlayState("restarting");
           }}
         />
-      </div>
-      <div className="font-block-sort text-center text-orange-400 tracking-widest">
-        {title}
       </div>
       <LevelLayout
         levelState={levelState}
