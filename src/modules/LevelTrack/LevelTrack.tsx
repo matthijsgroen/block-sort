@@ -167,7 +167,7 @@ export const LevelTrack: React.FC<Props> = ({
             "invisible"
           )}
         >
-          <span className={"block -translate-y-1 scale-150"}>🧘‍♂️ ▸</span>
+          <span className={"block -translate-y-1 scale-150"}>️🌻 ▸</span>
         </button>
         <PlayButton
           label={`Level ${levelNr + 1}`}
