@@ -1,6 +1,6 @@
 import { BlockColor } from "../types";
 
-export const shapeMapping: Record<BlockColor, string> = {
+export const shapeMap: Record<BlockColor, string> = {
   black: "🎵",
   brown: "🍄",
   darkgreen: "🍀",

@@ -1,5 +1,6 @@
 import { Dispatch } from "react";
 
+import { BlockTheme } from "@/game/themes";
 import { LevelState } from "@/game/types";
 import { colSizes } from "@/support/grid";
 
@@ -9,6 +10,7 @@ type Props = {
   started: boolean;
   levelState: LevelState;
   selection?: [column: number, amount: number];
+  theme?: BlockTheme;
   onColumnClick?: Dispatch<number>;
   onPickUp?: VoidFunction;
   onDrop?: VoidFunction;
@@ -39,6 +41,7 @@ export const LevelLayout: React.FC<Props> = ({
   started,
   levelState,
   selection,
+  theme = "default",
   onColumnClick,
   onDrop,
   onLock,
@@ -57,6 +60,7 @@ export const LevelLayout: React.FC<Props> = ({
             <BlockColumn
               column={bar}
               key={i}
+              theme={theme}
               onClick={() => onColumnClick?.(i)}
               started={started}
               amountSelected={

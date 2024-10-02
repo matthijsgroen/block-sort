@@ -1,4 +1,4 @@
-import { shapeMapping } from "./themes/default";
+import { shapeMap } from "./themes/default";
 import { LevelState } from "./types";
 
 export const debugLevel = (level: LevelState) => {
@@ -34,7 +34,7 @@ export const debugLevel = (level: LevelState) => {
           if (block.revealed === false) {
             lineStr += `│﹖│ `;
           } else {
-            lineStr += `│${shapeMapping[block.color]}│ `;
+            lineStr += `│${shapeMap[block.color]}│ `;
           }
         }
       }
@@ -47,7 +47,7 @@ export const debugLevel = (level: LevelState) => {
         }
       }
       if (i === col.columnSize + 1 && col.limitColor) {
-        lineStr += ` ${shapeMapping[col.limitColor]}  `;
+        lineStr += ` ${shapeMap[col.limitColor]}  `;
       } else if (i > col.columnSize) {
         lineStr += "     ";
       }
