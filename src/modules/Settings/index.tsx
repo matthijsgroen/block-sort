@@ -5,6 +5,7 @@ import { Checkbox } from "@/ui/Checkbox";
 import { TopButton } from "@/ui/TopButton/TopButton";
 
 import info from "@/../package.json";
+import { THEMES } from "@/featureFlags";
 
 import { Attribution } from "./Attribution";
 import { Changelog } from "./Changelog";
@@ -14,16 +15,20 @@ import styles from "./index.module.css";
 type Props = {
   soundEnabled?: boolean;
   musicEnabled?: boolean;
+  themesEnabled?: boolean;
   onSoundChange?: Dispatch<boolean>;
   onMusicChange?: Dispatch<boolean>;
+  onThemesChange?: Dispatch<boolean>;
   onClose?: VoidFunction;
 };
 
 export const Settings: React.FC<Props> = ({
   soundEnabled = true,
   musicEnabled = true,
+  themesEnabled = true,
   onSoundChange,
   onMusicChange,
+  onThemesChange,
   onClose,
 }) => {
   const dialogElement = useRef<HTMLDialogElement>(null);
@@ -66,6 +71,13 @@ export const Settings: React.FC<Props> = ({
               onChange={(v) => onMusicChange?.(v)}
               label="Music"
             />
+            {THEMES && (
+              <Checkbox
+                value={themesEnabled}
+                onChange={(v) => onThemesChange?.(v)}
+                label="Seasonal Themes"
+              />
+            )}
             {"share" in navigator && (
               <button
                 className={clsx(

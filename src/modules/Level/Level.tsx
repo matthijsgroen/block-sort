@@ -13,6 +13,7 @@ import { colorMap } from "@/game/themes/default";
 import { LevelState } from "@/game/types";
 import { LevelType } from "@/support/getLevelType";
 import { mulberry32, pick } from "@/support/random";
+import { ThemeContext } from "@/support/ThemeProvider";
 import { useGameStorage } from "@/support/useGameStorage";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
@@ -76,6 +77,8 @@ export const Level: React.FC<Props> = ({
     const cleanup = setTimeout(() => setStarted(true), 300);
     return () => clearTimeout(cleanup);
   }, []);
+
+  const { activeTheme } = use(ThemeContext);
 
   useEffect(() => {
     if (hasWon(levelState)) {
@@ -205,6 +208,7 @@ export const Level: React.FC<Props> = ({
       </div>
       <LevelLayout
         levelState={levelState}
+        theme={activeTheme}
         started={started}
         onColumnClick={(column) => onColumnClick(column)}
         selection={

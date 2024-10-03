@@ -1,3 +1,4 @@
+import halloween from "@/assets/halloween.mp3";
 import lose from "@/assets/lose.mp3";
 import music from "@/assets/music.mp3";
 import pickup from "@/assets/pickup.mp3";
@@ -49,12 +50,15 @@ const createItem = (
 
 const audioItems = {
   music: createItem("music", music, 1.0, { loop: true }),
+  halloween: createItem("music", halloween, 0.5, { loop: true }),
   lose: createItem("effects", lose, 0.5),
   place: createItem("effects", place),
   lock: createItem("effects", place, 1.0, { multipleInstances: true }),
   win: createItem("effects", win),
   pickup: createItem("effects", pickup, 2.0),
 };
+
+export type AudioItemName = keyof typeof audioItems;
 
 const loadAndDecodeAudio = async (
   context: AudioContext,
@@ -182,7 +186,7 @@ export const sound = {
   setStreamEnabled: (stream: Stream, enabled = true) => {
     streams[stream].disabled = !enabled;
   },
-  play: (item: keyof typeof audioItems) => {
+  play: (item: AudioItemName) => {
     if (document.visibilityState === "hidden") {
       return;
     }
@@ -196,7 +200,16 @@ export const sound = {
       s.play(item);
     });
   },
-  stop: (item: keyof typeof audioItems) => {
+  stopAllInStream: (stream: Stream) => {
+    getSoundSystem().then((s) => {
+      for (const [k, v] of Object.entries(audioItems)) {
+        if (v.audioStream === stream) {
+          s.stop(k as AudioItemName);
+        }
+      }
+    });
+  },
+  stop: (item: AudioItemName) => {
     getSoundSystem().then((s) => s.stop(item));
   },
 };
