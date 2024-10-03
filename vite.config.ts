@@ -1,12 +1,29 @@
 import react from "@vitejs/plugin-react";
+import markdownIt from "markdown-it";
 import * as path from "node:path";
 import { defineConfig } from "vite";
+import { Mode, plugin as markDown } from "vite-plugin-markdown";
 import { VitePWA } from "vite-plugin-pwa";
+
+const md = markdownIt();
+const defaultRender =
+  md.renderer.rules.link_open ||
+  function (tokens, idx, options, _env, self) {
+    return self.renderToken(tokens, idx, options);
+  };
+
+md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+  // Add a new `target` attribute, or replace the value of the existing one.
+  tokens[idx].attrSet("target", "_blank");
+  // Pass the token to the default renderer.
+  return defaultRender(tokens, idx, options, env, self);
+};
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
+    markDown({ mode: [Mode.REACT], markdownIt: md }),
     VitePWA({
       registerType: "prompt",
       injectRegister: false,

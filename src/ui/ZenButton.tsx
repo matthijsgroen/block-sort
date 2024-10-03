@@ -11,6 +11,6 @@ export const ZenButton: React.FC<Props> = ({ onClick }) => (
       "inline-block h-12 rounded-3xl shadow-lg font-bold pt-3 px-6 bg-orange-500 active:scale-90 transition-transform"
     )}
   >
-    <span className={"block -translate-y-1 scale-150"}>️🧘 ▸</span>
+    <span className={"block -translate-y-1 scale-150"}>️🌻 ▸</span>
   </button>
 );

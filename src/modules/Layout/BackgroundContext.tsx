@@ -8,7 +8,7 @@ import {
 
 import { Background } from "@/ui/Background/Background";
 
-type Theme = ComponentProps<typeof Background>["theme"];
+type Theme = ComponentProps<typeof Background>["levelType"];
 export const BackgroundContext = createContext<
   [value: Theme, updateValue: Dispatch<Theme>]
 >([undefined, () => {}]);
@@ -19,7 +19,7 @@ export const BackgroundProvider: React.FC<PropsWithChildren> = ({
   const state = useState<Theme>(undefined);
   return (
     <BackgroundContext.Provider value={state}>
-      <Background theme={state[0]}>{children}</Background>
+      <Background levelType={state[0]}>{children}</Background>
     </BackgroundContext.Provider>
   );
 };
