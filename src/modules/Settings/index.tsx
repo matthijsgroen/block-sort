@@ -6,6 +6,7 @@ import { TopButton } from "@/ui/TopButton/TopButton";
 
 import info from "@/../package.json";
 
+import { Attribution } from "./Attribution";
 import { Changelog } from "./Changelog";
 
 import styles from "./index.module.css";
@@ -37,7 +38,11 @@ export const Settings: React.FC<Props> = ({
   return (
     <dialog
       ref={dialogElement}
-      className="pb-5 px-0 bg-transparent w-4/5 max-w-[300px] max-h-4/5"
+      className={clsx("pb-5 px-0 bg-transparent w-4/5 max-h-4/5", {
+        "max-w-[300px]":
+          activeTab === "settings" || activeTab === "attribution",
+        "max-w-4/5": activeTab === "changes",
+      })}
     >
       <div
         className={clsx(
@@ -100,6 +105,7 @@ export const Settings: React.FC<Props> = ({
                   "inline-block rounded-full border border-black p-2 shadow-md text-black text-sm px-4",
                   "active:scale-90 transition-transform"
                 )}
+                onClick={() => setActiveTab("attribution")}
               >
                 Attribution
               </button>
@@ -120,6 +126,20 @@ export const Settings: React.FC<Props> = ({
             <Suspense fallback={<div>Loading...</div>}>
               <Changelog />
             </Suspense>
+          </div>
+        )}
+        {activeTab === "attribution" && (
+          <div className="flex flex-col gap-3">
+            <button
+              className={clsx(
+                "inline-block rounded-full border border-black p-2 shadow-md text-black text-sm px-4",
+                "active:scale-90 transition-transform"
+              )}
+              onClick={() => setActiveTab("settings")}
+            >
+              Back
+            </button>
+            <Attribution />
           </div>
         )}
         <div className="text-center translate-y-9 -mt-9">

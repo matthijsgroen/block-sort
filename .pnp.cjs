@@ -44,6 +44,7 @@ const RAW_RUNTIME_STATE =
           ["@tsparticles/react", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:3.0.0"],\
           ["@tsparticles/slim", "npm:3.5.0"],\
           ["@types/babel__core", "npm:7.20.5"],\
+          ["@types/markdown-it", "npm:14.1.2"],\
           ["@types/node", "npm:22.5.5"],\
           ["@types/react", [\
             "types-react",\
@@ -70,6 +71,7 @@ const RAW_RUNTIME_STATE =
           ["globals", "npm:15.9.0"],\
           ["immer", "npm:10.1.1"],\
           ["localforage", "npm:1.10.0"],\
+          ["markdown-it", "npm:14.1.0"],\
           ["postcss", "npm:8.4.45"],\
           ["prettier", "npm:3.3.3"],\
           ["react", "npm:19.0.0-rc-d6cb4e77-20240911"],\
@@ -5629,11 +5631,40 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/linkify-it", [\
+      ["npm:5.0.0", {\
+        "packageLocation": "../../../.yarn/berry/cache/@types-linkify-it-npm-5.0.0-576a16b976-10c0.zip/node_modules/@types/linkify-it/",\
+        "packageDependencies": [\
+          ["@types/linkify-it", "npm:5.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/lodash", [\
       ["npm:4.17.7", {\
         "packageLocation": "../../../.yarn/berry/cache/@types-lodash-npm-4.17.7-2077805efb-10c0.zip/node_modules/@types/lodash/",\
         "packageDependencies": [\
           ["@types/lodash", "npm:4.17.7"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/markdown-it", [\
+      ["npm:14.1.2", {\
+        "packageLocation": "../../../.yarn/berry/cache/@types-markdown-it-npm-14.1.2-d0c4e12c49-10c0.zip/node_modules/@types/markdown-it/",\
+        "packageDependencies": [\
+          ["@types/markdown-it", "npm:14.1.2"],\
+          ["@types/linkify-it", "npm:5.0.0"],\
+          ["@types/mdurl", "npm:2.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/mdurl", [\
+      ["npm:2.0.0", {\
+        "packageLocation": "../../../.yarn/berry/cache/@types-mdurl-npm-2.0.0-2f4116c0b0-10c0.zip/node_modules/@types/mdurl/",\
+        "packageDependencies": [\
+          ["@types/mdurl", "npm:2.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -6978,6 +7009,7 @@ const RAW_RUNTIME_STATE =
           ["@tsparticles/react", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:3.0.0"],\
           ["@tsparticles/slim", "npm:3.5.0"],\
           ["@types/babel__core", "npm:7.20.5"],\
+          ["@types/markdown-it", "npm:14.1.2"],\
           ["@types/node", "npm:22.5.5"],\
           ["@types/react", [\
             "types-react",\
@@ -7004,6 +7036,7 @@ const RAW_RUNTIME_STATE =
           ["globals", "npm:15.9.0"],\
           ["immer", "npm:10.1.1"],\
           ["localforage", "npm:1.10.0"],\
+          ["markdown-it", "npm:14.1.0"],\
           ["postcss", "npm:8.4.45"],\
           ["prettier", "npm:3.3.3"],\
           ["react", "npm:19.0.0-rc-d6cb4e77-20240911"],\
@@ -8012,6 +8045,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/entities-npm-2.2.0-0fc8d5b2f7-10c0.zip/node_modules/entities/",\
         "packageDependencies": [\
           ["entities", "npm:2.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:4.5.0", {\
+        "packageLocation": "../../../.yarn/berry/cache/entities-npm-4.5.0-7cdb83b832-10c0.zip/node_modules/entities/",\
+        "packageDependencies": [\
+          ["entities", "npm:4.5.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -10350,6 +10390,14 @@ const RAW_RUNTIME_STATE =
           ["uc.micro", "npm:1.0.6"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:5.0.0", {\
+        "packageLocation": "../../../.yarn/berry/cache/linkify-it-npm-5.0.0-adb5f9c96f-10c0.zip/node_modules/linkify-it/",\
+        "packageDependencies": [\
+          ["linkify-it", "npm:5.0.0"],\
+          ["uc.micro", "npm:2.1.0"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["localforage", [\
@@ -10540,6 +10588,19 @@ const RAW_RUNTIME_STATE =
           ["uc.micro", "npm:1.0.6"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:14.1.0", {\
+        "packageLocation": "../../../.yarn/berry/cache/markdown-it-npm-14.1.0-e337d75bfe-10c0.zip/node_modules/markdown-it/",\
+        "packageDependencies": [\
+          ["markdown-it", "npm:14.1.0"],\
+          ["argparse", "npm:2.0.1"],\
+          ["entities", "npm:4.5.0"],\
+          ["linkify-it", "npm:5.0.0"],\
+          ["mdurl", "npm:2.0.0"],\
+          ["punycode.js", "npm:2.3.1"],\
+          ["uc.micro", "npm:2.1.0"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["markdown-to-jsx", [\
@@ -10585,6 +10646,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/mdurl-npm-1.0.1-054d974269-10c0.zip/node_modules/mdurl/",\
         "packageDependencies": [\
           ["mdurl", "npm:1.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:2.0.0", {\
+        "packageLocation": "../../../.yarn/berry/cache/mdurl-npm-2.0.0-3259713daf-10c0.zip/node_modules/mdurl/",\
+        "packageDependencies": [\
+          ["mdurl", "npm:2.0.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -11620,6 +11688,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/punycode-npm-2.3.1-97543c420d-10c0.zip/node_modules/punycode/",\
         "packageDependencies": [\
           ["punycode", "npm:2.3.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["punycode.js", [\
+      ["npm:2.3.1", {\
+        "packageLocation": "../../../.yarn/berry/cache/punycode.js-npm-2.3.1-9084ecbbf5-10c0.zip/node_modules/punycode.js/",\
+        "packageDependencies": [\
+          ["punycode.js", "npm:2.3.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -13484,6 +13561,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/uc.micro-npm-1.0.6-36f3dc2fc4-10c0.zip/node_modules/uc.micro/",\
         "packageDependencies": [\
           ["uc.micro", "npm:1.0.6"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:2.1.0", {\
+        "packageLocation": "../../../.yarn/berry/cache/uc.micro-npm-2.1.0-c45282c865-10c0.zip/node_modules/uc.micro/",\
+        "packageDependencies": [\
+          ["uc.micro", "npm:2.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\

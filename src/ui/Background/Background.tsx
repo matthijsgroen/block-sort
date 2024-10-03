@@ -1,5 +1,5 @@
-import { PropsWithChildren, useEffect, useMemo, useState } from "react";
-import { IOptions, ISourceOptions, MoveDirection } from "@tsparticles/engine";
+import { PropsWithChildren, useEffect, useState } from "react";
+import { ISourceOptions, MoveDirection } from "@tsparticles/engine";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 import clsx from "clsx";
@@ -57,7 +57,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
   levelType,
 }) => {
   const [init, setInit] = useState(false);
-  const [useParticles, setUseParticles] = useState(false);
+  const [useParticles] = useState(false);
 
   // this should be run only once per application lifetime
   useEffect(() => {

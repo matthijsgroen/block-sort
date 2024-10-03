@@ -1,4 +1,4 @@
-import { ReactComponent } from "../../../CHANGELOG.md";
+import { ReactComponent } from "@/../CHANGELOG.md";
 
 const ChangelogData: React.FC = () => <ReactComponent />;
 

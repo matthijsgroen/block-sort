@@ -16,3 +16,6 @@
 .changelog li {
   @apply my-2 list-disc text-xs;
 }
+.changelog a {
+  @apply underline;
+}
