@@ -1,12 +1,14 @@
 import react from "@vitejs/plugin-react";
 import * as path from "node:path";
 import { defineConfig } from "vite";
+import { Mode, plugin as markDown } from "vite-plugin-markdown";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
+    markDown({ mode: [Mode.REACT] }),
     VitePWA({
       registerType: "prompt",
       injectRegister: false,

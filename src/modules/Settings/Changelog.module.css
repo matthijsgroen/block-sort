@@ -1,0 +1,18 @@
+.changelog h1 {
+  @apply text-xl font-bold;
+}
+.changelog p {
+  @apply text-xs my-1;
+}
+.changelog h2 {
+  @apply text-lg font-bold;
+}
+.changelog h3 {
+  @apply font-bold;
+}
+.changelog ul {
+  @apply list-outside pl-4;
+}
+.changelog li {
+  @apply my-2 list-disc text-xs;
+}
