@@ -18,6 +18,7 @@ describe(getSpecial1Settings, () => {
       buffers: 6,
       extraPlacementStacks: 0,
       stackSize: 12,
+      blockColorPick: "end",
     });
 
     const hard = getSpecial1Settings(10);
@@ -28,6 +29,7 @@ describe(getSpecial1Settings, () => {
       buffers: 6,
       extraPlacementStacks: 0,
       stackSize: 13,
+      blockColorPick: "end",
     });
 
     const veryHard = getSpecial1Settings(11);
@@ -38,6 +40,7 @@ describe(getSpecial1Settings, () => {
       buffers: 6,
       extraPlacementStacks: 0,
       stackSize: 13,
+      blockColorPick: "end",
     });
   });
 

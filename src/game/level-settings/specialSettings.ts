@@ -7,6 +7,7 @@ export const getSpecial1Settings = (difficulty: number): LevelSettings => ({
   buffers: 6,
   bufferSizes: 4,
   bufferPlacementLimits: 0 + Math.max(Math.round(difficulty / 4), 0),
+  blockColorPick: "end",
 });
 
 export const getSpecial2Settings = (difficulty: number): LevelSettings => ({
@@ -18,6 +19,7 @@ export const getSpecial2Settings = (difficulty: number): LevelSettings => ({
     4 - Math.min(Math.max(Math.round(difficulty / 2), 0), 3) - 1,
     0
   ),
+  blockColorPick: "end",
 });
 
 export const getSpecial3Settings = (difficulty: number): LevelSettings => ({
@@ -26,6 +28,7 @@ export const getSpecial3Settings = (difficulty: number): LevelSettings => ({
   extraPlacementStacks: 2,
   extraPlacementLimits:
     0 + Math.max(Math.min(Math.round(difficulty / 5), 2), 0),
+  blockColorPick: "end",
 });
 
 export const getSpecial4Settings = (difficulty: number): LevelSettings => ({
@@ -36,4 +39,5 @@ export const getSpecial4Settings = (difficulty: number): LevelSettings => ({
   extraPlacementLimits: 2,
   buffers: 1,
   bufferSizes: 1,
+  blockColorPick: "end",
 });

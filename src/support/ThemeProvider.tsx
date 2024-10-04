@@ -21,7 +21,7 @@ const themeSchedule: ThemeSchedule[] = [
     theme: "halloween",
   },
   {
-    begin: { month: 12, day: 10 },
+    begin: { month: 12, day: 1 },
     end: { month: 1, day: 8 },
     theme: "winter",
   },

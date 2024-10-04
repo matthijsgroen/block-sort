@@ -59,6 +59,7 @@ describe(getSpecialSettings, () => {
         buffers: 6,
         bufferSizes: 4,
         bufferPlacementLimits: 0,
+        blockColorPick: "end",
       } satisfies LevelSettings);
 
       const hardResult = getSpecialSettings(LEVEL_SCALE.at(-1)!, random);
@@ -70,6 +71,7 @@ describe(getSpecialSettings, () => {
         buffers: 6,
         bufferSizes: 4,
         bufferPlacementLimits: 3,
+        blockColorPick: "end",
       } satisfies LevelSettings);
     });
 
@@ -93,6 +95,7 @@ describe(getSpecialSettings, () => {
         stackSize: 3,
         extraPlacementStacks: 3,
         extraPlacementLimits: 2,
+        blockColorPick: "end",
       } satisfies LevelSettings);
 
       const hardResult = getSpecialSettings(LEVEL_SCALE.at(-1)!, random);
@@ -102,6 +105,7 @@ describe(getSpecialSettings, () => {
         stackSize: 3,
         extraPlacementStacks: 2,
         extraPlacementLimits: 0,
+        blockColorPick: "end",
       } satisfies LevelSettings);
     });
 
@@ -125,6 +129,7 @@ describe(getSpecialSettings, () => {
         stackSize: 4,
         extraPlacementStacks: 2,
         extraPlacementLimits: 0,
+        blockColorPick: "end",
       } satisfies LevelSettings);
 
       const hardResult = getSpecialSettings(LEVEL_SCALE.at(-1)!, random);
@@ -134,6 +139,7 @@ describe(getSpecialSettings, () => {
         stackSize: 5,
         extraPlacementStacks: 2,
         extraPlacementLimits: 2,
+        blockColorPick: "end",
       } satisfies LevelSettings);
     });
 
@@ -160,6 +166,7 @@ describe(getSpecialSettings, () => {
         buffers: 1,
         bufferSizes: 1,
         stacksPerColor: 2,
+        blockColorPick: "end",
       } satisfies LevelSettings);
 
       const hardResult = getSpecialSettings(LEVEL_SCALE.at(-1)!, random);
@@ -173,6 +180,7 @@ describe(getSpecialSettings, () => {
         buffers: 1,
         bufferSizes: 1,
         stacksPerColor: 2,
+        blockColorPick: "end",
       } satisfies LevelSettings);
     });
 
