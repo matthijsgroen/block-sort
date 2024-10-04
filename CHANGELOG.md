@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.0.1 - 2024-10-04
+
+### Fixes
+
+- Updates color of one of the orange halloween blocks to be more distinguishable
+- Set frames per second of particles to 30fps, to prevent stutter
+- Added explicit control variant to emoji's to prevent coffin outline on android phones
+
 ## Version 1.0.0 - 2024-10-04
 
 The introduction of themes! Themes change block colors and symbols, music and backgrounds.

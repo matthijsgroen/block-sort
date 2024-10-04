@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import clsx from "clsx";
 
+import { encodeForContent } from "@/support/emojiEncoding";
 import { useDelayedToggle } from "@/support/useDelayedToggle";
 
 import styles from "./Block.module.css";
@@ -63,7 +64,7 @@ export const Block: React.FC<Props> = ({
       style={{
         "--cube-color": revealed ? color : "#64748b",
         "--cube-shape-opacity": revealed ? "50%" : "100%",
-        "--cube-shape": `'${displayShape}'`,
+        "--cube-shape": `'${encodeForContent(displayShape)}'`,
         animationDelay: !locked ? `-${index * 50}ms` : "0",
       }}
       className={clsx(
