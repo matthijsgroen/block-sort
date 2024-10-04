@@ -8,6 +8,8 @@ import {
   useState,
 } from "react";
 
+import { effectTimeout } from "@/support/effectTimeout";
+
 type Props = {
   active?: boolean;
   startDelay?: number;
@@ -32,11 +34,6 @@ type TransitionState =
   | "exitStart"
   | "exiting"
   | "exitEnd";
-
-const effectTimeout = (goal: VoidFunction, duration: number): VoidFunction => {
-  const clear = setTimeout(goal, duration);
-  return () => clearTimeout(clear);
-};
 
 const transitions = <T,>(
   state: T,
@@ -65,7 +62,7 @@ export const Transition: React.FC<PropsWithChildren<Props>> = ({
   children,
 }) => {
   const [state, setState] = useState<TransitionState>(
-    active ? "enterStart" : "exitEnd"
+    active ? "delayStart" : "exitEnd"
   );
 
   useEffect(
@@ -82,7 +79,13 @@ export const Transition: React.FC<PropsWithChildren<Props>> = ({
   );
 
   useEffect(() => {
-    setState(active ? "delayStart" : "exitStart");
+    setState((currentState) =>
+      active
+        ? "delayStart"
+        : currentState === "delayStart" || currentState === "exitEnd"
+          ? "exitEnd"
+          : "exitStart"
+    );
   }, [active]);
 
   if (state === "exitEnd" || state === "delayStart") {

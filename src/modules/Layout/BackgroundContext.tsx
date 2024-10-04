@@ -1,5 +1,4 @@
 import {
-  ComponentProps,
   createContext,
   Dispatch,
   PropsWithChildren,
@@ -9,17 +8,17 @@ import {
 
 import { Background } from "@/ui/Background/Background";
 
+import { LevelType } from "@/support/getLevelType";
 import { ThemeContext } from "@/support/ThemeProvider";
 
-type Theme = ComponentProps<typeof Background>["levelType"];
 export const BackgroundContext = createContext<
-  [value: Theme, updateValue: Dispatch<Theme>]
+  [value: LevelType | undefined, updateValue: Dispatch<LevelType | undefined>]
 >([undefined, () => {}]);
 
 export const BackgroundProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
-  const state = useState<Theme>(undefined);
+  const state = useState<LevelType | undefined>(undefined);
   const { activeTheme } = use(ThemeContext);
   return (
     <BackgroundContext.Provider value={state}>
