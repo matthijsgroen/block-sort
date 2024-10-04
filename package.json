@@ -1,6 +1,6 @@
 {
   "name": "block-sorting",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Mobile Block sorting game, as a Progressive Web App",
   "author": {
     "name": "Matthijs Groen",
@@ -88,6 +88,18 @@
   "eslintConfig": {
     "extends": [
       "plugin:storybook/recommended"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      "> 5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "> 5%",
+      "not dead",
+      "not op_mini all"
     ]
   }
 }

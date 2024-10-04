@@ -121,7 +121,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
   return (
     <div
       className={clsx(
-        "h-full relative transition-all [transition-duration:1.5s] [transition-timing-function:ease-out]",
+        "h-full relative transition-all [transition-duration:1.5s] [transition-timing-function:ease-out] overflow-hidden",
         {
           "bg-transparent": levelType === undefined || levelType === "normal",
           "bg-purple-700/50": levelType === "special",

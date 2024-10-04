@@ -28,22 +28,18 @@ All audio has been slightly cut or audio adjusted through [editor.audio](https:/
 
 - **Win sound**  
   Artist: LittleRobotSoundFactory  
-  [Source](https://freesound.org/people/LittleRobotSoundFactory/sounds/274181/) &bull;
-  [License](https://creativecommons.org/licenses/by/4.0/)
+  [Source](https://freesound.org/people/LittleRobotSoundFactory/sounds/274181/) • [License](https://creativecommons.org/licenses/by/4.0/)
 - **Game over sound**  
-  [Source](https://mixkit.co/free-sound-effects/game-over/) &bull;
-  [License](https://mixkit.co/license/#sfxFree)
+  [Source](https://mixkit.co/free-sound-effects/game-over/) • [License](https://mixkit.co/license/#sfxFree)
 - **Block placement**  
   Artist: JamesFarrell_97  
-  [Source](https://freesound.org/people/JamesFarrell_97/sounds/566254/) &bull;
-  [License](https://creativecommons.org/licenses/by-nc/3.0/)
+  [Source](https://freesound.org/people/JamesFarrell_97/sounds/566254/) • [License](https://creativecommons.org/licenses/by-nc/3.0/)
 - **Block pickup**  
   Artist: deleted_user_6479820  
-  [Source](https://freesound.org/people/deleted_user_6479820/sounds/390388/) &bull;
-  [License](https://creativecommons.org/licenses/by-nc/3.0/)
+  [Source](https://freesound.org/people/deleted_user_6479820/sounds/390388/) • [License](https://creativecommons.org/licenses/by-nc/3.0/)
 
 ## Font
 
 - **Luckiest Guy**  
   Artist: Astigmatic  
-  [Source](https://fonts.google.com/specimen/Luckiest+Guy?preview.text=Block%20Sort) &bull; [License](https://www.apache.org/licenses/LICENSE-2.0)
+  [Source](https://fonts.google.com/specimen/Luckiest+Guy?preview.text=Block%20Sort) • [License](https://www.apache.org/licenses/LICENSE-2.0)
