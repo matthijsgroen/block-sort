@@ -14,7 +14,8 @@ type Props = {
 
 const snow: ISourceOptions = {
   detectRetina: true,
-  fpsLimit: 60,
+  fpsLimit: 30,
+  pauseOnBlur: true,
   particles: {
     number: {
       value: 100,
@@ -35,7 +36,7 @@ const snow: ISourceOptions = {
       type: "emoji",
       options: {
         emoji: {
-          font: "system-ui",
+          font: "sans-serif",
           value: "❄️",
         },
       },
@@ -54,7 +55,8 @@ const snow: ISourceOptions = {
 
 const ghosts: ISourceOptions = {
   detectRetina: true,
-  fpsLimit: 60,
+  fpsLimit: 30,
+  pauseOnBlur: true,
   particles: {
     number: {
       value: 10,
@@ -75,7 +77,7 @@ const ghosts: ISourceOptions = {
       type: "emoji",
       options: {
         emoji: {
-          font: "system-ui",
+          font: "sans-serif",
           value: "️👻",
         },
       },

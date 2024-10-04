@@ -123,7 +123,10 @@ export const BlockColumn: React.FC<Props> = ({
                   style={{ "--cube-color": activeColorMap[column.limitColor] }}
                   className={`${styles.limit} animate-fadeIn`}
                 >
-                  {amountSelected === 0 && activeShapeMap[column.limitColor]}
+                  {amountSelected === 0 &&
+                    activeShapeMap[column.limitColor] && (
+                      <>{activeShapeMap[column.limitColor]}&#xFE0F;</>
+                    )}
                 </div>
               </div>
             ) : (
