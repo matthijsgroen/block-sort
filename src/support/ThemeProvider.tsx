@@ -17,7 +17,7 @@ type ThemeSchedule = {
 const themeSchedule: ThemeSchedule[] = [
   {
     begin: { month: 10, day: 1 },
-    end: { month: 11, day: 7 },
+    end: { month: 11, day: 8 },
     theme: "halloween",
   },
   {

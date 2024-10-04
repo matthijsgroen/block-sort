@@ -102,7 +102,17 @@ export const Settings: React.FC<Props> = ({
                 ❤︎ Share
               </button>
             )}
-            <p className="text-xs">Matthijs Groen, 2024</p>
+            <p className="text-xs">
+              <a
+                href="https://github.com/matthijsgroen"
+                target="_blank"
+                rel="nofollow noreferrer"
+                className="underline"
+              >
+                Matthijs Groen
+              </a>
+              , 2024
+            </p>
             <div className="flex flex-row justify-between pb-4">
               <button
                 className={clsx(

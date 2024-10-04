@@ -1,22 +1,22 @@
 import { BlockColor } from "../types";
 
 export const shapeMap: Record<BlockColor, string> = {
-  black: "🎵",
-  brown: "🎄",
+  black: "⛷",
+  brown: "🔔",
   darkgreen: "⛸️",
   yellow: "🥂",
   aqua: "⭐️",
   pink: "✨",
   purple: "️️❤️",
   blue: "🌙",
-  red: "🔔",
+  red: "🎄",
   white: "️❄️",
-  green: "️🍸",
-  darkblue: "️⛷️",
+  green: "️💰",
+  darkblue: "️️🎵",
   turquoise: "🛷",
   orange: "⛄️",
-  lightyellow: "️️🫎",
-  gray: "️🎵",
+  lightyellow: "️️🎀",
+  gray: "️🧩",
 };
 
 export const colorMap: Record<BlockColor, string> = {
