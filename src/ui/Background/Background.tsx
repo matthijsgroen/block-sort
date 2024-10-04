@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, use, useEffect, useState } from "react";
 import { ISourceOptions, MoveDirection } from "@tsparticles/engine";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
@@ -6,6 +6,7 @@ import clsx from "clsx";
 
 import { BlockTheme } from "@/game/themes";
 import { LevelType } from "@/support/getLevelType";
+import { ThemeContext } from "@/support/ThemeProvider";
 
 type Props = {
   levelType?: LevelType;
@@ -52,12 +53,60 @@ const snow: ISourceOptions = {
   },
 };
 
+const ghosts: ISourceOptions = {
+  detectRetina: true,
+  fpsLimit: 60,
+  particles: {
+    number: {
+      value: 10,
+    },
+    move: {
+      direction: MoveDirection.top,
+      enable: true,
+      random: false,
+      straight: false,
+    },
+    opacity: {
+      value: { min: 0.1, max: 0.5 },
+    },
+    size: {
+      value: { min: 3, max: 20 },
+    },
+    shape: {
+      type: "emoji",
+      options: {
+        emoji: {
+          font: "system-ui",
+          value: "️👻",
+        },
+      },
+    },
+
+    wobble: {
+      distance: 20,
+      enable: true,
+      speed: {
+        min: -5,
+        max: 5,
+      },
+    },
+  },
+};
+
+const themeParticles: Record<BlockTheme, ISourceOptions | undefined> = {
+  winter: snow,
+  halloween: ghosts,
+  default: undefined,
+};
+
 export const Background: React.FC<PropsWithChildren<Props>> = ({
   children,
   levelType,
 }) => {
   const [init, setInit] = useState(false);
-  const [useParticles] = useState(false);
+  const { activeTheme } = use(ThemeContext);
+
+  const particles = themeParticles[activeTheme];
 
   // this should be run only once per application lifetime
   useEffect(() => {
@@ -81,9 +130,23 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
         }
       )}
     >
+      {activeTheme === "halloween" && (
+        <div className="absolute left-0 top-0 h-full w-full animate-lightning"></div>
+      )}
       <div className="absolute left-0 top-0 h-full w-full mix-blend-multiply bg-wood-texture"></div>
+      {activeTheme === "halloween" && (
+        <div className="absolute left-0 bottom-0 text-8xl -rotate-12">🎃</div>
+      )}
+      {activeTheme === "winter" && (
+        <div className="absolute left-0 bottom-0 text-8xl">🎄</div>
+      )}
+      {activeTheme === "winter" && (
+        <div className="absolute right-0 top-3/4 text-8xl -rotate-45 translate-x-8">
+          ⛄️
+        </div>
+      )}
       <div className="absolute left-0 top-0 h-safe-area w-full">{children}</div>
-      {init && useParticles && <Particles id="tsparticles" options={snow} />}
+      {init && particles && <Particles id="tsparticles" options={particles} />}
     </div>
   );
 };
