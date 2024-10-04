@@ -20,6 +20,10 @@ All audio has been slightly cut or audio adjusted through [editor.audio](https:/
   Artist: SpadeStars  
   [Source](https://pixabay.com/music/beats-no-way-out-a-backrooms-song-123220/) • [License](https://pixabay.com/service/license-summary/)
 
+- **Christmas 2** (Christmas theme)  
+  Artist: MagentaSix  
+  [Source](https://pixabay.com/music/christmas-christmas-2-177696/) • [License](https://pixabay.com/service/license-summary/)
+
 ## Sound effects
 
 - **Win sound**  
