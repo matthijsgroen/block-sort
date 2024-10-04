@@ -89,5 +89,17 @@
     "extends": [
       "plugin:storybook/recommended"
     ]
+  },
+  "browserslist": {
+    "production": [
+      "> 5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "> 5%",
+      "not dead",
+      "not op_mini all"
+    ]
   }
 }
