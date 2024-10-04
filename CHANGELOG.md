@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.0.0 - 2024-10-04
+
+The introduction of themes! Themes change block colors and symbols, music and backgrounds.
+
+### Added
+
+- Fall/Halloween theme, runs from 1 oct till 8 nov
+- Winter/Christmas theme, runs from 1 dec till 8 jan
+- Setting to switch back form themed content
+- Lazy loading audio to prevent pre-loading themed music that is not used
+
+### Changed
+
+- Block types picked for special levels start at the end of color range
+- Converted mp3 music to aac, to have smaller files
+
 ## Version 0.9.0 - 2024-10-03
 
 ### Added

@@ -5,6 +5,7 @@ import { Checkbox } from "@/ui/Checkbox";
 import { TopButton } from "@/ui/TopButton/TopButton";
 
 import info from "@/../package.json";
+import { THEMES } from "@/featureFlags";
 
 import { Attribution } from "./Attribution";
 import { Changelog } from "./Changelog";
@@ -14,16 +15,20 @@ import styles from "./index.module.css";
 type Props = {
   soundEnabled?: boolean;
   musicEnabled?: boolean;
+  themesEnabled?: boolean;
   onSoundChange?: Dispatch<boolean>;
   onMusicChange?: Dispatch<boolean>;
+  onThemesChange?: Dispatch<boolean>;
   onClose?: VoidFunction;
 };
 
 export const Settings: React.FC<Props> = ({
   soundEnabled = true,
   musicEnabled = true,
+  themesEnabled = true,
   onSoundChange,
   onMusicChange,
+  onThemesChange,
   onClose,
 }) => {
   const dialogElement = useRef<HTMLDialogElement>(null);
@@ -38,7 +43,7 @@ export const Settings: React.FC<Props> = ({
   return (
     <dialog
       ref={dialogElement}
-      className={clsx("pb-5 px-0 bg-transparent w-4/5 max-h-4/5", {
+      className={clsx("pb-5 px-0 bg-transparent w-4/5 max-h-3/4", {
         "max-w-[300px]":
           activeTab === "settings" || activeTab === "attribution",
         "max-w-4/5": activeTab === "changes",
@@ -66,6 +71,14 @@ export const Settings: React.FC<Props> = ({
               onChange={(v) => onMusicChange?.(v)}
               label="Music"
             />
+            {THEMES && (
+              <Checkbox
+                value={themesEnabled}
+                onChange={(v) => onThemesChange?.(v)}
+                label="Seasonal Themes"
+                description="Automatically switch to themed content when available"
+              />
+            )}
             {"share" in navigator && (
               <button
                 className={clsx(
@@ -89,7 +102,17 @@ export const Settings: React.FC<Props> = ({
                 ❤︎ Share
               </button>
             )}
-            <p className="text-xs">Matthijs Groen, 2024</p>
+            <p className="text-xs">
+              <a
+                href="https://github.com/matthijsgroen"
+                target="_blank"
+                rel="nofollow noreferrer"
+                className="underline"
+              >
+                Matthijs Groen
+              </a>
+              , 2024
+            </p>
             <div className="flex flex-row justify-between pb-4">
               <button
                 className={clsx(

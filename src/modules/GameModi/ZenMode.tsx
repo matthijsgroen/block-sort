@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 import { Transition } from "@/ui/Transition/Transition.tsx";
 
@@ -8,6 +8,8 @@ import { getZenSettings } from "@/game/level-settings/zenLevelSettings.ts";
 import { LevelLoader } from "@/modules/Level/LevelLoader.tsx";
 import { LevelType } from "@/support/getLevelType.ts";
 import { generateNewSeed, mulberry32, pick } from "@/support/random.ts";
+import { getThemeSong } from "@/support/themeMusic.tsx";
+import { ThemeContext } from "@/support/ThemeProvider.tsx";
 import { deleteGameValue, useGameStorage } from "@/support/useGameStorage.ts";
 
 import { ZenSelection } from "../ZenSelection/ZenSelection.tsx";
@@ -39,6 +41,9 @@ export const ZenMode: React.FC<Props> = ({
     0
   );
   const [levelTypeIndex, setLevelTypeIndex] = useGameStorage("zenLevelType", 0);
+
+  const { activeTheme } = use(ThemeContext);
+  const song = getThemeSong(activeTheme);
 
   useEffect(() => {
     setZenLevelSeed(generateNewSeed(ZEN_BASE_SEED, zenLevelNr));
@@ -99,7 +104,7 @@ export const ZenMode: React.FC<Props> = ({
               currentGame.levelType === levelType &&
               currentGame.difficultyIndex === difficultyIndex
             ) {
-              sound.play("music");
+              sound.play(song);
               setInLevel(true);
               return;
             }
@@ -116,7 +121,7 @@ export const ZenMode: React.FC<Props> = ({
               settings,
             });
             // tie playback to user interaction
-            sound.play("music");
+            sound.play(song);
             setInLevel(true);
           }}
           onOpenSettings={onOpenSettings}

@@ -1,3 +1,4 @@
 /.yarn/releases/** binary
 /.yarn/plugins/** binary
 /src/assets/*.mp3 binary
+/src/assets/*.aac binary
