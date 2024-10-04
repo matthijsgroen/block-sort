@@ -22,24 +22,36 @@ const themeSchedule: ThemeSchedule[] = [
   },
   {
     begin: { month: 12, day: 10 },
-    end: { month: 1, day: 7 },
+    end: { month: 1, day: 8 },
     theme: "winter",
   },
 ];
 
-export const getActiveTheme = (date: Date) => {
+const inRange = (date: Date, begin: ScheduleDate, end: ScheduleDate) => {
   const day = date.getDate();
   const month = date.getMonth() + 1;
 
-  const activeSchedule = themeSchedule.find((schedule) => {
-    const afterStart =
-      schedule.begin.month < month ||
-      (schedule.begin.month === month && schedule.begin.day <= day);
+  const afterStart =
+    begin.month < month || (begin.month === month && begin.day <= day);
 
-    const beforeEnd =
-      schedule.end.month > month ||
-      (schedule.end.month === month && schedule.end.day >= day);
-    return afterStart && beforeEnd;
+  const beforeEnd =
+    end.month > month || (end.month === month && end.day >= day);
+
+  return afterStart && beforeEnd;
+};
+
+const EOY: ScheduleDate = { month: 12, day: 31 };
+const BOY: ScheduleDate = { month: 1, day: 1 };
+
+export const getActiveTheme = (date: Date) => {
+  const activeSchedule = themeSchedule.find((schedule) => {
+    if (schedule.begin.month > schedule.end.month) {
+      // Schedule spans over the year, split it into two ranges
+      return (
+        inRange(date, schedule.begin, EOY) || inRange(date, BOY, schedule.end)
+      );
+    }
+    return inRange(date, schedule.begin, schedule.end);
   });
 
   return activeSchedule?.theme ?? "default";
