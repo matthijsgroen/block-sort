@@ -1,4 +1,4 @@
-import { PropsWithChildren, use, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import { ISourceOptions, MoveDirection } from "@tsparticles/engine";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
@@ -6,7 +6,6 @@ import clsx from "clsx";
 
 import { BlockTheme } from "@/game/themes";
 import { LevelType } from "@/support/getLevelType";
-import { ThemeContext } from "@/support/ThemeProvider";
 
 type Props = {
   levelType?: LevelType;
@@ -102,11 +101,11 @@ const themeParticles: Record<BlockTheme, ISourceOptions | undefined> = {
 export const Background: React.FC<PropsWithChildren<Props>> = ({
   children,
   levelType,
+  theme = "default",
 }) => {
   const [init, setInit] = useState(false);
-  const { activeTheme } = use(ThemeContext);
 
-  const particles = themeParticles[activeTheme];
+  const particles = themeParticles[theme];
 
   // this should be run only once per application lifetime
   useEffect(() => {
@@ -130,17 +129,17 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
         }
       )}
     >
-      {activeTheme === "halloween" && (
+      {theme === "halloween" && (
         <div className="absolute left-0 top-0 h-full w-full animate-lightning"></div>
       )}
       <div className="absolute left-0 top-0 h-full w-full mix-blend-multiply bg-wood-texture"></div>
-      {activeTheme === "halloween" && (
+      {theme === "halloween" && (
         <div className="absolute left-0 bottom-0 text-8xl -rotate-12">🎃</div>
       )}
-      {activeTheme === "winter" && (
+      {theme === "winter" && (
         <div className="absolute left-0 bottom-0 text-8xl">🎄</div>
       )}
-      {activeTheme === "winter" && (
+      {theme === "winter" && (
         <div className="absolute right-0 top-3/4 text-8xl -rotate-45 translate-x-8">
           ⛄️
         </div>

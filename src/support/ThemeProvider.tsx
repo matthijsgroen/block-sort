@@ -20,6 +20,11 @@ const themeSchedule: ThemeSchedule[] = [
     end: { month: 11, day: 7 },
     theme: "halloween",
   },
+  {
+    begin: { month: 12, day: 10 },
+    end: { month: 1, day: 7 },
+    theme: "winter",
+  },
 ];
 
 export const getActiveTheme = (date: Date) => {
@@ -30,6 +35,7 @@ export const getActiveTheme = (date: Date) => {
     const afterStart =
       schedule.begin.month < month ||
       (schedule.begin.month === month && schedule.begin.day <= day);
+
     const beforeEnd =
       schedule.end.month > month ||
       (schedule.end.month === month && schedule.end.day >= day);
