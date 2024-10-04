@@ -7,7 +7,7 @@ import styles from "./Changelog.module.css";
 export const Attribution: React.FC = () => (
   <div
     className={clsx(
-      "text-sm flex-1 overflow-y-scroll max-h-[75vh]",
+      "text-sm flex-1 overflow-y-scroll max-h-[60vh] overscroll-y-contain",
       styles.changelog
     )}
   >

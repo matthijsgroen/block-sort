@@ -43,7 +43,7 @@ export const Settings: React.FC<Props> = ({
   return (
     <dialog
       ref={dialogElement}
-      className={clsx("pb-5 px-0 bg-transparent w-4/5 max-h-4/5", {
+      className={clsx("pb-5 px-0 bg-transparent w-4/5 max-h-3/4", {
         "max-w-[300px]":
           activeTab === "settings" || activeTab === "attribution",
         "max-w-4/5": activeTab === "changes",
@@ -76,6 +76,7 @@ export const Settings: React.FC<Props> = ({
                 value={themesEnabled}
                 onChange={(v) => onThemesChange?.(v)}
                 label="Seasonal Themes"
+                description="Automatically switch to themed content when available"
               />
             )}
             {"share" in navigator && (
