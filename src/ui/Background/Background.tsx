@@ -130,7 +130,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
       )}
     >
       {theme === "halloween" && (
-        <div className="absolute left-0 top-0 h-full w-full animate-lightning"></div>
+        <div className="absolute left-0 top-0 h-full w-full animate-lightning bg-white"></div>
       )}
       <div className="absolute left-0 top-0 h-full w-full mix-blend-multiply bg-wood-texture"></div>
       {theme === "halloween" && (

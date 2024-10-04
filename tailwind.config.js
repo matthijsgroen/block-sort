@@ -46,6 +46,7 @@ export default {
           "flyBottomLeft 3s ease-in-out forwards, rotate 8s linear infinite, scale 2s ease-in-out infinite",
         flyBottomRight:
           "flyBottomRight 3s ease-in-out forwards, rotate 6s linear infinite, scale 3s ease-in-out infinite",
+        lightning: "lightning 10s linear infinite",
       },
       keyframes: {
         rotate: {
@@ -131,6 +132,16 @@ export default {
           "0%": { translate: "0 -5px" },
           "50%": { translate: "0 5px" },
           "100%": { translate: "0 -5px" },
+        },
+        lightning: {
+          "0%": { opacity: "0" },
+          "9%": { opacity: "0" },
+          "10%": { opacity: "4%" },
+          "11%": { opacity: "0" },
+          "19%": { opacity: "0" },
+          "20%": { opacity: "4%" },
+          "21%": { opacity: "0" },
+          "100%": { opacity: "0" },
         },
       },
       gridTemplateRows: {
