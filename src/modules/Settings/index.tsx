@@ -3,6 +3,7 @@ import clsx from "clsx";
 
 import { Checkbox } from "@/ui/Checkbox";
 import { TopButton } from "@/ui/TopButton/TopButton";
+import { Transition } from "@/ui/Transition/Transition";
 
 import info from "@/../package.json";
 import { THEMES } from "@/featureFlags";
@@ -16,9 +17,11 @@ type Props = {
   soundEnabled?: boolean;
   musicEnabled?: boolean;
   themesEnabled?: boolean;
+  particlesEnabled?: boolean;
   onSoundChange?: Dispatch<boolean>;
   onMusicChange?: Dispatch<boolean>;
   onThemesChange?: Dispatch<boolean>;
+  onParticlesChange?: Dispatch<boolean>;
   onClose?: VoidFunction;
 };
 
@@ -26,9 +29,11 @@ export const Settings: React.FC<Props> = ({
   soundEnabled = true,
   musicEnabled = true,
   themesEnabled = true,
+  particlesEnabled = true,
   onSoundChange,
   onMusicChange,
   onThemesChange,
+  onParticlesChange,
   onClose,
 }) => {
   const dialogElement = useRef<HTMLDialogElement>(null);
@@ -63,22 +68,41 @@ export const Settings: React.FC<Props> = ({
           <div className="flex flex-col gap-3">
             <Checkbox
               value={soundEnabled}
-              onChange={(v) => onSoundChange?.(v)}
+              onChange={(value) => onSoundChange?.(value)}
               label="Sound Effects"
             />
             <Checkbox
               value={musicEnabled}
-              onChange={(v) => onMusicChange?.(v)}
+              onChange={(value) => onMusicChange?.(value)}
               label="Music"
             />
             {THEMES && (
               <Checkbox
                 value={themesEnabled}
-                onChange={(v) => onThemesChange?.(v)}
+                onChange={(value) => onThemesChange?.(value)}
                 label="Seasonal Themes"
                 description="Automatically switch to themed content when available"
               />
             )}
+            <Transition
+              active={themesEnabled}
+              enterStart={{ opacity: 0, height: "0rem" }}
+              enterEnd={{ opacity: 1, height: "3rem" }}
+              exitStart={{ opacity: 1, height: "3rem" }}
+              exitEnd={{ opacity: 0, height: "0rem" }}
+              duration={300}
+            >
+              <div className="pl-10">
+                <Checkbox
+                  value={particlesEnabled}
+                  label="Use particle effects"
+                  description="Can reduce performance"
+                  onChange={(value) => {
+                    onParticlesChange?.(value);
+                  }}
+                />
+              </div>
+            </Transition>
             {"share" in navigator && (
               <button
                 className={clsx(
