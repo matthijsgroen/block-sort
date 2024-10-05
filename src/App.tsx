@@ -16,6 +16,10 @@ export const App: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useGameStorage("soundEnabled", true);
   const [musicEnabled, setMusicEnabled] = useGameStorage("musicEnabled", true);
+  const [particlesEnabled, setParticlesEnabled] = useGameStorage(
+    "particlesEnabled",
+    true
+  );
   const [themesEnabled, setThemesEnabled] = useGameStorage(
     "themesEnabled",
     true
@@ -61,6 +65,7 @@ export const App: React.FC = () => {
             soundEnabled={soundEnabled}
             musicEnabled={musicEnabled}
             themesEnabled={themesEnabled}
+            particlesEnabled={particlesEnabled}
             onSoundChange={(effectsEnabled) => {
               sound.setStreamEnabled(Stream.effects, effectsEnabled);
               setSoundEnabled(effectsEnabled);
@@ -76,6 +81,7 @@ export const App: React.FC = () => {
               setMusicEnabled(musicEnabled);
             }}
             onThemesChange={setThemesEnabled}
+            onParticlesChange={setParticlesEnabled}
             onClose={() => setSettingsOpen(false)}
           />
         )}

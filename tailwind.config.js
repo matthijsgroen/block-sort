@@ -136,10 +136,10 @@ export default {
         lightning: {
           "0%": { opacity: "0" },
           "9%": { opacity: "0" },
-          "10%": { opacity: "4%" },
+          "10%": { opacity: "6%" },
           "11%": { opacity: "0" },
           "19%": { opacity: "0" },
-          "20%": { opacity: "4%" },
+          "20%": { opacity: "6%" },
           "21%": { opacity: "0" },
           "100%": { opacity: "0" },
         },

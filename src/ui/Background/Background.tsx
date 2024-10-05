@@ -10,6 +10,7 @@ import { LevelType } from "@/support/getLevelType";
 type Props = {
   levelType?: LevelType;
   theme?: BlockTheme;
+  disableParticles?: boolean;
 };
 
 const snow: ISourceOptions = {
@@ -103,11 +104,12 @@ const themeParticles: Record<BlockTheme, ISourceOptions | undefined> = {
 export const Background: React.FC<PropsWithChildren<Props>> = ({
   children,
   levelType,
+  disableParticles = false,
   theme = "default",
 }) => {
   const [init, setInit] = useState(false);
 
-  const particles = themeParticles[theme];
+  const particles = disableParticles ? false : themeParticles[theme];
 
   // this should be run only once per application lifetime
   useEffect(() => {
