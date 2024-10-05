@@ -1,6 +1,5 @@
 import { Dispatch, Suspense, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import { on } from "events";
 
 import { Checkbox } from "@/ui/Checkbox";
 import { TopButton } from "@/ui/TopButton/TopButton";
