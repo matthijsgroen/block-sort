@@ -23,6 +23,8 @@ import styles from "./levelTrack.module.css";
 type Props = {
   levelNr: number;
   hasZenMode?: boolean;
+  showInstallButton?: boolean;
+  onInstall?: VoidFunction;
   onLevelStart: VoidFunction;
   onZenModeStart?: VoidFunction;
   onOpenSettings?: VoidFunction;
@@ -42,6 +44,8 @@ const translates = [
 export const LevelTrack: React.FC<Props> = ({
   levelNr,
   hasZenMode = false,
+  showInstallButton = false,
+  onInstall,
   onZenModeStart,
   onLevelStart,
   onOpenSettings,
@@ -59,11 +63,18 @@ export const LevelTrack: React.FC<Props> = ({
   return (
     <div className="flex flex-col items-center h-full">
       <div className="flex flex-row pt-2 pl-safeLeft pr-safeRight gap-x-2 w-full">
-        {onOpenSettings && (
-          <TopButton buttonType="settings" onClick={onOpenSettings} />
-        )}
+        <TopButton buttonType="settings" onClick={onOpenSettings} />
         <GameTitle />
-        {onOpenSettings && <div className="size-block"></div>}
+        {!showInstallButton && <div className="size-block"></div>}
+        {showInstallButton && (
+          <TopButton
+            buttonType="install"
+            onClick={() => {
+              onInstall?.();
+            }}
+            highlight
+          />
+        )}
       </div>
 
       <ol className="flex flex-col-reverse w-full flex-1 overflow-y-hidden">

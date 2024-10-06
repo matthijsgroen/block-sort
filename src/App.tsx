@@ -11,9 +11,11 @@ import { getActiveTheme, ThemeProvider } from "./support/ThemeProvider.tsx";
 import { sound, Stream } from "./audio.ts";
 import { THEMES } from "./featureFlags.ts";
 import PWABadge from "./PWABadge.tsx";
+import { InstallPrompt } from "./modules/InstallPrompt/index.tsx";
 
 export const App: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [installPromptOpen, setInstallPromptOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useGameStorage("soundEnabled", true);
   const [musicEnabled, setMusicEnabled] = useGameStorage("musicEnabled", true);
   const [particlesEnabled, setParticlesEnabled] = useGameStorage(
@@ -29,6 +31,10 @@ export const App: React.FC = () => {
   const theme =
     themesEnabled && THEMES ? getActiveTheme(new Date()) : "default";
   const song = getThemeSong(theme);
+
+  const isInstalled: boolean =
+    "standalone" in window.navigator &&
+    (window.navigator["standalone"] as boolean);
 
   useEffect(() => {
     sound.stopAllInStream(Stream.music);
@@ -52,6 +58,8 @@ export const App: React.FC = () => {
       <BackgroundProvider>
         <NormalMode
           active={!inZenMode}
+          showInstallButton={!isInstalled}
+          onInstall={() => setInstallPromptOpen(true)}
           onOpenSettings={() => setSettingsOpen(true)}
           onZenModeStart={() => setInZenMode(true)}
         />
@@ -84,6 +92,9 @@ export const App: React.FC = () => {
             onParticlesChange={setParticlesEnabled}
             onClose={() => setSettingsOpen(false)}
           />
+        )}
+        {installPromptOpen && (
+          <InstallPrompt onClose={() => setInstallPromptOpen(false)} />
         )}
         <PWABadge />
       </BackgroundProvider>

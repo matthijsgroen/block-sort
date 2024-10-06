@@ -1,0 +1,24 @@
+.textStyling h1 {
+  @apply text-xl font-bold;
+}
+.textStyling p {
+  @apply text-xs my-1;
+}
+.textStyling h2 {
+  @apply text-lg font-bold;
+}
+.textStyling h3 {
+  @apply font-bold;
+}
+.textStyling ul {
+  @apply list-outside pl-4 list-disc;
+}
+.textStyling ol {
+  @apply list-outside pl-4 list-decimal;
+}
+.textStyling li {
+  @apply my-2 text-xs;
+}
+.textStyling a {
+  @apply underline;
+}
