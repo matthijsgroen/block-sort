@@ -63,7 +63,7 @@ describe(getNormalSettings, () => {
           amountColors: 7,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 4,
+          stackSize: 5,
         },
       },
       {
@@ -72,7 +72,7 @@ describe(getNormalSettings, () => {
           amountColors: 8,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 4,
+          stackSize: 5,
         },
       },
       {
@@ -81,7 +81,7 @@ describe(getNormalSettings, () => {
           amountColors: 9,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 5,
+          stackSize: 6,
         },
       },
       {
