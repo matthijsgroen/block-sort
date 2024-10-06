@@ -32,6 +32,7 @@ export const App: React.FC = () => {
     themesEnabled && THEMES ? getActiveTheme(new Date()) : "default";
   const song = getThemeSong(theme);
 
+  const canInstall: boolean = "standalone" in window.navigator;
   const isInstalled: boolean =
     "standalone" in window.navigator &&
     (window.navigator["standalone"] as boolean);
@@ -58,7 +59,7 @@ export const App: React.FC = () => {
       <BackgroundProvider>
         <NormalMode
           active={!inZenMode}
-          showInstallButton={!isInstalled}
+          showInstallButton={!isInstalled && canInstall}
           onInstall={() => setInstallPromptOpen(true)}
           onOpenSettings={() => setSettingsOpen(true)}
           onZenModeStart={() => setInZenMode(true)}
