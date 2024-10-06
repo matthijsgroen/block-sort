@@ -11,6 +11,7 @@ type Props = {
   direction: "up" | "down";
   scale: [min: number, max: number];
   speed: [min: number, max: number];
+  shift?: number;
   floatSpeed: [min: number, max: number];
   floatDistance: [min: number, max: number];
 };
@@ -21,6 +22,7 @@ export const CSSParticles: React.FC<Props> = ({
   symbol,
   amount,
   direction,
+  shift = 0,
   scale,
   speed,
   floatDistance,
@@ -48,7 +50,7 @@ export const CSSParticles: React.FC<Props> = ({
               "--directionYStart": `${yStart}`,
               "--directionYEnd": `${yEnd}`,
               "--directionXStart": "0px",
-              "--directionXEnd": `${between(-100, 100, random)}px`,
+              "--directionXEnd": `${between(-shift, shift, random)}px`,
               "--float": `${Math.round(between(floatDistance[0], floatDistance[1], random))}px`,
               "--symbol": `"${symbol}"`,
               scale: `${between(scale[0], scale[1], random)}`,

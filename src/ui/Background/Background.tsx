@@ -42,13 +42,21 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           className={clsx(
             "absolute left-0 bottom-0 text-8xl transition-all [transition-duration:2000ms]",
             {
-              "-rotate-12": layout === "levelTrack",
-              "rotate-[372deg] translate-x-[100vw] -left-[90px]":
-                layout === "zenMode",
+              "translate-x-[100vw]": layout === "zenMode",
             }
           )}
         >
-          🎃
+          <div
+            className={clsx(
+              "inline-block transition-all [transition-duration:2000ms]",
+              {
+                "-rotate-12": layout === "levelTrack",
+                "rotate-[372deg] -translate-x-[90px]": layout === "zenMode",
+              }
+            )}
+          >
+            🎃
+          </div>
         </div>
       )}
       {theme === "winter" && (
@@ -86,9 +94,10 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
       {!disableParticles && theme === "halloween" && (
         <CSSParticles
           symbol="👻"
-          amount={15}
+          amount={10}
           direction="up"
-          scale={[0.5, 1.8]}
+          shift={200}
+          scale={[0.7, 1.8]}
           speed={[30, 50]}
           floatDistance={[20, 100]}
           floatSpeed={[5, 10]}
@@ -98,6 +107,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
         <CSSParticles
           symbol="❄️"
           amount={30}
+          shift={100}
           direction="down"
           scale={[0.2, 1]}
           speed={[30, 50]}
