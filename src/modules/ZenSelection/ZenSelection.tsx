@@ -34,9 +34,10 @@ export const ZenSelection: React.FC<Props> = ({
   onLevelStart,
   onOpenSettings,
 }) => {
-  const [, setTheme] = use(BackgroundContext);
+  const { setLevelType, setScreenLayout } = use(BackgroundContext);
   useEffect(() => {
-    setTheme("easy");
+    setLevelType("easy");
+    setScreenLayout("zenMode");
   }, []);
 
   // Synch with offline state

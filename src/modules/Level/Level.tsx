@@ -70,9 +70,9 @@ export const Level: React.FC<Props> = ({
 
   const [started, setStarted] = useState(false);
 
-  const [, setTheme] = use(BackgroundContext);
+  const { setLevelType } = use(BackgroundContext);
   useEffect(() => {
-    setTheme(levelType);
+    setLevelType(levelType);
 
     const cleanup = setTimeout(() => setStarted(true), 300);
     return () => clearTimeout(cleanup);

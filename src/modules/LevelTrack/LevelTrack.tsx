@@ -50,9 +50,10 @@ export const LevelTrack: React.FC<Props> = ({
 
   const levelNrs = new Array(30).fill(0).map((_, i) => startNumbering + i);
 
-  const [, setTheme] = use(BackgroundContext);
+  const { setLevelType, setScreenLayout } = use(BackgroundContext);
   useEffect(() => {
-    setTheme(undefined);
+    setLevelType(undefined);
+    setScreenLayout("levelTrack");
   }, []);
 
   return (

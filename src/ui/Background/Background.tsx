@@ -11,6 +11,7 @@ type Props = {
   levelType?: LevelType;
   theme?: BlockTheme;
   disableParticles?: boolean;
+  layout?: string;
 };
 
 const snow: ISourceOptions = {
@@ -106,6 +107,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
   levelType,
   disableParticles = false,
   theme = "default",
+  layout = "default",
 }) => {
   const [init, setInit] = useState(false);
 
@@ -138,7 +140,18 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
       )}
       <div className="absolute left-0 top-0 h-full w-full mix-blend-multiply bg-wood-texture"></div>
       {theme === "halloween" && (
-        <div className="absolute left-0 bottom-0 text-8xl -rotate-12">🎃</div>
+        <div
+          className={clsx(
+            "absolute left-0 bottom-0 text-8xl transition-all [transition-duration:1000ms]",
+            {
+              "-rotate-12": layout === "levelTrack",
+              "rotate-[372deg] translate-x-[100vw] -left-20":
+                layout === "zenMode",
+            }
+          )}
+        >
+          🎃
+        </div>
       )}
       {theme === "winter" && (
         <div className="absolute left-0 bottom-0 text-8xl">🎄</div>
