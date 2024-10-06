@@ -43,7 +43,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
             "absolute left-0 bottom-0 text-8xl transition-all [transition-duration:2000ms]",
             {
               "-rotate-12": layout === "levelTrack",
-              "rotate-[372deg] translate-x-[100vw] -left-20":
+              "rotate-[372deg] translate-x-[100vw] -left-[90px]":
                 layout === "zenMode",
             }
           )}
@@ -52,7 +52,30 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
         </div>
       )}
       {theme === "winter" && (
-        <div className="absolute left-0 bottom-0 text-8xl">🎄</div>
+        <>
+          <div
+            className={clsx(
+              "absolute right-0 bottom-0 text-8xl scale-150 origin-bottom transition-transform [transition-duration:2000ms]",
+              {
+                "translate-y-[150%]": layout === "levelTrack",
+                "[transition-delay:1500ms]": layout === "zenMode",
+              }
+            )}
+          >
+            🎄
+          </div>
+          <div
+            className={clsx(
+              "absolute left-0 bottom-0 text-8xl scale-150 origin-bottom transition-transform [transition-duration:2000ms]",
+              {
+                "translate-y-[150%]": layout === "zenMode",
+                "[transition-delay:1500ms]": layout === "levelTrack",
+              }
+            )}
+          >
+            🎄
+          </div>
+        </>
       )}
       {theme === "winter" && (
         <div className="absolute right-0 top-3/4 text-8xl -rotate-45 translate-x-8">
@@ -66,6 +89,9 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           amount={15}
           direction="up"
           scale={[0.5, 1.8]}
+          speed={[30, 50]}
+          floatDistance={[20, 100]}
+          floatSpeed={[5, 10]}
         />
       )}
       {!disableParticles && theme === "winter" && (
@@ -74,6 +100,9 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           amount={30}
           direction="down"
           scale={[0.2, 1]}
+          speed={[30, 50]}
+          floatDistance={[20, 100]}
+          floatSpeed={[5, 10]}
         />
       )}
     </div>

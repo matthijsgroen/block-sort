@@ -10,6 +10,9 @@ type Props = {
   amount: number;
   direction: "up" | "down";
   scale: [min: number, max: number];
+  speed: [min: number, max: number];
+  floatSpeed: [min: number, max: number];
+  floatDistance: [min: number, max: number];
 };
 
 const SEED = 123456789;
@@ -19,30 +22,34 @@ export const CSSParticles: React.FC<Props> = ({
   amount,
   direction,
   scale,
+  speed,
+  floatDistance,
+  floatSpeed,
 }) => {
   const random = mulberry32(SEED);
-  const yStart = direction === "up" ? "100vh" : "calc(0vh - 50px)";
-  const yEnd = direction === "up" ? "calc(0vh - 50px)" : "100vh";
+  const yStart = direction === "up" ? "calc(100vh + 50px)" : "0vh";
+  const yEnd = direction === "up" ? "0vh" : "calc(100vh + 50px)";
 
   return (
     <div className="absolute inset-0 pointer-events-none">
       {timesMap(amount, (i) => {
-        const movement = between(20, 40, random);
+        const movement = between(speed[0], speed[1], random);
+        const delay = between(0, movement, random);
         return (
           <div
             key={i}
             style={{
-              left: `${between(-2, 98, random)}vw`,
+              left: `${Math.round(between(-2, 98, random))}vw`,
               top: "-50px",
-              "--floatSpeed": `${between(2, 6, random)}s`,
-              "--floatDelay": `${between(0, 1, random)}s`,
-              "--moveSpeed": `${movement}s`,
-              "--delay": `-${between(0, movement, random)}s`,
+              "--floatSpeed": `${Math.round(between(floatSpeed[0], floatSpeed[1], random) * 1000)}ms`,
+              "--floatDelay": `-${Math.round(between(0, floatSpeed[0], random) * 1000)}ms`,
+              "--moveSpeed": `${Math.round(movement * 1000)}ms`,
+              "--delay": `-${Math.round(delay * 1000)}ms`,
               "--directionYStart": `${yStart}`,
               "--directionYEnd": `${yEnd}`,
               "--directionXStart": "0px",
               "--directionXEnd": `${between(-100, 100, random)}px`,
-              "--float": `${between(20, 40, random)}px`,
+              "--float": `${Math.round(between(floatDistance[0], floatDistance[1], random))}px`,
               "--symbol": `"${symbol}"`,
               scale: `${between(scale[0], scale[1], random)}`,
               opacity: `${between(0.5, 0.8, random)}`,

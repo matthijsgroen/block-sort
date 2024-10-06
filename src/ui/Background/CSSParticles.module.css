@@ -1,5 +1,5 @@
 .float {
-  animation: float var(--floatSpeed) ease-in-out var(--floatDelay, 0s) infinite;
+  animation: move var(--moveSpeed) linear var(--delay, 0s) infinite;
 }
 
 .particle {
@@ -10,7 +10,7 @@
 .particle::before {
   content: var(--symbol);
   display: block;
-  animation: move var(--moveSpeed) linear var(--delay, 0s) infinite;
+  animation: float var(--floatSpeed) ease-in-out var(--floatDelay, 0s) infinite;
   will-change: transform;
 }
 
