@@ -1,0 +1,11 @@
+.highlight {
+  @apply relative;
+}
+
+.highlight::before {
+  content: "💥";
+  scale: 3.5;
+  filter: blur(1px);
+  @apply absolute block bg-yellow-200 text-transparent bg-clip-text origin-center animate-spin [animation-duration:12s];
+  translate: 10px 10px;
+}

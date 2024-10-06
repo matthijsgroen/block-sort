@@ -24,12 +24,16 @@ import { BASE_SEED, SCREEN_TRANSITION } from "./constants.ts";
 
 type Props = {
   active: boolean;
+  showInstallButton: boolean;
+  onInstall: VoidFunction;
   onOpenSettings: VoidFunction;
   onZenModeStart: VoidFunction;
 };
 
 export const NormalMode: React.FC<Props> = ({
   active,
+  showInstallButton,
+  onInstall,
   onOpenSettings,
   onZenModeStart,
 }) => {
@@ -67,12 +71,14 @@ export const NormalMode: React.FC<Props> = ({
         <LevelTrack
           levelNr={levelNr}
           hasZenMode={levelNr >= 49 && ZEN_MODE}
+          showInstallButton={showInstallButton}
           onLevelStart={() => {
             // tie playback to user interaction
             sound.play(song);
             setInLevel(true);
           }}
           onOpenSettings={onOpenSettings}
+          onInstall={onInstall}
           onZenModeStart={onZenModeStart}
         />
       </Transition>

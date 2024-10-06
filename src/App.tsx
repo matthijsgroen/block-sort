@@ -4,6 +4,7 @@ import { useGameStorage } from "@/support/useGameStorage.ts";
 
 import { NormalMode } from "./modules/GameModi/NormalMode.tsx";
 import { ZenMode } from "./modules/GameModi/ZenMode.tsx";
+import { InstallPrompt } from "./modules/InstallPrompt/index.tsx";
 import { BackgroundProvider } from "./modules/Layout/BackgroundContext.tsx";
 import { Settings } from "./modules/Settings/index.tsx";
 import { getThemeSong } from "./support/themeMusic.tsx";
@@ -14,6 +15,7 @@ import PWABadge from "./PWABadge.tsx";
 
 export const App: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [installPromptOpen, setInstallPromptOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useGameStorage("soundEnabled", true);
   const [musicEnabled, setMusicEnabled] = useGameStorage("musicEnabled", true);
   const [particlesEnabled, setParticlesEnabled] = useGameStorage(
@@ -29,6 +31,11 @@ export const App: React.FC = () => {
   const theme =
     themesEnabled && THEMES ? getActiveTheme(new Date()) : "default";
   const song = getThemeSong(theme);
+
+  const canInstall: boolean = "standalone" in window.navigator;
+  const isInstalled: boolean =
+    "standalone" in window.navigator &&
+    (window.navigator["standalone"] as boolean);
 
   useEffect(() => {
     sound.stopAllInStream(Stream.music);
@@ -52,6 +59,8 @@ export const App: React.FC = () => {
       <BackgroundProvider>
         <NormalMode
           active={!inZenMode}
+          showInstallButton={!isInstalled && canInstall}
+          onInstall={() => setInstallPromptOpen(true)}
           onOpenSettings={() => setSettingsOpen(true)}
           onZenModeStart={() => setInZenMode(true)}
         />
@@ -84,6 +93,9 @@ export const App: React.FC = () => {
             onParticlesChange={setParticlesEnabled}
             onClose={() => setSettingsOpen(false)}
           />
+        )}
+        {installPromptOpen && (
+          <InstallPrompt onClose={() => setInstallPromptOpen(false)} />
         )}
         <PWABadge />
       </BackgroundProvider>
