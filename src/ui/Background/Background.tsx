@@ -42,13 +42,21 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           className={clsx(
             "absolute left-0 bottom-0 text-8xl transition-all [transition-duration:2000ms]",
             {
-              "-rotate-12": layout === "levelTrack",
-              "rotate-[372deg] translate-x-[100vw] -left-[90px]":
-                layout === "zenMode",
+              "translate-x-[100vw]": layout === "zenMode",
             }
           )}
         >
-          🎃
+          <div
+            className={clsx(
+              "inline-block transition-all [transition-duration:2000ms]",
+              {
+                "-rotate-12": layout === "levelTrack",
+                "rotate-[372deg] -translate-x-[90px]": layout === "zenMode",
+              }
+            )}
+          >
+            🎃
+          </div>
         </div>
       )}
       {theme === "winter" && (
