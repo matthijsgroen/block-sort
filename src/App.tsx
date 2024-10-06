@@ -4,6 +4,7 @@ import { useGameStorage } from "@/support/useGameStorage.ts";
 
 import { NormalMode } from "./modules/GameModi/NormalMode.tsx";
 import { ZenMode } from "./modules/GameModi/ZenMode.tsx";
+import { InstallPrompt } from "./modules/InstallPrompt/index.tsx";
 import { BackgroundProvider } from "./modules/Layout/BackgroundContext.tsx";
 import { Settings } from "./modules/Settings/index.tsx";
 import { getThemeSong } from "./support/themeMusic.tsx";
@@ -11,7 +12,6 @@ import { getActiveTheme, ThemeProvider } from "./support/ThemeProvider.tsx";
 import { sound, Stream } from "./audio.ts";
 import { THEMES } from "./featureFlags.ts";
 import PWABadge from "./PWABadge.tsx";
-import { InstallPrompt } from "./modules/InstallPrompt/index.tsx";
 
 export const App: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
