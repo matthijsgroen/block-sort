@@ -13,12 +13,17 @@ const meta = {
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ["autodocs"],
   argTypes: {
+    disableParticles: { control: "boolean" },
     levelType: {
       options: ["none", "easy", "hard", "special", "scrambled"],
       control: "select",
     },
     theme: {
       options: ["default", "halloween", "winter"],
+      control: "select",
+    },
+    layout: {
+      options: ["levelTrack", "zenMode"],
       control: "select",
     },
   },

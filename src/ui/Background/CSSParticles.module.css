@@ -1,0 +1,36 @@
+.float {
+  animation: float var(--floatSpeed) ease-in-out var(--floatDelay, 0s) infinite;
+}
+
+.particle {
+  position: absolute;
+  pointer-events: none;
+}
+
+.particle::before {
+  content: var(--symbol);
+  display: block;
+  animation: move var(--moveSpeed) linear var(--delay, 0s) infinite;
+  will-change: transform;
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0px, 0px);
+  }
+  50% {
+    transform: translate(var(--float, 0px), 0px);
+  }
+  100% {
+    transform: translate(0px, 0px);
+  }
+}
+
+@keyframes move {
+  0% {
+    translate: var(--directionXStart, 0) var(--directionYStart, 0);
+  }
+  100% {
+    translate: var(--directionXEnd, 0) var(--directionYEnd, 100vh);
+  }
+}
