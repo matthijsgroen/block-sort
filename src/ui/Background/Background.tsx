@@ -94,9 +94,10 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
       {!disableParticles && theme === "halloween" && (
         <CSSParticles
           symbol="👻"
-          amount={15}
+          amount={10}
           direction="up"
-          scale={[0.5, 1.8]}
+          shift={200}
+          scale={[0.7, 1.8]}
           speed={[30, 50]}
           floatDistance={[20, 100]}
           floatSpeed={[5, 10]}
@@ -106,6 +107,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
         <CSSParticles
           symbol="❄️"
           amount={30}
+          shift={100}
           direction="down"
           scale={[0.2, 1]}
           speed={[30, 50]}
