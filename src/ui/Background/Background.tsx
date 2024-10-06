@@ -1,105 +1,16 @@
-import { PropsWithChildren, useEffect, useState } from "react";
-import { ISourceOptions, MoveDirection } from "@tsparticles/engine";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim";
+import { PropsWithChildren } from "react";
 import clsx from "clsx";
 
 import { BlockTheme } from "@/game/themes";
 import { LevelType } from "@/support/getLevelType";
+
+import { CSSParticles } from "./CSSParticles";
 
 type Props = {
   levelType?: LevelType;
   theme?: BlockTheme;
   disableParticles?: boolean;
   layout?: string;
-};
-
-const snow: ISourceOptions = {
-  detectRetina: true,
-  fpsLimit: 30,
-  pauseOnBlur: true,
-  particles: {
-    number: {
-      value: 100,
-    },
-    move: {
-      direction: MoveDirection.bottom,
-      enable: true,
-      random: false,
-      straight: false,
-    },
-    opacity: {
-      value: { min: 0.1, max: 0.5 },
-    },
-    size: {
-      value: { min: 2, max: 10 },
-    },
-    shape: {
-      type: "emoji",
-      options: {
-        emoji: {
-          font: "sans-serif",
-          value: "❄️",
-        },
-      },
-    },
-
-    wobble: {
-      distance: 20,
-      enable: true,
-      speed: {
-        min: -5,
-        max: 5,
-      },
-    },
-  },
-};
-
-const ghosts: ISourceOptions = {
-  detectRetina: true,
-  fpsLimit: 30,
-  pauseOnBlur: true,
-  particles: {
-    number: {
-      value: 10,
-    },
-    move: {
-      direction: MoveDirection.top,
-      enable: true,
-      random: false,
-      straight: false,
-    },
-    opacity: {
-      value: { min: 0.1, max: 0.5 },
-    },
-    size: {
-      value: { min: 3, max: 20 },
-    },
-    shape: {
-      type: "emoji",
-      options: {
-        emoji: {
-          font: "sans-serif",
-          value: "️👻",
-        },
-      },
-    },
-
-    wobble: {
-      distance: 20,
-      enable: true,
-      speed: {
-        min: -5,
-        max: 5,
-      },
-    },
-  },
-};
-
-const themeParticles: Record<BlockTheme, ISourceOptions | undefined> = {
-  winter: snow,
-  halloween: ghosts,
-  default: undefined,
 };
 
 export const Background: React.FC<PropsWithChildren<Props>> = ({
@@ -109,19 +20,6 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
   theme = "default",
   layout = "default",
 }) => {
-  const [init, setInit] = useState(false);
-
-  const particles = disableParticles ? false : themeParticles[theme];
-
-  // this should be run only once per application lifetime
-  useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine);
-    }).then(() => {
-      setInit(true);
-    });
-  }, []);
-
   return (
     <div
       className={clsx(
@@ -142,7 +40,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
       {theme === "halloween" && (
         <div
           className={clsx(
-            "absolute left-0 bottom-0 text-8xl transition-all [transition-duration:1000ms]",
+            "absolute left-0 bottom-0 text-8xl transition-all [transition-duration:2000ms]",
             {
               "-rotate-12": layout === "levelTrack",
               "rotate-[372deg] translate-x-[100vw] -left-20":
@@ -162,7 +60,22 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
         </div>
       )}
       <div className="absolute left-0 top-0 h-safe-area w-full">{children}</div>
-      {init && particles && <Particles id="tsparticles" options={particles} />}
+      {!disableParticles && theme === "halloween" && (
+        <CSSParticles
+          symbol="👻"
+          amount={15}
+          direction="up"
+          scale={[0.5, 1.8]}
+        />
+      )}
+      {!disableParticles && theme === "winter" && (
+        <CSSParticles
+          symbol="❄️"
+          amount={30}
+          direction="down"
+          scale={[0.2, 1]}
+        />
+      )}
     </div>
   );
 };

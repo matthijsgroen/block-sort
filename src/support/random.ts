@@ -38,3 +38,6 @@ export const generateNewSeed = (seed: number, index: number) => {
 
 export const pick = <T>(list: T[], random: () => number = Math.random): T =>
   list[Math.floor(random() * list.length)];
+
+export const between = (min: number, max: number, random: () => number) =>
+  random() * (max - min) + min;
