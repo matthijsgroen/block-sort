@@ -24,7 +24,7 @@ const audioItems = {
     loop: true,
     lazy: true,
   }),
-  winter: createItem(Stream.music, winter, 0.5, {
+  winter: createItem(Stream.music, winter, 0.4, {
     loop: true,
     lazy: true,
   }),
