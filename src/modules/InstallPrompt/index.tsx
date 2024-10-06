@@ -46,6 +46,11 @@ export const InstallPrompt: React.FC<Props> = ({ onClose }) => {
           <li>Tap &quot;Add to Home Screen&quot;</li>
           <li>Tap &quot;Add&quot;</li>
         </ol>
+        <p>
+          Your GameState cannot be transferred when installing on iOS, so you
+          will need to start over.
+        </p>
+        <p>So the earlier you install, the better.</p>
       </div>
     </Dialog>
   );
