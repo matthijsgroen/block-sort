@@ -1,5 +1,3 @@
-import { useEffect, useRef } from "react";
-
 import { Dialog } from "@/ui/Dialog/Dialog";
 import { DialogTitle } from "@/ui/Dialog/DialogTitle";
 
@@ -10,17 +8,10 @@ type Props = {
 };
 
 export const InstallPrompt: React.FC<Props> = ({ onClose }) => {
-  const dialogElement = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    dialogElement.current?.showModal();
-  }, []);
-
   return (
     <Dialog
-      ref={dialogElement}
       wide={false}
       onClose={() => {
-        dialogElement.current?.close();
         onClose?.();
       }}
     >

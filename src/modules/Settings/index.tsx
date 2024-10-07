@@ -31,21 +31,14 @@ export const Settings: React.FC<Props> = ({
   onThemesChange,
   onClose,
 }) => {
-  const dialogElement = useRef<HTMLDialogElement>(null);
   const [activeTab, setActiveTab] = useState<
     "settings" | "changes" | "attribution"
   >("settings");
 
-  useEffect(() => {
-    dialogElement.current?.showModal();
-  }, []);
-
   return (
     <Dialog
-      ref={dialogElement}
       wide={activeTab === "changes"}
       onClose={() => {
-        dialogElement.current?.close();
         onClose?.();
       }}
     >

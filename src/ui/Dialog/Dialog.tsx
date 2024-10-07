@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useEffect, useRef } from "react";
 import clsx from "clsx";
 
 import { TopButton } from "../TopButton/TopButton";
@@ -6,20 +6,31 @@ import { TopButton } from "../TopButton/TopButton";
 import styles from "./Dialog.module.css";
 
 type Props = PropsWithChildren<{
-  ref: React.Ref<HTMLDialogElement>;
   wide?: boolean;
   onClose?: VoidFunction;
 }>;
 
 export const Dialog: React.FC<Props> = ({
-  ref,
   children,
   wide = false,
   onClose,
 }) => {
+  const dialogElement = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    dialogElement.current?.showModal();
+    const listener = () => {
+      onClose?.();
+    };
+    dialogElement.current?.addEventListener("close", listener);
+    return () => {
+      dialogElement.current?.removeEventListener("close", listener);
+    };
+  }, []);
+
   return (
     <dialog
-      ref={ref}
+      ref={dialogElement}
       className={clsx("pb-5 px-0 bg-transparent w-4/5 max-h-3/4", {
         "max-w-[300px]": !wide,
         "max-w-4/5": wide,
@@ -36,7 +47,7 @@ export const Dialog: React.FC<Props> = ({
           <TopButton
             buttonType="close"
             onClick={() => {
-              onClose?.();
+              dialogElement.current?.close();
             }}
           />
         </div>
