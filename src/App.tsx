@@ -61,7 +61,7 @@ export const App: React.FC = () => {
           active={!inZenMode}
           showInstallButton={!isInstalled && canInstall}
           onInstall={() => setInstallPromptOpen(true)}
-          onOpenSettings={() => setSettingsOpen(true)}
+          onOpenSettings={() => setSettingsOpen((settings) => !settings)}
           onZenModeStart={() => setInZenMode(true)}
         />
         <ZenMode
