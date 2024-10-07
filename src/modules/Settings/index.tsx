@@ -16,11 +16,9 @@ type Props = {
   soundEnabled?: boolean;
   musicEnabled?: boolean;
   themesEnabled?: boolean;
-  particlesEnabled?: boolean;
   onSoundChange?: Dispatch<boolean>;
   onMusicChange?: Dispatch<boolean>;
   onThemesChange?: Dispatch<boolean>;
-  onParticlesChange?: Dispatch<boolean>;
   onClose?: VoidFunction;
 };
 
@@ -28,11 +26,9 @@ export const Settings: React.FC<Props> = ({
   soundEnabled = true,
   musicEnabled = true,
   themesEnabled = true,
-  particlesEnabled = true,
   onSoundChange,
   onMusicChange,
   onThemesChange,
-  onParticlesChange,
   onClose,
 }) => {
   const dialogElement = useRef<HTMLDialogElement>(null);
@@ -84,14 +80,7 @@ export const Settings: React.FC<Props> = ({
             duration={300}
           >
             <div className="pl-10">
-              <Checkbox
-                value={particlesEnabled}
-                label="Use particle effects"
-                description="Can reduce performance"
-                onChange={(value) => {
-                  onParticlesChange?.(value);
-                }}
-              />
+              <p>Peekaboo!</p>
             </div>
           </Transition>
           {"share" in navigator && (
@@ -128,7 +117,7 @@ export const Settings: React.FC<Props> = ({
             </a>
             , 2024
           </p>
-          <div className="flex flex-row justify-between pb-4">
+          <div className="flex flex-row justify-between">
             <button
               className={clsx(
                 "inline-block rounded-full border border-black p-2 shadow-md text-black text-sm px-4",
@@ -146,6 +135,17 @@ export const Settings: React.FC<Props> = ({
               onClick={() => setActiveTab("attribution")}
             >
               Attribution
+            </button>
+          </div>
+          <div className="flex flex-row justify-between pb-4">
+            <button
+              className={clsx(
+                "inline-block rounded-full border border-black p-2 shadow-md text-black text-sm px-4",
+                "active:scale-90 transition-transform"
+              )}
+              onClick={() => setActiveTab("changes")}
+            >
+              Data transfer
             </button>
           </div>
         </div>
