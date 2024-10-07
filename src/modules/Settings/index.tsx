@@ -13,6 +13,7 @@ import { TextEmoji } from "@/support/Emoji";
 
 import { Attribution } from "./Attribution";
 import { Changelog } from "./Changelog";
+import { EventCalendar } from "./EventCalendar";
 
 type Props = {
   soundEnabled?: boolean;
@@ -37,6 +38,8 @@ export const Settings: React.FC<Props> = ({
     "settings" | "changes" | "attribution"
   >("settings");
 
+  const [showThemes, setShowThemes] = useState(false);
+
   return (
     <Dialog
       wide={activeTab === "changes"}
@@ -45,7 +48,6 @@ export const Settings: React.FC<Props> = ({
       }}
     >
       <DialogTitle>BlockSort, v{info.version}</DialogTitle>
-
       {activeTab === "settings" && (
         <div className="flex flex-col gap-3">
           <Checkbox
@@ -67,19 +69,25 @@ export const Settings: React.FC<Props> = ({
                 description="Automatically switch to themed content when available"
               />
               <div>
-                <TransparentButton>📅</TransparentButton>
+                <TransparentButton
+                  onClick={() => setShowThemes((show) => !show)}
+                >
+                  📅
+                </TransparentButton>
               </div>
             </div>
           )}
           <Transition
-            active={themesEnabled}
+            active={showThemes}
             enterStart={{ opacity: 0, height: "0rem" }}
-            enterEnd={{ opacity: 1, height: "3rem" }}
-            exitStart={{ opacity: 1, height: "3rem" }}
+            enterEnd={{ opacity: 1, height: "2.5rem" }}
+            exitStart={{ opacity: 1, height: "2.5rem" }}
             exitEnd={{ opacity: 0, height: "0rem" }}
             duration={300}
           >
-            <div className="pl-10"></div>
+            <div className="pl-12">
+              <EventCalendar />
+            </div>
           </Transition>
           {"share" in navigator && (
             <TransparentButton
@@ -120,7 +128,7 @@ export const Settings: React.FC<Props> = ({
             </TransparentButton>
           </div>
           <div className="flex flex-row justify-between pb-4">
-            <TransparentButton onClick={() => setActiveTab("changes")}>
+            <TransparentButton onClick={() => {}}>
               Data transfer
             </TransparentButton>
           </div>

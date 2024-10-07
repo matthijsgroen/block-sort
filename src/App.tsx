@@ -8,20 +8,17 @@ import { InstallPrompt } from "./modules/InstallPrompt/index.tsx";
 import { BackgroundProvider } from "./modules/Layout/BackgroundContext.tsx";
 import { Settings } from "./modules/Settings/index.tsx";
 import { getThemeSong } from "./support/themeMusic.tsx";
-import { getActiveTheme, ThemeProvider } from "./support/ThemeProvider.tsx";
+import { ThemeProvider } from "./support/ThemeProvider.tsx";
 import { sound, Stream } from "./audio.ts";
 import { THEMES } from "./featureFlags.ts";
 import PWABadge from "./PWABadge.tsx";
+import { getActiveTheme } from "./support/themes.ts";
 
 export const App: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [installPromptOpen, setInstallPromptOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useGameStorage("soundEnabled", true);
   const [musicEnabled, setMusicEnabled] = useGameStorage("musicEnabled", true);
-  // const [particlesEnabled, setParticlesEnabled] = useGameStorage(
-  //   "particlesEnabled",
-  //   true
-  // );
   const [themesEnabled, setThemesEnabled] = useGameStorage(
     "themesEnabled",
     true
