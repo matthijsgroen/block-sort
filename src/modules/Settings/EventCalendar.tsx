@@ -1,4 +1,4 @@
-import { getActiveTheme, themeSchedule } from "@/support/themes";
+import { getActiveTheme, getToday, themeSchedule } from "@/support/themes";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
@@ -6,7 +6,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 });
 
 export const EventCalendar: React.FC = () => {
-  const today = new Date();
+  const today = getToday();
 
   let displayTheme = getActiveTheme(today);
   const isUpcomingTheme = displayTheme === "default";

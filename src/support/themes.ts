@@ -52,3 +52,14 @@ export const getActiveTheme = (date: Date) => {
 
   return activeSchedule?.theme ?? "default";
 };
+
+/**
+ * Get the current date.
+ *
+ * The app uses this function to determine the active theme.
+ * Dates can be overridden for testing purposes.
+ *
+ * @returns the current date
+ */
+export const getToday = (): Date =>
+  process.env.NODE_ENV === "production" ? new Date() : new Date(2024, 11, 10);

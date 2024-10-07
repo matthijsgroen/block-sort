@@ -12,7 +12,7 @@ import { ThemeProvider } from "./support/ThemeProvider.tsx";
 import { sound, Stream } from "./audio.ts";
 import { THEMES } from "./featureFlags.ts";
 import PWABadge from "./PWABadge.tsx";
-import { getActiveTheme } from "./support/themes.ts";
+import { getActiveTheme, getToday } from "./support/themes.ts";
 
 export const App: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -26,7 +26,7 @@ export const App: React.FC = () => {
 
   const [inZenMode, setInZenMode] = useGameStorage("inZenMode", false);
   const theme =
-    themesEnabled && THEMES ? getActiveTheme(new Date()) : "default";
+    themesEnabled && THEMES ? getActiveTheme(getToday()) : "default";
   const song = getThemeSong(theme);
 
   const canInstall: boolean = "standalone" in window.navigator;
