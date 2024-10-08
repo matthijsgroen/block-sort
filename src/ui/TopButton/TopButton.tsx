@@ -1,5 +1,7 @@
 import clsx from "clsx";
 
+import { TextEmoji } from "@/support/Emoji";
+
 import { WoodButton } from "../WoodButton/WoodButton";
 
 import styles from "./TopButton.module.css";
@@ -42,7 +44,7 @@ export const TopButton: React.FC<Props> = ({
         )}
         {buttonType === "install" && (
           <span className="inline-block -translate-y-[1px] translate-x-[-1px] font-mono underline">
-            ⬇&#xFE0E;
+            <TextEmoji emoji="⬇" />
           </span>
         )}
         {buttonType === "close" && (

@@ -1,60 +1,57 @@
-import { Dispatch, Suspense, useEffect, useRef, useState } from "react";
-import clsx from "clsx";
+import { Dispatch, lazy, Suspense, use, useState } from "react";
 
 import { Checkbox } from "@/ui/Checkbox";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import { DialogTitle } from "@/ui/Dialog/DialogTitle";
 import { Transition } from "@/ui/Transition/Transition";
+import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";
 
 import info from "@/../package.json";
 import { THEMES } from "@/featureFlags";
+import { TextEmoji } from "@/support/Emoji";
+
+import { BetaContext } from "../Layout/BetaContext";
 
 import { Attribution } from "./Attribution";
 import { Changelog } from "./Changelog";
+import { EventCalendar } from "./EventCalendar";
 
 type Props = {
   soundEnabled?: boolean;
   musicEnabled?: boolean;
   themesEnabled?: boolean;
-  particlesEnabled?: boolean;
   onSoundChange?: Dispatch<boolean>;
   onMusicChange?: Dispatch<boolean>;
   onThemesChange?: Dispatch<boolean>;
-  onParticlesChange?: Dispatch<boolean>;
   onClose?: VoidFunction;
 };
+
+export const DataTransfer = lazy(() => import("./DataTransfer"));
 
 export const Settings: React.FC<Props> = ({
   soundEnabled = true,
   musicEnabled = true,
   themesEnabled = true,
-  particlesEnabled = true,
   onSoundChange,
   onMusicChange,
   onThemesChange,
-  onParticlesChange,
   onClose,
 }) => {
-  const dialogElement = useRef<HTMLDialogElement>(null);
   const [activeTab, setActiveTab] = useState<
-    "settings" | "changes" | "attribution"
+    "settings" | "changes" | "attribution" | "data"
   >("settings");
 
-  useEffect(() => {
-    dialogElement.current?.showModal();
-  }, []);
+  const [showThemes, setShowThemes] = useState(false);
+  const { showBeta } = use(BetaContext);
 
   return (
     <Dialog
-      ref={dialogElement}
       wide={activeTab === "changes"}
       onClose={() => {
-        dialogElement.current?.close();
         onClose?.();
       }}
     >
       <DialogTitle>BlockSort, v{info.version}</DialogTitle>
-
       {activeTab === "settings" && (
         <div className="flex flex-col gap-3">
           <Checkbox
@@ -68,39 +65,37 @@ export const Settings: React.FC<Props> = ({
             label="Music"
           />
           {THEMES && (
-            <Checkbox
-              value={themesEnabled}
-              onChange={(value) => onThemesChange?.(value)}
-              label="Seasonal Themes"
-              description="Automatically switch to themed content when available"
-            />
+            <div className="flex flex-row">
+              <Checkbox
+                value={themesEnabled}
+                onChange={(value) => onThemesChange?.(value)}
+                label="Seasonal Themes"
+                description="Automatically switch to themed content when available"
+              />
+              <div>
+                <TransparentButton
+                  onClick={() => setShowThemes((show) => !show)}
+                >
+                  📅
+                </TransparentButton>
+              </div>
+            </div>
           )}
           <Transition
-            active={themesEnabled}
+            active={showThemes}
             enterStart={{ opacity: 0, height: "0rem" }}
-            enterEnd={{ opacity: 1, height: "3rem" }}
-            exitStart={{ opacity: 1, height: "3rem" }}
+            enterEnd={{ opacity: 1, height: "2.5rem" }}
+            exitStart={{ opacity: 1, height: "2.5rem" }}
             exitEnd={{ opacity: 0, height: "0rem" }}
             duration={300}
           >
-            <div className="pl-10">
-              <Checkbox
-                value={particlesEnabled}
-                label="Use particle effects"
-                description="Can reduce performance"
-                onChange={(value) => {
-                  onParticlesChange?.(value);
-                }}
-              />
+            <div className="pl-12">
+              <EventCalendar />
             </div>
           </Transition>
           {"share" in navigator && (
-            <button
-              className={clsx(
-                "inline-block rounded-full border border-black p-2 shadow-md",
-                "bg-black bg-clip-text text-transparent",
-                "active:scale-90 transition-transform"
-              )}
+            <TransparentButton
+              size="large"
               onClick={async () => {
                 try {
                   await navigator.share({
@@ -108,14 +103,13 @@ export const Settings: React.FC<Props> = ({
                     url: "https://matthijsgroen.github.io/block-sort/",
                     text: "A block sorting puzzle game. No ads, cookies, tracking or payments. Just the pure fun!",
                   });
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                } catch (e) {
+                } catch (ignoreError) {
                   // Nothing to do, user probably canceled the share
                 }
               }}
             >
-              ❤︎ Share
-            </button>
+              <TextEmoji emoji="❤︎" className="text-xl" /> Share
+            </TransparentButton>
           )}
           <p className="text-xs">
             <a
@@ -128,39 +122,32 @@ export const Settings: React.FC<Props> = ({
             </a>
             , 2024
           </p>
-          <div className="flex flex-row justify-between pb-4">
-            <button
-              className={clsx(
-                "inline-block rounded-full border border-black p-2 shadow-md text-black text-sm px-4",
-                "active:scale-90 transition-transform"
-              )}
-              onClick={() => setActiveTab("changes")}
-            >
+          <div className="flex flex-row justify-between">
+            <TransparentButton onClick={() => setActiveTab("changes")}>
               Recent changes
-            </button>
-            <button
-              className={clsx(
-                "inline-block rounded-full border border-black p-2 shadow-md text-black text-sm px-4",
-                "active:scale-90 transition-transform"
-              )}
-              onClick={() => setActiveTab("attribution")}
-            >
+            </TransparentButton>
+            <TransparentButton onClick={() => setActiveTab("attribution")}>
               Attribution
-            </button>
+            </TransparentButton>
           </div>
+          {showBeta && (
+            <div className="flex flex-col justify-between pb-4">
+              <TransparentButton
+                onClick={() => {
+                  setActiveTab("data");
+                }}
+              >
+                Game data import / export <sup>beta</sup>
+              </TransparentButton>
+            </div>
+          )}
         </div>
       )}
       {activeTab === "changes" && (
         <div className="flex flex-col gap-3">
-          <button
-            className={clsx(
-              "inline-block rounded-full border border-black p-2 shadow-md text-black text-sm px-4",
-              "active:scale-90 transition-transform"
-            )}
-            onClick={() => setActiveTab("settings")}
-          >
+          <TransparentButton onClick={() => setActiveTab("settings")}>
             Back
-          </button>
+          </TransparentButton>
           <Suspense fallback={<div>Loading...</div>}>
             <Changelog />
           </Suspense>
@@ -168,16 +155,18 @@ export const Settings: React.FC<Props> = ({
       )}
       {activeTab === "attribution" && (
         <div className="flex flex-col gap-3">
-          <button
-            className={clsx(
-              "inline-block rounded-full border border-black p-2 shadow-md text-black text-sm px-4",
-              "active:scale-90 transition-transform"
-            )}
-            onClick={() => setActiveTab("settings")}
-          >
+          <TransparentButton onClick={() => setActiveTab("settings")}>
             Back
-          </button>
+          </TransparentButton>
           <Attribution />
+        </div>
+      )}
+      {activeTab === "data" && (
+        <div className="flex flex-col gap-3">
+          <TransparentButton onClick={() => setActiveTab("settings")}>
+            Back
+          </TransparentButton>
+          <DataTransfer />
         </div>
       )}
     </Dialog>

@@ -36,6 +36,7 @@ export default defineConfig({
       manifest: {
         name: "Block Sort",
         short_name: "Block Sort",
+        id: "com.matthijsgroen.blocksort",
         description: "Sort the stacks of blocks",
         theme_color: "#63462d",
         background_color: "#63462d",
@@ -62,4 +63,12 @@ export default defineConfig({
     },
   },
   base: "/block-sort/",
+  optimizeDeps: {
+    esbuildOptions: {
+      target: "esnext",
+    },
+  },
+  build: {
+    target: "esnext",
+  },
 });

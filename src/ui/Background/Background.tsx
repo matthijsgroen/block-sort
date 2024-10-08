@@ -9,14 +9,12 @@ import { CSSParticles } from "./CSSParticles";
 type Props = {
   levelType?: LevelType;
   theme?: BlockTheme;
-  disableParticles?: boolean;
   layout?: string;
 };
 
 export const Background: React.FC<PropsWithChildren<Props>> = ({
   children,
   levelType,
-  disableParticles = false,
   theme = "default",
   layout = "default",
 }) => {
@@ -63,9 +61,9 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
         <>
           <div
             className={clsx(
-              "absolute right-0 bottom-0 text-8xl scale-150 origin-bottom transition-transform [transition-duration:2000ms]",
+              "absolute right-0 bottom-0 text-8xl scale-150 origin-bottom transition-transform [transition-duration:1500ms]",
               {
-                "translate-y-[150%]": layout === "levelTrack",
+                "translate-y-[150%] -rotate-12": layout === "levelTrack",
                 "[transition-delay:1500ms]": layout === "zenMode",
               }
             )}
@@ -74,9 +72,9 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           </div>
           <div
             className={clsx(
-              "absolute left-0 bottom-0 text-8xl scale-150 origin-bottom transition-transform [transition-duration:2000ms]",
+              "absolute left-0 bottom-0 text-8xl scale-150 origin-bottom transition-transform [transition-duration:1500ms]",
               {
-                "translate-y-[150%]": layout === "zenMode",
+                "translate-y-[150%] rotate-12": layout === "zenMode",
                 "[transition-delay:1500ms]": layout === "levelTrack",
               }
             )}
@@ -91,7 +89,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
         </div>
       )}
       <div className="absolute left-0 top-0 h-safe-area w-full">{children}</div>
-      {!disableParticles && theme === "halloween" && (
+      {theme === "halloween" && (
         <CSSParticles
           symbol="👻"
           amount={10}
@@ -103,7 +101,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           floatSpeed={[5, 10]}
         />
       )}
-      {!disableParticles && theme === "winter" && (
+      {theme === "winter" && (
         <CSSParticles
           symbol="❄️"
           amount={30}

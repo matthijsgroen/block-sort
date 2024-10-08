@@ -1,6 +1,6 @@
 {
   "name": "block-sorting",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Mobile Block sorting game, as a Progressive Web App",
   "author": {
     "name": "Matthijs Groen",
@@ -21,8 +21,12 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "bson": "^6.8.0",
     "clsx": "^2.1.1",
+    "jsqr-es6": "^1.4.0-1",
     "localforage": "^1.10.0",
+    "pako": "^2.1.0",
+    "qrcode": "^1.5.4",
     "react": "19.0.0-rc-d6cb4e77-20240911",
     "react-dom": "19.0.0-rc-d6cb4e77-20240911"
   },
@@ -43,6 +47,8 @@
     "@types/babel__core": "^7",
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^22.5.4",
+    "@types/pako": "^2",
+    "@types/qrcode": "^1",
     "@types/react": "npm:types-react@rc",
     "@types/react-dom": "npm:types-react-dom@rc",
     "@typescript-eslint/eslint-plugin": "^8.5.0",
