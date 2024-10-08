@@ -10,12 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Event calendar button to display current or upcoming theme
-- Added ability to download and upload game data in a QR code image.
-  **This is still considered beta, use at your own risk!**
 
 ### Removed
 
-- Option to disable particles. The performance issues have been resolved. (simplifies settings screen)
+- Removed Option to disable particles. The performance issues have been resolved. (simplifies settings screen)
 
 ## Version 1.4.0 - 2024-10-06
 

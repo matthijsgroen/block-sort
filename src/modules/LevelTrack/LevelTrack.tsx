@@ -1,4 +1,4 @@
-import { use, useEffect } from "react";
+import { use, useEffect, useState } from "react";
 import clsx from "clsx";
 
 import { GameTitle } from "@/ui/GameTitle/GameTitle";
@@ -17,6 +17,7 @@ import { getLevelType } from "@/support/getLevelType";
 
 import { PlayButton } from "../../ui/PlayButton";
 import { BackgroundContext } from "../Layout/BackgroundContext";
+import { BetaContext } from "../Layout/BetaContext";
 
 import styles from "./levelTrack.module.css";
 
@@ -59,12 +60,24 @@ export const LevelTrack: React.FC<Props> = ({
     setLevelType(undefined);
     setScreenLayout("levelTrack");
   }, []);
+  const { setShowBeta } = use(BetaContext);
+  const [betaCounter, setBetaCounter] = useState(0);
+
+  useEffect(() => {
+    if (betaCounter > 7) {
+      setShowBeta(true);
+    }
+  }, [betaCounter]);
 
   return (
     <div className="flex flex-col items-center h-full">
       <div className="flex flex-row pt-2 pl-safeLeft pr-safeRight gap-x-2 w-full">
         <TopButton buttonType="settings" onClick={onOpenSettings} />
-        <GameTitle />
+        <GameTitle
+          onClick={() => {
+            setBetaCounter((counter) => counter + 1);
+          }}
+        />
         {!showInstallButton && <div className="size-block"></div>}
         {showInstallButton && (
           <TopButton
