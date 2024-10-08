@@ -5,11 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Version 1.5.0 - UNRELEASED
+## Version 1.5.0 - 2024-10-08
 
 ### Added
 
 - Event calendar button to display current or upcoming theme
+- Added ability to download and upload game data in a QR code image.
+  **This is still considered beta, use at your own risk!**
 
 ### Removed
 
