@@ -62,4 +62,4 @@ export const getActiveTheme = (date: Date) => {
  * @returns the current date
  */
 export const getToday = (): Date =>
-  process.env.NODE_ENV === "production" ? new Date() : new Date(2024, 11, 10);
+  process.env.NODE_ENV === "production" ? new Date() : new Date();
