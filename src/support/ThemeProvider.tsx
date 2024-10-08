@@ -15,9 +15,5 @@ export const ThemeProvider: React.FC<
   const theme =
     themesEnabled && THEMES ? getActiveTheme(getToday()) : "default";
 
-  return (
-    <ThemeContext.Provider value={{ activeTheme: theme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext value={{ activeTheme: theme }}>{children}</ThemeContext>;
 };

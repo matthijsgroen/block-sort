@@ -30,7 +30,7 @@ export const BackgroundProvider: React.FC<PropsWithChildren> = ({
   const [screenLayout, setScreenLayout] = useState<string>("levelTrack");
   const { activeTheme } = use(ThemeContext);
   return (
-    <BackgroundContext.Provider
+    <BackgroundContext
       value={{
         levelType,
         setLevelType,
@@ -45,6 +45,6 @@ export const BackgroundProvider: React.FC<PropsWithChildren> = ({
       >
         {children}
       </Background>
-    </BackgroundContext.Provider>
+    </BackgroundContext>
   );
 };
