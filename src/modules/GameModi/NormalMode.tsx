@@ -20,6 +20,8 @@ import { getThemeSong } from "@/support/themeMusic.tsx";
 import { ThemeContext } from "@/support/ThemeProvider.tsx";
 import { useGameStorage } from "@/support/useGameStorage.ts";
 
+import { BetaContext } from "../Layout/BetaContext.tsx";
+
 import { BASE_SEED, SCREEN_TRANSITION } from "./constants.ts";
 
 type Props = {
@@ -60,6 +62,8 @@ export const NormalMode: React.FC<Props> = ({
   const { activeTheme } = use(ThemeContext);
   const song = getThemeSong(activeTheme);
 
+  const { showBeta } = use(BetaContext);
+
   return (
     <>
       <Transition
@@ -71,7 +75,7 @@ export const NormalMode: React.FC<Props> = ({
         <LevelTrack
           levelNr={levelNr}
           hasZenMode={levelNr >= 49 && ZEN_MODE}
-          showInstallButton={showInstallButton}
+          showInstallButton={showInstallButton || showBeta}
           onLevelStart={() => {
             // tie playback to user interaction
             sound.play(song);

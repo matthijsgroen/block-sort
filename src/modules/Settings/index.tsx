@@ -1,4 +1,4 @@
-import { Dispatch, lazy, Suspense, use, useState } from "react";
+import { Dispatch, lazy, Suspense, useState } from "react";
 
 import { Checkbox } from "@/ui/Checkbox";
 import { Dialog } from "@/ui/Dialog/Dialog";
@@ -9,8 +9,6 @@ import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";
 import info from "@/../package.json";
 import { THEMES } from "@/featureFlags";
 import { TextEmoji } from "@/support/Emoji";
-
-import { BetaContext } from "../Layout/BetaContext";
 
 import { Attribution } from "./Attribution";
 import { Changelog } from "./Changelog";
@@ -42,7 +40,6 @@ export const Settings: React.FC<Props> = ({
   >("settings");
 
   const [showThemes, setShowThemes] = useState(false);
-  const { showBeta } = use(BetaContext);
 
   return (
     <Dialog
@@ -130,17 +127,15 @@ export const Settings: React.FC<Props> = ({
               Attribution
             </TransparentButton>
           </div>
-          {showBeta && (
-            <div className="flex flex-col justify-between">
-              <TransparentButton
-                onClick={() => {
-                  setActiveTab("data");
-                }}
-              >
-                Game data import / export <sup>beta</sup>
-              </TransparentButton>
-            </div>
-          )}
+          <div className="flex flex-col justify-between">
+            <TransparentButton
+              onClick={() => {
+                setActiveTab("data");
+              }}
+            >
+              Game data import / export <sup>beta</sup>
+            </TransparentButton>
+          </div>
         </div>
       )}
       {activeTab === "changes" && (
