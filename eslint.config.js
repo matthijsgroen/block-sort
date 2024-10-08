@@ -33,7 +33,7 @@ export default [
 
       "@typescript-eslint/no-unused-vars": [
         "error",
-        { argsIgnorePattern: "^_" },
+        { argsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^ignore" },
       ],
       "simple-import-sort/exports": "error",
       "simple-import-sort/imports": [

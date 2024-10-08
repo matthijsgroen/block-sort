@@ -63,4 +63,12 @@ export default defineConfig({
     },
   },
   base: "/block-sort/",
+  optimizeDeps: {
+    esbuildOptions: {
+      target: "esnext",
+    },
+  },
+  build: {
+    target: "esnext",
+  },
 });

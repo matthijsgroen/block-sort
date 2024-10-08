@@ -1,5 +1,4 @@
-import { Dispatch, Suspense, useState } from "react";
-import clsx from "clsx";
+import { Dispatch, lazy, Suspense, useState } from "react";
 
 import { Checkbox } from "@/ui/Checkbox";
 import { Dialog } from "@/ui/Dialog/Dialog";
@@ -25,6 +24,8 @@ type Props = {
   onClose?: VoidFunction;
 };
 
+export const DataTransfer = lazy(() => import("./DataTransfer"));
+
 export const Settings: React.FC<Props> = ({
   soundEnabled = true,
   musicEnabled = true,
@@ -35,7 +36,7 @@ export const Settings: React.FC<Props> = ({
   onClose,
 }) => {
   const [activeTab, setActiveTab] = useState<
-    "settings" | "changes" | "attribution"
+    "settings" | "changes" | "attribution" | "data"
   >("settings");
 
   const [showThemes, setShowThemes] = useState(false);
@@ -99,8 +100,7 @@ export const Settings: React.FC<Props> = ({
                     url: "https://matthijsgroen.github.io/block-sort/",
                     text: "A block sorting puzzle game. No ads, cookies, tracking or payments. Just the pure fun!",
                   });
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                } catch (e) {
+                } catch (ignoreError) {
                   // Nothing to do, user probably canceled the share
                 }
               }}
@@ -127,24 +127,22 @@ export const Settings: React.FC<Props> = ({
               Attribution
             </TransparentButton>
           </div>
-          <div className="flex flex-row justify-between pb-4">
-            <TransparentButton onClick={() => {}}>
-              Data transfer
+          <div className="flex flex-col justify-between pb-4">
+            <TransparentButton
+              onClick={() => {
+                setActiveTab("data");
+              }}
+            >
+              Game data import / export <sup>beta</sup>
             </TransparentButton>
           </div>
         </div>
       )}
       {activeTab === "changes" && (
         <div className="flex flex-col gap-3">
-          <button
-            className={clsx(
-              "inline-block rounded-full border border-black p-2 shadow-md text-black text-sm px-4",
-              "active:scale-90 transition-transform"
-            )}
-            onClick={() => setActiveTab("settings")}
-          >
+          <TransparentButton onClick={() => setActiveTab("settings")}>
             Back
-          </button>
+          </TransparentButton>
           <Suspense fallback={<div>Loading...</div>}>
             <Changelog />
           </Suspense>
@@ -152,16 +150,18 @@ export const Settings: React.FC<Props> = ({
       )}
       {activeTab === "attribution" && (
         <div className="flex flex-col gap-3">
-          <button
-            className={clsx(
-              "inline-block rounded-full border border-black p-2 shadow-md text-black text-sm px-4",
-              "active:scale-90 transition-transform"
-            )}
-            onClick={() => setActiveTab("settings")}
-          >
+          <TransparentButton onClick={() => setActiveTab("settings")}>
             Back
-          </button>
+          </TransparentButton>
           <Attribution />
+        </div>
+      )}
+      {activeTab === "data" && (
+        <div className="flex flex-col gap-3">
+          <TransparentButton onClick={() => setActiveTab("settings")}>
+            Back
+          </TransparentButton>
+          <DataTransfer />
         </div>
       )}
     </Dialog>

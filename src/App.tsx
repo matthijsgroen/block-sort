@@ -9,10 +9,10 @@ import { BackgroundProvider } from "./modules/Layout/BackgroundContext.tsx";
 import { Settings } from "./modules/Settings/index.tsx";
 import { getThemeSong } from "./support/themeMusic.tsx";
 import { ThemeProvider } from "./support/ThemeProvider.tsx";
+import { getActiveTheme, getToday } from "./support/themes.ts";
 import { sound, Stream } from "./audio.ts";
 import { THEMES } from "./featureFlags.ts";
 import PWABadge from "./PWABadge.tsx";
-import { getActiveTheme, getToday } from "./support/themes.ts";
 
 export const App: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
