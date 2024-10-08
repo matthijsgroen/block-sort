@@ -7,6 +7,7 @@ import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";
 
 import info from "@/../package.json";
 import { decryptData, encryptData } from "@/support/dataTransfer";
+import { getGameValue } from "@/support/useGameStorage";
 
 import { DataFormat, getGameData, setGameData } from "./gameData";
 
@@ -19,6 +20,85 @@ const getEncryptedData = async (): Promise<string> => {
     type: "image/png",
   });
   return url;
+};
+
+const importImageData = async (
+  file: File
+): Promise<{ success: boolean; message: string }> => {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = async () => {
+      // Create a canvas element
+      const canvas = document.createElement("canvas");
+      canvas.width = image.width;
+      canvas.height = image.height;
+
+      // Get the 2D drawing context
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        // Draw the image onto the canvas
+        ctx.drawImage(image, 0, 0);
+
+        // Get the ImageData object
+        const imageData = ctx.getImageData(0, 0, image.width, image.height);
+        const code = jsQR(imageData.data, image.width, image.height);
+        if (code) {
+          try {
+            const data = await decryptData<DataFormat>(
+              new Uint8Array(code.binaryData)
+            );
+
+            const age = (new Date().getTime() - data.timestamp) / 60_000;
+
+            if (data.version !== info.version) {
+              return {
+                success: false,
+                message: `Version mismatch: ${data.version} vs. ${info.version}`,
+              };
+            }
+            if (age > DATA_VALIDITY_TIME) {
+              resolve({
+                success: false,
+                message:
+                  Math.ceil(age) > 90
+                    ? `Data is too old: ${Math.floor(age / 60)} hours`
+                    : `Data is too old: ${Math.ceil(age)} minutes`,
+              });
+              return;
+            }
+            const currentLevel = (await getGameValue<number>("levelNr")) ?? 0;
+            const importLevel = data.levelNr;
+
+            if (currentLevel > importLevel) {
+              if (
+                confirm("Import has less progress than current game. Continue?")
+              ) {
+                await setGameData(data);
+              } else {
+                resolve({ success: false, message: "Import canceled" });
+                return;
+              }
+            } else {
+              await setGameData(data);
+            }
+
+            resolve({ success: true, message: "" });
+            return;
+          } catch (ignoreError) {
+            resolve({ success: false, message: "Could not unpack data" });
+            return;
+          }
+        } else {
+          resolve({ success: false, message: "Could not read QR code" });
+          return;
+        }
+      } else {
+        resolve({ success: false, message: "Could not load image data" });
+        return;
+      }
+    };
+    image.src = URL.createObjectURL(file);
+  });
 };
 
 const DataTransfer: React.FC = () => {
@@ -44,20 +124,19 @@ const DataTransfer: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="font-bold text-lg">Data transfer</h2>
+      <h2 className="font-bold text-lg">
+        Data transfer <sup>beta</sup>
+      </h2>
       {supportsEncryption ? (
         <>
-          <p className="text-xs text-red-600 font-bold">
-            Warning: This feature is experimental and may not work as expected.
-            Please only import data into a blank new game.
-          </p>
           {!startDownload && (
             <>
-              <p className="text-xs">
+              <p className="text-sm">
                 You can export your game data as an image. This image can be
                 used to import your game data into another instance of the game.
-                The export is valid for {DATA_VALIDITY_TIME} minutes, and needs
-                to be imported into the same version of the game.
+                The export is valid for{" "}
+                <strong>{DATA_VALIDITY_TIME} minutes</strong>, and needs to be
+                imported into the same version of the game.
               </p>
               <TransparentButton
                 onClick={() => {
@@ -96,70 +175,14 @@ const DataTransfer: React.FC = () => {
               id="dropzone-file"
               type="file"
               className="hidden"
-              onChange={(event) => {
-                const file = event.target.files?.[0];
+              onChange={async (event) => {
                 setImportSuccess(false);
+
+                const file = event.target.files?.[0];
                 if (file) {
-                  const image = new Image();
-                  image.onload = async () => {
-                    // Create a canvas element
-                    const canvas = document.createElement("canvas");
-                    canvas.width = image.width;
-                    canvas.height = image.height;
-
-                    // Get the 2D drawing context
-                    const ctx = canvas.getContext("2d");
-                    if (ctx) {
-                      // Draw the image onto the canvas
-                      ctx.drawImage(image, 0, 0);
-
-                      // Get the ImageData object
-                      const imageData = ctx.getImageData(
-                        0,
-                        0,
-                        image.width,
-                        image.height
-                      );
-                      const code = jsQR(
-                        imageData.data,
-                        image.width,
-                        image.height
-                      );
-                      if (code) {
-                        try {
-                          const data = await decryptData<DataFormat>(
-                            new Uint8Array(code.binaryData)
-                          );
-
-                          const age =
-                            (new Date().getTime() - data.timestamp) / 60_000;
-
-                          if (data.version !== info.version) {
-                            setImportErrors(
-                              `Version mismatch: ${data.version} vs. ${info.version}`
-                            );
-                            return;
-                          }
-                          if (age > DATA_VALIDITY_TIME) {
-                            setImportErrors(
-                              `Data is too old: ${Math.ceil(age)} minutes`
-                            );
-                            return;
-                          }
-
-                          await setGameData(data);
-                          setImportSuccess(true);
-                        } catch (ignoreError) {
-                          setImportErrors("Could not unpack data");
-                        }
-                      } else {
-                        setImportErrors("Could not read QR code");
-                      }
-                    } else {
-                      setImportErrors("Could not load image data");
-                    }
-                  };
-                  image.src = URL.createObjectURL(file);
+                  const { success, message } = await importImageData(file);
+                  setImportSuccess(success);
+                  setImportErrors(message);
                 } else {
                   setImportErrors("No file selected");
                 }
@@ -191,7 +214,8 @@ const ExportData: React.FC<{
       <p className="text-sm pt-2">
         This image contains all your game data. <strong>Long press</strong> to
         download it and upload it to your new game instance (on another device
-        or this one). The image will be valid for {DATA_VALIDITY_TIME} minutes.
+        or this one). The image will be valid for{" "}
+        <strong>{DATA_VALIDITY_TIME} minutes</strong>.
       </p>
     </div>
   );

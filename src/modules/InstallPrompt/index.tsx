@@ -38,10 +38,11 @@ export const InstallPrompt: React.FC<Props> = ({ onClose }) => {
           <li>Tap &quot;Add&quot;</li>
         </ol>
         <p>
-          Your GameState cannot be transferred when installing on iOS, so you
-          will need to start over.
+          You can transfer your progress from the browser version to the
+          installed version, using the{" "}
+          <strong>&quot;Game data import / export&quot;</strong> button in the
+          settings.
         </p>
-        <p>So the earlier you install, the better.</p>
       </div>
     </Dialog>
   );
