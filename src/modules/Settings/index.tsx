@@ -53,7 +53,7 @@ export const Settings: React.FC<Props> = ({
     >
       <DialogTitle>BlockSort, v{info.version}</DialogTitle>
       {activeTab === "settings" && (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 pb-4">
           <Checkbox
             value={soundEnabled}
             onChange={(value) => onSoundChange?.(value)}
@@ -131,7 +131,7 @@ export const Settings: React.FC<Props> = ({
             </TransparentButton>
           </div>
           {showBeta && (
-            <div className="flex flex-col justify-between pb-4">
+            <div className="flex flex-col justify-between">
               <TransparentButton
                 onClick={() => {
                   setActiveTab("data");
@@ -144,7 +144,7 @@ export const Settings: React.FC<Props> = ({
         </div>
       )}
       {activeTab === "changes" && (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 pb-4">
           <TransparentButton onClick={() => setActiveTab("settings")}>
             Back
           </TransparentButton>
@@ -154,7 +154,7 @@ export const Settings: React.FC<Props> = ({
         </div>
       )}
       {activeTab === "attribution" && (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 pb-4">
           <TransparentButton onClick={() => setActiveTab("settings")}>
             Back
           </TransparentButton>
@@ -162,7 +162,7 @@ export const Settings: React.FC<Props> = ({
         </div>
       )}
       {activeTab === "data" && (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 pb-4">
           <TransparentButton onClick={() => setActiveTab("settings")}>
             Back
           </TransparentButton>
