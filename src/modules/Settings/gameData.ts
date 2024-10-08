@@ -12,7 +12,6 @@ type LevelData = {
 export type DataFormat = {
   levelNr: number;
   levelData: LevelData;
-  zenLevelData: LevelData;
   zenMode: {
     levelNr: number;
     difficulty: number;
@@ -42,10 +41,7 @@ export const setGameData = async (data: DataFormat) => {
     setGameValue("zenLevelType", data.zenMode.levelType),
   ]);
 
-  await Promise.all([
-    setLevelData("", data.levelNr, data.levelData),
-    setLevelData("zen", data.zenMode.levelNr, data.zenLevelData),
-  ]);
+  await Promise.all([setLevelData("", data.levelNr, data.levelData)]);
 };
 
 const getLevelData = async (storagePrefix: string, levelNr: number) => {
@@ -71,7 +67,6 @@ export const getGameData = async (): Promise<DataFormat> => {
   return {
     levelNr,
     levelData: await getLevelData("", levelNr),
-    zenLevelData: await getLevelData("zen", zenLevelNr),
     zenMode: {
       levelNr: zenLevelNr,
       difficulty: zenDifficulty,

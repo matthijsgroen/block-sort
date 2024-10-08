@@ -106,10 +106,10 @@ const DataTransfer: React.FC = () => {
   const [importErrors, setImportErrors] = useState<string | null>(null);
   const [importSuccess, setImportSuccess] = useState<boolean>(false);
 
-  const encryptedData = useMemo(() => {
+  const encryptedData = useMemo(async () => {
     if (startDownload) {
       try {
-        return getEncryptedData();
+        return await getEncryptedData();
       } catch (ignoreError) {
         setImportErrors("Could not pack data");
         setStartDownload(false);
