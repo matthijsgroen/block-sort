@@ -73,7 +73,7 @@ export const stackColumn: Tactic = (level, _random = Math.random) => {
             bonusPoints += 10;
           }
           return {
-            name: "stackColumn",
+            // name: "stackColumn",
             move: { from: source.index, to: t.index },
             weight: 10 + bonusPoints,
           };

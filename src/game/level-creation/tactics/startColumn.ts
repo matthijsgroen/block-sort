@@ -42,7 +42,7 @@ export const startColumn: Tactic = (level, random = Math.random) => {
                 emptyColumns.reduce(
                   (r, emptyCol) =>
                     r.concat({
-                      name: "startColumn",
+                      // name: "startColumn",
                       move: {
                         from: pos,
                         to: emptyCol.index,

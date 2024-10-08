@@ -37,9 +37,19 @@ export default defineConfig({
         name: "Block Sort",
         short_name: "Block Sort",
         id: "com.matthijsgroen.blocksort",
-        description: "Sort the stacks of blocks",
+        description:
+          "Sort stacks of blocks to the same color. No ads, no tracking, no payments. Make sure you don't get blocked!",
         theme_color: "#63462d",
         background_color: "#63462d",
+        orientation: "portrait",
+        categories: [
+          "puzzle",
+          "game",
+          "offline",
+          "single-player",
+          "user-friendly",
+        ],
+        dir: "ltr",
       },
 
       workbox: {
