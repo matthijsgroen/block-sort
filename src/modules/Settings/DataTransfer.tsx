@@ -56,6 +56,13 @@ const importImageData = async (
                 message: `Version mismatch: ${data.version} vs. ${info.version}`,
               };
             }
+            if (age < 0 || data.time !== data.timestamp) {
+              resolve({
+                success: false,
+                message: "Data is invalid",
+              });
+              return;
+            }
             if (age > DATA_VALIDITY_TIME) {
               resolve({
                 success: false,
@@ -66,20 +73,16 @@ const importImageData = async (
               });
               return;
             }
-            const currentLevel = (await getGameValue<number>("levelNr")) ?? 0;
             const importLevel = data.levelNr;
-
-            if (currentLevel > importLevel) {
-              if (
-                confirm("Import has less progress than current game. Continue?")
-              ) {
-                await setGameData(data);
-              } else {
-                resolve({ success: false, message: "Import canceled" });
-                return;
-              }
-            } else {
+            if (
+              confirm(
+                `You are about to import data at level ${importLevel + 1}. Continue?`
+              )
+            ) {
               await setGameData(data);
+            } else {
+              resolve({ success: false, message: "Import canceled" });
+              return;
             }
 
             resolve({ success: true, message: "" });
