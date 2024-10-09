@@ -17,7 +17,7 @@ export const testDifficulties = (
   describe("playability", () => {
     it.each(
       [{ difficulty: 1, level: 1 }].concat(
-        LEVEL_SCALE.map((level, i) => ({ difficulty: i + 1, level }))
+        LEVEL_SCALE.map((level, i) => ({ difficulty: i + 2, level: level + 1 }))
       )
     )(
       "can play difficulty $difficulty at level $level",

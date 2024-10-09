@@ -6,6 +6,7 @@ import {
   getSpecial2Settings,
   getSpecial3Settings,
   getSpecial4Settings,
+  getSpecial5Settings,
 } from "./specialSettings";
 
 describe(getSpecial1Settings, () => {
@@ -15,7 +16,19 @@ describe(getSpecial1Settings, () => {
       amountColors: 4,
       bufferPlacementLimits: 0,
       bufferSizes: 4,
-      buffers: 6,
+      buffers: 4,
+      extraBuffers: [
+        {
+          amount: 1,
+          limit: 0,
+          size: 4,
+        },
+        {
+          amount: 1,
+          limit: 0,
+          size: 4,
+        },
+      ],
       extraPlacementStacks: 0,
       stackSize: 12,
       blockColorPick: "end",
@@ -25,9 +38,21 @@ describe(getSpecial1Settings, () => {
     expect(hard).toEqual({
       amountColors: 4,
       bufferPlacementLimits: 3,
-      bufferSizes: 4,
-      buffers: 6,
+      bufferSizes: 3,
+      buffers: 4,
       extraPlacementStacks: 0,
+      extraBuffers: [
+        {
+          amount: 1,
+          limit: 0,
+          size: 3,
+        },
+        {
+          amount: 1,
+          limit: 0,
+          size: 4,
+        },
+      ],
       stackSize: 13,
       blockColorPick: "end",
     });
@@ -36,9 +61,21 @@ describe(getSpecial1Settings, () => {
     expect(veryHard).toEqual({
       amountColors: 4,
       bufferPlacementLimits: 3,
-      bufferSizes: 4,
-      buffers: 6,
+      bufferSizes: 3,
+      buffers: 4,
       extraPlacementStacks: 0,
+      extraBuffers: [
+        {
+          amount: 1,
+          limit: 0,
+          size: 3,
+        },
+        {
+          amount: 1,
+          limit: 0,
+          size: 3,
+        },
+      ],
       stackSize: 13,
       blockColorPick: "end",
     });
@@ -57,4 +94,8 @@ describe(getSpecial3Settings, () => {
 
 describe(getSpecial4Settings, () => {
   testDifficulties(getSpecial4Settings);
+});
+
+describe(getSpecial5Settings, () => {
+  testDifficulties(getSpecial5Settings);
 });
