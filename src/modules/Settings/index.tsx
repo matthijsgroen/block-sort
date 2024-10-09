@@ -133,7 +133,7 @@ export const Settings: React.FC<Props> = ({
                 setActiveTab("data");
               }}
             >
-              Game data import / export <sup>beta</sup>
+              Game data import / export
             </TransparentButton>
           </div>
         </div>

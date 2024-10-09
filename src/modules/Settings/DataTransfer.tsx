@@ -7,7 +7,6 @@ import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";
 
 import info from "@/../package.json";
 import { decryptData, encryptData } from "@/support/dataTransfer";
-import { getGameValue } from "@/support/useGameStorage";
 
 import { DataFormat, getGameData, setGameData } from "./gameData";
 
@@ -108,6 +107,7 @@ const DataTransfer: React.FC = () => {
   const [startDownload, setStartDownload] = useState(false);
   const [importErrors, setImportErrors] = useState<string | null>(null);
   const [importSuccess, setImportSuccess] = useState<boolean>(false);
+  const [fileInputKey, setFileInputKey] = useState(0);
 
   const encryptedData = useMemo(async () => {
     if (startDownload) {
@@ -127,9 +127,7 @@ const DataTransfer: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="font-bold text-lg">
-        Data transfer <sup>beta</sup>
-      </h2>
+      <h2 className="font-bold text-lg">Data transfer</h2>
       {supportsEncryption ? (
         <>
           {!startDownload && (
@@ -139,7 +137,7 @@ const DataTransfer: React.FC = () => {
                 used to import your game data into another instance of the game.
                 The export is valid for{" "}
                 <strong>{DATA_VALIDITY_TIME} minutes</strong>, and needs to be
-                imported into the same version of the game.
+                imported into the same version ({info.version}) of the game.
               </p>
               <TransparentButton
                 onClick={() => {
@@ -177,6 +175,7 @@ const DataTransfer: React.FC = () => {
             <input
               id="dropzone-file"
               type="file"
+              key={fileInputKey}
               className="hidden"
               onChange={async (event) => {
                 setImportSuccess(false);
@@ -189,6 +188,7 @@ const DataTransfer: React.FC = () => {
                 } else {
                   setImportErrors("No file selected");
                 }
+                setFileInputKey((v) => (v + 1) % 5);
               }}
             />
           </label>
