@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version 1.6.2 - UNRELEASED
 
+### Added
+
+- Labels to options in 'zen mode' screen
+
 ### Fixed
 
 - Always ask for confirmation before import

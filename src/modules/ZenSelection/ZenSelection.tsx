@@ -60,6 +60,9 @@ export const ZenSelection: React.FC<Props> = ({
         <div className="text-center">
           <span className="text-4xl">🌻</span>
         </div>
+        <div className={clsx(styles.text, styles.title, styles.shadow)}>
+          Select difficulty
+        </div>
         <div className="flex flex-row gap-4 items-center">
           <WoodButton
             onClick={() => {
@@ -76,6 +79,8 @@ export const ZenSelection: React.FC<Props> = ({
                 [styles.disabled]:
                   levelNr < selectedDifficulty.unlocksAtLevel - 1,
                 [styles.enabled]:
+                  levelNr >= selectedDifficulty.unlocksAtLevel - 1,
+                [styles.shadow]:
                   levelNr >= selectedDifficulty.unlocksAtLevel - 1,
               })}
             >
@@ -95,6 +100,9 @@ export const ZenSelection: React.FC<Props> = ({
             <span className="inline-block translate-y-[5px] px-2">▶</span>︎ ︎
           </WoodButton>
         </div>
+        <div className={clsx(styles.text, styles.title, styles.shadow)}>
+          Select level type
+        </div>
         <div className="flex flex-row gap-4 items-center">
           <WoodButton
             onClick={() => {
@@ -111,6 +119,8 @@ export const ZenSelection: React.FC<Props> = ({
                 [styles.disabled]:
                   levelNr < selectedLevelType.unlocksAtLevel - 1,
                 [styles.enabled]:
+                  levelNr >= selectedLevelType.unlocksAtLevel - 1,
+                [styles.shadow]:
                   levelNr >= selectedLevelType.unlocksAtLevel - 1,
               })}
             >

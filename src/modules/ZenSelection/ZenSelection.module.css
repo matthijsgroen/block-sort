@@ -3,9 +3,16 @@
   @apply text-center font-bold font-block-sort  text-xl;
 }
 
-.enabled {
+.shadow {
   text-shadow: 1px 1px 4px #0008;
+}
+
+.title {
   @apply text-orange-400;
+}
+
+.enabled {
+  @apply text-orange-300;
 }
 
 .disabled {
