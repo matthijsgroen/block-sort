@@ -14,10 +14,10 @@ type UnlockableLevelType = {
 
 export const DIFFICULTY_LEVELS: DifficultyLevel[] = [
   { name: "Starter", unlocksAtLevel: 50, difficulties: [0, 1, 2] },
-  { name: "Junior", unlocksAtLevel: 50, difficulties: [3, 4] },
-  { name: "Expert", unlocksAtLevel: 75, difficulties: [5, 6] },
-  { name: "Master", unlocksAtLevel: 200, difficulties: [7, 8] },
-  { name: "Wizard", unlocksAtLevel: 300, difficulties: [9, 10] },
+  { name: "Junior", unlocksAtLevel: 50, difficulties: [3, 4, 5] },
+  { name: "Expert", unlocksAtLevel: 75, difficulties: [6, 7] },
+  { name: "Master", unlocksAtLevel: 200, difficulties: [8, 9] },
+  { name: "Wizard", unlocksAtLevel: 300, difficulties: [10, 11] },
 ];
 
 export const LEVEL_TYPES: UnlockableLevelType[] = [

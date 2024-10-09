@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { use } from "react";
 
 import { Transition } from "@/ui/Transition/Transition.tsx";
 
@@ -31,9 +31,6 @@ export const ZenMode: React.FC<Props> = ({
   const [zenLevelNr, setZenLevelNr] = useGameStorage("zenLevelNr", 0);
   const [levelNr] = useGameStorage<null | number>("levelNr", null);
 
-  const [zenLevelSeed, setZenLevelSeed] = useState(() =>
-    generateNewSeed(ZEN_BASE_SEED, zenLevelNr)
-  );
   const [inLevel, setInLevel] = useGameStorage("inLevel", false);
 
   const [difficultyIndex, setDifficultyIndex] = useGameStorage(
@@ -45,9 +42,7 @@ export const ZenMode: React.FC<Props> = ({
   const { activeTheme } = use(ThemeContext);
   const song = getThemeSong(activeTheme);
 
-  useEffect(() => {
-    setZenLevelSeed(generateNewSeed(ZEN_BASE_SEED, zenLevelNr));
-  }, [zenLevelNr]);
+  const zenLevelSeed = generateNewSeed(ZEN_BASE_SEED, zenLevelNr);
 
   const random = mulberry32(zenLevelSeed);
   const [currentGame, setCurrentGame] = useGameStorage<null | {
@@ -73,6 +68,7 @@ export const ZenMode: React.FC<Props> = ({
               setInLevel(false);
               if (won) {
                 setZenLevelNr((nr) => nr + 1);
+                setCurrentGame(null);
               }
             }}
             levelNr={zenLevelNr}
@@ -112,7 +108,11 @@ export const ZenMode: React.FC<Props> = ({
             deleteGameValue(`zenlevelState${zenLevelNr}`);
 
             const difficulty = pick(difficultySettings.difficulties, random);
-            const settings = getZenSettings(difficulty + 1, levelType, random);
+            const settings = getZenSettings(
+              difficulty + 1,
+              levelType,
+              zenLevelNr
+            );
 
             setCurrentGame({
               title: DIFFICULTY_LEVELS[difficultyIndex].name,

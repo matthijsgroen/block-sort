@@ -7,6 +7,7 @@ import { TopButton } from "@/ui/TopButton/TopButton";
 import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { LevelType } from "@/support/getLevelType";
+import { timesMap } from "@/support/timeMap";
 
 import { DIFFICULTY_LEVELS, LEVEL_TYPES } from "../GameModi/zenModeConstants";
 import { BackgroundContext } from "../Layout/BackgroundContext";
@@ -86,9 +87,13 @@ export const ZenSelection: React.FC<Props> = ({
             >
               {selectedDifficulty.name}
             </div>
-            {selectedDifficulty.unlocksAtLevel - 1 > levelNr && (
+            {selectedDifficulty.unlocksAtLevel - 1 > levelNr ? (
               <div className="text-center -mt-2">
                 Unlocks at level {selectedDifficulty.unlocksAtLevel}
+              </div>
+            ) : (
+              <div className="text-center -mt-2 tracking-widest text-transparent bg-gradient-to-r bg-clip-text from-orange-200 to-orange-600">
+                {timesMap(difficultyIndex + 1, () => "⭐️")}
               </div>
             )}
           </div>

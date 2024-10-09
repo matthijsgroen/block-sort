@@ -23,7 +23,7 @@ export const getSpecial1Settings: SettingsProducer = (difficulty) => ({
 });
 
 export const getSpecial2Settings: SettingsProducer = (difficulty) => ({
-  amountColors: 10 + Math.min(Math.max(Math.round(difficulty / 2), 0), 6),
+  amountColors: 5 + Math.min(Math.max(Math.round(difficulty * 1.1), 0), 11),
   stackSize: 3,
   extraPlacementStacks:
     4 - Math.min(Math.max(Math.round(difficulty / 2), 0), 2),
@@ -47,7 +47,7 @@ export const getSpecial4Settings: SettingsProducer = (difficulty) => ({
   amountColors: 5 + Math.max(Math.round(difficulty / 8), 0),
   stacksPerColor: 2,
   stackSize: 3,
-  extraPlacementStacks: 2,
+  extraPlacementStacks: 4 - Math.max(Math.round(difficulty / 5), 0),
   extraPlacementLimits: 2,
   buffers: 1,
   bufferSizes: 1,
@@ -55,12 +55,12 @@ export const getSpecial4Settings: SettingsProducer = (difficulty) => ({
 });
 
 export const getSpecial5Settings: SettingsProducer = (difficulty) => ({
-  amountColors: 5,
+  amountColors: difficulty < 3 ? 4 : 5,
   stackSize: difficulty > 4 ? 5 : 4,
   extraPlacementStacks: 0,
   extraPlacementLimits: 0,
   buffers: 1,
-  bufferSizes: difficulty > 4 ? 5 : 4,
+  bufferSizes: 4,
   bufferPlacementLimits: 1,
   extraBuffers: [
     { amount: 1, size: difficulty > 4 && difficulty < 10 ? 4 : 3, limit: 1 },
