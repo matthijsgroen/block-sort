@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.7.0 - 2024-10-10
+
+### Added
+
+- Labels to options in 'zen mode' screen
+- New special level type, with steps buffer
+- Animation on main track to let player jump to next level
+- Always ask for confirmation before import
+- Reveal block if not earlier revealed when column is completed with same colors
+
+### Changed
+
+- Updated the difficulty of some of the special templates
+
+### Removed
+
+- The beta label on the data transfer
+
 ## Version 1.6.2 - 2024-10-10
 
 ### Fixed

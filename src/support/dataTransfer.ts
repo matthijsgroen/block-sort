@@ -53,7 +53,7 @@ export const decodeData = (data: string): Uint8Array => {
 
 export const decryptData = async <T>(
   input: Uint8Array
-): Promise<T & { timestamp: number }> => {
+): Promise<T & { timestamp: number; time: number }> => {
   const { now, data } = BSON.deserialize(input);
 
   const key = await makeKey(`${now}`);
@@ -66,5 +66,8 @@ export const decryptData = async <T>(
 
   const inflate = pako.inflate(binaryData);
   const result = BSON.deserialize(new Uint8Array(inflate));
-  return { ...result, timestamp: now } as unknown as T & { timestamp: number };
+  return { ...result, timestamp: now } as unknown as T & {
+    timestamp: number;
+    time: number;
+  };
 };

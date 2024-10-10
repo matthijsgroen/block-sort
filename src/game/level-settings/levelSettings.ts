@@ -1,7 +1,10 @@
 import { fib } from "@/support/fib";
 import { pick } from "@/support/random";
 
-import { LevelSettings } from "../level-creation/generateRandomLevel";
+import {
+  LevelSettings,
+  SettingsProducer,
+} from "../level-creation/generateRandomLevel";
 
 import {
   getHard2Settings as _getHard2Settings,
@@ -14,10 +17,11 @@ import {
 } from "./normalSettings";
 import { getSettings as _getScrambledSettings } from "./scrambledSettings";
 import {
-  getSpecial1Settings as _getSpecial1Settings,
-  getSpecial2Settings as _getSpecial2Settings,
-  getSpecial3Settings as _getSpecial3Settings,
-  getSpecial4Settings as _getSpecial4Settings,
+  getSpecial1Settings,
+  getSpecial2Settings,
+  getSpecial3Settings,
+  getSpecial4Settings,
+  getSpecial5Settings,
 } from "./specialSettings";
 
 export const LEVEL_SCALE = fib(3, 11);
@@ -87,27 +91,15 @@ export const getSpecialSettings = (
 ): LevelSettings => {
   const difficulty = getDifficultyLevel(levelNr);
 
-  const templates: LevelSettings[] = [
-    _getSpecial1Settings(difficulty),
-    _getSpecial2Settings(difficulty),
-    _getSpecial3Settings(difficulty),
-    _getSpecial4Settings(difficulty),
+  const templates: SettingsProducer[] = [
+    getSpecial1Settings,
+    getSpecial2Settings,
+    getSpecial3Settings,
+    getSpecial4Settings,
+    getSpecial5Settings,
   ];
 
-  const baseSettings = pick(templates, random);
-
-  if (levelNr >= 199) {
-    return pick(
-      [
-        baseSettings,
-        baseSettings,
-        { ...baseSettings, hideBlockTypes: "checker" },
-      ],
-      random
-    );
-  }
-
-  return baseSettings;
+  return pick(templates, random)(difficulty);
 };
 
 export const getScrambledSettings = (levelNr: number): LevelSettings =>

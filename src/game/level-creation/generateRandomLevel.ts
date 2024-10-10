@@ -25,6 +25,8 @@ export type LevelSettings = {
   playMoves?: [minCount: number, maxPercent: number];
 };
 
+export type SettingsProducer = (difficulty: number) => LevelSettings;
+
 export const generateRandomLevel = (
   {
     amountColors = 2,

@@ -1,6 +1,6 @@
-import { LevelSettings } from "../level-creation/generateRandomLevel";
+import { SettingsProducer } from "../level-creation/generateRandomLevel";
 
-export const getNormalSettings = (difficulty: number): LevelSettings => ({
+export const getNormalSettings: SettingsProducer = (difficulty) => ({
   amountColors: Math.min(1 + difficulty, 10),
   stackSize: Math.min(Math.max(2 + Math.floor(difficulty / 2), 4), 7),
   extraPlacementStacks: difficulty < 2 ? 1 : 2,
@@ -8,7 +8,7 @@ export const getNormalSettings = (difficulty: number): LevelSettings => ({
   hideBlockTypes: "none",
 });
 
-export const getNormal2Settings = (difficulty: number): LevelSettings => ({
+export const getNormal2Settings: SettingsProducer = (difficulty) => ({
   amountColors: Math.min(1 + difficulty, 10),
   stackSize: Math.min(Math.max(difficulty - 3, 4), 7),
   extraPlacementStacks: difficulty < 2 || difficulty > 9 ? 1 : 2,
@@ -18,7 +18,7 @@ export const getNormal2Settings = (difficulty: number): LevelSettings => ({
   bufferSizes: difficulty === 10 ? 3 : difficulty === 11 ? 2 : undefined,
 });
 
-export const getNormal3Settings = (difficulty: number): LevelSettings => ({
+export const getNormal3Settings: SettingsProducer = (difficulty) => ({
   amountColors: Math.min(1 + difficulty, 10),
   stackSize: Math.min(Math.max(difficulty - 3, 4), 7),
   extraPlacementStacks: difficulty < 2 || difficulty > 9 ? 1 : 2,

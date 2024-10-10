@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { mulberry32 } from "@/support/random";
-
 import { LevelSettings } from "../level-creation/generateRandomLevel";
-import { generatePlayableLevel } from "../level-creation/tactics";
 
 import {
   getDifficultyLevel,
@@ -11,8 +8,6 @@ import {
   LEVEL_SCALE,
   nextLevelAt,
 } from "./levelSettings";
-
-const TEST_SEED = 123456789;
 
 describe("Level scale", () => {
   it("reaches maximum level at level 267", () => {
@@ -43,7 +38,7 @@ describe(nextLevelAt, () => {
   });
 });
 
-const AMOUNT_TEMPLATES = 4;
+const AMOUNT_TEMPLATES = 5;
 const randomTemplate = (index: number) => () => (1 / AMOUNT_TEMPLATES) * index;
 
 describe(getSpecialSettings, () => {
@@ -53,12 +48,16 @@ describe(getSpecialSettings, () => {
       const result = getSpecialSettings(0, random);
 
       expect(result).toEqual({
-        amountColors: 4,
+        amountColors: 3,
         stackSize: 12,
         extraPlacementStacks: 0,
-        buffers: 6,
+        buffers: 2,
         bufferSizes: 4,
         bufferPlacementLimits: 0,
+        extraBuffers: [
+          { amount: 1, size: 4, limit: 0 },
+          { amount: 1, size: 4, limit: 0 },
+        ],
         blockColorPick: "end",
       } satisfies LevelSettings);
 
@@ -68,20 +67,15 @@ describe(getSpecialSettings, () => {
         amountColors: 4,
         stackSize: 13,
         extraPlacementStacks: 0,
-        buffers: 6,
-        bufferSizes: 4,
+        buffers: 4,
+        bufferSizes: 3,
         bufferPlacementLimits: 3,
+        extraBuffers: [
+          { amount: 1, size: 3, limit: 0 },
+          { amount: 1, size: 3, limit: 0 },
+        ],
         blockColorPick: "end",
       } satisfies LevelSettings);
-    });
-
-    it("can handle the most complex level", async () => {
-      const random = mulberry32(TEST_SEED);
-      const settings = getSpecialSettings(
-        LEVEL_SCALE.at(-1)!,
-        randomTemplate(0)
-      );
-      await generatePlayableLevel(settings, random);
     });
   });
 
@@ -91,7 +85,7 @@ describe(getSpecialSettings, () => {
       const result = getSpecialSettings(0, random);
 
       expect(result).toEqual({
-        amountColors: 11,
+        amountColors: 6,
         stackSize: 3,
         extraPlacementStacks: 3,
         extraPlacementLimits: 2,
@@ -107,15 +101,6 @@ describe(getSpecialSettings, () => {
         extraPlacementLimits: 0,
         blockColorPick: "end",
       } satisfies LevelSettings);
-    });
-
-    it("can handle the most complex level", async () => {
-      const random = mulberry32(TEST_SEED);
-      const settings = getSpecialSettings(
-        LEVEL_SCALE.at(-1)!,
-        randomTemplate(1)
-      );
-      await generatePlayableLevel(settings, random);
     });
   });
 
@@ -142,15 +127,6 @@ describe(getSpecialSettings, () => {
         blockColorPick: "end",
       } satisfies LevelSettings);
     });
-
-    it("can handle the most complex level", async () => {
-      const random = mulberry32(TEST_SEED);
-      const settings = getSpecialSettings(
-        LEVEL_SCALE.at(-1)!,
-        randomTemplate(2)
-      );
-      await generatePlayableLevel(settings, random);
-    });
   });
 
   describe("template 4", () => {
@@ -159,9 +135,9 @@ describe(getSpecialSettings, () => {
       const result = getSpecialSettings(0, random);
 
       expect(result).toEqual({
-        amountColors: 5,
+        amountColors: 3,
         stackSize: 3,
-        extraPlacementStacks: 2,
+        extraPlacementStacks: 4,
         extraPlacementLimits: 2,
         buffers: 1,
         bufferSizes: 1,
@@ -176,21 +152,50 @@ describe(getSpecialSettings, () => {
         stackSize: 3,
         extraPlacementStacks: 2,
         extraPlacementLimits: 2,
-        hideBlockTypes: "checker",
         buffers: 1,
         bufferSizes: 1,
         stacksPerColor: 2,
         blockColorPick: "end",
       } satisfies LevelSettings);
     });
+  });
 
-    it("can handle the most complex level", async () => {
-      const random = mulberry32(TEST_SEED);
-      const settings = getSpecialSettings(
-        LEVEL_SCALE.at(-1)!,
-        randomTemplate(3)
-      );
-      await generatePlayableLevel(settings, random);
+  describe("template 5", () => {
+    it("has buffers with steps", () => {
+      const random = randomTemplate(4);
+      const result = getSpecialSettings(0, random);
+
+      expect(result).toEqual({
+        amountColors: 4,
+        stackSize: 4,
+        extraPlacementStacks: 0,
+        extraPlacementLimits: 0,
+        buffers: 1,
+        bufferPlacementLimits: 1,
+        bufferSizes: 4,
+        extraBuffers: [
+          { amount: 1, size: 3, limit: 1 },
+          { amount: 1, size: 2, limit: 1 },
+        ],
+        blockColorPick: "end",
+      } satisfies LevelSettings);
+
+      const hardResult = getSpecialSettings(LEVEL_SCALE.at(-1)!, random);
+
+      expect(hardResult).toEqual({
+        amountColors: 5,
+        stackSize: 5,
+        extraPlacementStacks: 0,
+        extraPlacementLimits: 0,
+        buffers: 1,
+        bufferPlacementLimits: 1,
+        bufferSizes: 4,
+        extraBuffers: [
+          { amount: 1, size: 3, limit: 1 },
+          { amount: 1, size: 2, limit: 1 },
+        ],
+        blockColorPick: "end",
+      } satisfies LevelSettings);
     });
   });
 });

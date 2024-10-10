@@ -65,6 +65,9 @@ export const moveBlocks = (
       endCol.blocks.length === endCol.columnSize &&
       endCol.blocks.every((b) => b.color === moveColor)
     ) {
+      endCol.blocks.forEach((b) => {
+        b.revealed = true;
+      });
       endCol.locked = true;
     }
   })(level);

@@ -7,6 +7,7 @@ import { TopButton } from "@/ui/TopButton/TopButton";
 import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { LevelType } from "@/support/getLevelType";
+import { timesMap } from "@/support/timeMap";
 
 import { DIFFICULTY_LEVELS, LEVEL_TYPES } from "../GameModi/zenModeConstants";
 import { BackgroundContext } from "../Layout/BackgroundContext";
@@ -60,6 +61,9 @@ export const ZenSelection: React.FC<Props> = ({
         <div className="text-center">
           <span className="text-4xl">🌻</span>
         </div>
+        <div className={clsx(styles.text, styles.title, styles.shadow)}>
+          Select difficulty
+        </div>
         <div className="flex flex-row gap-4 items-center">
           <WoodButton
             onClick={() => {
@@ -77,13 +81,19 @@ export const ZenSelection: React.FC<Props> = ({
                   levelNr < selectedDifficulty.unlocksAtLevel - 1,
                 [styles.enabled]:
                   levelNr >= selectedDifficulty.unlocksAtLevel - 1,
+                [styles.shadow]:
+                  levelNr >= selectedDifficulty.unlocksAtLevel - 1,
               })}
             >
               {selectedDifficulty.name}
             </div>
-            {selectedDifficulty.unlocksAtLevel - 1 > levelNr && (
+            {selectedDifficulty.unlocksAtLevel - 1 > levelNr ? (
               <div className="text-center -mt-2">
                 Unlocks at level {selectedDifficulty.unlocksAtLevel}
+              </div>
+            ) : (
+              <div className="text-center -mt-2 tracking-widest text-transparent bg-gradient-to-r bg-clip-text from-orange-200 to-orange-600">
+                {timesMap(difficultyIndex + 1, () => "⭐️")}
               </div>
             )}
           </div>
@@ -94,6 +104,9 @@ export const ZenSelection: React.FC<Props> = ({
           >
             <span className="inline-block translate-y-[5px] px-2">▶</span>︎ ︎
           </WoodButton>
+        </div>
+        <div className={clsx(styles.text, styles.title, styles.shadow)}>
+          Select level type
         </div>
         <div className="flex flex-row gap-4 items-center">
           <WoodButton
@@ -111,6 +124,8 @@ export const ZenSelection: React.FC<Props> = ({
                 [styles.disabled]:
                   levelNr < selectedLevelType.unlocksAtLevel - 1,
                 [styles.enabled]:
+                  levelNr >= selectedLevelType.unlocksAtLevel - 1,
+                [styles.shadow]:
                   levelNr >= selectedLevelType.unlocksAtLevel - 1,
               })}
             >
@@ -132,7 +147,7 @@ export const ZenSelection: React.FC<Props> = ({
         </div>
       </div>
       <div className="text-center pb-10 flex flex-row justify-between w-full px-5">
-        <div className={"block"}>
+        <div className={"block w-22"}>
           <button
             onClick={onZenModeEnd}
             className={clsx(
@@ -153,17 +168,7 @@ export const ZenSelection: React.FC<Props> = ({
             levelNr < selectedLevelType.unlocksAtLevel - 1
           }
         />
-        <div className={clsx("block transition-opacity opacity-0")}>
-          <button
-            onClick={() => {}}
-            className={clsx(
-              "inline-block h-12 rounded-3xl shadow-lg font-bold pt-3 px-6 bg-orange-500",
-              "invisible"
-            )}
-          >
-            <span className={"block -translate-y-1 scale-150"}>▸</span>
-          </button>
-        </div>
+        <div className={"block w-22"}></div>
       </div>
     </div>
   );

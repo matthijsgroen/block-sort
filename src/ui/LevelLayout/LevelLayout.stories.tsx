@@ -4,7 +4,10 @@ import {
   generateRandomLevel,
   LevelSettings,
 } from "@/game/level-creation/generateRandomLevel";
-import { getHardSettings as getHardSettings } from "@/game/level-settings/hardSettings";
+import {
+  getHard2Settings,
+  getHardSettings as getHardSettings,
+} from "@/game/level-settings/hardSettings";
 import {
   getNormal2Settings,
   getNormal3Settings,
@@ -15,6 +18,7 @@ import {
   getSpecial2Settings,
   getSpecial3Settings,
   getSpecial4Settings,
+  getSpecial5Settings,
 } from "@/game/level-settings/specialSettings";
 import { mulberry32 } from "@/support/random";
 
@@ -25,10 +29,12 @@ type LevelType =
   | "normal2"
   | "normal3"
   | "hard"
+  | "hard2"
   | "special1"
   | "special2"
   | "special3"
-  | "special4";
+  | "special4"
+  | "special5";
 
 type CustomArgs = {
   levelType: LevelType;
@@ -52,10 +58,12 @@ const meta: Meta<CustomArgs> = {
         "normal2",
         "normal3",
         "hard",
+        "hard2",
         "special1",
         "special2",
         "special3",
         "special4",
+        "special5",
       ],
       control: { type: "select" },
     },
@@ -81,10 +89,12 @@ const settingProducer: Record<
   normal2: getNormal2Settings,
   normal3: getNormal3Settings,
   hard: getHardSettings,
+  hard2: getHard2Settings,
   special1: getSpecial1Settings,
   special2: getSpecial2Settings,
   special3: getSpecial3Settings,
   special4: getSpecial4Settings,
+  special5: getSpecial5Settings,
 };
 
 const SEED = 123456789;

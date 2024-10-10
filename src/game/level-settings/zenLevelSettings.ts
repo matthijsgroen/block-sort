@@ -1,7 +1,9 @@
 import { LevelType } from "@/support/getLevelType";
-import { pick } from "@/support/random";
 
-import { LevelSettings } from "../level-creation/generateRandomLevel";
+import {
+  LevelSettings,
+  SettingsProducer,
+} from "../level-creation/generateRandomLevel";
 
 import { getHard2Settings, getHardSettings } from "./hardSettings";
 import {
@@ -15,53 +17,38 @@ import {
   getSpecial2Settings,
   getSpecial3Settings,
   getSpecial4Settings,
+  getSpecial5Settings,
 } from "./specialSettings";
 
 export const getZenSettings = (
   difficultyLevel: number,
   levelType: LevelType,
-  random = Math.random
+  zenLevel: number
 ): LevelSettings => {
   if (levelType === "normal") {
-    const templates: LevelSettings[] = [getNormalSettings(difficultyLevel)];
+    const templates: SettingsProducer[] = [getNormalSettings];
     if (difficultyLevel >= 8) {
-      templates.push(
-        getNormal2Settings(difficultyLevel),
-        getNormal3Settings(difficultyLevel)
-      );
+      templates.push(getNormal2Settings, getNormal3Settings);
     }
-    return pick(templates, random);
+    return templates[zenLevel % templates.length](difficultyLevel);
   }
   if (levelType === "hard") {
     if (difficultyLevel > 8) {
-      return pick(
-        [getHard2Settings(difficultyLevel), getHardSettings(difficultyLevel)],
-        random
-      );
+      const templates: SettingsProducer[] = [getHardSettings, getHard2Settings];
+      return templates[zenLevel % templates.length](difficultyLevel);
     }
 
     return getHardSettings(difficultyLevel);
   }
   if (levelType === "special") {
-    const templates: LevelSettings[] = [
-      getSpecial1Settings(difficultyLevel),
-      getSpecial2Settings(difficultyLevel),
-      getSpecial3Settings(difficultyLevel),
-      getSpecial4Settings(difficultyLevel),
+    const templates: SettingsProducer[] = [
+      getSpecial1Settings,
+      getSpecial2Settings,
+      getSpecial3Settings,
+      getSpecial4Settings,
+      getSpecial5Settings,
     ];
-    const baseSettings = pick(templates, random);
-    if (difficultyLevel >= 9) {
-      return pick(
-        [
-          baseSettings,
-          baseSettings,
-          { ...baseSettings, hideBlockTypes: "checker" },
-        ],
-        random
-      );
-    }
-
-    return baseSettings;
+    return templates[zenLevel % templates.length](difficultyLevel);
   }
 
   return getScrambledSettings(difficultyLevel);
