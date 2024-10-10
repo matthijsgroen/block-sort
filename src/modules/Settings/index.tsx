@@ -43,7 +43,7 @@ export const Settings: React.FC<Props> = ({
 
   return (
     <Dialog
-      wide={activeTab === "changes"}
+      wide={activeTab === "changes" || activeTab === "attribution"}
       onClose={() => {
         onClose?.();
       }}
@@ -133,7 +133,7 @@ export const Settings: React.FC<Props> = ({
                 setActiveTab("data");
               }}
             >
-              Game data import / export
+              Transfer game data
             </TransparentButton>
           </div>
         </div>

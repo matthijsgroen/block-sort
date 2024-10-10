@@ -127,18 +127,18 @@ const DataTransfer: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="font-bold text-lg">Data transfer</h2>
+      <h2 className="font-bold text-lg">Transfer game data</h2>
       {supportsEncryption ? (
         <>
           {!startDownload && (
             <>
               <p className="text-sm">
-                You can export your game data as an image. This image can be
-                used to import your game data into another instance of the game.
-                The export is valid for{" "}
+                You can transfer your game data to another instance of the game
+                through an image. The export is valid for{" "}
                 <strong>{DATA_VALIDITY_TIME} minutes</strong>, and needs to be
                 imported into the same version ({info.version}) of the game.
               </p>
+              <p className="text-sm">This is not meant to act as a backup.</p>
               <TransparentButton
                 onClick={() => {
                   setStartDownload(true);
