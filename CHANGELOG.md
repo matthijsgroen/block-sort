@@ -24,6 +24,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The beta label on the data transfer
 
+## Version 1.6.2 - 2024-10-10
+
+### Fixed
+
+- Fixed loading of level 360
+
+### Added
+
+- Decent error screen if level generation fails with email and back option
+
 ## Version 1.6.1 - 2024-10-08
 
 ### Fixed
