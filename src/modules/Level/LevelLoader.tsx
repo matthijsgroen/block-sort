@@ -1,6 +1,7 @@
 import { Suspense, useMemo, useState } from "react";
 
 import { Loading } from "@/ui/Loading/Loading";
+import { TopButton } from "@/ui/TopButton/TopButton";
 
 import { moveBlocks } from "@/game/actions";
 import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
@@ -15,6 +16,7 @@ import {
   setGameValue,
 } from "@/support/useGameStorage";
 
+import { ErrorBoundary } from "./ErrorBoundary";
 import { Level } from "./Level";
 
 type Props = {
@@ -85,31 +87,61 @@ export const LevelLoader: React.FC<Props> = ({
   }, [locked.seed, JSON.stringify(locked.levelSettings)]);
 
   return (
-    <Suspense
+    <ErrorBoundary
       fallback={
-        <div className="h-full flex flex-col justify-center items-center text-light-wood font-bold text-2xl opacity-0 animate-fadeIn [animation-delay:1s]">
-          <Loading />
-          <p>Loading...</p>
+        <div className="h-full flex flex-col text-light-wood font-bold text-2xl">
+          <div className="flex flex-row pt-2 pl-safeLeft pr-safeRight gap-x-2 items-center">
+            <TopButton
+              buttonType="back"
+              onClick={() => {
+                onComplete(false);
+              }}
+            />
+          </div>
+          <div className="flex flex-col flex-1 items-center justify-center">
+            <div className="text-4xl">😢</div>
+            <p className="max-w-[300px] text-center">
+              uh oh... failed to generate level {locked.levelNr + 1},
+              <br />
+              please e-mail me on{" "}
+              <a
+                href={`mailto:matthijsgroen@gmail.com?subject=[BlockSort]-Failed-to-generate-level-${locked.levelNr + 1}`}
+                className="underline"
+              >
+                matthijs.groen@gmail.com
+              </a>{" "}
+              to notify me
+            </p>
+          </div>
         </div>
       }
     >
-      <Level
-        level={level}
-        title={locked.title}
-        storageKey={`${storagePrefix}levelState${locked.levelNr}`}
-        storagePrefix={storagePrefix}
-        levelNr={levelNr}
-        levelSettings={levelSettings}
-        levelType={levelType}
-        onComplete={(won) => {
-          if (won) {
-            deleteGameValue(
-              `${storagePrefix}initialLevelState${locked.levelNr}`
-            );
-          }
-          onComplete(won);
-        }}
-      />
-    </Suspense>
+      <Suspense
+        fallback={
+          <div className="h-full flex flex-col justify-center items-center text-light-wood font-bold text-2xl opacity-0 animate-fadeIn [animation-delay:1s]">
+            <Loading />
+            <p>Loading...</p>
+          </div>
+        }
+      >
+        <Level
+          level={level}
+          title={locked.title}
+          storageKey={`${storagePrefix}levelState${locked.levelNr}`}
+          storagePrefix={storagePrefix}
+          levelNr={levelNr}
+          levelSettings={levelSettings}
+          levelType={levelType}
+          onComplete={(won) => {
+            if (won) {
+              deleteGameValue(
+                `${storagePrefix}initialLevelState${locked.levelNr}`
+              );
+            }
+            onComplete(won);
+          }}
+        />
+      </Suspense>
+    </ErrorBoundary>
   );
 };
