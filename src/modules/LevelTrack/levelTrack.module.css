@@ -39,10 +39,10 @@
     transform: translateY(0);
   }
   50% {
-    transform: translateY(calc(3.5rem - 2px));
+    transform: translateY(3.5rem);
   }
   100% {
-    transform: translateY(calc(3.5rem - 2px));
+    transform: translateY(3.5rem);
   }
 }
 
@@ -73,7 +73,7 @@
     scale: 1 1.2;
   }
   80% {
-    translate: var(--direction, 0rem) calc(-3.6rem - 1px);
+    translate: var(--direction, 0rem) calc(-3.5rem - 1px);
     scale: 1 0.8;
   }
   90% {

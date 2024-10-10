@@ -239,16 +239,28 @@ export const LevelTrack: React.FC<Props> = ({
                     {i > levelNr && isSpecial(i) && (
                       <span
                         style={{ "--color": "#a855f7" }}
-                        className={styles.colorEmoji}
+                        className={clsx(styles.colorEmoji, {
+                          ["animate-fadeOut"]: i === officialLevelNr,
+                        })}
                       >
                         ⭐️
                       </span>
                     )}
-                    {i > levelNr && isHard(i) && "️🔥"}
+                    {i > levelNr && isHard(i) && (
+                      <span
+                        className={clsx({
+                          ["animate-fadeOut"]: i === officialLevelNr,
+                        })}
+                      >
+                        ️🔥
+                      </span>
+                    )}
                     {i > levelNr && isEasy(i) && (
                       <span
                         style={{ "--color": "#15803d" }}
-                        className={styles.colorEmoji}
+                        className={clsx(styles.colorEmoji, {
+                          ["animate-fadeOut"]: i === officialLevelNr,
+                        })}
                       >
                         ️🍀
                       </span>
@@ -256,7 +268,9 @@ export const LevelTrack: React.FC<Props> = ({
                     {i > levelNr && isScrambled(i) && (
                       <span
                         style={{ "--color": "#94a3b8" }}
-                        className={styles.colorEmoji}
+                        className={clsx(styles.colorEmoji, {
+                          ["animate-fadeOut"]: i === officialLevelNr,
+                        })}
                       >
                         ️🧩
                       </span>

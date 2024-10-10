@@ -37,6 +37,7 @@ export default {
         locked: "locked 0.5s ease-in-out forwards",
         trayLocked: "trayLocked 0.3s ease-in-out forwards",
         fadeIn: "fadeIn 1s ease-in-out forwards",
+        fadeOut: "fadeOut 1s ease-in-out forwards",
         popInOut: "popInOut 3s ease-in-out forwards",
         rotate: "rotate 2s linear infinite",
         flyTopLeft:
@@ -92,6 +93,10 @@ export default {
         fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
+        },
+        fadeOut: {
+          "0%": { opacity: "1" },
+          "100%": { opacity: "0" },
         },
         place: {
           "0%": { translate: "0 -2rem" },
