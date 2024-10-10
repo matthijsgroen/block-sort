@@ -5,16 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Version 1.7.0 - UNRELEASED
+## Version 1.7.0 - 2024-10-10
 
 ### Added
 
 - Labels to options in 'zen mode' screen
 - New special level type, with steps buffer
 - Animation on main track to let player jump to next level
-
-### Fixed
-
 - Always ask for confirmation before import
 
 ### Changed
