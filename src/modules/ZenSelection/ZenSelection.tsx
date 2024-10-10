@@ -147,7 +147,7 @@ export const ZenSelection: React.FC<Props> = ({
         </div>
       </div>
       <div className="text-center pb-10 flex flex-row justify-between w-full px-5">
-        <div className={"block"}>
+        <div className={"block w-22"}>
           <button
             onClick={onZenModeEnd}
             className={clsx(
@@ -168,17 +168,7 @@ export const ZenSelection: React.FC<Props> = ({
             levelNr < selectedLevelType.unlocksAtLevel - 1
           }
         />
-        <div className={clsx("block transition-opacity opacity-0")}>
-          <button
-            onClick={() => {}}
-            className={clsx(
-              "inline-block h-12 rounded-3xl shadow-lg font-bold pt-3 px-6 bg-orange-500",
-              "invisible"
-            )}
-          >
-            <span className={"block -translate-y-1 scale-150"}>▸</span>
-          </button>
-        </div>
+        <div className={"block w-22"}></div>
       </div>
     </div>
   );
