@@ -16,7 +16,7 @@
 
 .levelUp::after {
   content: "💪🏼 " var(--levelNr, "0");
-  @apply mr-4 text-transparent bg-black/30 bg-clip-text opacity-80;
+  @apply absolute right-1 mr-4 text-transparent bg-black/30 bg-clip-text opacity-80;
 }
 
 .textShadow {
@@ -28,4 +28,75 @@
   background-color: var(--color);
   background-clip: text;
   color: transparent;
+}
+
+.shiftDown {
+  animation: shiftDown 1.5s ease-in-out 0.5s 1 forwards;
+}
+
+@keyframes shiftDown {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(calc(3.5rem - 2px));
+  }
+  100% {
+    transform: translateY(calc(3.5rem - 2px));
+  }
+}
+
+.hop {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  translate: 0 0;
+  scale: 1 1;
+  animation:
+    hop 1s ease-out 1s 1 forwards,
+    flip 1s ease-in-out 1s 1 forwards;
+  z-index: 1;
+  @apply w-block;
+}
+
+@keyframes hop {
+  0% {
+    translate: 0 0;
+    scale: 1 1;
+  }
+  10% {
+    translate: 0 0;
+    scale: 1 0.9;
+  }
+  50% {
+    translate: calc(var(--direction, 0rem) * 0.5) -6rem;
+    scale: 1 1.2;
+  }
+  80% {
+    translate: var(--direction, 0rem) calc(-3.6rem - 1px);
+    scale: 1 0.8;
+  }
+  90% {
+    translate: var(--direction, 0rem) calc(-3.9rem - 1px);
+    scale: 1 0.9;
+  }
+  100% {
+    translate: var(--direction, 0rem) calc(-3.5rem - 1px);
+    scale: 1 1;
+  }
+}
+
+@keyframes flip {
+  0% {
+    rotate: 0deg;
+  }
+  40% {
+    rotate: var(--rotateDirection, 0deg);
+  }
+  80% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: 0deg;
+  }
 }

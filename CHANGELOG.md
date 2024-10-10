@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Labels to options in 'zen mode' screen
 - New special level type, with steps buffer
+- Animation on main track to let player jump to next level
 
 ### Fixed
 

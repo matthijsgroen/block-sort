@@ -13,7 +13,9 @@ import {
   isSpecial,
   LEVEL_SCALE,
 } from "@/game/level-settings/levelSettings";
+import { effectTimeout } from "@/support/effectTimeout";
 import { getLevelType } from "@/support/getLevelType";
+import { useGameStorage } from "@/support/useGameStorage";
 
 import { PlayButton } from "../../ui/PlayButton";
 import { BackgroundContext } from "../Layout/BackgroundContext";
@@ -43,7 +45,7 @@ const translates = [
 ];
 
 export const LevelTrack: React.FC<Props> = ({
-  levelNr,
+  levelNr: officialLevelNr,
   hasZenMode = false,
   showInstallButton = false,
   onInstall,
@@ -51,8 +53,20 @@ export const LevelTrack: React.FC<Props> = ({
   onLevelStart,
   onOpenSettings,
 }) => {
-  const startNumbering = Math.max(Math.floor(levelNr - 2), 0);
+  const [levelNr, setDisplayLevelNr] = useGameStorage(
+    "displayLevelNr",
+    officialLevelNr
+  );
 
+  // If levelNr is lower than the official one (keep in offline state)
+  // Start a transition to the next level
+  useEffect(() => {
+    return effectTimeout(() => {
+      setDisplayLevelNr((nr) => (nr < officialLevelNr ? nr + 1 : nr));
+    }, 2000);
+  }, [officialLevelNr]);
+
+  const startNumbering = Math.max(Math.floor(levelNr - 2), 0);
   const levelNrs = new Array(30).fill(0).map((_, i) => startNumbering + i);
 
   const { setLevelType, setScreenLayout } = use(BackgroundContext);
@@ -68,6 +82,8 @@ export const LevelTrack: React.FC<Props> = ({
       setShowBeta(true);
     }
   }, [betaCounter]);
+
+  const jumpRight = (levelNr + 2) % 8 < 4;
 
   return (
     <div className="flex flex-col items-center h-full">
@@ -95,101 +111,169 @@ export const LevelTrack: React.FC<Props> = ({
           const offset = i % 8;
           const levelTransition = LEVEL_SCALE.includes(i);
           return (
-            <li
-              key={i}
-              style={{ "--levelNr": `'${LEVEL_SCALE.indexOf(i) + 1}'` }}
-              className={clsx(
-                "flex align-middle items-center w-full h-height-block flex-shrink-0 justify-center",
-                {
-                  [styles.levelUp]: levelTransition,
-                }
-              )}
-            >
-              <div
-                className={clsx(
-                  translates[offset],
-                  "whitespace-nowrap leading-10 align-middle mx-auto"
-                )}
-              >
-                <span
+            <>
+              {levelNr < officialLevelNr && i === levelNr && (
+                <li
+                  key={`jump${i}`}
                   className={clsx(
-                    "text-orange-400",
+                    "relative -top-7 z-10 flex align-middle items-center w-full flex-shrink-0 justify-center h-0",
                     {
-                      "text-green-900": i < levelNr,
-                      "font-bold": i === levelNr,
-                      "text-purple-500": isSpecial(i) && i >= levelNr,
-                      "text-green-700": isEasy(i) && i >= levelNr,
-                      "text-slate-400": isScrambled(i) && i >= levelNr,
-                    },
-                    styles.textShadow
-                  )}
-                >
-                  {i + 1}&nbsp;
-                </span>
-                <span
-                  className={clsx(
-                    "inline-block border size-block align-top rounded-md text-center bg-black/30",
-                    {
-                      "border border-block-brown":
-                        !isSpecial(i) ||
-                        !isHard(i) ||
-                        !isEasy(i) ||
-                        isScrambled(i),
-                      "border-2 border-purple-800": isSpecial(i),
-                      "border-2 border-orange-700": isHard(i),
-                      "border-2 border-green-800": isEasy(i),
-                      "border-2 border-slate-400": isScrambled(i),
+                      [styles.levelUp]: levelTransition,
+                      [styles.shiftDown]:
+                        levelNr < officialLevelNr && levelNr > 2,
                     }
                   )}
                 >
-                  {i < levelNr && (
+                  <div
+                    className={clsx(
+                      translates[offset],
+                      "whitespace-nowrap leading-10 align-middle mx-auto"
+                    )}
+                  >
+                    <span className={clsx("text-transparent")}>
+                      {i + 1}&nbsp;
+                    </span>
                     <span
                       className={clsx(
-                        "bg-green-500 bg-clip-text text-transparent",
-                        styles.doneGlow
+                        "inline-block size-block border-1 border-transparent align-top rounded-md text-center",
+                        {
+                          ["relative"]: i === levelNr,
+                        }
                       )}
                     >
-                      ✔
+                      <span
+                        className={clsx("inline-block", {
+                          [styles.hop]: levelNr < officialLevelNr,
+                        })}
+                        style={{
+                          "--direction": jumpRight ? "2.6rem" : "-2.4rem",
+                          "--rotateDirection": jumpRight ? "40deg" : "-40deg",
+                        }}
+                      >
+                        <Smiley />
+                      </span>
                     </span>
+                  </div>
+                </li>
+              )}
+              <li
+                key={i}
+                style={{ "--levelNr": `'${LEVEL_SCALE.indexOf(i) + 1}'` }}
+                className={clsx(
+                  "flex align-middle items-center w-full h-height-block flex-shrink-0 justify-center",
+                  {
+                    [styles.levelUp]: levelTransition,
+                    [styles.shiftDown]:
+                      levelNr < officialLevelNr && levelNr > 2,
+                  }
+                )}
+              >
+                <div
+                  className={clsx(
+                    translates[offset],
+                    "whitespace-nowrap leading-10 align-middle mx-auto"
                   )}
-                  {i == levelNr && <Smiley />}
-                  {i > levelNr && isSpecial(i) && (
-                    <span
-                      style={{ "--color": "#a855f7" }}
-                      className={styles.colorEmoji}
-                    >
-                      ⭐️
-                    </span>
-                  )}
-                  {i > levelNr && isHard(i) && "️🔥"}
-                  {i > levelNr && isEasy(i) && (
-                    <span
-                      style={{ "--color": "#15803d" }}
-                      className={styles.colorEmoji}
-                    >
-                      ️🍀
-                    </span>
-                  )}
-                  {i > levelNr && isScrambled(i) && (
-                    <span
-                      style={{ "--color": "#94a3b8" }}
-                      className={styles.colorEmoji}
-                    >
-                      ️🧩
-                    </span>
-                  )}
-                </span>
-              </div>
-            </li>
+                >
+                  <span
+                    className={clsx(
+                      "text-orange-400",
+                      {
+                        "text-green-900": i < officialLevelNr,
+                        "font-bold": i === officialLevelNr,
+                        "text-purple-500": isSpecial(i) && i >= officialLevelNr,
+                        "text-green-700": isEasy(i) && i >= officialLevelNr,
+                        "text-slate-400":
+                          isScrambled(i) && i >= officialLevelNr,
+                      },
+                      styles.textShadow
+                    )}
+                  >
+                    {i + 1}&nbsp;
+                  </span>
+                  <span
+                    className={clsx(
+                      "inline-block border size-block align-top rounded-md text-center bg-black/30",
+                      {
+                        "border border-block-brown":
+                          !isSpecial(i) ||
+                          !isHard(i) ||
+                          !isEasy(i) ||
+                          isScrambled(i),
+                        "border-2 border-purple-800": isSpecial(i),
+                        "border-2 border-orange-700": isHard(i),
+                        "border-2 border-green-800": isEasy(i),
+                        "border-2 border-slate-400": isScrambled(i),
+                        ["relative"]: i === levelNr,
+                      }
+                    )}
+                  >
+                    {i < levelNr && (
+                      <span
+                        className={clsx(
+                          "bg-green-500 bg-clip-text text-transparent",
+                          styles.doneGlow
+                        )}
+                      >
+                        ✔
+                      </span>
+                    )}
+                    {i == levelNr && (
+                      <span
+                        className={clsx("inline-block", {
+                          ["hidden"]: levelNr < officialLevelNr,
+                        })}
+                      >
+                        <Smiley />
+                      </span>
+                    )}
+                    {i == levelNr && levelNr < officialLevelNr && (
+                      <span
+                        className={clsx(
+                          "bg-green-500 bg-clip-text text-transparent animate-fadeIn [animation-duration:2s] [animation-delay:1s] opacity-0",
+                          styles.doneGlow
+                        )}
+                      >
+                        ✔
+                      </span>
+                    )}
+                    {i > levelNr && isSpecial(i) && (
+                      <span
+                        style={{ "--color": "#a855f7" }}
+                        className={styles.colorEmoji}
+                      >
+                        ⭐️
+                      </span>
+                    )}
+                    {i > levelNr && isHard(i) && "️🔥"}
+                    {i > levelNr && isEasy(i) && (
+                      <span
+                        style={{ "--color": "#15803d" }}
+                        className={styles.colorEmoji}
+                      >
+                        ️🍀
+                      </span>
+                    )}
+                    {i > levelNr && isScrambled(i) && (
+                      <span
+                        style={{ "--color": "#94a3b8" }}
+                        className={styles.colorEmoji}
+                      >
+                        ️🧩
+                      </span>
+                    )}
+                  </span>
+                </div>
+              </li>
+            </>
           );
         })}
       </ol>
       <div className="text-center pb-10 flex flex-row justify-between w-full px-5">
         <div className="w-22"></div>
         <PlayButton
-          label={`Level ${levelNr + 1}`}
+          label={`Level ${officialLevelNr + 1}`}
           onClick={onLevelStart}
-          type={getLevelType(levelNr)}
+          type={getLevelType(officialLevelNr)}
         />
         <div
           className={clsx("block transition-opacity w-22", {
