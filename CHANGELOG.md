@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New special level type, with steps buffer
 - Animation on main track to let player jump to next level
 - Always ask for confirmation before import
+- Reveal block if not earlier revealed when column is completed with same colors
 
 ### Changed
 
