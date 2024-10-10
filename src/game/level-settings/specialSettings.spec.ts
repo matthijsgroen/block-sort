@@ -13,10 +13,10 @@ describe(getSpecial1Settings, () => {
   it("returns settings based on difficulty", () => {
     const easy = getSpecial1Settings(1);
     expect(easy).toEqual({
-      amountColors: 4,
+      amountColors: 3,
       bufferPlacementLimits: 0,
       bufferSizes: 4,
-      buffers: 4,
+      buffers: 2,
       extraBuffers: [
         {
           amount: 1,

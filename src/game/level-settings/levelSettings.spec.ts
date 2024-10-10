@@ -48,10 +48,10 @@ describe(getSpecialSettings, () => {
       const result = getSpecialSettings(0, random);
 
       expect(result).toEqual({
-        amountColors: 4,
+        amountColors: 3,
         stackSize: 12,
         extraPlacementStacks: 0,
-        buffers: 4,
+        buffers: 2,
         bufferSizes: 4,
         bufferPlacementLimits: 0,
         extraBuffers: [
@@ -135,7 +135,7 @@ describe(getSpecialSettings, () => {
       const result = getSpecialSettings(0, random);
 
       expect(result).toEqual({
-        amountColors: 5,
+        amountColors: 3,
         stackSize: 3,
         extraPlacementStacks: 4,
         extraPlacementLimits: 2,

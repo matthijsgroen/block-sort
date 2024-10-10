@@ -1,10 +1,10 @@
 import { SettingsProducer } from "../level-creation/generateRandomLevel";
 
 export const getSpecial1Settings: SettingsProducer = (difficulty) => ({
-  amountColors: 4,
+  amountColors: difficulty < 4 ? 3 : 4,
   stackSize: 12 + Math.max(Math.round(difficulty / 8), 0),
   extraPlacementStacks: 0,
-  buffers: 4,
+  buffers: difficulty < 4 ? 2 : 4,
   bufferSizes: 4 - Math.max(Math.round((difficulty - 7) / 4), 0),
   bufferPlacementLimits: 0 + Math.max(Math.round(difficulty / 4), 0),
   extraBuffers: [
@@ -44,7 +44,7 @@ export const getSpecial3Settings: SettingsProducer = (difficulty) => ({
 });
 
 export const getSpecial4Settings: SettingsProducer = (difficulty) => ({
-  amountColors: 5 + Math.max(Math.round(difficulty / 8), 0),
+  amountColors: 2 + Math.min(Math.max(Math.round(difficulty / 2), 0), 4),
   stacksPerColor: 2,
   stackSize: 3,
   extraPlacementStacks: 4 - Math.max(Math.round(difficulty / 5), 0),
