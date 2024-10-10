@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.6.2 - 2024-10-10
+
+### Fixed
+
+- Fixed loading of level 360
+
+### Added
+
+- Decent error screen if level generation fails with email and back option
+
 ## Version 1.6.1 - 2024-10-08
 
 ### Fixed
