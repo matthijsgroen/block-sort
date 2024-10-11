@@ -4,7 +4,6 @@ import { Transition } from "@/ui/Transition/Transition.tsx";
 
 import { sound } from "@/audio.ts";
 import { ZEN_MODE } from "@/featureFlags.ts";
-import { LevelSettings } from "@/game/level-creation/generateRandomLevel.ts";
 import {
   getEasySettings,
   getHardSettings,
@@ -12,6 +11,7 @@ import {
   getScrambledSettings,
   getSpecialSettings,
 } from "@/game/level-settings/levelSettings.ts";
+import { LevelSettings } from "@/game/types.ts";
 import { LevelLoader } from "@/modules/Level/LevelLoader.tsx";
 import { LevelTrack } from "@/modules/LevelTrack/LevelTrack.tsx";
 import { getLevelType, LevelType } from "@/support/getLevelType.ts";

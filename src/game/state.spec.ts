@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   createBlock,
   createBlocks,
+  createBufferColumn,
   createHiddenBlocks,
   createLevelState,
   createPlacementColumn,
@@ -181,6 +182,27 @@ describe(isStuck, () => {
       ),
       createPlacementColumn(4, createBlocks("green", "red", "red")),
       createPlacementColumn(4, createBlocks("red", "red")),
+    ]);
+    const result = isStuck(level);
+    expect(result).toBe(true);
+  });
+
+  it("returns true if a move makes no difference (locked columns)", () => {
+    const level = createLevelState([
+      createPlacementColumn(4, createBlocks("white")),
+      createPlacementColumn(4, createBlocks("red")),
+      createPlacementColumn(4, createBlocks("black", "black", "red", "white")),
+      createPlacementColumn(
+        4,
+        createBlocks("black", "green", "green", "brown")
+      ),
+      createPlacementColumn(
+        4,
+        createBlocks("black", "white", "white", "brown")
+      ),
+      createBufferColumn(4, "brown", createBlocks("brown", "brown")),
+      createBufferColumn(3, "green", createBlocks("green", "green")),
+      createBufferColumn(2, "red", createBlocks("red", "red")),
     ]);
     const result = isStuck(level);
     expect(result).toBe(true);

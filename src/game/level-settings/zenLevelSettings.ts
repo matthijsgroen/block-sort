@@ -1,9 +1,6 @@
 import { LevelType } from "@/support/getLevelType";
 
-import {
-  LevelSettings,
-  SettingsProducer,
-} from "../level-creation/generateRandomLevel";
+import { LevelSettings, SettingsProducer } from "../types";
 
 import { getHard2Settings, getHardSettings } from "./hardSettings";
 import {

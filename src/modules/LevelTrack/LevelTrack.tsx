@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { Fragment, use, useEffect, useState } from "react";
 import clsx from "clsx";
 
 import { GameTitle } from "@/ui/GameTitle/GameTitle";
@@ -6,6 +6,7 @@ import { Smiley } from "@/ui/Smiley/Smiley";
 import { TopButton } from "@/ui/TopButton/TopButton";
 import { ZenButton } from "@/ui/ZenButton";
 
+import { sound } from "@/audio";
 import {
   isEasy,
   isHard,
@@ -61,10 +62,24 @@ export const LevelTrack: React.FC<Props> = ({
   // If levelNr is lower than the official one (keep in offline state)
   // Start a transition to the next level
   useEffect(() => {
-    return effectTimeout(() => {
-      setDisplayLevelNr((nr) => (nr < officialLevelNr ? nr + 1 : nr));
-    }, 2000);
-  }, [officialLevelNr]);
+    if (officialLevelNr <= levelNr) {
+      return;
+    }
+    const cancellations: VoidFunction[] = [];
+    cancellations.push(
+      effectTimeout(() => {
+        sound.play("progress");
+      }, 1000)
+    );
+    cancellations.push(
+      effectTimeout(() => {
+        setDisplayLevelNr((nr) => (nr < officialLevelNr ? nr + 1 : nr));
+      }, 2000)
+    );
+    return () => {
+      cancellations.forEach((cancel) => cancel());
+    };
+  }, [officialLevelNr, levelNr]);
 
   const startNumbering = Math.max(Math.floor(levelNr - 2), 0);
   const levelNrs = new Array(30).fill(0).map((_, i) => startNumbering + i);
@@ -111,10 +126,9 @@ export const LevelTrack: React.FC<Props> = ({
           const offset = i % 8;
           const levelTransition = LEVEL_SCALE.includes(i);
           return (
-            <>
+            <Fragment key={i}>
               {levelNr < officialLevelNr && i === levelNr && (
                 <li
-                  key={`jump${i}`}
                   className={clsx(
                     "relative -top-7 z-10 flex align-middle items-center w-full flex-shrink-0 justify-center h-0",
                     {
@@ -157,7 +171,6 @@ export const LevelTrack: React.FC<Props> = ({
                 </li>
               )}
               <li
-                key={i}
                 style={{ "--levelNr": `'${LEVEL_SCALE.indexOf(i) + 1}'` }}
                 className={clsx(
                   "flex align-middle items-center w-full h-height-block flex-shrink-0 justify-center",
@@ -278,7 +291,7 @@ export const LevelTrack: React.FC<Props> = ({
                   </span>
                 </div>
               </li>
-            </>
+            </Fragment>
           );
         })}
       </ol>

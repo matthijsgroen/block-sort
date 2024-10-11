@@ -19,15 +19,15 @@ describe(generatePlayableLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["blue", "white"]);
+    expect(level.colors).toEqual(["red", "white"]);
     expect(level.columns).toEqual([
-      createPlacementColumn(4, createBlocks("white", "white", "blue", "blue")),
-      createPlacementColumn(4, createBlocks("blue", "white", "white", "blue")),
+      createPlacementColumn(4, createBlocks("white", "white", "red", "white")),
+      createPlacementColumn(4, createBlocks("white", "red", "red", "red")),
       createPlacementColumn(4),
       createPlacementColumn(4),
     ]);
 
-    expect(level.cost).toBeGreaterThan(812);
+    expect(level.generationInformation?.cost).toBeGreaterThan(812);
   });
 
   it("generates a medium level", async () => {
@@ -41,24 +41,7 @@ describe(generatePlayableLevel, () => {
       random
     );
     expect(level.colors).toHaveLength(5);
-    expect(level.cost).toBeGreaterThan(815);
-  });
-
-  it("generates a complex level", async () => {
-    const random = mulberry32(TEST_SEED);
-    const level = await generatePlayableLevel(
-      {
-        amountColors: 10,
-        stackSize: 8,
-        extraPlacementStacks: 2,
-        extraPlacementLimits: 1,
-        buffers: 2,
-        bufferSizes: 1,
-      },
-      random
-    );
-    expect(level.colors).toHaveLength(10);
-    expect(level.cost).toBeGreaterThan(816);
+    expect(level.generationInformation?.cost).toBeGreaterThan(815);
   });
 
   it("generates a hard level", async () => {

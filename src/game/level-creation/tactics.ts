@@ -1,12 +1,14 @@
+import { mulberry32 } from "@/support/random";
+
 import { moveBlocks } from "../actions";
 import { allShuffled, hasWon, isStuck } from "../state";
-import { LevelState, Move } from "../types";
+import { LevelSettings, LevelState, Move } from "../types";
 
 import { randomMove } from "./tactics/randomMove";
 import { stackColumn } from "./tactics/stackColumn";
 import { startColumn } from "./tactics/startColumn";
 import { Tactic, WeightedMove } from "./tactics/types";
-import { generateRandomLevel, LevelSettings } from "./generateRandomLevel";
+import { generateRandomLevel } from "./generateRandomLevel";
 import { scoreState } from "./scoreState";
 
 const MAX_PLAY_ATTEMPTS = 1;
@@ -21,16 +23,23 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const generatePlayableLevel = async (
   settings: LevelSettings,
-  random = Math.random
+  random = Math.random,
+  seed: number | null = null
 ): Promise<LevelState> => {
+  // Start logging level seeds for faster reproduction
+  const startSeed = seed ?? Math.floor(random() * 1e9);
+
   let attempt = 0;
   while (attempt < MAX_GENERATE_ATTEMPTS) {
+    const seed = startSeed + attempt;
+    const generationRandom = mulberry32(seed);
+
     attempt++;
-    const level = generateRandomLevel(settings, random);
+    const level = generateRandomLevel(settings, generationRandom);
     if (isStuck(level) || !allShuffled(level)) {
       continue;
     }
-    const [beatable, moves, cost] = await isBeatable(level, random);
+    const [beatable, moves, cost] = await isBeatable(level, generationRandom);
     const generationCost = cost + attempt * MAX_GENERATE_COST;
     if (beatable) {
       if (settings.playMoves !== undefined) {
@@ -48,10 +57,21 @@ export const generatePlayableLevel = async (
         return {
           ...playedLevel,
           moves: moves.slice(movesToPlay),
-          cost: generationCost,
+          generationInformation: {
+            cost: generationCost,
+            attempts: attempt,
+          },
         };
       }
-      return { ...level, moves, cost: generationCost };
+      return {
+        ...level,
+        moves,
+        generationInformation: {
+          cost: generationCost,
+          attempts: attempt,
+          seed,
+        },
+      };
     }
   }
   throw new Error("Can't generate playable level");

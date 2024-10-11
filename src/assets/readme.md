@@ -13,30 +13,33 @@ All audio has been slightly cut or audio adjusted through [editor.audio](https:/
 ## Music
 
 - **Relaxing Music (Tranquility in the Dew)** (Default track)  
-  Artist: Wahyu Music  
+  Artist: [Wahyu Music](https://pixabay.com/users/df_wahyumusicproduction-45033356/)  
   [Source](https://pixabay.com/music/smooth-jazz-relaxing-music-tranquility-in-the-dew-241470/) • [License](https://pixabay.com/service/license-summary/)
 
 - **No Way Out: A (Backrooms) Song** (Halloween theme)  
-  Artist: SpadeStars  
+  Artist: [SpadeStars](https://pixabay.com/users/spadestars-24048310/)  
   [Source](https://pixabay.com/music/beats-no-way-out-a-backrooms-song-123220/) • [License](https://pixabay.com/service/license-summary/)
 
 - **Christmas 2** (Christmas theme)  
-  Artist: MagentaSix  
+  Artist: [MagentaSix](https://pixabay.com/users/magentasix-40459079/)  
   [Source](https://pixabay.com/music/christmas-christmas-2-177696/) • [License](https://pixabay.com/service/license-summary/)
 
 ## Sound effects
 
 - **Win sound**  
-  Artist: LittleRobotSoundFactory  
+  Artist: [LittleRobotSoundFactory](https://freesound.org/people/LittleRobotSoundFactory/)  
   [Source](https://freesound.org/people/LittleRobotSoundFactory/sounds/274181/) • [License](https://creativecommons.org/licenses/by/4.0/)
 - **Game over sound**  
   [Source](https://mixkit.co/free-sound-effects/game-over/) • [License](https://mixkit.co/license/#sfxFree)
 - **Block placement**  
-  Artist: JamesFarrell_97  
+  Artist: [JamesFarrell_97](https://freesound.org/people/JamesFarrell_97/)  
   [Source](https://freesound.org/people/JamesFarrell_97/sounds/566254/) • [License](https://creativecommons.org/licenses/by-nc/3.0/)
 - **Block pickup**  
-  Artist: deleted_user_6479820  
+  Artist: [deleted_user_6479820](https://freesound.org/people/deleted_user_6479820/)  
   [Source](https://freesound.org/people/deleted_user_6479820/sounds/390388/) • [License](https://creativecommons.org/licenses/by-nc/3.0/)
+- **Level track progress**  
+  Artist: [Pixabay](https://pixabay.com/users/pixabay-1/)  
+  [Source](https://pixabay.com/sound-effects/boings-jews-harp-7153/) • [License](https://pixabay.com/service/license-summary/)
 
 ## Font
 

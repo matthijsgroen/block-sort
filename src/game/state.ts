@@ -30,7 +30,10 @@ export const hasWon = (level: LevelState): boolean =>
 
 export const isStuck = (level: LevelState): boolean => {
   const createSignature = (level: LevelState) =>
-    level.columns.map((c) => c.blocks[0]?.color);
+    level.columns.map((c) => {
+      const block = c.blocks[0];
+      return block ? block.color : c.limitColor;
+    });
 
   const countHidden = (level: LevelState) =>
     level.columns.reduce(
@@ -38,8 +41,17 @@ export const isStuck = (level: LevelState): boolean => {
       0
     );
 
+  const countCompleted = (level: LevelState) =>
+    level.columns.filter(
+      (col) =>
+        col.type === "placement" &&
+        col.columnSize === col.blocks.length &&
+        col.blocks.every((b) => b.color === col.blocks[0].color)
+    ).length;
+
   const topSignature = createSignature(level);
   const originalHidden = countHidden(level);
+  const originalCompleted = countCompleted(level);
 
   return level.columns.every((_source, sourceIndex) => {
     let didChange = false;
@@ -50,9 +62,12 @@ export const isStuck = (level: LevelState): boolean => {
       playLevel = moveBlocks(playLevel, sourceIndex, destIndex);
       const resultSig = createSignature(playLevel);
       const resultHidden = countHidden(playLevel);
+      const resultCompleted = countCompleted(playLevel);
       if (
         resultHidden !== originalHidden ||
-        resultSig.some((c, i) => c !== topSignature[i])
+        resultCompleted !== originalCompleted ||
+        resultSig.some((c, i) => c !== topSignature[i]) ||
+        hasWon(playLevel)
       ) {
         didChange = true;
       }

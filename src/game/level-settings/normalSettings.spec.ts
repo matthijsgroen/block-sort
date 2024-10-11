@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { LevelSettings } from "../level-creation/generateRandomLevel";
+import { LevelSettings } from "../types";
 
 import { testDifficulties } from "./difficultyTester";
 import {

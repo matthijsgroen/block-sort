@@ -3,9 +3,9 @@ import { describe, expect, it } from "vitest";
 import { mulberry32 } from "@/support/random";
 
 import { moveBlocks } from "../actions";
-import { LevelSettings } from "../level-creation/generateRandomLevel";
 import { generatePlayableLevel } from "../level-creation/tactics";
 import { hasWon } from "../state";
+import { LevelSettings } from "../types";
 
 import { LEVEL_SCALE } from "./levelSettings";
 

@@ -15,7 +15,6 @@ export const createLevelState = (columns: Column[]): LevelState => {
     colors,
     columns,
     moves: [],
-    cost: 0,
   };
 };
 
@@ -34,12 +33,13 @@ export const createPlacementColumn = (
 
 export const createBufferColumn = (
   size: number,
-  limitColor?: BlockColor
+  limitColor?: BlockColor,
+  blocks: Block[] = []
 ): Column => ({
   type: "buffer",
   locked: false,
   columnSize: size,
-  blocks: [],
+  blocks,
   limitColor,
 });
 

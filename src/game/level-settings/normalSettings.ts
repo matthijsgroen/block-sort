@@ -1,4 +1,4 @@
-import { SettingsProducer } from "../level-creation/generateRandomLevel";
+import { SettingsProducer } from "../types";
 
 export const getNormalSettings: SettingsProducer = (difficulty) => ({
   amountColors: Math.min(1 + difficulty, 10),

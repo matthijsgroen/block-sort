@@ -1,10 +1,7 @@
 import { fib } from "@/support/fib";
 import { pick } from "@/support/random";
 
-import {
-  LevelSettings,
-  SettingsProducer,
-} from "../level-creation/generateRandomLevel";
+import { LevelSettings, SettingsProducer } from "../types";
 
 import {
   getHard2Settings as _getHard2Settings,

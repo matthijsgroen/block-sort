@@ -3,8 +3,8 @@ import { use } from "react";
 import { Transition } from "@/ui/Transition/Transition.tsx";
 
 import { sound } from "@/audio.ts";
-import { LevelSettings } from "@/game/level-creation/generateRandomLevel.ts";
 import { getZenSettings } from "@/game/level-settings/zenLevelSettings.ts";
+import { LevelSettings } from "@/game/types.ts";
 import { LevelLoader } from "@/modules/Level/LevelLoader.tsx";
 import { LevelType } from "@/support/getLevelType.ts";
 import { generateNewSeed, mulberry32, pick } from "@/support/random.ts";

@@ -1,4 +1,4 @@
-import { SettingsProducer } from "../level-creation/generateRandomLevel";
+import { SettingsProducer } from "../types";
 
 import { getNormalSettings as getNormalSettings } from "./normalSettings";
 

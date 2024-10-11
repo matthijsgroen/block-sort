@@ -50,27 +50,25 @@ const importImageData = async (
             const age = (new Date().getTime() - data.timestamp) / 60_000;
 
             if (data.version !== info.version) {
-              return {
+              return resolve({
                 success: false,
                 message: `Version mismatch: ${data.version} vs. ${info.version}`,
-              };
+              });
             }
             if (age < 0 || data.time !== data.timestamp) {
-              resolve({
+              return resolve({
                 success: false,
                 message: "Data is invalid",
               });
-              return;
             }
             if (age > DATA_VALIDITY_TIME) {
-              resolve({
+              return resolve({
                 success: false,
                 message:
                   Math.ceil(age) > 90
                     ? `Data is too old: ${Math.floor(age / 60)} hours`
                     : `Data is too old: ${Math.ceil(age)} minutes`,
               });
-              return;
             }
             const importLevel = data.levelNr;
             if (
@@ -80,23 +78,24 @@ const importImageData = async (
             ) {
               await setGameData(data);
             } else {
-              resolve({ success: false, message: "Import canceled" });
-              return;
+              return resolve({ success: false, message: "Import canceled" });
             }
 
-            resolve({ success: true, message: "" });
-            return;
+            return resolve({ success: true, message: "" });
           } catch (ignoreError) {
-            resolve({ success: false, message: "Could not unpack data" });
-            return;
+            return resolve({
+              success: false,
+              message: "Could not unpack data",
+            });
           }
         } else {
-          resolve({ success: false, message: "Could not read QR code" });
-          return;
+          return resolve({ success: false, message: "Could not read QR code" });
         }
       } else {
-        resolve({ success: false, message: "Could not load image data" });
-        return;
+        return resolve({
+          success: false,
+          message: "Could not load image data",
+        });
       }
     };
     image.src = URL.createObjectURL(file);
