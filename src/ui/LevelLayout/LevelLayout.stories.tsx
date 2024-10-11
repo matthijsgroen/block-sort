@@ -1,9 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import {
-  generateRandomLevel,
-  LevelSettings,
-} from "@/game/level-creation/generateRandomLevel";
+import { generateRandomLevel } from "@/game/level-creation/generateRandomLevel";
 import {
   getHard2Settings,
   getHardSettings as getHardSettings,
@@ -20,6 +17,7 @@ import {
   getSpecial4Settings,
   getSpecial5Settings,
 } from "@/game/level-settings/specialSettings";
+import { LevelSettings } from "@/game/types";
 import { mulberry32 } from "@/support/random";
 
 import { LevelLayout as LevelLayoutComponent } from "./LevelLayout";

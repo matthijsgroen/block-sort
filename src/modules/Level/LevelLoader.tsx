@@ -4,10 +4,9 @@ import { Loading } from "@/ui/Loading/Loading";
 import { TopButton } from "@/ui/TopButton/TopButton";
 
 import { moveBlocks } from "@/game/actions";
-import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { hasWon } from "@/game/state";
-import { LevelState } from "@/game/types";
+import { LevelSettings, LevelState } from "@/game/types";
 import { LevelType } from "@/support/getLevelType";
 import { generateNewSeed, mulberry32 } from "@/support/random";
 import {

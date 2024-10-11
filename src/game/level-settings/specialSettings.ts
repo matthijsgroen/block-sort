@@ -1,4 +1,4 @@
-import { SettingsProducer } from "../level-creation/generateRandomLevel";
+import { SettingsProducer } from "../types";
 
 export const getSpecial1Settings: SettingsProducer = (difficulty) => ({
   amountColors: difficulty < 4 ? 3 : 4,

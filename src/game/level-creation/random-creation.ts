@@ -1,8 +1,8 @@
 import { moveBlocks } from "../actions";
 import { hasWon, isStuck } from "../state";
-import { LevelState, Move } from "../types";
+import { LevelSettings, LevelState, Move } from "../types";
 
-import { generateRandomLevel, LevelSettings } from "./generateRandomLevel";
+import { generateRandomLevel } from "./generateRandomLevel";
 
 const MAX_PLAY_ATTEMPTS = 10;
 const MAX_GENERATE_ATTEMPTS = 10;

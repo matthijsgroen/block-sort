@@ -1,12 +1,12 @@
 import { moveBlocks } from "../actions";
 import { allShuffled, hasWon, isStuck } from "../state";
-import { LevelState, Move } from "../types";
+import { LevelSettings, LevelState, Move } from "../types";
 
 import { randomMove } from "./tactics/randomMove";
 import { stackColumn } from "./tactics/stackColumn";
 import { startColumn } from "./tactics/startColumn";
 import { Tactic, WeightedMove } from "./tactics/types";
-import { generateRandomLevel, LevelSettings } from "./generateRandomLevel";
+import { generateRandomLevel } from "./generateRandomLevel";
 import { scoreState } from "./scoreState";
 
 const MAX_PLAY_ATTEMPTS = 1;
@@ -33,6 +33,9 @@ export const generatePlayableLevel = async (
     const [beatable, moves, cost] = await isBeatable(level, random);
     const generationCost = cost + attempt * MAX_GENERATE_COST;
     if (beatable) {
+      console.log(
+        `Generated playable level after ${attempt} attempts, beated in ${moves.length} moves.`
+      );
       if (settings.playMoves !== undefined) {
         const [minMoves, maxMovesPercentage] = settings.playMoves;
         const movesToPlay = Math.min(

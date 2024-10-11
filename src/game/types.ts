@@ -78,3 +78,20 @@ export type Column = {
    */
   blocks: Block[];
 };
+
+export type LevelSettings = {
+  amountColors?: number;
+  hideBlockTypes?: "none" | "all" | "checker";
+  stackSize?: number;
+  stacksPerColor?: number;
+  extraPlacementStacks?: number;
+  extraPlacementLimits?: number;
+  buffers?: number;
+  bufferSizes?: number;
+  blockColorPick?: "start" | "end";
+  bufferPlacementLimits?: number;
+  extraBuffers?: { size: number; amount: number; limit: number }[];
+  playMoves?: [minCount: number, maxPercent: number];
+};
+
+export type SettingsProducer = (difficulty: number) => LevelSettings;

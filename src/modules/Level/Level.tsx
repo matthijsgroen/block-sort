@@ -7,10 +7,9 @@ import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { sound } from "@/audio";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
-import { LevelSettings } from "@/game/level-creation/generateRandomLevel";
 import { hasWon, isStuck } from "@/game/state";
 import { colorMap } from "@/game/themes/default";
-import { LevelState } from "@/game/types";
+import { LevelSettings, LevelState } from "@/game/types";
 import { LevelType } from "@/support/getLevelType";
 import { mulberry32, pick } from "@/support/random";
 import { ThemeContext } from "@/support/ThemeProvider";
