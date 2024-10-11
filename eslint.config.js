@@ -7,7 +7,7 @@ import tseslint from "typescript-eslint";
 
 export default [
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
-  { ignores: [".yarn/*", ".pnp.*", "dist/*"] },
+  { ignores: [".yarn/*", "dist/*", ".pnp.*", "storybook-static/", "public/*"] },
   { languageOptions: { globals: { ...globals.browser, ...globals.commonjs } } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,

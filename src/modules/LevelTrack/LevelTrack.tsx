@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { Fragment, use, useEffect, useState } from "react";
 import clsx from "clsx";
 
 import { GameTitle } from "@/ui/GameTitle/GameTitle";
@@ -111,10 +111,9 @@ export const LevelTrack: React.FC<Props> = ({
           const offset = i % 8;
           const levelTransition = LEVEL_SCALE.includes(i);
           return (
-            <>
+            <Fragment key={i}>
               {levelNr < officialLevelNr && i === levelNr && (
                 <li
-                  key={`jump${i}`}
                   className={clsx(
                     "relative -top-7 z-10 flex align-middle items-center w-full flex-shrink-0 justify-center h-0",
                     {
@@ -157,7 +156,6 @@ export const LevelTrack: React.FC<Props> = ({
                 </li>
               )}
               <li
-                key={i}
                 style={{ "--levelNr": `'${LEVEL_SCALE.indexOf(i) + 1}'` }}
                 className={clsx(
                   "flex align-middle items-center w-full h-height-block flex-shrink-0 justify-center",
@@ -278,7 +276,7 @@ export const LevelTrack: React.FC<Props> = ({
                   </span>
                 </div>
               </li>
-            </>
+            </Fragment>
           );
         })}
       </ol>
