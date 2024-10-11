@@ -3,11 +3,14 @@ import { Suspense, useMemo, useState } from "react";
 import { Loading } from "@/ui/Loading/Loading";
 import { TopButton } from "@/ui/TopButton/TopButton";
 
+import { levelSeeds } from "@/data/levelSeeds";
 import { moveBlocks } from "@/game/actions";
+import { colorHustle } from "@/game/level-creation/colorHustle";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { hasWon } from "@/game/state";
 import { LevelSettings, LevelState } from "@/game/types";
 import { LevelType } from "@/support/getLevelType";
+import { hash } from "@/support/hash";
 import { generateNewSeed, mulberry32 } from "@/support/random";
 import {
   deleteGameValue,
@@ -31,7 +34,8 @@ type Props = {
 const generateLevelContent = async (
   seed: number,
   storageKey: string,
-  levelSettings: LevelSettings
+  levelSettings: LevelSettings,
+  levelNr: number
 ): Promise<LevelState> => {
   const random = mulberry32(seed);
   const existingState = await getGameValue<LevelState>(storageKey);
@@ -39,7 +43,19 @@ const generateLevelContent = async (
     return existingState;
   }
 
-  const level = await generatePlayableLevel(levelSettings, random);
+  const hashVersion = { ...levelSettings };
+  delete hashVersion["playMoves"];
+
+  const settingsHash = hash(JSON.stringify(hashVersion)).toString();
+
+  const seeds = levelSeeds[settingsHash] ?? [];
+  const preSeed = seeds.length > 0 ? seeds[levelNr % seeds.length] : undefined;
+
+  let level = await generatePlayableLevel(levelSettings, random, preSeed);
+  if (preSeed !== undefined && level.generationInformation?.seed === preSeed) {
+    level = colorHustle(level, random);
+  }
+
   await setGameValue(storageKey, level);
 
   return level;
@@ -60,7 +76,8 @@ export const LevelLoader: React.FC<Props> = ({
     const level = await generateLevelContent(
       locked.seed,
       `${storagePrefix}initialLevelState${locked.levelNr}`,
-      locked.levelSettings
+      locked.levelSettings,
+      levelNr
     );
     // Verify level content
     let levelState = level;
@@ -77,7 +94,8 @@ export const LevelLoader: React.FC<Props> = ({
       const level = await generateLevelContent(
         newSeed,
         `${storagePrefix}initialLevelState${locked.levelNr}`,
-        locked.levelSettings
+        locked.levelSettings,
+        levelNr
       );
       return level;
     }

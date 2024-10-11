@@ -20,6 +20,7 @@ export type LevelState = {
   generationInformation?: {
     cost?: number;
     attempts?: number;
+    seed?: number;
   };
 };
 

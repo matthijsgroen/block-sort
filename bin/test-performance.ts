@@ -3,30 +3,11 @@
 import c from "ansi-colors";
 
 import { generatePlayableLevel } from "../src/game/level-creation/tactics";
-import {
-  getHard2Settings,
-  getHardSettings,
-} from "../src/game/level-settings/hardSettings";
 import { LEVEL_SCALE } from "../src/game/level-settings/levelSettings";
-import {
-  getNormal2Settings,
-  getNormal3Settings,
-  getNormalSettings,
-} from "../src/game/level-settings/normalSettings";
-import {
-  getSpecial1Settings,
-  getSpecial2Settings,
-  getSpecial3Settings,
-  getSpecial4Settings,
-  getSpecial5Settings,
-} from "../src/game/level-settings/specialSettings";
 import { SettingsProducer } from "../src/game/types";
 import { mulberry32 } from "../src/support/random";
 
-type Producer = {
-  name: string;
-  producer: SettingsProducer;
-};
+import { producers } from "./producers";
 
 type TestResult = {
   runId: number;
@@ -88,19 +69,6 @@ const testProducer = async (producer: SettingsProducer) => {
 
 const main = async () => {
   console.log("Testing solver performance");
-
-  const producers: Producer[] = [
-    { name: "Normal1", producer: getNormalSettings },
-    { name: "Normal2", producer: getNormal2Settings },
-    { name: "Normal3", producer: getNormal3Settings },
-    { name: "Special1", producer: getSpecial1Settings },
-    { name: "Special2", producer: getSpecial2Settings },
-    { name: "Special3", producer: getSpecial3Settings },
-    { name: "Special4", producer: getSpecial4Settings },
-    { name: "Special5", producer: getSpecial5Settings },
-    { name: "Hard", producer: getHardSettings },
-    { name: "Hard2", producer: getHard2Settings },
-  ];
 
   for (const { name, producer } of producers) {
     console.log(c.bold(`Testing ${name}`));
