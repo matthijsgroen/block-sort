@@ -6,6 +6,7 @@ import { Smiley } from "@/ui/Smiley/Smiley";
 import { TopButton } from "@/ui/TopButton/TopButton";
 import { ZenButton } from "@/ui/ZenButton";
 
+import { sound } from "@/audio";
 import {
   isEasy,
   isHard,
@@ -61,10 +62,24 @@ export const LevelTrack: React.FC<Props> = ({
   // If levelNr is lower than the official one (keep in offline state)
   // Start a transition to the next level
   useEffect(() => {
-    return effectTimeout(() => {
-      setDisplayLevelNr((nr) => (nr < officialLevelNr ? nr + 1 : nr));
-    }, 2000);
-  }, [officialLevelNr]);
+    if (officialLevelNr <= levelNr) {
+      return;
+    }
+    const cancellations: VoidFunction[] = [];
+    cancellations.push(
+      effectTimeout(() => {
+        sound.play("progress");
+      }, 1000)
+    );
+    cancellations.push(
+      effectTimeout(() => {
+        setDisplayLevelNr((nr) => (nr < officialLevelNr ? nr + 1 : nr));
+      }, 2000)
+    );
+    return () => {
+      cancellations.forEach((cancel) => cancel());
+    };
+  }, [officialLevelNr, levelNr]);
 
   const startNumbering = Math.max(Math.floor(levelNr - 2), 0);
   const levelNrs = new Array(30).fill(0).map((_, i) => startNumbering + i);

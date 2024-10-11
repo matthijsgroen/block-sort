@@ -3,6 +3,7 @@ import lose from "@/assets/lose.mp3";
 import music from "@/assets/music.aac";
 import pickup from "@/assets/pickup.mp3";
 import place from "@/assets/place.mp3";
+import progress from "@/assets/progress.mp3";
 import win from "@/assets/win.mp3";
 import winter from "@/assets/winter.aac";
 
@@ -33,6 +34,7 @@ const audioItems = {
   lock: createItem(Stream.effects, place, 1.0, { multipleInstances: true }),
   win: createItem(Stream.effects, win),
   pickup: createItem(Stream.effects, pickup, 2.0),
+  progress: createItem(Stream.effects, progress),
 };
 
 export type AudioItemName = keyof typeof audioItems;
