@@ -27,7 +27,7 @@ describe(generatePlayableLevel, () => {
       createPlacementColumn(4),
     ]);
 
-    expect(level.cost).toBeGreaterThan(812);
+    expect(level.generationInformation?.cost).toBeGreaterThan(812);
   });
 
   it("generates a medium level", async () => {
@@ -41,7 +41,7 @@ describe(generatePlayableLevel, () => {
       random
     );
     expect(level.colors).toHaveLength(5);
-    expect(level.cost).toBeGreaterThan(815);
+    expect(level.generationInformation?.cost).toBeGreaterThan(815);
   });
 
   it("generates a complex level", async () => {
@@ -58,7 +58,7 @@ describe(generatePlayableLevel, () => {
       random
     );
     expect(level.colors).toHaveLength(10);
-    expect(level.cost).toBeGreaterThan(816);
+    expect(level.generationInformation?.cost).toBeGreaterThan(816);
   });
 
   it("generates a hard level", async () => {

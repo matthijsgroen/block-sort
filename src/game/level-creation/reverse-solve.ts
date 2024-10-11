@@ -156,6 +156,5 @@ export const generateBaseLevel = (
       )
       .concat(timesMap(buffers, () => createBufferColumn(bufferSizes))),
     moves: [],
-    cost: 0,
   };
 };

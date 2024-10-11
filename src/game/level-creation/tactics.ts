@@ -33,9 +33,6 @@ export const generatePlayableLevel = async (
     const [beatable, moves, cost] = await isBeatable(level, random);
     const generationCost = cost + attempt * MAX_GENERATE_COST;
     if (beatable) {
-      console.log(
-        `Generated playable level after ${attempt} attempts, beated in ${moves.length} moves.`
-      );
       if (settings.playMoves !== undefined) {
         const [minMoves, maxMovesPercentage] = settings.playMoves;
         const movesToPlay = Math.min(
@@ -51,10 +48,20 @@ export const generatePlayableLevel = async (
         return {
           ...playedLevel,
           moves: moves.slice(movesToPlay),
-          cost: generationCost,
+          generationInformation: {
+            cost: generationCost,
+            attempts: attempt,
+          },
         };
       }
-      return { ...level, moves, cost: generationCost };
+      return {
+        ...level,
+        moves,
+        generationInformation: {
+          cost: generationCost,
+          attempts: attempt,
+        },
+      };
     }
   }
   throw new Error("Can't generate playable level");
