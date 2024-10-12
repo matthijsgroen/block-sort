@@ -61,89 +61,97 @@ export const ZenSelection: React.FC<Props> = ({
         <div className="text-center">
           <span className="text-4xl">🌻</span>
         </div>
-        <div className={clsx(styles.text, styles.title, styles.shadow)}>
-          Select difficulty
-        </div>
-        <div className="flex flex-row gap-4 items-center">
-          <WoodButton
-            onClick={() => {
-              setDifficultyIndex(
-                (a) => (a - 1 + enabledDifficulties) % enabledDifficulties
-              );
-            }}
-          >
-            <span className="inline-block translate-y-[5px] px-2">◀</span>︎
-          </WoodButton>
-          <div className="w-[200px]">
-            <div
-              className={clsx(styles.text, {
-                [styles.disabled]:
-                  levelNr < selectedDifficulty.unlocksAtLevel - 1,
-                [styles.enabled]:
-                  levelNr >= selectedDifficulty.unlocksAtLevel - 1,
-                [styles.shadow]:
-                  levelNr >= selectedDifficulty.unlocksAtLevel - 1,
-              })}
-            >
-              {selectedDifficulty.name}
+        <div className="flex flex-row flex-wrap gap-12 justify-center">
+          <div className="flex flex-col gap-4">
+            <div className={clsx(styles.text, styles.title, styles.shadow)}>
+              Select difficulty
             </div>
-            {selectedDifficulty.unlocksAtLevel - 1 > levelNr ? (
-              <div className="text-center -mt-2">
-                Unlocks at level {selectedDifficulty.unlocksAtLevel}
+            <div className="flex flex-row gap-4 items-center">
+              <WoodButton
+                onClick={() => {
+                  setDifficultyIndex(
+                    (a) => (a - 1 + enabledDifficulties) % enabledDifficulties
+                  );
+                }}
+              >
+                <span className="inline-block translate-y-[5px] px-2">◀</span>︎
+              </WoodButton>
+              <div className="w-[200px]">
+                <div
+                  className={clsx(styles.text, {
+                    [styles.disabled]:
+                      levelNr < selectedDifficulty.unlocksAtLevel - 1,
+                    [styles.enabled]:
+                      levelNr >= selectedDifficulty.unlocksAtLevel - 1,
+                    [styles.shadow]:
+                      levelNr >= selectedDifficulty.unlocksAtLevel - 1,
+                  })}
+                >
+                  {selectedDifficulty.name}
+                </div>
+                {selectedDifficulty.unlocksAtLevel - 1 > levelNr ? (
+                  <div className="text-center -mt-2">
+                    Unlocks at level {selectedDifficulty.unlocksAtLevel}
+                  </div>
+                ) : (
+                  <div className="text-center -mt-2 tracking-widest text-transparent bg-gradient-to-r bg-clip-text from-orange-200 to-orange-600">
+                    {timesMap(difficultyIndex + 1, () => "⭐️")}
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="text-center -mt-2 tracking-widest text-transparent bg-gradient-to-r bg-clip-text from-orange-200 to-orange-600">
-                {timesMap(difficultyIndex + 1, () => "⭐️")}
-              </div>
-            )}
-          </div>
-          <WoodButton
-            onClick={() => {
-              setDifficultyIndex((a) => (a + 1) % enabledDifficulties);
-            }}
-          >
-            <span className="inline-block translate-y-[5px] px-2">▶</span>︎ ︎
-          </WoodButton>
-        </div>
-        <div className={clsx(styles.text, styles.title, styles.shadow)}>
-          Select level type
-        </div>
-        <div className="flex flex-row gap-4 items-center">
-          <WoodButton
-            onClick={() => {
-              setLevelTypeIndex(
-                (a) => (a - 1 + enabledLevelTypes) % enabledLevelTypes
-              );
-            }}
-          >
-            <span className="inline-block translate-y-[5px] px-2">◀</span>︎
-          </WoodButton>
-          <div className="w-[200px]">
-            <div
-              className={clsx(styles.text, {
-                [styles.disabled]:
-                  levelNr < selectedLevelType.unlocksAtLevel - 1,
-                [styles.enabled]:
-                  levelNr >= selectedLevelType.unlocksAtLevel - 1,
-                [styles.shadow]:
-                  levelNr >= selectedLevelType.unlocksAtLevel - 1,
-              })}
-            >
-              {selectedLevelType.name}
+              <WoodButton
+                onClick={() => {
+                  setDifficultyIndex((a) => (a + 1) % enabledDifficulties);
+                }}
+              >
+                <span className="inline-block translate-y-[5px] px-2">▶</span>︎
+                ︎
+              </WoodButton>
             </div>
-            {selectedLevelType.unlocksAtLevel - 1 > levelNr && (
-              <div className="text-center -mt-2">
-                Unlocks at level {selectedLevelType.unlocksAtLevel}
-              </div>
-            )}
           </div>
-          <WoodButton
-            onClick={() => {
-              setLevelTypeIndex((a) => (a + 1) % enabledLevelTypes);
-            }}
-          >
-            <span className="inline-block translate-y-[5px] px-2">▶</span>︎ ︎
-          </WoodButton>
+          <div className="flex flex-col gap-4">
+            <div className={clsx(styles.text, styles.title, styles.shadow)}>
+              Select level type
+            </div>
+            <div className="flex flex-row gap-4 items-center">
+              <WoodButton
+                onClick={() => {
+                  setLevelTypeIndex(
+                    (a) => (a - 1 + enabledLevelTypes) % enabledLevelTypes
+                  );
+                }}
+              >
+                <span className="inline-block translate-y-[5px] px-2">◀</span>︎
+              </WoodButton>
+              <div className="w-[200px]">
+                <div
+                  className={clsx(styles.text, {
+                    [styles.disabled]:
+                      levelNr < selectedLevelType.unlocksAtLevel - 1,
+                    [styles.enabled]:
+                      levelNr >= selectedLevelType.unlocksAtLevel - 1,
+                    [styles.shadow]:
+                      levelNr >= selectedLevelType.unlocksAtLevel - 1,
+                  })}
+                >
+                  {selectedLevelType.name}
+                </div>
+                {selectedLevelType.unlocksAtLevel - 1 > levelNr && (
+                  <div className="text-center -mt-2">
+                    Unlocks at level {selectedLevelType.unlocksAtLevel}
+                  </div>
+                )}
+              </div>
+              <WoodButton
+                onClick={() => {
+                  setLevelTypeIndex((a) => (a + 1) % enabledLevelTypes);
+                }}
+              >
+                <span className="inline-block translate-y-[5px] px-2">▶</span>︎
+                ︎
+              </WoodButton>
+            </div>
+          </div>
         </div>
       </div>
       <div className="text-center pb-10 flex flex-row justify-between w-full px-5">

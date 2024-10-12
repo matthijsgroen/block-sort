@@ -3,6 +3,7 @@ import { Dispatch } from "react";
 import { BlockTheme } from "@/game/themes";
 import { LevelState } from "@/game/types";
 import { colSizes } from "@/support/grid";
+import { useScreenUpdate } from "@/support/useScreenUpdate";
 
 import { BlockColumn } from "../BlockColumn/BlockColumn";
 
@@ -21,17 +22,22 @@ const determineColumns = (
   maxColumnHeight: number,
   amountColumns: number
 ): string => {
+  const isLandscape = window.screen.orientation.type.includes("landscape");
+
   if (maxColumnHeight <= 6 && amountColumns < 6) {
     const gridColumnCount = amountColumns;
     return colSizes[gridColumnCount];
   }
-  if (maxColumnHeight <= 6 && amountColumns < 12) {
+  if (maxColumnHeight <= 6 && amountColumns < 12 && !isLandscape) {
     const gridColumnCount = Math.ceil(amountColumns / 2);
     return colSizes[gridColumnCount];
   }
-  if (maxColumnHeight <= 4 && amountColumns < 16) {
+  if (maxColumnHeight <= 4 && amountColumns < 16 && !isLandscape) {
     const gridColumnCount = Math.ceil(amountColumns / 3);
     return colSizes[gridColumnCount];
+  }
+  if (isLandscape) {
+    return colSizes[Math.min(amountColumns, 12)];
   }
 
   return "grid-cols-6";
@@ -47,6 +53,8 @@ export const LevelLayout: React.FC<Props> = ({
   onLock,
   onPickUp,
 }) => {
+  useScreenUpdate();
+
   const maxColumnSize = levelState.columns.reduce(
     (r, c) => Math.max(r, c.columnSize),
     0
