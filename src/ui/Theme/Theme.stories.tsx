@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { generateRandomLevel } from "@/game/level-creation/generateRandomLevel";
-import { getSpecial2Settings } from "@/game/level-settings/specialSettings";
+import { getSpecial2Settings } from "@/game/level-types/special";
 import { BlockTheme } from "@/game/themes";
 import { mulberry32 } from "@/support/random";
 
@@ -47,7 +47,7 @@ export const Theme: Story = {
     const settings = getSpecial2Settings(11);
     const level = generateRandomLevel(settings, random);
     return (
-      <div className="w-full flex flex-col">
+      <div className="flex w-full flex-col">
         <LevelLayoutComponent
           started={true}
           levelState={level}

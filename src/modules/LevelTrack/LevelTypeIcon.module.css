@@ -1,0 +1,6 @@
+.colorEmoji {
+  text-shadow: 0 0 0 var(--color);
+  background-color: var(--color);
+  background-clip: text;
+  color: transparent;
+}

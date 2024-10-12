@@ -7,20 +7,20 @@ import { TopButton } from "@/ui/TopButton/TopButton";
 import { ZenButton } from "@/ui/ZenButton";
 
 import { sound } from "@/audio";
+import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
 import {
-  isEasy,
-  isHard,
-  isScrambled,
-  isSpecial,
-  LEVEL_SCALE,
-} from "@/game/level-settings/levelSettings";
+  getLevelType,
+  levelTypeBorder,
+  levelTypeTextColor,
+} from "@/game/level-types";
 import { effectTimeout } from "@/support/effectTimeout";
-import { getLevelType } from "@/support/getLevelType";
 import { useGameStorage } from "@/support/useGameStorage";
 
 import { PlayButton } from "../../ui/PlayButton";
 import { BackgroundContext } from "../Layout/BackgroundContext";
 import { BetaContext } from "../Layout/BetaContext";
+
+import { LevelTypeIcon } from "./LevelTypeIcon";
 
 import styles from "./levelTrack.module.css";
 
@@ -56,7 +56,7 @@ export const LevelTrack: React.FC<Props> = ({
 }) => {
   const [levelNr, setDisplayLevelNr] = useGameStorage(
     "displayLevelNr",
-    officialLevelNr
+    officialLevelNr,
   );
 
   // If levelNr is lower than the official one (keep in offline state)
@@ -69,12 +69,12 @@ export const LevelTrack: React.FC<Props> = ({
     cancellations.push(
       effectTimeout(() => {
         sound.play("progress");
-      }, 1000)
+      }, 1000),
     );
     cancellations.push(
       effectTimeout(() => {
         setDisplayLevelNr((nr) => (nr < officialLevelNr ? nr + 1 : nr));
-      }, 2000)
+      }, 2000),
     );
     return () => {
       cancellations.forEach((cancel) => cancel());
@@ -101,8 +101,8 @@ export const LevelTrack: React.FC<Props> = ({
   const jumpRight = (levelNr + 2) % 8 < 4;
 
   return (
-    <div className="flex flex-col items-center h-full">
-      <div className="flex flex-row pt-2 pl-safeLeft pr-safeRight gap-x-2 w-full">
+    <div className="flex h-full flex-col items-center">
+      <div className="flex w-full flex-row gap-x-2 pl-safeLeft pr-safeRight pt-2">
         <TopButton buttonType="settings" onClick={onOpenSettings} />
         <GameTitle
           onClick={() => {
@@ -121,7 +121,7 @@ export const LevelTrack: React.FC<Props> = ({
         )}
       </div>
 
-      <ol className="flex flex-col-reverse w-full flex-1 overflow-y-hidden">
+      <ol className="flex w-full flex-1 flex-col-reverse overflow-y-hidden">
         {levelNrs.map((i) => {
           const offset = i % 8;
           const levelTransition = LEVEL_SCALE.includes(i);
@@ -130,18 +130,18 @@ export const LevelTrack: React.FC<Props> = ({
               {levelNr < officialLevelNr && i === levelNr && (
                 <li
                   className={clsx(
-                    "relative -top-7 z-10 flex align-middle items-center w-full flex-shrink-0 justify-center h-0",
+                    "relative -top-7 z-10 flex h-0 w-full flex-shrink-0 items-center justify-center align-middle",
                     {
                       [styles.levelUp]: levelTransition,
                       [styles.shiftDown]:
                         levelNr < officialLevelNr && levelNr > 2,
-                    }
+                    },
                   )}
                 >
                   <div
                     className={clsx(
                       translates[offset],
-                      "whitespace-nowrap leading-10 align-middle mx-auto"
+                      "mx-auto whitespace-nowrap align-middle leading-10",
                     )}
                   >
                     <span className={clsx("text-transparent")}>
@@ -149,10 +149,10 @@ export const LevelTrack: React.FC<Props> = ({
                     </span>
                     <span
                       className={clsx(
-                        "inline-block size-block border-1 border-transparent align-top rounded-md text-center",
+                        "border-1 inline-block size-block rounded-md border-transparent text-center align-top",
                         {
                           ["relative"]: i === levelNr,
-                        }
+                        },
                       )}
                     >
                       <span
@@ -173,58 +173,44 @@ export const LevelTrack: React.FC<Props> = ({
               <li
                 style={{ "--levelNr": `'${LEVEL_SCALE.indexOf(i) + 1}'` }}
                 className={clsx(
-                  "flex align-middle items-center w-full h-height-block flex-shrink-0 justify-center",
+                  "flex h-height-block w-full flex-shrink-0 items-center justify-center align-middle",
                   {
                     [styles.levelUp]: levelTransition,
                     [styles.shiftDown]:
                       levelNr < officialLevelNr && levelNr > 2,
-                  }
+                  },
                 )}
               >
                 <div
                   className={clsx(
                     translates[offset],
-                    "whitespace-nowrap leading-10 align-middle mx-auto"
+                    "mx-auto whitespace-nowrap align-middle leading-10",
                   )}
                 >
                   <span
                     className={clsx(
-                      "text-orange-400",
                       {
-                        "text-green-900": i < officialLevelNr,
+                        "text-green-600": i < officialLevelNr,
                         "font-bold": i === officialLevelNr,
-                        "text-purple-500": isSpecial(i) && i >= officialLevelNr,
-                        "text-green-700": isEasy(i) && i >= officialLevelNr,
-                        "text-slate-400":
-                          isScrambled(i) && i >= officialLevelNr,
                       },
-                      styles.textShadow
+                      i >= officialLevelNr ? levelTypeTextColor(i) : undefined,
+                      styles.textShadow,
                     )}
                   >
                     {i + 1}&nbsp;
                   </span>
                   <span
                     className={clsx(
-                      "inline-block border size-block align-top rounded-md text-center bg-black/30",
-                      {
-                        "border border-block-brown":
-                          !isSpecial(i) ||
-                          !isHard(i) ||
-                          !isEasy(i) ||
-                          isScrambled(i),
-                        "border-2 border-purple-800": isSpecial(i),
-                        "border-2 border-orange-700": isHard(i),
-                        "border-2 border-green-800": isEasy(i),
-                        "border-2 border-slate-400": isScrambled(i),
-                        ["relative"]: i === levelNr,
-                      }
+                      "inline-block size-block rounded-md border bg-black/30 text-center align-top",
+                      { ["relative"]: i === levelNr },
+                      levelTypeBorder(i),
                     )}
                   >
                     {i < levelNr && (
                       <span
                         className={clsx(
                           "bg-green-500 bg-clip-text text-transparent",
-                          styles.doneGlow
+                          styles.doneGlow,
                         )}
                       >
                         ✔
@@ -242,51 +228,18 @@ export const LevelTrack: React.FC<Props> = ({
                     {i == levelNr && levelNr < officialLevelNr && (
                       <span
                         className={clsx(
-                          "bg-green-500 bg-clip-text text-transparent animate-fadeIn [animation-duration:2s] [animation-delay:1s] opacity-0",
-                          styles.doneGlow
+                          "animate-fadeIn bg-green-500 bg-clip-text text-transparent opacity-0 [animation-delay:1s] [animation-duration:2s]",
+                          styles.doneGlow,
                         )}
                       >
                         ✔
                       </span>
                     )}
-                    {i > levelNr && isSpecial(i) && (
-                      <span
-                        style={{ "--color": "#a855f7" }}
-                        className={clsx(styles.colorEmoji, {
-                          ["animate-fadeOut"]: i === officialLevelNr,
-                        })}
-                      >
-                        ⭐️
-                      </span>
-                    )}
-                    {i > levelNr && isHard(i) && (
-                      <span
-                        className={clsx({
-                          ["animate-fadeOut"]: i === officialLevelNr,
-                        })}
-                      >
-                        ️🔥
-                      </span>
-                    )}
-                    {i > levelNr && isEasy(i) && (
-                      <span
-                        style={{ "--color": "#15803d" }}
-                        className={clsx(styles.colorEmoji, {
-                          ["animate-fadeOut"]: i === officialLevelNr,
-                        })}
-                      >
-                        ️🍀
-                      </span>
-                    )}
-                    {i > levelNr && isScrambled(i) && (
-                      <span
-                        style={{ "--color": "#94a3b8" }}
-                        className={clsx(styles.colorEmoji, {
-                          ["animate-fadeOut"]: i === officialLevelNr,
-                        })}
-                      >
-                        ️🧩
-                      </span>
+                    {i > levelNr && (
+                      <LevelTypeIcon
+                        levelNr={i}
+                        fadeOut={i === officialLevelNr}
+                      />
                     )}
                   </span>
                 </div>
@@ -295,7 +248,7 @@ export const LevelTrack: React.FC<Props> = ({
           );
         })}
       </ol>
-      <div className="text-center pb-10 flex flex-row justify-between w-full px-5">
+      <div className="flex w-full flex-row justify-between px-5 pb-10 text-center">
         <div className="w-22"></div>
         <PlayButton
           label={`Level ${officialLevelNr + 1}`}
@@ -303,7 +256,7 @@ export const LevelTrack: React.FC<Props> = ({
           type={getLevelType(officialLevelNr)}
         />
         <div
-          className={clsx("block transition-opacity w-22", {
+          className={clsx("block w-22 transition-opacity", {
             ["opacity-0"]: !hasZenMode,
             ["opacity-100"]: hasZenMode,
           })}

@@ -7,9 +7,9 @@ import { levelSeeds } from "@/data/levelSeeds";
 import { moveBlocks } from "@/game/actions";
 import { colorHustle } from "@/game/level-creation/colorHustle";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
+import { LevelTypeString } from "@/game/level-types";
 import { hasWon } from "@/game/state";
 import { LevelSettings, LevelState } from "@/game/types";
-import { LevelType } from "@/support/getLevelType";
 import { hash } from "@/support/hash";
 import { generateNewSeed, mulberry32 } from "@/support/random";
 import {
@@ -27,7 +27,7 @@ type Props = {
   levelSettings: LevelSettings;
   levelNr: number;
   title: string;
-  levelType: LevelType;
+  levelType: LevelTypeString;
   storagePrefix?: string;
 };
 
@@ -35,7 +35,7 @@ const generateLevelContent = async (
   seed: number,
   storageKey: string,
   levelSettings: LevelSettings,
-  levelNr: number
+  levelNr: number,
 ): Promise<LevelState> => {
   const random = mulberry32(seed);
   const existingState = await getGameValue<LevelState>(storageKey);
@@ -77,7 +77,7 @@ export const LevelLoader: React.FC<Props> = ({
       locked.seed,
       `${storagePrefix}initialLevelState${locked.levelNr}`,
       locked.levelSettings,
-      levelNr
+      levelNr,
     );
     // Verify level content
     let levelState = level;
@@ -89,13 +89,13 @@ export const LevelLoader: React.FC<Props> = ({
       const newSeed = generateNewSeed(locked.seed, 2);
       // Level content is botched, retry
       await deleteGameValue(
-        `${storagePrefix}initialLevelState${locked.levelNr}`
+        `${storagePrefix}initialLevelState${locked.levelNr}`,
       );
       const level = await generateLevelContent(
         newSeed,
         `${storagePrefix}initialLevelState${locked.levelNr}`,
         locked.levelSettings,
-        levelNr
+        levelNr,
       );
       return level;
     }
@@ -106,8 +106,8 @@ export const LevelLoader: React.FC<Props> = ({
   return (
     <ErrorBoundary
       fallback={
-        <div className="h-full flex flex-col text-light-wood font-bold text-2xl">
-          <div className="flex flex-row pt-2 pl-safeLeft pr-safeRight gap-x-2 items-center">
+        <div className="flex h-full flex-col text-2xl font-bold text-light-wood">
+          <div className="flex flex-row items-center gap-x-2 pl-safeLeft pr-safeRight pt-2">
             <TopButton
               buttonType="back"
               onClick={() => {
@@ -115,7 +115,7 @@ export const LevelLoader: React.FC<Props> = ({
               }}
             />
           </div>
-          <div className="flex flex-col flex-1 items-center justify-center">
+          <div className="flex flex-1 flex-col items-center justify-center">
             <div className="text-4xl">😢</div>
             <p className="max-w-[300px] text-center">
               uh oh... failed to generate level {locked.levelNr + 1},
@@ -135,7 +135,7 @@ export const LevelLoader: React.FC<Props> = ({
     >
       <Suspense
         fallback={
-          <div className="h-full flex flex-col justify-center items-center text-light-wood font-bold text-2xl opacity-0 animate-fadeIn [animation-delay:1s]">
+          <div className="flex h-full animate-fadeIn flex-col items-center justify-center text-2xl font-bold text-light-wood opacity-0 [animation-delay:1s]">
             <Loading />
             <p>Loading...</p>
           </div>
@@ -152,7 +152,7 @@ export const LevelLoader: React.FC<Props> = ({
           onComplete={(won) => {
             if (won) {
               deleteGameValue(
-                `${storagePrefix}initialLevelState${locked.levelNr}`
+                `${storagePrefix}initialLevelState${locked.levelNr}`,
               );
             }
             onComplete(won);

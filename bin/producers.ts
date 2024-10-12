@@ -1,19 +1,19 @@
 import {
   getHard2Settings,
   getHardSettings,
-} from "../src/game/level-settings/hardSettings";
+} from "../src/game/level-types/hard";
 import {
   getNormal2Settings,
   getNormal3Settings,
   getNormalSettings,
-} from "../src/game/level-settings/normalSettings";
+} from "../src/game/level-types/normal";
 import {
   getSpecial1Settings,
   getSpecial2Settings,
   getSpecial3Settings,
   getSpecial4Settings,
   getSpecial5Settings,
-} from "../src/game/level-settings/specialSettings";
+} from "../src/game/level-types/special";
 import { SettingsProducer } from "../src/game/types";
 
 export type Producer = {

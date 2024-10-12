@@ -7,10 +7,10 @@ import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { sound } from "@/audio";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
+import { LevelTypeString } from "@/game/level-types";
 import { hasWon, isStuck } from "@/game/state";
 import { colorMap } from "@/game/themes/default";
 import { LevelSettings, LevelState } from "@/game/types";
-import { LevelType } from "@/support/getLevelType";
 import { mulberry32, pick } from "@/support/random";
 import { ThemeContext } from "@/support/ThemeProvider";
 import { useGameStorage } from "@/support/useGameStorage";
@@ -25,7 +25,7 @@ type Props = {
   level: Promise<LevelState>;
   title: string;
   levelNr: number;
-  levelType: LevelType;
+  levelType: LevelTypeString;
   levelSettings: LevelSettings;
   storageKey: string;
   storagePrefix?: string;
@@ -52,15 +52,15 @@ export const Level: React.FC<Props> = ({
     useGameStorage<LevelState>(storageKey, initialLevelState);
   const [lostCounter, setLostCounter] = useGameStorage(
     `${storagePrefix}lostCounter`,
-    0
+    0,
   );
   const [autoMoves, setAutoMoves] = useGameStorage(
     `${storagePrefix}autoMoves`,
-    0
+    0,
   );
   const autoMoveLimit = Math.min(
     getAutoMoveCount(lostCounter),
-    Math.floor(initialLevelState.moves.length * MAX_SOLVE_PERCENTAGE)
+    Math.floor(initialLevelState.moves.length * MAX_SOLVE_PERCENTAGE),
   );
 
   const [selectStart, setSelectStart] = useState<
@@ -95,7 +95,7 @@ export const Level: React.FC<Props> = ({
   const onColumnClick = (columnIndex: number) => {
     if (selectStart) {
       setLevelState((levelState) =>
-        moveBlocks(levelState, selectStart[0], columnIndex)
+        moveBlocks(levelState, selectStart[0], columnIndex),
       );
       setAutoMoves(0);
     } else {
@@ -107,7 +107,7 @@ export const Level: React.FC<Props> = ({
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       {playState === "restarting" && (
         <Message
           delay={100}
@@ -155,7 +155,7 @@ export const Level: React.FC<Props> = ({
           }}
         />
       )}
-      <div className="flex flex-row pt-2 pl-safeLeft pr-safeRight gap-x-2 items-center">
+      <div className="flex flex-row items-center gap-x-2 pl-safeLeft pr-safeRight pt-2">
         <TopButton
           buttonType="back"
           onClick={() => {
@@ -176,24 +176,24 @@ export const Level: React.FC<Props> = ({
                 }
                 setTimeout(() => {
                   setLevelState((levelState) =>
-                    moveBlocks(levelState, move.from, move.to)
+                    moveBlocks(levelState, move.from, move.to),
                   );
                 }, 200);
               }
             }}
           >
             <>
-              <span className={"text-lg pt-[4px] inline-block px-2"}>
+              <span className={"inline-block px-2 pt-[4px] text-lg"}>
                 Automove
               </span>
-              <span className="inline-block bg-black/20 p-1 text-xs rounded-md mr-1">
+              <span className="mr-1 inline-block rounded-md bg-black/20 p-1 text-xs">
                 {autoMoves}
               </span>
             </>
           </WoodButton>
         )}
         {autoMoves === 0 && (
-          <div className="font-block-sort text-center text-orange-400 tracking-widest">
+          <div className="text-center font-block-sort tracking-widest text-orange-400">
             {title}
           </div>
         )}
