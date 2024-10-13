@@ -1,7 +1,6 @@
-import { getDifficultyLevel } from "../level-settings/levelSettings";
 import { SettingsProducer } from "../types";
 
-import { getNormalSettings } from "./normal";
+import { getNormalSettings, normal } from "./normal";
 import { LevelType } from "./types";
 
 export const getScrambledSettings: SettingsProducer = (difficulty) => ({
@@ -16,17 +15,17 @@ export const ghost: LevelType<"ghost"> = {
   borderClassName: "border-2 border-green-200",
   textClassName: "text-green-300",
   buttonBackgroundClassName: "bg-green-400",
-  backgroundClassName: "bg-slate-400/40",
+  backgroundClassName: "bg-green-200/10",
   unlocksAtLevel: 350,
   levelModifiers: {
     theme: "halloween",
+    ghostMode: true,
   },
-  occurrence: (levelNr) => levelNr === 49 || levelNr === 48,
+  occurrence: (levelNr) => levelNr > 100 && (levelNr + 3) % (15 * 4) === 0,
   getSettings: (levelNr) => {
-    const difficulty = getDifficultyLevel(levelNr);
-    return getScrambledSettings(difficulty);
+    return normal.getSettings(levelNr);
   },
-  getZenSettings: (_levelNr, difficulty) => {
-    return getScrambledSettings(difficulty);
+  getZenSettings: (levelNr, difficulty) => {
+    return normal.getZenSettings(levelNr, difficulty);
   },
 };

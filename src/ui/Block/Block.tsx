@@ -11,6 +11,7 @@ export type Props = {
   revealed?: boolean;
   color: string;
   selected?: boolean | null;
+  suggested?: boolean | null;
   /**
    * Used to offset animations
    */
@@ -33,6 +34,7 @@ export const Block: React.FC<Props> = ({
   onDrop,
   onPickUp,
   selected = null,
+  suggested = null,
   locked = false,
   shadow = true,
 }) => {
@@ -68,27 +70,31 @@ export const Block: React.FC<Props> = ({
         animationDelay: !locked ? `-${index * 50}ms` : "0",
       }}
       className={clsx(
-        "relative h-height-block w-block text-center -mt-top-block",
+        "relative -mt-top-block h-height-block w-block text-center",
         {
           [styles.selected]: selected && !isLocked,
           "animate-locked": !selected && isLocked,
           "animate-place": !selected && !isLocked,
-        }
+        },
       )}
     >
       {shadow && <div className={styles.shadow}></div>}
       <div
         className={clsx(
           styles.layer,
-          "bg-block rounded-md border border-black/10 transition-colors",
+          "rounded-md border border-black/10 bg-block transition-colors",
           {
             [styles.selectedOutline]: selected,
             "[transition-duration:0ms]": isRevealed,
             "[transition-duration:500ms]": !isRevealed,
-          }
+          },
         )}
       ></div>
-      <div className={clsx(styles.layer, "z-10 pt-7")}>
+      <div
+        className={clsx(styles.layer, "z-10 pt-7", {
+          [styles.suggestedOutline]: suggested,
+        })}
+      >
         <span className={clsx("block", styles.shape)}></span>
       </div>
       {revealed && <div className={clsx(styles.layer, styles.texture)}></div>}
@@ -100,9 +106,9 @@ export const Block: React.FC<Props> = ({
       ></div>
       <div
         className={clsx(
-          "absolute w-full h-full rounded-md",
+          "absolute h-full w-full rounded-md",
           styles.gradientLocked,
-          { ["opacity-100"]: isLocked, ["opacity-0"]: !isLocked }
+          { ["opacity-100"]: isLocked, ["opacity-0"]: !isLocked },
         )}
       ></div>
     </div>

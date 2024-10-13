@@ -8,7 +8,7 @@ import { special } from "./special";
 import { LevelType, Unlockable } from "./types";
 
 const levelTypes = [
-  // ghost,
+  // ghost, -- not yet ready for release
   special,
   hard,
   easy,

@@ -10,7 +10,7 @@ import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { getLevelTypeByType, LevelTypeString } from "@/game/level-types";
 import { hasWon, isStuck } from "@/game/state";
 import { colorMap } from "@/game/themes/default";
-import { LevelSettings, LevelState } from "@/game/types";
+import { LevelSettings, LevelState, Move } from "@/game/types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { mulberry32, pick } from "@/support/random";
 import { useGameStorage } from "@/support/useGameStorage";
@@ -58,6 +58,13 @@ export const Level: React.FC<Props> = ({
     `${storagePrefix}autoMoves`,
     0,
   );
+  const [levelMoves, setLevelMoves, deleteMoves] = useGameStorage<Move[]>(
+    `${storagePrefix}moves`,
+    [],
+  );
+  const [previousLevelMoves, setPreviousLevelMoves, deletePreviousMoves] =
+    useGameStorage<Move[]>(`${storagePrefix}previousMoves`, []);
+
   const autoMoveLimit = Math.min(
     getAutoMoveCount(lostCounter),
     Math.floor(initialLevelState.moves.length * MAX_SOLVE_PERCENTAGE),
@@ -99,8 +106,15 @@ export const Level: React.FC<Props> = ({
 
   const onColumnClick = (columnIndex: number) => {
     if (selectStart) {
+      if (selectStart[0] === columnIndex) {
+        setSelectStart(null);
+        return;
+      }
       setLevelState((levelState) =>
         moveBlocks(levelState, selectStart[0], columnIndex),
+      );
+      setLevelMoves((moves) =>
+        moves.concat({ from: selectStart[0], to: columnIndex }),
       );
       setAutoMoves(0);
     } else {
@@ -111,6 +125,25 @@ export const Level: React.FC<Props> = ({
     }
   };
 
+  // Level modifier: Ghost mode
+  const ghostMoves = previousLevelMoves.filter(
+    (m, i) => levelMoves[i]?.from === m.from && levelMoves[i]?.to === m.to,
+  );
+  const canGhostMove =
+    levelMoves.length === ghostMoves.length &&
+    !!levelTypePlugin.levelModifiers?.ghostMode;
+  const nextGhostMove = previousLevelMoves[levelMoves.length];
+  const ghostSelection: [column: number, amount: number] | undefined =
+    nextGhostMove && canGhostMove
+      ? [
+          nextGhostMove.from,
+          selectFromColumn(levelState, nextGhostMove.from).length,
+        ]
+      : undefined;
+
+  const ghostTarget: number | undefined =
+    nextGhostMove && canGhostMove ? nextGhostMove.to : undefined;
+
   return (
     <div className="flex h-full flex-col">
       {playState === "restarting" && (
@@ -119,9 +152,10 @@ export const Level: React.FC<Props> = ({
           message="Restarting"
           color="#888"
           shape="&#10226;"
-          afterShow={() => {
+          afterShow={async () => {
             setLevelState(initialLevelState);
             setAutoMoves(autoMoveLimit);
+            await deleteMoves();
             setPlayState("busy");
           }}
           onShow={() => {
@@ -135,8 +169,10 @@ export const Level: React.FC<Props> = ({
           message={pick(WIN_SENTENCES, localRandom)}
           color={colorMap["green"]}
           shape="✔️"
-          afterShow={() => {
+          afterShow={async () => {
             deleteLevelState();
+            await deleteMoves();
+            await deletePreviousMoves();
             clearThemeOverride();
             onComplete(playState === "won");
           }}
@@ -151,9 +187,11 @@ export const Level: React.FC<Props> = ({
           color={colorMap["red"]}
           message="Blocked!"
           shape="❌"
-          afterShow={() => {
+          afterShow={async () => {
             setLevelState(initialLevelState);
             setAutoMoves(autoMoveLimit);
+            setPreviousLevelMoves(levelMoves);
+            await deleteMoves();
             setPlayState("busy");
           }}
           onShow={() => {
@@ -222,6 +260,8 @@ export const Level: React.FC<Props> = ({
             ? [selectStart[0], selectStart[1]]
             : undefined
         }
+        suggestionSelection={ghostSelection}
+        suggestionTarget={ghostTarget}
         onLock={() => {
           sound.play("lock");
         }}

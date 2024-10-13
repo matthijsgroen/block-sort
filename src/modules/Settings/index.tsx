@@ -141,7 +141,7 @@ export const Settings: React.FC<Props> = ({
             Recent changes
           </TransparentButton>
           <TransparentButton href={"https://buymeacoffee.com/matthijsgroen"}>
-            <TextEmoji emoji="☕️" className="text-md" /> Donate
+            <TextEmoji emoji="☕️" className="text-md" /> Buy me a coffee
           </TransparentButton>
           <TransparentButton
             href={`mailto:matthijs.groen@gmail.com?subject=[BlockSort]-Feedback`}

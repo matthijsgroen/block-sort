@@ -32,6 +32,7 @@ export default {
       animation: {
         wobble:
           "wobble 1s ease-in-out both infinite, smallBounce 1.3s ease-in-out both infinite",
+        pulse: "pulse 1.5s ease-in-out infinite",
         // Somehow if the place duration is 0.3s, it won't show on iPhone in app mode
         place: "place 0.4s ease-out 2ms forwards",
         locked: "locked 0.5s ease-in-out forwards",
@@ -51,6 +52,11 @@ export default {
         lightning: "lightning 10s linear infinite",
       },
       keyframes: {
+        pulse: {
+          "0%": { scale: "1" },
+          "50%": { scale: "1.1" },
+          "100%": { scale: "1" },
+        },
         rotate: {
           "0%": { rotate: "0deg" },
           "100%": { rotate: "360deg" },
