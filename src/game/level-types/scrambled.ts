@@ -17,6 +17,7 @@ export const scrambled: LevelType<"scrambled"> = {
   borderClassName: "border-2 border-slate-400",
   textClassName: "text-slate-400",
   buttonBackgroundClassName: "bg-slate-400",
+  backgroundClassName: "bg-slate-400/40",
   unlocksAtLevel: 200,
   occurrence: (levelNr) => levelNr > 180 && levelNr % 9 === 0,
   getSettings: (levelNr) => {

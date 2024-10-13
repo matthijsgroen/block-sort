@@ -9,6 +9,7 @@ export type LevelType<T extends string> = {
   borderClassName: string;
   buttonBackgroundClassName: string;
   textClassName: string;
+  backgroundClassName?: string;
   occurrence: (levelNr: number) => boolean;
   getSettings: (levelNr: number, random?: () => number) => LevelSettings;
   getZenSettings: (levelNr: number, difficulty: number) => LevelSettings;

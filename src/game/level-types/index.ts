@@ -20,6 +20,9 @@ export type LevelTypeString = typeof levelTypes[number]["type"];
 export const getLevelType = (levelNr: number): LevelType<string> =>
   levelTypes.find((level) => level.occurrence(levelNr))!;
 
+export const getLevelTypeByType = <T extends LevelTypeString>(type: T): LevelType<T> =>
+  levelTypes.find((level) => level.type === type) as LevelType<T>;
+
 export const getUnlockableLevelTypes = (): Unlockable<LevelType<string>>[] =>
   (levelTypes as LevelType<string>[])
     .filter(

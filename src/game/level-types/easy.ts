@@ -19,6 +19,7 @@ export const easy: LevelType<"easy"> = {
   borderClassName: "border-2 border-green-800",
   textClassName: "text-green-700",
   buttonBackgroundClassName: "bg-green-700",
+  backgroundClassName: "bg-green-600/40",
   occurrence: (levelNr) => levelNr > 150 && (levelNr + 1) % 13 === 0,
   getSettings(levelNr, random = Math.random) {
     const difficulty = getDifficultyLevel(levelNr);

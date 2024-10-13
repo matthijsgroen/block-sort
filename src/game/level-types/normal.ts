@@ -43,6 +43,7 @@ export const normal: LevelType<"normal"> = {
   borderClassName: "border border-block-brown",
   textClassName: "text-orange-400",
   buttonBackgroundClassName: "bg-orange-500",
+  backgroundClassName: "bg-transparent",
   occurrence: () => true,
   getSettings(levelNr, random = Math.random) {
     const difficulty = getDifficultyLevel(levelNr);
