@@ -84,6 +84,7 @@ export default [
           varsIgnorePattern: "^_",
           args: "after-used",
           argsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^ignore",
         },
       ],
     },
