@@ -1,5 +1,3 @@
-import { get } from "http";
-
 export type StreamItem = {
   gainNode?: GainNode;
   gain: number;
