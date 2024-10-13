@@ -3,13 +3,12 @@ import { use } from "react";
 import { Transition } from "@/ui/Transition/Transition.tsx";
 
 import { sound } from "@/audio.ts";
-import { getZenSettings } from "@/game/level-settings/zenLevelSettings.ts";
+import { LevelTypeString } from "@/game/level-types/index.ts";
 import { LevelSettings } from "@/game/types.ts";
+import { ThemeContext } from "@/modules/Layout/ThemeContext.tsx";
 import { LevelLoader } from "@/modules/Level/LevelLoader.tsx";
-import { LevelType } from "@/support/getLevelType.ts";
 import { generateNewSeed, mulberry32, pick } from "@/support/random.ts";
 import { getThemeSong } from "@/support/themeMusic.tsx";
-import { ThemeContext } from "@/support/ThemeProvider.tsx";
 import { deleteGameValue, useGameStorage } from "@/support/useGameStorage.ts";
 
 import { ZenSelection } from "../ZenSelection/ZenSelection.tsx";
@@ -35,7 +34,7 @@ export const ZenMode: React.FC<Props> = ({
 
   const [difficultyIndex, setDifficultyIndex] = useGameStorage(
     "zenDifficulty",
-    0
+    0,
   );
   const [levelTypeIndex, setLevelTypeIndex] = useGameStorage("zenLevelType", 0);
 
@@ -47,7 +46,7 @@ export const ZenMode: React.FC<Props> = ({
   const random = mulberry32(zenLevelSeed);
   const [currentGame, setCurrentGame] = useGameStorage<null | {
     title: string;
-    levelType: LevelType;
+    levelType: string;
     difficultyIndex: number;
     settings: LevelSettings;
   }>("zenLevelSettings", null);
@@ -72,7 +71,7 @@ export const ZenMode: React.FC<Props> = ({
               }
             }}
             levelNr={zenLevelNr}
-            levelType={currentGame.levelType}
+            levelType={currentGame.levelType as LevelTypeString}
             seed={zenLevelSeed}
             storagePrefix="zen"
             levelSettings={currentGame.settings}
@@ -97,7 +96,7 @@ export const ZenMode: React.FC<Props> = ({
 
             if (
               currentGame !== null &&
-              currentGame.levelType === levelType &&
+              currentGame.levelType === levelType.type &&
               currentGame.difficultyIndex === difficultyIndex
             ) {
               sound.play(song);
@@ -108,16 +107,15 @@ export const ZenMode: React.FC<Props> = ({
             deleteGameValue(`zenlevelState${zenLevelNr}`);
 
             const difficulty = pick(difficultySettings.difficulties, random);
-            const settings = getZenSettings(
+            const settings = levelType.getZenSettings(
+              zenLevelNr,
               difficulty + 1,
-              levelType,
-              zenLevelNr
             );
 
             setCurrentGame({
               title: DIFFICULTY_LEVELS[difficultyIndex].name,
               difficultyIndex,
-              levelType,
+              levelType: levelType.type,
               settings,
             });
             // tie playback to user interaction

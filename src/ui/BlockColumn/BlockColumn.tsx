@@ -14,6 +14,8 @@ import styles from "./BlockColumn.module.css";
 type Props = {
   column: Column;
   amountSelected?: number;
+  amountSuggested?: number;
+  suggested?: boolean;
   started?: boolean;
   theme?: BlockTheme;
   onClick?: VoidFunction;
@@ -30,7 +32,9 @@ export const BlockColumn: React.FC<Props> = ({
   onPickUp,
   theme = "default",
   started = true,
+  suggested = false,
   amountSelected = 0,
+  amountSuggested = 0,
 }) => {
   const [locked, setLocked] = useState(column.locked);
   const [blocksLocked, setBlocksLocked] = useState(-1);
@@ -68,20 +72,25 @@ export const BlockColumn: React.FC<Props> = ({
   return (
     <div className={`${rowSpans[column.columnSize + 1]} justify-self-center`}>
       <div
-        className={clsx("border border-transparent box-content pb-6", {
+        className={clsx("box-content border border-transparent pb-6", {
           "contain-paint": locked,
           "rounded-b-md": column.type === "buffer",
           "rounded-md border-t-black/60": column.type === "placement",
         })}
       >
+        {suggested && (
+          <div className="pointer-events-none absolute w-block -translate-y-8 animate-pulse bg-green-200 bg-clip-text text-center text-2xl text-transparent opacity-30">
+            ️👻
+          </div>
+        )}
         <div
           className={clsx(
-            "w-block box-content cursor-pointer flex flex-col-reverse",
+            "box-content flex w-block cursor-pointer flex-col-reverse",
             {
               [styles.buffer]: column.type === "buffer",
-              "bg-black/20 border border-black/60 border-t-0 rounded-md shadow-inner":
+              "rounded-md border border-t-0 border-black/60 bg-black/20 shadow-inner":
                 column.type === "placement",
-            }
+            },
           )}
           onPointerDown={onClick}
         >
@@ -90,11 +99,9 @@ export const BlockColumn: React.FC<Props> = ({
             const index = l.length - 1 - p;
             const block = l[index];
             const isSelected = index < amountSelected;
+            const isSuggested = index < amountSuggested;
             return (
-              <div
-                key={column.columnSize - column.blocks.length + index}
-                className={clsx(styles.shade)}
-              >
+              <div key={column.columnSize - column.blocks.length + index}>
                 <Block
                   locked={p <= blocksLocked - 1}
                   index={index}
@@ -106,6 +113,7 @@ export const BlockColumn: React.FC<Props> = ({
                     block.revealed ? activeShapeMap[block.color] : undefined
                   }
                   selected={isSelected}
+                  suggested={isSuggested}
                   onDrop={onDrop}
                   onPickUp={onPickUp}
                   onLock={onLock}
@@ -134,7 +142,7 @@ export const BlockColumn: React.FC<Props> = ({
                 key={column.blocks.length + p}
                 className={`${p === 0 && column.blocks.length === 0 ? styles.bottom : styles.empty} ${styles.shade}`}
               ></div>
-            )
+            ),
           )}
         </div>
       </div>

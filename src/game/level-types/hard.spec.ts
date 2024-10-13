@@ -1,7 +1,8 @@
 import { describe } from "vitest";
 
-import { testDifficulties } from "./difficultyTester";
-import { getHard2Settings, getHardSettings } from "./hardSettings";
+import { testDifficulties } from "../level-settings/difficultyTester";
+
+import { getHard2Settings, getHardSettings } from "./hard";
 
 describe(getHardSettings, () => {
   testDifficulties(getHardSettings);

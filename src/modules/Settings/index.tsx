@@ -36,7 +36,7 @@ export const Settings: React.FC<Props> = ({
   onClose,
 }) => {
   const [activeTab, setActiveTab] = useState<
-    "settings" | "changes" | "attribution" | "data"
+    "settings" | "changes" | "attribution" | "data" | "advanced"
   >("settings");
 
   const [showThemes, setShowThemes] = useState(false);
@@ -120,27 +120,46 @@ export const Settings: React.FC<Props> = ({
             , 2024
           </p>
           <div className="flex flex-row justify-between">
-            <TransparentButton onClick={() => setActiveTab("changes")}>
-              Recent changes
+            <TransparentButton onClick={() => setActiveTab("advanced")}>
+              Advanced
+            </TransparentButton>
+            <TransparentButton href={"https://buymeacoffee.com/matthijsgroen"}>
+              <TextEmoji emoji="☕️" className="text-xl" />
             </TransparentButton>
             <TransparentButton onClick={() => setActiveTab("attribution")}>
               Attribution
             </TransparentButton>
           </div>
-          <div className="flex flex-col justify-between">
-            <TransparentButton
-              onClick={() => {
-                setActiveTab("data");
-              }}
-            >
-              Transfer game data
-            </TransparentButton>
-          </div>
+        </div>
+      )}
+      {activeTab === "advanced" && (
+        <div className="flex flex-col gap-3 pb-4">
+          <TransparentButton onClick={() => setActiveTab("settings")}>
+            Back
+          </TransparentButton>
+          <TransparentButton onClick={() => setActiveTab("changes")}>
+            Recent changes
+          </TransparentButton>
+          <TransparentButton href={"https://buymeacoffee.com/matthijsgroen"}>
+            <TextEmoji emoji="☕️" className="text-md" /> Buy me a coffee
+          </TransparentButton>
+          <TransparentButton
+            href={`mailto:matthijs.groen@gmail.com?subject=[BlockSort]-Feedback`}
+          >
+            Feedback
+          </TransparentButton>
+          <TransparentButton
+            onClick={() => {
+              setActiveTab("data");
+            }}
+          >
+            Transfer game data
+          </TransparentButton>
         </div>
       )}
       {activeTab === "changes" && (
         <div className="flex flex-col gap-3 pb-4">
-          <TransparentButton onClick={() => setActiveTab("settings")}>
+          <TransparentButton onClick={() => setActiveTab("advanced")}>
             Back
           </TransparentButton>
           <Suspense fallback={<div>Loading...</div>}>
@@ -158,7 +177,7 @@ export const Settings: React.FC<Props> = ({
       )}
       {activeTab === "data" && (
         <div className="flex flex-col gap-3 pb-4">
-          <TransparentButton onClick={() => setActiveTab("settings")}>
+          <TransparentButton onClick={() => setActiveTab("advanced")}>
             Back
           </TransparentButton>
           <DataTransfer />

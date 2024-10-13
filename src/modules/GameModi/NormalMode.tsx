@@ -5,19 +5,15 @@ import { Transition } from "@/ui/Transition/Transition.tsx";
 import { sound } from "@/audio.ts";
 import { ZEN_MODE } from "@/featureFlags.ts";
 import {
-  getEasySettings,
-  getHardSettings,
-  getNormalSettings,
-  getScrambledSettings,
-  getSpecialSettings,
-} from "@/game/level-settings/levelSettings.ts";
-import { LevelSettings } from "@/game/types.ts";
+  getLevelSettings,
+  getLevelType,
+  LevelTypeString,
+} from "@/game/level-types/index.ts";
+import { ThemeContext } from "@/modules/Layout/ThemeContext.tsx";
 import { LevelLoader } from "@/modules/Level/LevelLoader.tsx";
 import { LevelTrack } from "@/modules/LevelTrack/LevelTrack.tsx";
-import { getLevelType, LevelType } from "@/support/getLevelType.ts";
 import { generateNewSeed, mulberry32 } from "@/support/random.ts";
 import { getThemeSong } from "@/support/themeMusic.tsx";
-import { ThemeContext } from "@/support/ThemeProvider.tsx";
 import { useGameStorage } from "@/support/useGameStorage.ts";
 
 import { BetaContext } from "../Layout/BetaContext.tsx";
@@ -41,7 +37,7 @@ export const NormalMode: React.FC<Props> = ({
 }) => {
   const [levelNr, setLevelNr] = useGameStorage("levelNr", 0);
   const [levelSeed, setLevelSeed] = useState(() =>
-    generateNewSeed(BASE_SEED, levelNr)
+    generateNewSeed(BASE_SEED, levelNr),
   );
   const [inLevel, setInLevel] = useGameStorage("inLevel", false);
 
@@ -50,14 +46,7 @@ export const NormalMode: React.FC<Props> = ({
   }, [levelNr]);
 
   const random = mulberry32(levelSeed);
-  const settingProducers: Record<LevelType, (nr: number) => LevelSettings> = {
-    easy: (nr: number) => getEasySettings(nr, random),
-    hard: (nr: number) => getHardSettings(nr, random),
-    normal: (nr: number) => getNormalSettings(nr, random),
-    special: (nr: number) => getSpecialSettings(nr, random),
-    scrambled: (nr: number) => getScrambledSettings(nr),
-  };
-  const settings = settingProducers[getLevelType(levelNr)](levelNr);
+  const settings = getLevelSettings(levelNr, random);
 
   const { activeTheme } = use(ThemeContext);
   const song = getThemeSong(activeTheme);
@@ -102,7 +91,7 @@ export const NormalMode: React.FC<Props> = ({
             }
           }}
           levelNr={levelNr}
-          levelType={getLevelType(levelNr)}
+          levelType={getLevelType(levelNr).type as LevelTypeString}
           seed={levelSeed}
           levelSettings={settings}
           title={`Level ${levelNr + 1}`}

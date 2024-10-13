@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
 
+import { testDifficulties } from "../level-settings/difficultyTester";
 import { LevelSettings } from "../types";
 
-import { testDifficulties } from "./difficultyTester";
 import {
   getNormal2Settings,
   getNormal3Settings,
   getNormalSettings,
-} from "./normalSettings";
+} from "./normal";
 
 describe(getNormalSettings, () => {
   describe("increase in difficulty", () => {

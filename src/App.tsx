@@ -7,12 +7,9 @@ import { ZenMode } from "./modules/GameModi/ZenMode.tsx";
 import { InstallPrompt } from "./modules/InstallPrompt/index.tsx";
 import { BackgroundProvider } from "./modules/Layout/BackgroundContext.tsx";
 import { BetaProvider } from "./modules/Layout/BetaContext.tsx";
+import { ThemeProvider } from "./modules/Layout/ThemeContext.tsx";
 import { Settings } from "./modules/Settings/index.tsx";
-import { getThemeSong } from "./support/themeMusic.tsx";
-import { ThemeProvider } from "./support/ThemeProvider.tsx";
-import { getActiveTheme, getToday } from "./support/themes.ts";
 import { sound, Stream } from "./audio.ts";
-import { THEMES } from "./featureFlags.ts";
 import PWABadge from "./PWABadge.tsx";
 
 export const App: React.FC = () => {
@@ -22,13 +19,10 @@ export const App: React.FC = () => {
   const [musicEnabled, setMusicEnabled] = useGameStorage("musicEnabled", true);
   const [themesEnabled, setThemesEnabled] = useGameStorage(
     "themesEnabled",
-    true
+    true,
   );
 
   const [inZenMode, setInZenMode] = useGameStorage("inZenMode", false);
-  const theme =
-    themesEnabled && THEMES ? getActiveTheme(getToday()) : "default";
-  const song = getThemeSong(theme);
 
   const canInstall: boolean = "standalone" in window.navigator;
   const isInstalled: boolean =
@@ -36,25 +30,12 @@ export const App: React.FC = () => {
     (window.navigator["standalone"] as boolean);
 
   useEffect(() => {
-    sound.stopAllInStream(Stream.music);
-    if (musicEnabled) {
-      sound.play(song);
-    }
-  }, [song]);
-
-  useEffect(() => {
     sound.setStreamEnabled(Stream.effects, soundEnabled);
-    sound.setStreamEnabled(Stream.music, musicEnabled);
-    if (musicEnabled) {
-      sound.play(song);
-    } else {
-      sound.stopAllInStream(Stream.music);
-    }
-  }, [soundEnabled, musicEnabled]);
+  }, [soundEnabled]);
 
   return (
     <BetaProvider>
-      <ThemeProvider themesEnabled={themesEnabled}>
+      <ThemeProvider themesEnabled={themesEnabled} musicEnabled={musicEnabled}>
         <BackgroundProvider>
           <NormalMode
             active={!inZenMode}
@@ -79,12 +60,6 @@ export const App: React.FC = () => {
               }}
               onMusicChange={(musicEnabled) => {
                 sound.setStreamEnabled(Stream.music, musicEnabled);
-                if (musicEnabled) {
-                  // tie playback to user interaction
-                  sound.play(song);
-                } else {
-                  sound.stopAllInStream(Stream.music);
-                }
                 setMusicEnabled(musicEnabled);
               }}
               onThemesChange={setThemesEnabled}

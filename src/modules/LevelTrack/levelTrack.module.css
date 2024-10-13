@@ -16,18 +16,11 @@
 
 .levelUp::after {
   content: "💪🏼 " var(--levelNr, "0");
-  @apply absolute right-1 mr-4 text-transparent bg-black/30 bg-clip-text opacity-80;
+  @apply absolute right-1 mr-4 bg-black/30 bg-clip-text text-transparent opacity-80;
 }
 
 .textShadow {
   text-shadow: 1px 1px 2px #0008;
-}
-
-.colorEmoji {
-  text-shadow: 0 0 0 var(--color);
-  background-color: var(--color);
-  background-clip: text;
-  color: transparent;
 }
 
 .shiftDown {

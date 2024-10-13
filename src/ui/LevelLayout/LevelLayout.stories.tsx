@@ -4,19 +4,19 @@ import { generateRandomLevel } from "@/game/level-creation/generateRandomLevel";
 import {
   getHard2Settings,
   getHardSettings as getHardSettings,
-} from "@/game/level-settings/hardSettings";
+} from "@/game/level-types/hard";
 import {
   getNormal2Settings,
   getNormal3Settings,
   getNormalSettings,
-} from "@/game/level-settings/normalSettings";
+} from "@/game/level-types/normal";
 import {
   getSpecial1Settings,
   getSpecial2Settings,
   getSpecial3Settings,
   getSpecial4Settings,
   getSpecial5Settings,
-} from "@/game/level-settings/specialSettings";
+} from "@/game/level-types/special";
 import { LevelSettings } from "@/game/types";
 import { mulberry32 } from "@/support/random";
 
@@ -107,7 +107,7 @@ export const LevelLayout: Story = {
     const settings = producer(Math.min(Math.max(args.difficulty, 1), 11));
     const level = generateRandomLevel(settings, random);
     return (
-      <div className="w-full flex flex-col">
+      <div className="flex w-full flex-col">
         <LevelLayoutComponent started={true} levelState={level} />
       </div>
     );

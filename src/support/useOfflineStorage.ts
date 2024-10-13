@@ -61,7 +61,7 @@ const getStore = (storeName: string): Store => {
 
 export const getOfflineValue = <T>(
   key: string,
-  storeName = "defaultStore"
+  storeName = "defaultStore",
 ): Promise<T | null> => {
   const store = getStore(storeName);
   return store.getItem<T>(key);
@@ -70,7 +70,7 @@ export const getOfflineValue = <T>(
 export const setOfflineValue = <T>(
   key: string,
   value: T,
-  storeName = "defaultStore"
+  storeName = "defaultStore",
 ): Promise<T | null> => {
   const store = getStore(storeName);
   return store.setItem<T>(key, value);
@@ -78,7 +78,7 @@ export const setOfflineValue = <T>(
 
 export const deleteOfflineValue = (
   key: string,
-  storeName = "defaultStore"
+  storeName = "defaultStore",
 ): Promise<void> => {
   const store = getStore(storeName);
   return store.removeItem(key);
@@ -87,11 +87,11 @@ export const deleteOfflineValue = (
 export const useOfflineStorage = <T>(
   key: string,
   initialValue: T,
-  storeName = "defaultStore"
+  storeName = "defaultStore",
 ): [
   value: T,
   setValue: Dispatch<SetStateAction<T>>,
-  deleteValue: VoidFunction,
+  deleteValue: () => Promise<void>,
 ] => {
   const [localState, setLocalState] = useState(initialValue);
   const store = getStore(storeName);
@@ -114,17 +114,20 @@ export const useOfflineStorage = <T>(
       if (isSetFunction(value)) {
         const previousValue = await store.getItem<T>(key);
         const nextValue = value(previousValue ?? localState);
+        setLocalState(nextValue); // Optimistic
         await store.setItem<T>(key, nextValue);
         setLocalState(nextValue);
       } else {
+        setLocalState(value); // Optimistic
         await store.setItem<T>(key, value);
         setLocalState(value);
       }
     },
-    [key]
+    [key],
   );
 
   const deleteValue = useCallback(async () => {
+    setLocalState(initialValue); // Optimistic
     await store.removeItem(key);
   }, [key]);
 

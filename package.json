@@ -1,6 +1,6 @@
 {
   "name": "block-sorting",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "Mobile Block sorting game, as a Progressive Web App",
   "author": {
     "name": "Matthijs Groen",
@@ -67,11 +67,13 @@
     "eslint-plugin-react-refresh": "^0.4.9",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-storybook": "^0.8.0",
+    "eslint-plugin-unused-imports": "^4.1.4",
     "globals": "^15.9.0",
     "immer": "^10.1.1",
     "markdown-it": "^14.1.0",
     "postcss": "^8.4.45",
     "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.8",
     "storybook": "^8.3.2",
     "tailwindcss": "^3.4.10",
     "tsx": "^4.19.1",
@@ -109,5 +111,10 @@
       "not dead",
       "not op_mini all"
     ]
+  },
+  "dependenciesMeta": {
+    "prettier-plugin-tailwindcss@0.6.8": {
+      "unplugged": true
+    }
   }
 }
