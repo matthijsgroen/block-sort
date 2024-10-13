@@ -18,7 +18,7 @@ export const LevelTypeIcon: React.FC<Props> = ({ levelNr, fadeOut }) => {
 
   return (
     <span
-      style={{ "--color": "#a855f7" }}
+      style={levelType.color ? { "--color": levelType.color } : undefined}
       className={clsx({
         [styles.colorEmoji]: levelType.color !== undefined,
         ["animate-fadeOut"]: fadeOut,
