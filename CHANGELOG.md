@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Improve responsiveness for columns and zen screen
+- Feedback and donate buttons, per request of users 😊
+
+### Changed
+
+- Restructured settings screen to have more options in an advanced section
 
 ## Version 1.8.0 - 2024-10-11
 

@@ -9,7 +9,7 @@ import {
 import { Background } from "@/ui/Background/Background";
 
 import { LevelTypeString } from "@/game/level-types";
-import { ThemeContext } from "@/support/ThemeProvider";
+import { ThemeContext } from "@/modules/Layout/ThemeContext";
 
 export const BackgroundContext = createContext<{
   levelType: LevelTypeString | undefined;
@@ -26,7 +26,9 @@ export const BackgroundContext = createContext<{
 export const BackgroundProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
-  const [levelType, setLevelType] = useState<LevelTypeString | undefined>(undefined);
+  const [levelType, setLevelType] = useState<LevelTypeString | undefined>(
+    undefined,
+  );
   const [screenLayout, setScreenLayout] = useState<string>("levelTrack");
   const { activeTheme } = use(ThemeContext);
   return (

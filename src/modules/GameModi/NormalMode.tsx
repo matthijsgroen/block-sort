@@ -4,12 +4,16 @@ import { Transition } from "@/ui/Transition/Transition.tsx";
 
 import { sound } from "@/audio.ts";
 import { ZEN_MODE } from "@/featureFlags.ts";
-import { getLevelSettings, getLevelType, LevelTypeString } from "@/game/level-types/index.ts";
+import {
+  getLevelSettings,
+  getLevelType,
+  LevelTypeString,
+} from "@/game/level-types/index.ts";
+import { ThemeContext } from "@/modules/Layout/ThemeContext.tsx";
 import { LevelLoader } from "@/modules/Level/LevelLoader.tsx";
 import { LevelTrack } from "@/modules/LevelTrack/LevelTrack.tsx";
 import { generateNewSeed, mulberry32 } from "@/support/random.ts";
 import { getThemeSong } from "@/support/themeMusic.tsx";
-import { ThemeContext } from "@/support/ThemeProvider.tsx";
 import { useGameStorage } from "@/support/useGameStorage.ts";
 
 import { BetaContext } from "../Layout/BetaContext.tsx";

@@ -46,7 +46,7 @@ export const ZenSelection: React.FC<Props> = ({
   const levelTypes = getUnlockableLevelTypes();
 
   const selectedDifficulty = DIFFICULTY_LEVELS[difficultyIndex];
-  const selectedLevelType = levelTypes[levelTypeIndex];
+  const selectedLevelType = levelTypes[levelTypeIndex % levelTypes.length];
   const enabledDifficulties = DIFFICULTY_LEVELS.length;
   const enabledLevelTypes = levelTypes.length;
 

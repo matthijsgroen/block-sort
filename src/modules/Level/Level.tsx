@@ -7,12 +7,12 @@ import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { sound } from "@/audio";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
-import { LevelTypeString } from "@/game/level-types";
+import { getLevelTypeByType, LevelTypeString } from "@/game/level-types";
 import { hasWon, isStuck } from "@/game/state";
 import { colorMap } from "@/game/themes/default";
 import { LevelSettings, LevelState } from "@/game/types";
+import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { mulberry32, pick } from "@/support/random";
-import { ThemeContext } from "@/support/ThemeProvider";
 import { useGameStorage } from "@/support/useGameStorage";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
@@ -68,10 +68,15 @@ export const Level: React.FC<Props> = ({
   >(null);
 
   const [started, setStarted] = useState(false);
+  const levelTypePlugin = getLevelTypeByType(levelType);
+  const { setThemeOverride, clearThemeOverride } = use(ThemeContext);
 
   const { setLevelType } = use(BackgroundContext);
   useEffect(() => {
     setLevelType(levelType);
+    if (levelTypePlugin.levelModifiers?.theme) {
+      setThemeOverride(levelTypePlugin.levelModifiers.theme);
+    }
 
     const cleanup = setTimeout(() => setStarted(true), 300);
     return () => clearTimeout(cleanup);
@@ -132,6 +137,7 @@ export const Level: React.FC<Props> = ({
           shape="✔️"
           afterShow={() => {
             deleteLevelState();
+            clearThemeOverride();
             onComplete(playState === "won");
           }}
           onShow={() => {
@@ -159,6 +165,7 @@ export const Level: React.FC<Props> = ({
         <TopButton
           buttonType="back"
           onClick={() => {
+            clearThemeOverride();
             onComplete(false);
           }}
         />

@@ -8,6 +8,7 @@ import { special } from "./special";
 import { LevelType, Unlockable } from "./types";
 
 const levelTypes = [
+  // ghost,
   special,
   hard,
   easy,
@@ -15,12 +16,14 @@ const levelTypes = [
   normal,
 ] as const satisfies LevelType<string>[];
 
-export type LevelTypeString = typeof levelTypes[number]["type"];
+export type LevelTypeString = (typeof levelTypes)[number]["type"];
 
 export const getLevelType = (levelNr: number): LevelType<string> =>
   levelTypes.find((level) => level.occurrence(levelNr))!;
 
-export const getLevelTypeByType = <T extends LevelTypeString>(type: T): LevelType<T> =>
+export const getLevelTypeByType = <T extends LevelTypeString>(
+  type: T,
+): LevelType<T> =>
   levelTypes.find((level) => level.type === type) as LevelType<T>;
 
 export const getUnlockableLevelTypes = (): Unlockable<LevelType<string>>[] =>
@@ -43,7 +46,10 @@ export const levelTypeBorder = (levelNr: number): string => {
   return levelType.borderClassName;
 };
 
-export const getLevelSettings = (levelNr: number, random = Math.random): LevelSettings => {
+export const getLevelSettings = (
+  levelNr: number,
+  random = Math.random,
+): LevelSettings => {
   const levelType = getLevelType(levelNr);
   return levelType.getSettings(levelNr, random);
-}
+};
