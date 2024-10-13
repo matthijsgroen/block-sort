@@ -1,3 +1,5 @@
+import { get } from "http";
+
 export type StreamItem = {
   gainNode?: GainNode;
   gain: number;
@@ -23,13 +25,22 @@ export type AudioItem<Stream> = {
    * @default false
    */
   multipleInstances?: boolean;
+  /**
+   * Stops others in the stream with the same key
+   */
+  singleInStream?: string;
 };
 
 export const createItem = <Stream>(
   audioStream: Stream,
   fileUrl: string,
   gain = 1.0,
-  { loop = false, multipleInstances = false, lazy = false } = {}
+  {
+    loop = false,
+    multipleInstances = false,
+    lazy = false,
+    singleInStream,
+  }: Omit<AudioItem<Stream>, "gain" | "fileUrl" | "audioStream"> = {},
 ): AudioItem<Stream> => ({
   audioStream,
   fileUrl,
@@ -37,11 +48,12 @@ export const createItem = <Stream>(
   loop,
   multipleInstances,
   lazy,
+  singleInStream,
 });
 
 const loadAndDecodeAudio = async (
   context: AudioContext,
-  fileUrl: string
+  fileUrl: string,
 ): Promise<AudioBuffer> => {
   const file = await fetch(fileUrl);
   const buffer = await file.arrayBuffer();
@@ -53,7 +65,7 @@ export const audioSystem = <
   AudioLibrary extends Record<string, AudioItem<Stream>>,
 >(
   streams: Record<Stream, StreamItem>,
-  audioItems: AudioLibrary
+  audioItems: AudioLibrary,
 ) => {
   const loadAudio = async () => {
     const context = new AudioContext();
@@ -80,7 +92,7 @@ export const audioSystem = <
         if (v.buffer === undefined && !v.lazy) {
           v.buffer = await loadAndDecodeAudio(context, v.fileUrl);
         }
-      })
+      }),
     );
 
     const playBuffer = (item: AudioItem<Stream>) => {
@@ -89,7 +101,7 @@ export const audioSystem = <
         const targetNode = streams[item.audioStream].gainNode;
         if (!targetNode) {
           throw new Error(
-            `Audio stream for ${item.audioStream} is not yet initialized`
+            `Audio stream for ${item.audioStream} is not yet initialized`,
           );
         }
         item.gainNode = context.createGain();
@@ -173,7 +185,7 @@ export const audioSystem = <
     };
 
     const audioPlayers = Object.fromEntries(
-      Object.entries(audioItems).map(([k, v]) => [k, playBuffer(v)])
+      Object.entries(audioItems).map(([k, v]) => [k, playBuffer(v)]),
     ) as Record<keyof AudioLibrary, ReturnType<typeof playBuffer>>;
 
     return {
@@ -197,6 +209,36 @@ export const audioSystem = <
     return soundSystem;
   };
 
+  const playingInStream: Record<
+    string,
+    Record<string, keyof AudioLibrary | undefined>
+  > = {};
+
+  const getCurrentlyPlaying = (item: keyof AudioLibrary) => {
+    const itemInfo = audioItems[item];
+    if (itemInfo.singleInStream) {
+      return playingInStream[itemInfo.audioStream]?.[itemInfo.singleInStream];
+    }
+  };
+  const isCurrentlyPlaying = (item: keyof AudioLibrary) => {
+    return getCurrentlyPlaying(item) === item;
+  };
+  const setCurrentlyPlaying = (item: keyof AudioLibrary) => {
+    const itemInfo = audioItems[item];
+    if (itemInfo.singleInStream) {
+      playingInStream[itemInfo.audioStream] ??= {};
+      playingInStream[itemInfo.audioStream][itemInfo.singleInStream] = item;
+    }
+  };
+  const setStoppedPlaying = (item: keyof AudioLibrary) => {
+    const itemInfo = audioItems[item];
+    if (itemInfo.singleInStream && isCurrentlyPlaying(item)) {
+      playingInStream[itemInfo.audioStream] ??= {};
+      playingInStream[itemInfo.audioStream][itemInfo.singleInStream] =
+        undefined;
+    }
+  };
+
   return {
     setStreamEnabled: (stream: Stream, enabled = true) => {
       streams[stream].disabled = !enabled;
@@ -210,9 +252,20 @@ export const audioSystem = <
       if (stream.disabled) {
         return;
       }
+      if (isCurrentlyPlaying(item)) {
+        return;
+      }
       getSoundSystem().then((s) => {
         s.resume();
+        if (itemInfo.singleInStream) {
+          const currentlyPlaying = getCurrentlyPlaying(item);
+          if (currentlyPlaying) {
+            s.stop(currentlyPlaying);
+          }
+        }
+
         s.play(item);
+        setCurrentlyPlaying(item);
       });
     },
     stopAllInStream: (stream: Stream) => {
@@ -220,12 +273,16 @@ export const audioSystem = <
         for (const [k, v] of Object.entries(audioItems)) {
           if (v.audioStream === stream) {
             s.stop(k as keyof AudioLibrary);
+            playingInStream[stream] = {};
           }
         }
       });
     },
     stop: (item: keyof AudioLibrary) => {
-      getSoundSystem().then((s) => s.stop(item));
+      getSoundSystem().then((s) => {
+        s.stop(item);
+        setStoppedPlaying(item);
+      });
     },
   };
 };

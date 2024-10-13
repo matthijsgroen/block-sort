@@ -20,10 +20,15 @@ const streams: Record<Stream, StreamItem> = {
 };
 
 const audioItems = {
-  music: createItem(Stream.music, music, 1.0, { loop: true, lazy: true }),
+  music: createItem(Stream.music, music, 1.0, {
+    loop: true,
+    lazy: true,
+    singleInStream: "music",
+  }),
   halloween: createItem(Stream.music, halloween, 0.5, {
     loop: true,
     lazy: true,
+    singleInStream: "music",
   }),
   winter: createItem(Stream.music, winter, 0.4, {
     loop: true,

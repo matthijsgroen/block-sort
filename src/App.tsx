@@ -22,12 +22,13 @@ export const App: React.FC = () => {
   const [musicEnabled, setMusicEnabled] = useGameStorage("musicEnabled", true);
   const [themesEnabled, setThemesEnabled] = useGameStorage(
     "themesEnabled",
-    true
+    true,
   );
 
   const [inZenMode, setInZenMode] = useGameStorage("inZenMode", false);
   const theme =
     themesEnabled && THEMES ? getActiveTheme(getToday()) : "default";
+
   const song = getThemeSong(theme);
 
   const canInstall: boolean = "standalone" in window.navigator;
@@ -36,7 +37,6 @@ export const App: React.FC = () => {
     (window.navigator["standalone"] as boolean);
 
   useEffect(() => {
-    sound.stopAllInStream(Stream.music);
     if (musicEnabled) {
       sound.play(song);
     }
