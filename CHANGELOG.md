@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version 1.10.0 - UNRELEASED
 
+### Added
+
+- Added 'ghost' mode for replay hints in the week of halloween
+- Some work for winter theme (will unlock in december)
+
 ### Changed
 
 - Enabled zen mode at level 30, instead of 50
+- Reduced size of storage format
 
 ## Version 1.9.0 - 2024-10-13
 
