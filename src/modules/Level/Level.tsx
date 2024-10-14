@@ -18,6 +18,7 @@ import { useGameStorage } from "@/support/useGameStorage";
 import { BackgroundContext } from "../Layout/BackgroundContext";
 
 import { getAutoMoveCount, MAX_SOLVE_PERCENTAGE } from "./autoMove";
+import { ghostModeModifier } from "./ghostModeModifier";
 import { WIN_SENTENCES } from "./winSentences";
 
 type Props = {
@@ -126,23 +127,12 @@ export const Level: React.FC<Props> = ({
   };
 
   // Level modifier: Ghost mode
-  const ghostMoves = previousLevelMoves.filter(
-    (m, i) => levelMoves[i]?.from === m.from && levelMoves[i]?.to === m.to,
+  const { ghostSelection, ghostTarget } = ghostModeModifier(
+    levelState,
+    previousLevelMoves,
+    levelMoves,
+    { enabled: !!levelTypePlugin.levelModifiers?.ghostMode },
   );
-  const canGhostMove =
-    levelMoves.length === ghostMoves.length &&
-    !!levelTypePlugin.levelModifiers?.ghostMode;
-  const nextGhostMove = previousLevelMoves[levelMoves.length];
-  const ghostSelection: [column: number, amount: number] | undefined =
-    nextGhostMove && canGhostMove
-      ? [
-          nextGhostMove.from,
-          selectFromColumn(levelState, nextGhostMove.from).length,
-        ]
-      : undefined;
-
-  const ghostTarget: number | undefined =
-    nextGhostMove && canGhostMove ? nextGhostMove.to : undefined;
 
   return (
     <div className="flex h-full flex-col">
