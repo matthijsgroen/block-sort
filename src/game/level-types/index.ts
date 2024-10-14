@@ -1,6 +1,7 @@
 import { LevelSettings } from "../types";
 
 import { easy } from "./easy";
+import { ghost } from "./ghost";
 import { hard } from "./hard";
 import { normal } from "./normal";
 import { scrambled } from "./scrambled";
@@ -8,7 +9,7 @@ import { special } from "./special";
 import { LevelType, Unlockable } from "./types";
 
 const levelTypes = [
-  // ghost, -- not yet ready for release
+  ghost, // -- not yet ready for release
   special,
   hard,
   easy,

@@ -31,19 +31,19 @@ export const Dialog: React.FC<Props> = ({
   return (
     <dialog
       ref={dialogElement}
-      className={clsx("pb-5 px-0 bg-transparent w-4/5 max-h-3/4", {
-        "max-w-[300px]": !wide,
+      className={clsx("max-h-3/4 w-4/5 bg-transparent px-0 pb-5", {
+        "max-w-[320px]": !wide,
         "max-w-4/5": wide,
       })}
     >
       <div
         className={clsx(
-          "rounded-xl border border-black p-4 drop-shadow-lg animate-fadeIn [animation-duration:0.3s]",
-          styles.woodBackground
+          "animate-fadeIn rounded-xl border border-black p-4 drop-shadow-lg [animation-duration:0.3s]",
+          styles.woodBackground,
         )}
       >
         {children}
-        <div className="text-center translate-y-9 -mt-9">
+        <div className="-mt-9 translate-y-9 text-center">
           <TopButton
             buttonType="close"
             onClick={() => {

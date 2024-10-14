@@ -18,6 +18,7 @@ type Props = {
   suggested?: boolean;
   started?: boolean;
   theme?: BlockTheme;
+  hideFormat?: "glass" | "present";
   onClick?: VoidFunction;
   onPickUp?: VoidFunction;
   onDrop?: VoidFunction;
@@ -31,6 +32,7 @@ export const BlockColumn: React.FC<Props> = ({
   onLock,
   onPickUp,
   theme = "default",
+  hideFormat = "glass",
   started = true,
   suggested = false,
   amountSelected = 0,
@@ -79,8 +81,8 @@ export const BlockColumn: React.FC<Props> = ({
         })}
       >
         {suggested && (
-          <div className="pointer-events-none absolute w-block -translate-y-8 animate-pulse bg-green-200 bg-clip-text text-center text-2xl text-transparent opacity-30">
-            ️👻
+          <div className="pointer-events-none absolute w-block translate-y-1 animate-pulse bg-green-200 bg-clip-text text-center text-2xl text-transparent opacity-30">
+            👇
           </div>
         )}
         <div
@@ -109,6 +111,7 @@ export const BlockColumn: React.FC<Props> = ({
                   shadow={column.type === "placement" || isSelected}
                   revealed={block.revealed}
                   color={activeColorMap[block.color]}
+                  hideFormat={hideFormat}
                   shape={
                     block.revealed ? activeShapeMap[block.color] : undefined
                   }

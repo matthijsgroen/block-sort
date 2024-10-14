@@ -16,15 +16,22 @@ const meta = {
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
     color: { control: "color" },
+    hideFormat: {
+      options: ["glass", "present"],
+      control: { type: "radio" },
+    },
   },
   args: {
     shape: "✔️",
     color: "#16a34a",
+    hideFormat: "glass",
     moved: true,
     selected: false,
     locked: false,
     revealed: true,
     shadow: true,
+    suggested: false,
+    index: 0,
     onDrop: fn(),
     onLock: fn(),
     onPickUp: fn(),
@@ -42,7 +49,7 @@ export const ColorShape: Story = {
 
 export const hidden: Story = {
   args: {
-    shape: undefined,
+    shape: "✔",
     revealed: false,
   },
 };

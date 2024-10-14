@@ -14,6 +14,7 @@ type BlockColumnPropsAndCustomArgs = React.ComponentProps<
   amountBlocks: number;
   locked: boolean;
   limited: boolean;
+  amountHidden: number;
 };
 
 const columnSettings = (
@@ -21,7 +22,8 @@ const columnSettings = (
   columnSize = 1,
   locked = false,
   limited = false,
-  amountBlocks = 0
+  amountBlocks = 0,
+  amountHidden = 0,
 ): Column => {
   return {
     type,
@@ -30,7 +32,9 @@ const columnSettings = (
     limitColor: limited ? "aqua" : undefined,
     blocks: Array(Math.max(Math.min(amountBlocks, columnSize), 0))
       .fill(0)
-      .map<Block>(() => createBlock("aqua")),
+      .map<Block>((_, index, l) =>
+        createBlock("aqua", l.length - index - 1 < amountHidden),
+      ),
   };
 };
 
@@ -50,6 +54,10 @@ const meta: Meta<BlockColumnPropsAndCustomArgs> = {
       options: ["placement", "buffer"],
       control: { type: "radio" },
     },
+    hideFormat: {
+      options: ["glass", "present"],
+      control: { type: "radio" },
+    },
     columnSize: {
       control: { type: "number" },
     },
@@ -58,8 +66,11 @@ const meta: Meta<BlockColumnPropsAndCustomArgs> = {
     },
   },
   args: {
+    amountSuggested: 0,
     amountSelected: 0,
     amountBlocks: 0,
+    amountHidden: 0,
+    suggested: false,
     type: "placement",
     columnSize: 1,
     started: true,
@@ -77,13 +88,15 @@ const meta: Meta<BlockColumnPropsAndCustomArgs> = {
   },
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#action-args
   render: (args) => {
-    const { type, columnSize, locked, amountBlocks, limited } = args;
+    const { type, columnSize, locked, amountBlocks, limited, amountHidden } =
+      args;
     const column = columnSettings(
       type,
       columnSize,
       locked,
       limited,
-      amountBlocks
+      amountBlocks,
+      amountHidden,
     );
 
     return <BlockColumn {...args} column={column} />;
@@ -119,6 +132,15 @@ export const LockedColumn: Story = {
   },
 };
 
+export const HiddenColumn: Story = {
+  args: {
+    type: "placement",
+    columnSize: 4,
+    amountBlocks: 3,
+    amountHidden: 2,
+  },
+};
+
 export const LimitedColumn: Story = {
   args: {
     type: "placement",
@@ -135,5 +157,23 @@ export const LimitedColumnSelection: Story = {
     amountBlocks: 2,
     amountSelected: 1,
     limited: true,
+  },
+};
+
+export const ColumnBlockSuggestion: Story = {
+  args: {
+    type: "placement",
+    columnSize: 4,
+    amountBlocks: 3,
+    amountSuggested: 2,
+  },
+};
+
+export const ColumnSuggestion: Story = {
+  args: {
+    type: "placement",
+    columnSize: 4,
+    amountBlocks: 3,
+    suggested: true,
   },
 };
