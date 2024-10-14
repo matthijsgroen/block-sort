@@ -1,11 +1,19 @@
+import { levelModifiers } from "@/game/level-types/types";
 import { BlockTheme } from "@/game/themes";
 
 type ScheduleDate = { month: number; day: number };
-export type ThemeSchedule = {
+
+export type RangedItem = {
   begin: ScheduleDate;
   end: ScheduleDate;
+};
+
+export type ThemeSchedule = RangedItem & {
   name: string;
   theme: BlockTheme;
+  levelModifiers?: (RangedItem & {
+    modifiers: levelModifiers;
+  })[];
 };
 
 export const themeSchedule: ThemeSchedule[] = [
@@ -14,6 +22,13 @@ export const themeSchedule: ThemeSchedule[] = [
     end: { month: 11, day: 8 },
     name: "Fall/Halloween",
     theme: "halloween",
+    levelModifiers: [
+      {
+        modifiers: { ghostMode: true },
+        begin: { month: 10, day: 23 },
+        end: { month: 11, day: 2 },
+      },
+    ],
   },
   {
     begin: { month: 12, day: 1 },
@@ -36,11 +51,11 @@ const inRange = (date: Date, begin: ScheduleDate, end: ScheduleDate) => {
   return afterStart && beforeEnd;
 };
 
-const EOY: ScheduleDate = { month: 12, day: 31 };
-const BOY: ScheduleDate = { month: 1, day: 1 };
-
-export const getActiveTheme = (date: Date) => {
-  const activeSchedule = themeSchedule.find((schedule) => {
+const filterInRange = <TItem extends RangedItem>(
+  date: Date,
+  items: TItem[],
+): TItem[] =>
+  items.filter((schedule) => {
     if (schedule.begin.month > schedule.end.month) {
       // Schedule spans over the year, split it into two ranges
       return (
@@ -50,8 +65,18 @@ export const getActiveTheme = (date: Date) => {
     return inRange(date, schedule.begin, schedule.end);
   });
 
+const EOY: ScheduleDate = { month: 12, day: 31 };
+const BOY: ScheduleDate = { month: 1, day: 1 };
+
+export const getActiveTheme = (date: Date) => {
+  const activeSchedule = filterInRange(date, themeSchedule)[0];
   return activeSchedule?.theme ?? "default";
 };
+
+export const getActiveModifiers = (date: Date) =>
+  filterInRange(date, themeSchedule).flatMap((theme) =>
+    theme.levelModifiers ? filterInRange(date, theme.levelModifiers) : [],
+  );
 
 /**
  * Get the current date.

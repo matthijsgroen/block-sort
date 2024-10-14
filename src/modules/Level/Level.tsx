@@ -19,6 +19,7 @@ import { useGameStorage } from "@/support/useGameStorage";
 import { BackgroundContext } from "../Layout/BackgroundContext";
 
 import { getAutoMoveCount, MAX_SOLVE_PERCENTAGE } from "./autoMove";
+import { ghostModeModifier } from "./ghostModeModifier";
 import { WIN_SENTENCES } from "./winSentences";
 
 type Props = {
