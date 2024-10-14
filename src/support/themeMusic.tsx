@@ -5,6 +5,7 @@ const song: Record<BlockTheme, AudioItemName> = {
   default: "music",
   halloween: "halloween",
   winter: "winter",
+  spring: "music",
 };
 
 export const getThemeSong = (theme: BlockTheme) => song[theme];
