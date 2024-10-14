@@ -22,7 +22,7 @@ const getEncryptedData = async (): Promise<string> => {
 };
 
 const importImageData = async (
-  file: File
+  file: File,
 ): Promise<{ success: boolean; message: string }> => {
   return new Promise((resolve) => {
     const image = new Image();
@@ -44,7 +44,7 @@ const importImageData = async (
         if (code) {
           try {
             const data = await decryptData<DataFormat>(
-              new Uint8Array(code.binaryData)
+              new Uint8Array(code.binaryData),
             );
 
             const age = (new Date().getTime() - data.timestamp) / 60_000;
@@ -70,10 +70,10 @@ const importImageData = async (
                     : `Data is too old: ${Math.ceil(age)} minutes`,
               });
             }
-            const importLevel = data.levelNr;
+            const importLevel = data.l;
             if (
               confirm(
-                `You are about to import data at level ${importLevel + 1}. Continue?`
+                `You are about to import data\nat level ${importLevel + 1}. Continue?`,
               )
             ) {
               await setGameData(data);
@@ -126,7 +126,7 @@ const DataTransfer: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="font-bold text-lg">Transfer game data</h2>
+      <h2 className="text-lg font-bold">Transfer game data</h2>
       {supportsEncryption ? (
         <>
           {!startDownload && (
@@ -154,10 +154,10 @@ const DataTransfer: React.FC = () => {
           )}
 
           {importErrors && (
-            <p className="text-sm text-red-600 font-bold">{importErrors}</p>
+            <p className="text-sm font-bold text-red-600">{importErrors}</p>
           )}
           {importSuccess && (
-            <p className="text-sm text-green-900 font-bold">
+            <p className="text-sm font-bold text-green-900">
               Data successfully imported
             </p>
           )}
@@ -166,8 +166,8 @@ const DataTransfer: React.FC = () => {
             className={clsx(
               "inline-block rounded-full border border-black p-2 shadow-md",
               "text-black",
-              "active:scale-90 transition-transform",
-              "text-sm px-4 text-center"
+              "transition-transform active:scale-90",
+              "px-4 text-center text-sm",
             )}
           >
             <p>Import game data</p>
@@ -193,7 +193,7 @@ const DataTransfer: React.FC = () => {
           </label>
         </>
       ) : (
-        <p className="text-sm text-red-600 font-bold">
+        <p className="text-sm font-bold text-red-600">
           Your browser does not support encryption, data transfer is disabled
         </p>
       )}
@@ -213,7 +213,7 @@ const ExportData: React.FC<{
   return (
     <div className="flex flex-col items-center">
       <img src={resolved} width={200} height={200}></img>
-      <p className="text-sm pt-2">
+      <p className="pt-2 text-sm">
         This image contains all your game data. <strong>Long press</strong> to
         download it and upload it to your new game instance (on another device
         or this one). The image will be valid for{" "}
