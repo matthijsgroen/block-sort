@@ -13,6 +13,7 @@ import { colorMap } from "@/game/themes/default";
 import { LevelSettings, LevelState, Move } from "@/game/types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { mulberry32, pick } from "@/support/random";
+import { getActiveModifiers, getToday } from "@/support/themes";
 import { useGameStorage } from "@/support/useGameStorage";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
@@ -125,24 +126,19 @@ export const Level: React.FC<Props> = ({
     }
   };
 
-  // Level modifier: Ghost mode
-  const ghostMoves = previousLevelMoves.filter(
-    (m, i) => levelMoves[i]?.from === m.from && levelMoves[i]?.to === m.to,
-  );
-  const canGhostMove =
-    levelMoves.length === ghostMoves.length &&
-    !!levelTypePlugin.levelModifiers?.ghostMode;
-  const nextGhostMove = previousLevelMoves[levelMoves.length];
-  const ghostSelection: [column: number, amount: number] | undefined =
-    nextGhostMove && canGhostMove
-      ? [
-          nextGhostMove.from,
-          selectFromColumn(levelState, nextGhostMove.from).length,
-        ]
-      : undefined;
+  const levelModifiers = getActiveModifiers(getToday());
 
-  const ghostTarget: number | undefined =
-    nextGhostMove && canGhostMove ? nextGhostMove.to : undefined;
+  const ghostMode =
+    !!levelTypePlugin.levelModifiers?.ghostMode ||
+    levelModifiers.some((m) => m.modifiers.ghostMode);
+
+  // Level modifier: Ghost mode
+  const { ghostSelection, ghostTarget } = ghostModeModifier(
+    levelState,
+    previousLevelMoves,
+    levelMoves,
+    { enabled: ghostMode },
+  );
 
   return (
     <div className="flex h-full flex-col">

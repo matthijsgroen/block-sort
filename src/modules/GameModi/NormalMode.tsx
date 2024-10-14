@@ -19,6 +19,7 @@ import { useGameStorage } from "@/support/useGameStorage.ts";
 import { BetaContext } from "../Layout/BetaContext.tsx";
 
 import { BASE_SEED, SCREEN_TRANSITION } from "./constants.ts";
+import { ZEN_MODE_UNLOCK } from "./zenModeConstants.ts";
 
 type Props = {
   active: boolean;
@@ -63,7 +64,7 @@ export const NormalMode: React.FC<Props> = ({
       >
         <LevelTrack
           levelNr={levelNr}
-          hasZenMode={levelNr >= 49 && ZEN_MODE}
+          hasZenMode={levelNr >= ZEN_MODE_UNLOCK - 1 && ZEN_MODE}
           showInstallButton={showInstallButton || showBeta}
           onLevelStart={() => {
             // tie playback to user interaction
