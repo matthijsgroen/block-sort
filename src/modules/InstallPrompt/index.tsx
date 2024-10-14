@@ -41,7 +41,7 @@ export const InstallPrompt: React.FC<Props> = ({ onClose }) => {
           You can transfer your progress from the browser version to the
           installed version, using the{" "}
           <strong>&quot;Game data import / export&quot;</strong> button in the
-          settings.
+          advanced settings.
         </p>
       </div>
     </Dialog>
