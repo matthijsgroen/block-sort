@@ -31,6 +31,19 @@ export const themeSchedule: ThemeSchedule[] = [
     ],
   },
   {
+    begin: { month: 12, day: 1 },
+    end: { month: 1, day: 8 },
+    name: "Winter/Christmas",
+    theme: "winter",
+    levelModifiers: [
+      {
+        modifiers: { packageMode: true },
+        begin: { month: 12, day: 24 },
+        end: { month: 1, day: 1 },
+      },
+    ],
+  },
+  {
     begin: { month: 3, day: 15 },
     end: { month: 4, day: 20 },
     name: "Spring",
@@ -87,4 +100,4 @@ export const getActiveModifiers = (date: Date) =>
  * @returns the current date
  */
 export const getToday = (): Date =>
-  process.env.NODE_ENV === "production" ? new Date() : new Date(2025, 3, 1);
+  process.env.NODE_ENV === "production" ? new Date() : new Date();
