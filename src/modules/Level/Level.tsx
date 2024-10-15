@@ -8,7 +8,12 @@ import { WoodButton } from "@/ui/WoodButton/WoodButton";
 import { sound } from "@/audio";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { getLevelTypeByType, LevelTypeString } from "@/game/level-types";
-import { hasWon, isStuck } from "@/game/state";
+import {
+  getRevealedIndices,
+  hasWon,
+  isStuck,
+  revealBlocks,
+} from "@/game/state";
 import { colorMap } from "@/game/themes/default";
 import { LevelSettings, LevelState, Move } from "@/game/types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
@@ -65,6 +70,9 @@ export const Level: React.FC<Props> = ({
     `${storagePrefix}moves`,
     [],
   );
+  const [revealed, setRevealed, deleteRevealed] = useGameStorage<
+    { col: number; row: number }[]
+  >(`${storagePrefix}revealed`, []);
   const [previousLevelMoves, setPreviousLevelMoves, deletePreviousMoves] =
     useGameStorage<Move[]>(`${storagePrefix}previousMoves`, []);
 
@@ -107,10 +115,41 @@ export const Level: React.FC<Props> = ({
     }
   }, [levelState]);
 
+  const levelModifiers = getActiveModifiers(getToday());
+
+  const ghostMode =
+    !!levelTypePlugin.levelModifiers?.ghostMode ||
+    levelModifiers.some((m) => m.modifiers.ghostMode);
+
+  const packageMode =
+    !!levelTypePlugin.levelModifiers?.packageMode ||
+    levelModifiers.some((m) => m.modifiers.packageMode);
+
+  // Level modifier: Ghost mode
+  const { ghostSelection, ghostTarget } = ghostModeModifier(
+    levelState,
+    previousLevelMoves,
+    levelMoves,
+    { enabled: ghostMode },
+  );
+
   const move = (from: number, to: number) => {
-    setLevelState((levelState) => moveBlocks(levelState, from, to));
+    setLevelState((levelState) => {
+      const updatedLevelState = moveBlocks(levelState, from, to);
+      if (packageMode) {
+        const revealedBlocks = getRevealedIndices(
+          levelState,
+          updatedLevelState,
+          from,
+        ).map((i) => ({ col: from, row: i }));
+        setRevealed((revealed) => revealed.concat(revealedBlocks));
+      }
+
+      return updatedLevelState;
+    });
     // Detect revealed item on 'from' column, mark as revealed in
     // column, index fashion to 'reveal' fog
+
     setLevelMoves((moves) => moves.concat({ from, to }));
   };
 
@@ -130,24 +169,6 @@ export const Level: React.FC<Props> = ({
     }
   };
 
-  const levelModifiers = getActiveModifiers(getToday());
-
-  const ghostMode =
-    !!levelTypePlugin.levelModifiers?.ghostMode ||
-    levelModifiers.some((m) => m.modifiers.ghostMode);
-
-  const packageMode =
-    !!levelTypePlugin.levelModifiers?.packageMode ||
-    levelModifiers.some((m) => m.modifiers.packageMode);
-
-  // Level modifier: Ghost mode
-  const { ghostSelection, ghostTarget } = ghostModeModifier(
-    levelState,
-    previousLevelMoves,
-    levelMoves,
-    { enabled: ghostMode },
-  );
-
   return (
     <div className="flex h-full flex-col">
       {playState === "restarting" && (
@@ -160,6 +181,7 @@ export const Level: React.FC<Props> = ({
             setLevelState(initialLevelState);
             setAutoMoves(autoMoveLimit);
             deleteMoves();
+            deleteRevealed();
             setPlayState("busy");
           }}
           onShow={() => {
@@ -177,6 +199,7 @@ export const Level: React.FC<Props> = ({
             onComplete(playState === "won");
             deleteMoves();
             deletePreviousMoves();
+            deleteRevealed();
             clearThemeOverride();
             deleteLevelState(false);
           }}
@@ -192,8 +215,13 @@ export const Level: React.FC<Props> = ({
           message="Blocked!"
           shape="❌"
           afterShow={() => {
-            setLevelState(initialLevelState);
+            if (packageMode) {
+              setLevelState(revealBlocks(initialLevelState, revealed));
+            } else {
+              setLevelState(initialLevelState);
+            }
             setAutoMoves(autoMoveLimit);
+            deleteRevealed();
             setPreviousLevelMoves(levelMoves);
             deleteMoves();
             setPlayState("busy");

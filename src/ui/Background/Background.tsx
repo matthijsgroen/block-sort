@@ -85,6 +85,33 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
         </div>
       )}
       <div className="absolute left-0 top-0 h-safe-area w-full">{children}</div>
+      {theme === "spring" && (
+        <>
+          <div
+            className={clsx(
+              "pointer-events-none absolute right-0 top-0 origin-top-right rotate-[20deg] opacity-30",
+              "h-3/4 w-[7rem] translate-x-4 bg-gradient-to-b from-[#fffffffd] via-[#ffffae90] to-[#ffffae00]",
+            )}
+          ></div>
+          <div
+            className={clsx(
+              "pointer-events-none absolute right-0 top-0 origin-top-right rotate-[20deg] opacity-30",
+              "h-3/4 w-[8rem] -translate-x-9 bg-gradient-to-b from-[#fffffffd] via-[#ffffae90] to-[#ffffae00]",
+            )}
+          ></div>
+          <div
+            className={clsx(
+              "pointer-events-none absolute bottom-0 left-0 origin-bottom rotate-6 scale-150 text-8xl transition-transform [transition-duration:1500ms]",
+              {
+                "translate-y-[150%] rotate-12": layout === "zenMode",
+                "[transition-delay:1500ms]": layout === "levelTrack",
+              },
+            )}
+          >
+            🌷
+          </div>
+        </>
+      )}
       {theme === "halloween" && (
         <CSSParticles
           symbol="👻"
@@ -105,6 +132,18 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           direction="down"
           scale={[0.2, 1]}
           speed={[30, 50]}
+          floatDistance={[20, 100]}
+          floatSpeed={[5, 10]}
+        />
+      )}
+      {theme === "spring" && (
+        <CSSParticles
+          symbol="🟡"
+          amount={10}
+          shift={100}
+          direction="down"
+          scale={[0.2, 0.4]}
+          speed={[40, 80]}
           floatDistance={[20, 100]}
           floatSpeed={[5, 10]}
         />
