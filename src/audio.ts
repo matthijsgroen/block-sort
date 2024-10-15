@@ -33,6 +33,7 @@ const audioItems = {
   winter: createItem(Stream.music, winter, 0.4, {
     loop: true,
     lazy: true,
+    singleInStream: "music",
   }),
   lose: createItem(Stream.effects, lose, 0.5),
   place: createItem(Stream.effects, place),
