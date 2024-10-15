@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.10.0 - 2024-10-15
+
+### Added
+
+- Added 'ghost' mode for replay hints halfway during halloween theme
+- Added 'package' mode for revealing blocks halfway during winter theme
+- Basic spring theme (WIP) to run in march/april
+
+### Changed
+
+- Enabled zen mode at level 30, instead of 50
+- Reduced size of storage format
+
 ## Version 1.9.0 - 2024-10-13
 
 ### Added

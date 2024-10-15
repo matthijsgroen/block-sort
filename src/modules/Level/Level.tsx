@@ -8,16 +8,23 @@ import { WoodButton } from "@/ui/WoodButton/WoodButton";
 import { sound } from "@/audio";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { getLevelTypeByType, LevelTypeString } from "@/game/level-types";
-import { hasWon, isStuck } from "@/game/state";
+import {
+  getRevealedIndices,
+  hasWon,
+  isStuck,
+  revealBlocks,
+} from "@/game/state";
 import { colorMap } from "@/game/themes/default";
 import { LevelSettings, LevelState, Move } from "@/game/types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { mulberry32, pick } from "@/support/random";
+import { getActiveModifiers, getToday } from "@/support/themes";
 import { useGameStorage } from "@/support/useGameStorage";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
 
 import { getAutoMoveCount, MAX_SOLVE_PERCENTAGE } from "./autoMove";
+import { ghostModeModifier } from "./ghostModeModifier";
 import { WIN_SENTENCES } from "./winSentences";
 
 type Props = {
@@ -50,6 +57,7 @@ export const Level: React.FC<Props> = ({
 
   const [levelState, setLevelState, deleteLevelState] =
     useGameStorage<LevelState>(storageKey, initialLevelState);
+
   const [lostCounter, setLostCounter] = useGameStorage(
     `${storagePrefix}lostCounter`,
     0,
@@ -62,6 +70,9 @@ export const Level: React.FC<Props> = ({
     `${storagePrefix}moves`,
     [],
   );
+  const [revealed, setRevealed, deleteRevealed] = useGameStorage<
+    { col: number; row: number }[]
+  >(`${storagePrefix}revealed`, []);
   const [previousLevelMoves, setPreviousLevelMoves, deletePreviousMoves] =
     useGameStorage<Move[]>(`${storagePrefix}previousMoves`, []);
 
@@ -104,18 +115,51 @@ export const Level: React.FC<Props> = ({
     }
   }, [levelState]);
 
+  const levelModifiers = getActiveModifiers(getToday());
+
+  const ghostMode =
+    !!levelTypePlugin.levelModifiers?.ghostMode ||
+    levelModifiers.some((m) => m.modifiers.ghostMode);
+
+  const packageMode =
+    !!levelTypePlugin.levelModifiers?.packageMode ||
+    levelModifiers.some((m) => m.modifiers.packageMode);
+
+  // Level modifier: Ghost mode
+  const { ghostSelection, ghostTarget } = ghostModeModifier(
+    levelState,
+    previousLevelMoves,
+    levelMoves,
+    { enabled: ghostMode },
+  );
+
+  const move = (from: number, to: number) => {
+    setLevelState((levelState) => {
+      const updatedLevelState = moveBlocks(levelState, from, to);
+      if (packageMode) {
+        const revealedBlocks = getRevealedIndices(
+          levelState,
+          updatedLevelState,
+          from,
+        ).map((i) => ({ col: from, row: i }));
+        setRevealed((revealed) => revealed.concat(revealedBlocks));
+      }
+
+      return updatedLevelState;
+    });
+    // Detect revealed item on 'from' column, mark as revealed in
+    // column, index fashion to 'reveal' fog
+
+    setLevelMoves((moves) => moves.concat({ from, to }));
+  };
+
   const onColumnClick = (columnIndex: number) => {
     if (selectStart) {
       if (selectStart[0] === columnIndex) {
         setSelectStart(null);
         return;
       }
-      setLevelState((levelState) =>
-        moveBlocks(levelState, selectStart[0], columnIndex),
-      );
-      setLevelMoves((moves) =>
-        moves.concat({ from: selectStart[0], to: columnIndex }),
-      );
+      move(selectStart[0], columnIndex);
       setAutoMoves(0);
     } else {
       const selection = selectFromColumn(levelState, columnIndex);
@@ -125,25 +169,6 @@ export const Level: React.FC<Props> = ({
     }
   };
 
-  // Level modifier: Ghost mode
-  const ghostMoves = previousLevelMoves.filter(
-    (m, i) => levelMoves[i]?.from === m.from && levelMoves[i]?.to === m.to,
-  );
-  const canGhostMove =
-    levelMoves.length === ghostMoves.length &&
-    !!levelTypePlugin.levelModifiers?.ghostMode;
-  const nextGhostMove = previousLevelMoves[levelMoves.length];
-  const ghostSelection: [column: number, amount: number] | undefined =
-    nextGhostMove && canGhostMove
-      ? [
-          nextGhostMove.from,
-          selectFromColumn(levelState, nextGhostMove.from).length,
-        ]
-      : undefined;
-
-  const ghostTarget: number | undefined =
-    nextGhostMove && canGhostMove ? nextGhostMove.to : undefined;
-
   return (
     <div className="flex h-full flex-col">
       {playState === "restarting" && (
@@ -152,10 +177,11 @@ export const Level: React.FC<Props> = ({
           message="Restarting"
           color="#888"
           shape="&#10226;"
-          afterShow={async () => {
+          afterShow={() => {
             setLevelState(initialLevelState);
             setAutoMoves(autoMoveLimit);
-            await deleteMoves();
+            deleteMoves();
+            deleteRevealed();
             setPlayState("busy");
           }}
           onShow={() => {
@@ -170,11 +196,12 @@ export const Level: React.FC<Props> = ({
           color={colorMap["green"]}
           shape="✔️"
           afterShow={async () => {
-            deleteLevelState();
-            await deleteMoves();
-            await deletePreviousMoves();
-            clearThemeOverride();
             onComplete(playState === "won");
+            deleteMoves();
+            deletePreviousMoves();
+            deleteRevealed();
+            clearThemeOverride();
+            deleteLevelState(false);
           }}
           onShow={() => {
             sound.play("win");
@@ -187,11 +214,16 @@ export const Level: React.FC<Props> = ({
           color={colorMap["red"]}
           message="Blocked!"
           shape="❌"
-          afterShow={async () => {
-            setLevelState(initialLevelState);
+          afterShow={() => {
+            if (packageMode) {
+              setLevelState(revealBlocks(initialLevelState, revealed));
+            } else {
+              setLevelState(initialLevelState);
+            }
             setAutoMoves(autoMoveLimit);
+            deleteRevealed();
             setPreviousLevelMoves(levelMoves);
-            await deleteMoves();
+            deleteMoves();
             setPlayState("busy");
           }}
           onShow={() => {
@@ -213,16 +245,14 @@ export const Level: React.FC<Props> = ({
             onClick={() => {
               const moveIndex = autoMoveLimit - autoMoves;
               setAutoMoves((a) => a - 1);
-              const move = initialLevelState.moves[moveIndex];
-              if (move) {
-                const selection = selectFromColumn(levelState, move.from);
+              const nextMove = initialLevelState.moves[moveIndex];
+              if (nextMove) {
+                const selection = selectFromColumn(levelState, nextMove.from);
                 if (selection.length > 0) {
-                  setSelectStart([move.from, selection.length, levelState]);
+                  setSelectStart([nextMove.from, selection.length, levelState]);
                 }
                 setTimeout(() => {
-                  setLevelState((levelState) =>
-                    moveBlocks(levelState, move.from, move.to),
-                  );
+                  move(nextMove.from, nextMove.to);
                 }, 200);
               }
             }}
@@ -262,6 +292,7 @@ export const Level: React.FC<Props> = ({
         }
         suggestionSelection={ghostSelection}
         suggestionTarget={ghostTarget}
+        hideFormat={packageMode ? "present" : "glass"}
         onLock={() => {
           sound.play("lock");
         }}

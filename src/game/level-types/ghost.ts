@@ -21,7 +21,8 @@ export const ghost: LevelType<"ghost"> = {
     theme: "halloween",
     ghostMode: true,
   },
-  occurrence: (levelNr) => levelNr > 100 && (levelNr + 3) % (15 * 4) === 0,
+  occurrence: (levelNr) =>
+    levelNr == 29 || (levelNr > 100 && (levelNr + 3) % (15 * 4) === 0),
   getSettings: (levelNr) => {
     return normal.getSettings(levelNr);
   },

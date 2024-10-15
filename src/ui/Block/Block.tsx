@@ -6,9 +6,12 @@ import { useDelayedToggle } from "@/support/useDelayedToggle";
 
 import styles from "./Block.module.css";
 
+export type HideFormat = "glass" | "present";
+
 export type Props = {
   moved: boolean;
   revealed?: boolean;
+  hideFormat?: HideFormat;
   color: string;
   selected?: boolean | null;
   suggested?: boolean | null;
@@ -24,8 +27,12 @@ export type Props = {
   onLock?: VoidFunction;
 };
 
+const GLASS_COLOR = "#64748b";
+const PRESENT_COLOR = "#6b0";
+
 export const Block: React.FC<Props> = ({
   revealed = true,
+  hideFormat = "glass",
   color,
   shape,
   moved,
@@ -61,12 +68,18 @@ export const Block: React.FC<Props> = ({
     }
   }, [selected]);
 
+  const hiddenColor = hideFormat === "glass" ? GLASS_COLOR : PRESENT_COLOR;
+  const showTopShape = revealed || hideFormat === "glass";
+
   return (
     <div
       style={{
-        "--cube-color": revealed ? color : "#64748b",
+        "--cube-color": revealed ? color : hiddenColor,
         "--cube-shape-opacity": revealed ? "50%" : "100%",
         "--cube-shape": `'${encodeForContent(displayShape)}'`,
+        "--cube-top-shape": showTopShape
+          ? `'${encodeForContent(displayShape)}'`
+          : "''",
         animationDelay: !locked ? `-${index * 50}ms` : "0",
       }}
       className={clsx(
@@ -101,7 +114,8 @@ export const Block: React.FC<Props> = ({
       <div
         className={clsx(styles.layer, {
           [styles.gradient]: revealed,
-          [styles.hidden]: !revealed,
+          [styles.glass]: !revealed && hideFormat === "glass",
+          [styles.present]: !revealed && hideFormat === "present",
         })}
       ></div>
       <div

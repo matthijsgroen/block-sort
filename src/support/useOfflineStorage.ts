@@ -91,7 +91,7 @@ export const useOfflineStorage = <T>(
 ): [
   value: T,
   setValue: Dispatch<SetStateAction<T>>,
-  deleteValue: () => Promise<void>,
+  deleteValue: (optimistic?: boolean) => Promise<void>,
 ] => {
   const [localState, setLocalState] = useState(initialValue);
   const store = getStore(storeName);
@@ -126,10 +126,15 @@ export const useOfflineStorage = <T>(
     [key],
   );
 
-  const deleteValue = useCallback(async () => {
-    setLocalState(initialValue); // Optimistic
-    await store.removeItem(key);
-  }, [key]);
+  const deleteValue = useCallback(
+    async (optimistic = true) => {
+      if (optimistic) {
+        setLocalState(initialValue);
+      }
+      await store.removeItem(key);
+    },
+    [key],
+  );
 
   return [localState, setValue, deleteValue];
 };

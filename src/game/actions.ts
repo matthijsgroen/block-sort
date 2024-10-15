@@ -1,11 +1,11 @@
 import { produce } from "immer";
 
 import { canPlaceAmount } from "./state";
-import { Block, BlockColor, LevelState } from "./types";
+import { Block, BlockColor, LevelState, Move } from "./types";
 
 export const selectFromColumn = (
   level: LevelState,
-  columnIndex: number
+  columnIndex: number,
 ): Block[] => {
   const result: Block[] = [];
   if (level.columns[columnIndex].locked) {
@@ -32,7 +32,7 @@ export const selectFromColumn = (
 export const moveBlocks = (
   level: LevelState,
   startColumn: number,
-  endColumn: number
+  endColumn: number,
 ): LevelState =>
   produce<LevelState>((draft) => {
     if (startColumn === endColumn) {
@@ -71,3 +71,12 @@ export const moveBlocks = (
       endCol.locked = true;
     }
   })(level);
+
+export const replayMoves = (
+  levelState: LevelState,
+  moves: Move[],
+): LevelState =>
+  moves.reduce<LevelState>(
+    (state, { from, to }) => moveBlocks(state, from, to),
+    levelState,
+  );

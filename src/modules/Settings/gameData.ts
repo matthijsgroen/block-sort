@@ -1,21 +1,31 @@
 import info from "@/../package.json";
-import { LevelState } from "@/game/types";
+import { replayMoves } from "@/game/actions";
+import { LevelState, Move } from "@/game/types";
 import { getGameValue, setGameValue } from "@/support/useGameStorage";
 
-type LevelData = {
-  lostCounter: number;
-  autoMoves: number;
-  initial: LevelState | null;
-  state: LevelState | null;
+import {
+  fromLevelStateDTO,
+  fromMoveDTO,
+  LevelStateDTO,
+  MoveDTO,
+  toLevelStateDTO,
+  toMoveDTO,
+} from "./dto";
+
+type LevelDataDTO = {
+  l: number;
+  a: number;
+  s: LevelStateDTO | null;
+  m: MoveDTO[];
 };
 
 export type DataFormat = {
-  levelNr: number;
-  levelData: LevelData;
-  zenMode: {
-    levelNr: number;
-    difficulty: number;
-    levelType: number;
+  l: number;
+  ld: LevelDataDTO;
+  z: {
+    l: number;
+    d: number;
+    t: number;
   };
   version: string;
 };
@@ -23,39 +33,54 @@ export type DataFormat = {
 const setLevelData = async (
   storagePrefix: string,
   levelNr: number,
-  data: LevelData
+  data: LevelDataDTO,
 ) => {
+  const levelState = data.s ? fromLevelStateDTO(data.s) : null;
+
   await Promise.all([
-    setGameValue(`${storagePrefix}lostCounter`, data.lostCounter),
-    setGameValue(`${storagePrefix}autoMoves`, data.autoMoves),
-    setGameValue(`${storagePrefix}initialLevelState${levelNr}`, data.initial),
-    setGameValue(`${storagePrefix}levelState${levelNr}`, data.state),
+    setGameValue<number>(`${storagePrefix}lostCounter`, data.l),
+    setGameValue<number>(`${storagePrefix}autoMoves`, data.a),
+    setGameValue<LevelState | null>(
+      `${storagePrefix}initialLevelState${levelNr}`,
+      levelState,
+    ),
+    setGameValue<Move[]>(`${storagePrefix}moves`, fromMoveDTO(data.m)),
+    setGameValue(
+      `${storagePrefix}levelState${levelNr}`,
+      levelState ? replayMoves(levelState, fromMoveDTO(data.m)) : null,
+    ),
   ]);
 };
 
 export const setGameData = async (data: DataFormat) => {
   await Promise.all([
-    setGameValue("levelNr", data.levelNr),
-    setGameValue("zenLevelNr", data.zenMode.levelNr),
-    setGameValue("zenDifficulty", data.zenMode.difficulty),
-    setGameValue("zenLevelType", data.zenMode.levelType),
+    setGameValue("levelNr", data.l),
+    setGameValue("zenLevelNr", data.z.l),
+    setGameValue("zenDifficulty", data.z.d),
+    setGameValue("zenLevelType", data.z.t),
   ]);
 
-  await Promise.all([setLevelData("", data.levelNr, data.levelData)]);
+  await Promise.all([setLevelData("", data.l, data.ld)]);
 };
 
-const getLevelData = async (storagePrefix: string, levelNr: number) => {
+const getLevelData = async (
+  storagePrefix: string,
+  levelNr: number,
+): Promise<LevelDataDTO> => {
   const lostCounter =
     (await getGameValue<number>(`${storagePrefix}lostCounter`)) ?? 0;
   const autoMoves =
     (await getGameValue<number>(`${storagePrefix}autoMoves`)) ?? 0;
   const initial = await getGameValue<LevelState>(
-    `${storagePrefix}initialLevelState${levelNr}`
+    `${storagePrefix}initialLevelState${levelNr}`,
   );
-  const state = await getGameValue<LevelState>(
-    `${storagePrefix}levelState${levelNr}`
-  );
-  return { lostCounter, autoMoves, initial, state };
+  const moves = (await getGameValue<Move[]>(`${storagePrefix}moves`)) ?? [];
+  return {
+    l: lostCounter,
+    a: autoMoves,
+    s: initial ? toLevelStateDTO(initial) : null,
+    m: toMoveDTO(moves),
+  };
 };
 
 export const getGameData = async (): Promise<DataFormat> => {
@@ -65,12 +90,12 @@ export const getGameData = async (): Promise<DataFormat> => {
   const zenLevelType = (await getGameValue<number>("zenLevelType")) ?? 0;
 
   return {
-    levelNr,
-    levelData: await getLevelData("", levelNr),
-    zenMode: {
-      levelNr: zenLevelNr,
-      difficulty: zenDifficulty,
-      levelType: zenLevelType,
+    l: levelNr,
+    ld: await getLevelData("", levelNr),
+    z: {
+      l: zenLevelNr,
+      d: zenDifficulty,
+      t: zenLevelType,
     },
     version: info.version,
   };

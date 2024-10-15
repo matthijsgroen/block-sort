@@ -4,7 +4,7 @@ import { Loading } from "@/ui/Loading/Loading";
 import { TopButton } from "@/ui/TopButton/TopButton";
 
 import { levelSeeds } from "@/data/levelSeeds";
-import { moveBlocks } from "@/game/actions";
+import { replayMoves } from "@/game/actions";
 import { colorHustle } from "@/game/level-creation/colorHustle";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { LevelTypeString } from "@/game/level-types";
@@ -80,10 +80,7 @@ export const LevelLoader: React.FC<Props> = ({
       levelNr,
     );
     // Verify level content
-    let levelState = level;
-    for (const move of level.moves) {
-      levelState = moveBlocks(levelState, move.from, move.to);
-    }
+    const levelState = replayMoves(level, level.moves);
     const won = hasWon(levelState);
     if (!won) {
       const newSeed = generateNewSeed(locked.seed, 2);

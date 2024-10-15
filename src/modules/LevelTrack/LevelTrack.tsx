@@ -65,6 +65,10 @@ export const LevelTrack: React.FC<Props> = ({
     if (officialLevelNr <= levelNr) {
       return;
     }
+    if (officialLevelNr > levelNr + 1) {
+      setDisplayLevelNr(officialLevelNr);
+      return;
+    }
     const cancellations: VoidFunction[] = [];
     cancellations.push(
       effectTimeout(() => {

@@ -13,6 +13,7 @@ type Props = {
   selection?: [column: number, amount: number];
   suggestionSelection?: [column: number, amount: number];
   suggestionTarget?: number;
+  hideFormat?: "glass" | "present";
   theme?: BlockTheme;
   onColumnClick?: Dispatch<number>;
   onPickUp?: VoidFunction;
@@ -52,6 +53,7 @@ export const LevelLayout: React.FC<Props> = ({
   suggestionSelection,
   suggestionTarget,
   theme = "default",
+  hideFormat = "glass",
   onColumnClick,
   onDrop,
   onLock,
@@ -84,6 +86,7 @@ export const LevelLayout: React.FC<Props> = ({
                   ? suggestionSelection[1]
                   : 0
               }
+              hideFormat={hideFormat}
               onLock={onLock}
               onDrop={onDrop}
               onPickUp={onPickUp}

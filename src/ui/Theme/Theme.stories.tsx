@@ -23,7 +23,7 @@ const meta: Meta<CustomArgs> = {
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
     theme: {
-      options: ["default", "halloween", "winter"],
+      options: ["default", "halloween", "winter", "spring"],
       control: { type: "select" },
     },
   },

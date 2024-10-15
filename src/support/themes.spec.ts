@@ -41,4 +41,21 @@ describe(getActiveTheme, () => {
       expect(getActiveTheme(date)).toBe("default");
     });
   });
+
+  describe("spring", () => {
+    it("returns spring theme end of march", () => {
+      const date = new Date("2023-03-25");
+      expect(getActiveTheme(date)).toBe("spring");
+    });
+
+    it("returns spring theme early april", () => {
+      const date = new Date("2023-04-05");
+      expect(getActiveTheme(date)).toBe("spring");
+    });
+
+    it("returns default theme end of april", () => {
+      const date = new Date("2023-04-30");
+      expect(getActiveTheme(date)).toBe("default");
+    });
+  });
 });
