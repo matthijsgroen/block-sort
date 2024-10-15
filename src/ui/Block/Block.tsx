@@ -120,7 +120,7 @@ export const Block: React.FC<Props> = ({
       ></div>
       <div
         className={clsx(
-          "absolute h-full w-full rounded-md",
+          "pointer-events-none absolute h-full w-full rounded-md",
           styles.gradientLocked,
           { ["opacity-100"]: isLocked, ["opacity-0"]: !isLocked },
         )}
