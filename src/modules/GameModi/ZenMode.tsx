@@ -53,26 +53,22 @@ export const ZenMode: React.FC<Props> = ({
     levelType: string;
     difficultyIndex: number;
     settings: LevelSettings;
-  }>("zenLevelSettings", null);
+  }>("zenLevelSettings", () => {
+    const levelTypes = getUnlockableLevelTypes();
+    const fallbackLevelType = levelTypes[levelTypeIndex % levelTypes.length];
+    const settings = fallbackLevelType.getZenSettings(
+      zenLevelNr,
+      difficultyIndex + 1,
+    );
 
-  const gameSettings =
-    currentGame ??
-    (() => {
-      const levelTypes = getUnlockableLevelTypes();
-      const fallbackLevelType = levelTypes[levelTypeIndex % levelTypes.length];
-      const settings = fallbackLevelType.getZenSettings(
-        zenLevelNr,
-        difficultyIndex + 1,
-      );
-
-      const fallbackGame = {
-        title: DIFFICULTY_LEVELS[difficultyIndex].name,
-        difficultyIndex,
-        levelType: fallbackLevelType.type,
-        settings,
-      };
-      return fallbackGame;
-    })();
+    const fallbackGame = {
+      title: DIFFICULTY_LEVELS[difficultyIndex].name,
+      difficultyIndex,
+      levelType: fallbackLevelType.type,
+      settings,
+    };
+    return fallbackGame;
+  });
 
   return (
     <>
@@ -84,7 +80,7 @@ export const ZenMode: React.FC<Props> = ({
         }
         duration={SCREEN_TRANSITION}
       >
-        {gameSettings !== null && (
+        {currentGame !== null && (
           <LevelLoader
             onComplete={(won) => {
               setInLevel(false);
@@ -94,11 +90,11 @@ export const ZenMode: React.FC<Props> = ({
               }
             }}
             levelNr={zenLevelNr}
-            levelType={gameSettings.levelType as LevelTypeString}
+            levelType={currentGame.levelType as LevelTypeString}
             seed={zenLevelSeed}
             storagePrefix="zen"
-            levelSettings={gameSettings.settings}
-            title={gameSettings.title}
+            levelSettings={currentGame.settings}
+            title={currentGame.title}
           />
         )}
       </Transition>

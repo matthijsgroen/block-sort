@@ -7,7 +7,7 @@ import {
 
 const GAME_STORE = "block-sort-store";
 
-export const useGameStorage = <T>(key: string, initialValue: T) =>
+export const useGameStorage = <T>(key: string, initialValue: T | (() => T)) =>
   useOfflineStorage<T>(key, initialValue, GAME_STORE);
 
 export const getGameValue = <T>(key: string) =>
