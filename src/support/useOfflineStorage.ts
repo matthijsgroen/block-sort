@@ -86,14 +86,18 @@ export const deleteOfflineValue = (
 
 export const useOfflineStorage = <T>(
   key: string,
-  initialValue: T,
+  initialValue: T | (() => T),
   storeName = "defaultStore",
 ): [
   value: T,
   setValue: Dispatch<SetStateAction<T>>,
   deleteValue: (optimistic?: boolean) => Promise<void>,
 ] => {
-  const [localState, setLocalState] = useState(initialValue);
+  const [localState, setLocalState] = useState(
+    typeof initialValue === "function"
+      ? (initialValue as () => T)()
+      : initialValue,
+  );
   const store = getStore(storeName);
 
   useEffect(() => {
@@ -102,7 +106,12 @@ export const useOfflineStorage = <T>(
         setLocalState(value);
       } else {
         if (initialValue !== null) {
-          store.setItem<T>(key, initialValue);
+          store.setItem<T>(
+            key,
+            typeof initialValue === "function"
+              ? (initialValue as () => T)()
+              : initialValue,
+          );
         }
       }
     });
@@ -129,7 +138,11 @@ export const useOfflineStorage = <T>(
   const deleteValue = useCallback(
     async (optimistic = true) => {
       if (optimistic) {
-        setLocalState(initialValue);
+        setLocalState(
+          typeof initialValue === "function"
+            ? (initialValue as () => T)()
+            : initialValue,
+        );
       }
       await store.removeItem(key);
     },

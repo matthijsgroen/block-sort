@@ -3,7 +3,10 @@ import { use } from "react";
 import { Transition } from "@/ui/Transition/Transition.tsx";
 
 import { sound } from "@/audio.ts";
-import { LevelTypeString } from "@/game/level-types/index.ts";
+import {
+  getUnlockableLevelTypes,
+  LevelTypeString,
+} from "@/game/level-types/index.ts";
 import { LevelSettings } from "@/game/types.ts";
 import { ThemeContext } from "@/modules/Layout/ThemeContext.tsx";
 import { LevelLoader } from "@/modules/Level/LevelLoader.tsx";
@@ -44,12 +47,28 @@ export const ZenMode: React.FC<Props> = ({
   const zenLevelSeed = generateNewSeed(ZEN_BASE_SEED, zenLevelNr);
 
   const random = mulberry32(zenLevelSeed);
+
   const [currentGame, setCurrentGame] = useGameStorage<null | {
     title: string;
     levelType: string;
     difficultyIndex: number;
     settings: LevelSettings;
-  }>("zenLevelSettings", null);
+  }>("zenLevelSettings", () => {
+    const levelTypes = getUnlockableLevelTypes();
+    const fallbackLevelType = levelTypes[levelTypeIndex % levelTypes.length];
+    const settings = fallbackLevelType.getZenSettings(
+      zenLevelNr,
+      difficultyIndex + 1,
+    );
+
+    const fallbackGame = {
+      title: DIFFICULTY_LEVELS[difficultyIndex].name,
+      difficultyIndex,
+      levelType: fallbackLevelType.type,
+      settings,
+    };
+    return fallbackGame;
+  });
 
   return (
     <>
