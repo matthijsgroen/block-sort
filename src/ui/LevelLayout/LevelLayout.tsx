@@ -25,7 +25,7 @@ const determineColumns = (
   maxColumnHeight: number,
   amountColumns: number,
 ): string => {
-  const isLandscape = window.screen.orientation.type.includes("landscape");
+  const isLandscape = window.innerHeight < window.innerWidth;
 
   if (maxColumnHeight <= 6 && amountColumns < 6) {
     const gridColumnCount = amountColumns;
