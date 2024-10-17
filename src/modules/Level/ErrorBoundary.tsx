@@ -1,22 +1,34 @@
-import { Component, PropsWithChildren } from "react";
+import { Component, createContext, PropsWithChildren, ReactNode } from "react";
+
 type Props = PropsWithChildren<{
-  fallback: React.ReactNode;
+  fallback: ReactNode;
 }>;
 
-export class ErrorBoundary extends Component<Props, { hasError: boolean }> {
+export const ErrorContext = createContext<{ error: Error | null }>({
+  error: null,
+});
+
+export class ErrorBoundary extends Component<
+  Props,
+  { hasError: boolean; error: Error | null }
+> {
   constructor(props: Props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, error: null };
   }
 
-  static getDerivedStateFromError(_error: Error) {
-    return { hasError: true };
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
   }
 
   render() {
     if (this.state.hasError) {
       // You can render any custom fallback UI
-      return this.props.fallback;
+      return (
+        <ErrorContext value={{ error: this.state.error }}>
+          {this.props.fallback}
+        </ErrorContext>
+      );
     }
 
     return this.props.children;
