@@ -18,7 +18,7 @@ const meta = {
       control: "select",
     },
     theme: {
-      options: ["default", "halloween", "winter"],
+      options: ["default", "halloween", "winter", "spring"],
       control: "select",
     },
     layout: {

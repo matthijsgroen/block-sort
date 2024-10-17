@@ -89,13 +89,13 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
         <>
           <div
             className={clsx(
-              "pointer-events-none absolute right-0 top-0 origin-top-right rotate-[20deg] opacity-30",
+              "animate-rayShift pointer-events-none absolute right-0 top-0 origin-top-right rotate-[20deg] opacity-30",
               "h-3/4 w-[7rem] translate-x-4 bg-gradient-to-b from-[#fffffffd] via-[#ffffae90] to-[#ffffae00]",
             )}
           ></div>
           <div
             className={clsx(
-              "pointer-events-none absolute right-0 top-0 origin-top-right rotate-[20deg] opacity-30",
+              "animate-rayShift2 pointer-events-none absolute right-0 top-0 origin-top-right rotate-[20deg] opacity-30",
               "h-3/4 w-[8rem] -translate-x-9 bg-gradient-to-b from-[#fffffffd] via-[#ffffae90] to-[#ffffae00]",
             )}
           ></div>

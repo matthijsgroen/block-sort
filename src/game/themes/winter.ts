@@ -23,7 +23,7 @@ export const colorMap: Record<BlockColor, string> = {
   red: "#2E8B57",
   white: "#F8F8FF",
   yellow: "#D2691E",
-  blue: "#B0E0E6",
+  blue: "#9932CC",
   purple: "#B22222",
   black: "#C0C0C0",
   green: "#228B22",
