@@ -1,7 +1,6 @@
 import { Suspense, useMemo, useState } from "react";
 
 import { Loading } from "@/ui/Loading/Loading";
-import { TopButton } from "@/ui/TopButton/TopButton";
 
 import { levelSeeds } from "@/data/levelSeeds";
 import { replayMoves } from "@/game/actions";
@@ -19,6 +18,7 @@ import {
 } from "@/support/useGameStorage";
 
 import { ErrorBoundary } from "./ErrorBoundary";
+import { ErrorScreen } from "./ErrorScreen";
 import { Level } from "./Level";
 
 type Props = {
@@ -103,31 +103,12 @@ export const LevelLoader: React.FC<Props> = ({
   return (
     <ErrorBoundary
       fallback={
-        <div className="flex h-full flex-col text-2xl font-bold text-light-wood">
-          <div className="flex flex-row items-center gap-x-2 pl-safeLeft pr-safeRight pt-2">
-            <TopButton
-              buttonType="back"
-              onClick={() => {
-                onComplete(false);
-              }}
-            />
-          </div>
-          <div className="flex flex-1 flex-col items-center justify-center">
-            <div className="text-4xl">😢</div>
-            <p className="max-w-[300px] text-center">
-              uh oh... failed to generate level {locked.levelNr + 1},
-              <br />
-              please e-mail me on{" "}
-              <a
-                href={`mailto:matthijsgroen@gmail.com?subject=[BlockSort]-Failed-to-generate-level-${locked.levelNr + 1}`}
-                className="underline"
-              >
-                matthijs.groen@gmail.com
-              </a>{" "}
-              to notify me
-            </p>
-          </div>
-        </div>
+        <ErrorScreen
+          levelNr={locked.levelNr}
+          onBack={() => {
+            onComplete(false);
+          }}
+        />
       }
     >
       <Suspense
