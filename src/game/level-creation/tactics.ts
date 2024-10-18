@@ -12,8 +12,8 @@ import { generateRandomLevel } from "./generateRandomLevel";
 import { scoreState } from "./scoreState";
 
 const MAX_PLAY_ATTEMPTS = 1;
-const MAX_GENERATE_ATTEMPTS = 500;
-const MAX_LEVEL_MOVES = 1000;
+const MAX_GENERATE_ATTEMPTS = 2_000;
+const MAX_LEVEL_MOVES = 1_000;
 
 const MAX_GENERATE_COST = MAX_LEVEL_MOVES * MAX_PLAY_ATTEMPTS;
 
@@ -24,7 +24,7 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export const generatePlayableLevel = async (
   settings: LevelSettings,
   random = Math.random,
-  seed: number | null = null
+  seed: number | null = null,
 ): Promise<LevelState> => {
   // Start logging level seeds for faster reproduction
   const startSeed = seed ?? Math.floor(random() * 1e9);
@@ -46,13 +46,13 @@ export const generatePlayableLevel = async (
         const [minMoves, maxMovesPercentage] = settings.playMoves;
         const movesToPlay = Math.min(
           minMoves,
-          Math.floor(maxMovesPercentage * moves.length)
+          Math.floor(maxMovesPercentage * moves.length),
         );
         const playedLevel = moves
           .slice(0, movesToPlay)
           .reduce(
             (state, move) => moveBlocks(state, move.from, move.to),
-            level
+            level,
           );
         return {
           ...playedLevel,
@@ -60,8 +60,8 @@ export const generatePlayableLevel = async (
           generationInformation: {
             cost: generationCost,
             attempts: attempt,
-            seed
-          }
+            seed,
+          },
         };
       }
       return {
@@ -70,8 +70,8 @@ export const generatePlayableLevel = async (
         generationInformation: {
           cost: generationCost,
           attempts: attempt,
-          seed
-        }
+          seed,
+        },
       };
     }
   }
@@ -80,7 +80,7 @@ export const generatePlayableLevel = async (
 
 const generatePossibleMoves = (
   state: LevelState,
-  random = Math.random
+  random = Math.random,
 ): WeightedMove[] => {
   return tactics
     .reduce<WeightedMove[]>(
@@ -88,9 +88,9 @@ const generatePossibleMoves = (
         r.concat(
           tactic(state, random)
             .sort((a, b) => a.weight - b.weight)
-            .slice(0, 3) // take the 3 best moves
+            .slice(0, 3), // take the 3 best moves
         ),
-      []
+      [],
     )
     .map((move) => move);
 };
@@ -98,7 +98,7 @@ const generatePossibleMoves = (
 const lookahead = (
   state: LevelState,
   depth: number,
-  random = Math.random
+  random = Math.random,
 ): number => {
   if (depth === 0) {
     return scoreState(state); // Base case: return the score of the current state
@@ -121,7 +121,7 @@ const lookahead = (
 
 const evaluateBestMove = (
   initialState: LevelState,
-  random = Math.random
+  random = Math.random,
 ): WeightedMove | null => {
   const possibleMoves = generatePossibleMoves(initialState, random);
 
@@ -143,7 +143,7 @@ const evaluateBestMove = (
 
 const isBeatable = async (
   level: LevelState,
-  random = Math.random
+  random = Math.random,
 ): Promise<[beatable: boolean, moves: Move[], cost: number]> => {
   let attempt = 0;
 
@@ -164,7 +164,7 @@ const isBeatable = async (
         moves.push({
           from: nextMove.move.from,
           to: nextMove.move.to,
-          tactic: nextMove.name
+          tactic: nextMove.name,
         });
 
         playLevel = moveBlocks(playLevel, nextMove.move.from, nextMove.move.to);
