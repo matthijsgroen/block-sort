@@ -11,7 +11,7 @@ import {
   createBlocks,
   createHiddenBlocks,
   createLevelState,
-  createPlacementColumn,
+  createPlacementColumn
 } from "./factories";
 import { hasWon } from "./state";
 import { LevelState } from "./types";
@@ -25,9 +25,9 @@ describe(selectFromColumn, () => {
       {
         amountColors: 2,
         stackSize: 4,
-        extraPlacementStacks: 1,
+        extraPlacementStacks: 1
       },
-      random,
+      random
     );
     const blocks = selectFromColumn(level, 1);
     expect(blocks).toEqual([createBlock("blue")]);
@@ -39,9 +39,9 @@ describe(selectFromColumn, () => {
       {
         amountColors: 2,
         stackSize: 4,
-        extraPlacementStacks: 1,
+        extraPlacementStacks: 1
       },
-      random,
+      random
     );
     const blocks = selectFromColumn(level, 0);
     expect(blocks).toEqual([createBlock("white"), createBlock("white")]);
@@ -51,13 +51,13 @@ describe(selectFromColumn, () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
-        createHiddenBlocks("green", "black", "green", "green"),
+        createHiddenBlocks("green", "black", "green", "green")
       ),
       createPlacementColumn(
         4,
-        createHiddenBlocks("black", "black", "green", "black"),
+        createHiddenBlocks("black", "black", "green", "black")
       ),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
     const blocks = selectFromColumn(level, 1);
     expect(blocks).toEqual([createBlock("black")]);
@@ -69,9 +69,9 @@ describe(selectFromColumn, () => {
       {
         amountColors: 2,
         stackSize: 4,
-        extraPlacementStacks: 1,
+        extraPlacementStacks: 1
       },
-      random,
+      random
     );
     const blocks = selectFromColumn(level, 2);
     expect(blocks).toEqual([]);
@@ -83,8 +83,8 @@ describe(selectFromColumn, () => {
         4,
         createBlocks("white", "white", "white", "white"),
         undefined,
-        true,
-      ),
+        true
+      )
     ]);
     const blocks = selectFromColumn(level, 0);
     expect(blocks).toEqual([]);
@@ -96,18 +96,18 @@ describe(moveBlocks, () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
-        createBlocks("white", "white", "black", "green"),
+        createBlocks("white", "white", "black", "green")
       ),
       createPlacementColumn(
         4,
-        createBlocks("black", "black", "white", "white"),
+        createBlocks("black", "black", "white", "white")
       ),
       createPlacementColumn(
         4,
-        createBlocks("green", "black", "green", "green"),
+        createBlocks("green", "black", "green", "green")
       ),
       createPlacementColumn(4),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
 
     const result = moveBlocks(level, 0, 3);
@@ -117,16 +117,16 @@ describe(moveBlocks, () => {
         createPlacementColumn(4, createBlocks("black", "green")),
         createPlacementColumn(
           4,
-          createBlocks("black", "black", "white", "white"),
+          createBlocks("black", "black", "white", "white")
         ),
         createPlacementColumn(
           4,
-          createBlocks("green", "black", "green", "green"),
+          createBlocks("green", "black", "green", "green")
         ),
         createPlacementColumn(4, createBlocks("white", "white")),
-        createPlacementColumn(4),
+        createPlacementColumn(4)
       ],
-      moves: [],
+      moves: []
     };
     expect(result).toEqual(expected);
   });
@@ -135,18 +135,18 @@ describe(moveBlocks, () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
-        createBlocks("white", "white", "black", "green"),
+        createBlocks("white", "white", "black", "green")
       ),
       createPlacementColumn(
         4,
-        createBlocks("black", "black", "white", "white"),
+        createBlocks("black", "black", "white", "white")
       ),
       createPlacementColumn(
         4,
-        createBlocks("green", "black", "green", "green"),
+        createBlocks("green", "black", "green", "green")
       ),
       createPlacementColumn(4),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
 
     const result = moveBlocks(level, 0, 1);
@@ -157,18 +157,18 @@ describe(moveBlocks, () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
-        createBlocks("white", "white", "black", "green"),
+        createBlocks("white", "white", "black", "green")
       ),
       createPlacementColumn(
         4,
-        createBlocks("black", "black", "white", "white"),
+        createBlocks("black", "black", "white", "white")
       ),
       createPlacementColumn(
         4,
-        createBlocks("green", "black", "green", "green"),
+        createBlocks("green", "black", "green", "green")
       ),
       createPlacementColumn(4, [], "black"),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
 
     const result = moveBlocks(level, 0, 3);
@@ -179,18 +179,18 @@ describe(moveBlocks, () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
-        createBlocks("white", "white", "black", "green"),
+        createBlocks("white", "white", "black", "green")
       ),
       createPlacementColumn(
         4,
-        createBlocks("black", "black", "white", "white"),
+        createBlocks("black", "black", "white", "white")
       ),
       createPlacementColumn(
         4,
-        createBlocks("green", "black", "green", "green"),
+        createBlocks("green", "black", "green", "green")
       ),
       createPlacementColumn(4, [], "white"),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
 
     const result = moveBlocks(level, 0, 3);
@@ -200,16 +200,16 @@ describe(moveBlocks, () => {
         createPlacementColumn(4, createBlocks("black", "green")),
         createPlacementColumn(
           4,
-          createBlocks("black", "black", "white", "white"),
+          createBlocks("black", "black", "white", "white")
         ),
         createPlacementColumn(
           4,
-          createBlocks("green", "black", "green", "green"),
+          createBlocks("green", "black", "green", "green")
         ),
         createPlacementColumn(4, createBlocks("white", "white"), "white"),
-        createPlacementColumn(4),
+        createPlacementColumn(4)
       ],
-      moves: [],
+      moves: []
     };
     expect(result).toEqual(expected);
   });
@@ -218,18 +218,18 @@ describe(moveBlocks, () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
-        createHiddenBlocks("white", "white", "black", "green"),
+        createHiddenBlocks("white", "white", "black", "green")
       ),
       createPlacementColumn(
         4,
-        createHiddenBlocks("black", "black", "white", "white"),
+        createHiddenBlocks("black", "black", "white", "white")
       ),
       createPlacementColumn(
         4,
-        createHiddenBlocks("green", "black", "green", "green"),
+        createHiddenBlocks("green", "black", "green", "green")
       ),
       createPlacementColumn(4),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
 
     const result = moveBlocks(level, 0, 3);
@@ -239,16 +239,16 @@ describe(moveBlocks, () => {
         createPlacementColumn(4, createHiddenBlocks("white", "black", "green")),
         createPlacementColumn(
           4,
-          createHiddenBlocks("black", "black", "white", "white"),
+          createHiddenBlocks("black", "black", "white", "white")
         ),
         createPlacementColumn(
           4,
-          createHiddenBlocks("green", "black", "green", "green"),
+          createHiddenBlocks("green", "black", "green", "green")
         ),
         createPlacementColumn(4, [createBlock("white")]),
-        createPlacementColumn(4),
+        createPlacementColumn(4)
       ],
-      moves: [],
+      moves: []
     };
     expect(result).toEqual(expected);
   });
@@ -257,15 +257,15 @@ describe(moveBlocks, () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
-        createHiddenBlocks("white", "white", "black", "green"),
+        createHiddenBlocks("white", "white", "black", "green")
       ),
       createPlacementColumn(
         4,
-        createHiddenBlocks("black", "black", "white", "white"),
+        createHiddenBlocks("black", "black", "white", "white")
       ),
       createPlacementColumn(4, createHiddenBlocks("green", "black", "green")),
       createPlacementColumn(4, createBlocks("green")),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
 
     const result = moveBlocks(level, 2, 2);
@@ -274,17 +274,17 @@ describe(moveBlocks, () => {
       columns: [
         createPlacementColumn(
           4,
-          createHiddenBlocks("white", "white", "black", "green"),
+          createHiddenBlocks("white", "white", "black", "green")
         ),
         createPlacementColumn(
           4,
-          createHiddenBlocks("black", "black", "white", "white"),
+          createHiddenBlocks("black", "black", "white", "white")
         ),
         createPlacementColumn(4, createHiddenBlocks("green", "black", "green")),
         createPlacementColumn(4, createBlocks("green")),
-        createPlacementColumn(4),
+        createPlacementColumn(4)
       ],
-      moves: [],
+      moves: []
     };
     expect(result).toEqual(expected);
   });
@@ -293,18 +293,18 @@ describe(moveBlocks, () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
-        createHiddenBlocks("white", "black", "black", "green"),
+        createHiddenBlocks("white", "black", "black", "green")
       ),
       createPlacementColumn(
         4,
-        createHiddenBlocks("black", "black", "white", "black"),
+        createHiddenBlocks("black", "black", "white", "black")
       ),
       createPlacementColumn(
         4,
-        createHiddenBlocks("green", "black", "green", "green"),
+        createHiddenBlocks("green", "black", "green", "green")
       ),
       createPlacementColumn(4),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
     const result = moveBlocks(level, 0, 3);
 
@@ -314,24 +314,24 @@ describe(moveBlocks, () => {
         createPlacementColumn(4, [
           createBlock("black"),
           createBlock("black"),
-          createBlock("green", true),
+          createBlock("green", true)
         ]),
         createPlacementColumn(4, [
           createBlock("black"),
           createBlock("black", true),
           createBlock("white", true),
-          createBlock("black", true),
+          createBlock("black", true)
         ]),
         createPlacementColumn(4, [
           createBlock("green"),
           createBlock("black", true),
           createBlock("green", true),
-          createBlock("green", true),
+          createBlock("green", true)
         ]),
         createPlacementColumn(4, [createBlock("white")]),
-        createPlacementColumn(4),
+        createPlacementColumn(4)
       ],
-      moves: [],
+      moves: []
     };
     expect(result).toEqual(expected);
   });
@@ -340,15 +340,15 @@ describe(moveBlocks, () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
-        createBlocks("white", "white", "black", "green"),
+        createBlocks("white", "white", "black", "green")
       ),
       createPlacementColumn(4, createBlocks("black", "black")),
       createPlacementColumn(
         4,
-        createBlocks("green", "black", "green", "green"),
+        createBlocks("green", "black", "green", "green")
       ),
       createPlacementColumn(4, createBlocks("white", "white")),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
     const result = moveBlocks(level, 0, 3);
     expect(result.columns[3].locked).toBe(true);

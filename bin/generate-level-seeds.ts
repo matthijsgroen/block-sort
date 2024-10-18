@@ -62,7 +62,7 @@ const main = async () => {
         hash: settingsHash,
         name: producer.name,
         producer: producer.producer,
-        difficulty: index,
+        difficulty: index
       });
     }, [])
   );
@@ -110,6 +110,7 @@ const main = async () => {
   }
   if (!incompleteSeed && !firstMissing && obsoleteKeys.length === 0) {
     console.log("All seeds are complete");
+    console.log("verifying seeds...");
   }
 
   // Update TS file
@@ -118,7 +119,7 @@ const main = async () => {
   */
   export const levelSeeds: Record<string, number[]> = ${JSON.stringify(levelSeedsCopy)};`;
   const formattedCode = await prettier.format(newCode, {
-    parser: "typescript",
+    parser: "typescript"
   });
   writeFile("src/data/levelSeeds.ts", formattedCode);
 };

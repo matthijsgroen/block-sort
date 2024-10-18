@@ -8,13 +8,13 @@ type Props = {
 };
 export const WoodButton: React.FC<PropsWithChildren<Props>> = ({
   onClick,
-  children,
+  children
 }) => {
   return (
     <button
       onClick={onClick}
       className={clsx(
-        "inline-block border h-block border-black rounded-3xl min-w-block px-2",
+        "inline-block h-block min-w-block rounded-3xl border border-black px-2",
         styles.woodBackground
       )}
     >
@@ -25,7 +25,7 @@ export const WoodButton: React.FC<PropsWithChildren<Props>> = ({
       <span
         className={clsx(
           styles.woodLabel,
-          "inline-block min-w-block px-2 h-block rounded-3xl"
+          "inline-block h-block min-w-block rounded-3xl px-2"
         )}
       >
         {children}

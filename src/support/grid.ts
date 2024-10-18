@@ -14,7 +14,7 @@ export const rowSpans: Record<number, string> = {
   13: "row-span-13",
   14: "row-span-14",
   15: "row-span-15",
-  16: "row-span-16",
+  16: "row-span-16"
 };
 
 export const rowSizes: Record<number, string> = {
@@ -25,7 +25,7 @@ export const rowSizes: Record<number, string> = {
   12: "grid-rows-12",
   13: "grid-rows-13",
   14: "grid-rows-14",
-  16: "grid-rows-16",
+  16: "grid-rows-16"
 };
 
 export const colSizes: Record<number, string> = {
@@ -40,5 +40,5 @@ export const colSizes: Record<number, string> = {
   9: "grid-cols-9",
   10: "grid-cols-10",
   11: "grid-cols-11",
-  12: "grid-cols-12",
+  12: "grid-cols-12"
 };

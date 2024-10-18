@@ -11,15 +11,15 @@ export const TransparentButton: React.FC<Props> = ({
   onClick,
   href,
   children,
-  size = "default",
+  size = "default"
 }) => {
   const classNames = clsx(
     "inline-block rounded-full border border-black p-2 shadow-md",
     "text-center text-black",
     "transition-transform active:scale-90",
     {
-      "px-4 text-sm": size === "default",
-    },
+      "px-4 text-sm": size === "default"
+    }
   );
 
   if (href) {

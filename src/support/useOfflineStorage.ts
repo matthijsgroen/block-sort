@@ -3,7 +3,7 @@ import {
   SetStateAction,
   useCallback,
   useEffect,
-  useState,
+  useState
 } from "react";
 import localForage from "localforage";
 
@@ -24,7 +24,7 @@ const getStore = (storeName: string): Store => {
   if (!store) {
     const forage = localForage.createInstance({
       driver: [localForage.INDEXEDDB, localForage.LOCALSTORAGE],
-      name: storeName,
+      name: storeName
     });
     let subscribers: { key: string; callback: <T>(newValue: T) => void }[] = [];
 
@@ -50,7 +50,7 @@ const getStore = (storeName: string): Store => {
         return () => {
           subscribers = subscribers.filter((sub) => sub.callback !== callback);
         };
-      },
+      }
     };
 
     stores.set(storeName, newStore);
@@ -61,7 +61,7 @@ const getStore = (storeName: string): Store => {
 
 export const getOfflineValue = <T>(
   key: string,
-  storeName = "defaultStore",
+  storeName = "defaultStore"
 ): Promise<T | null> => {
   const store = getStore(storeName);
   return store.getItem<T>(key);
@@ -70,7 +70,7 @@ export const getOfflineValue = <T>(
 export const setOfflineValue = <T>(
   key: string,
   value: T,
-  storeName = "defaultStore",
+  storeName = "defaultStore"
 ): Promise<T | null> => {
   const store = getStore(storeName);
   return store.setItem<T>(key, value);
@@ -78,7 +78,7 @@ export const setOfflineValue = <T>(
 
 export const deleteOfflineValue = (
   key: string,
-  storeName = "defaultStore",
+  storeName = "defaultStore"
 ): Promise<void> => {
   const store = getStore(storeName);
   return store.removeItem(key);
@@ -87,16 +87,16 @@ export const deleteOfflineValue = (
 export const useOfflineStorage = <T>(
   key: string,
   initialValue: T | (() => T),
-  storeName = "defaultStore",
+  storeName = "defaultStore"
 ): [
   value: T,
   setValue: Dispatch<SetStateAction<T>>,
-  deleteValue: (optimistic?: boolean) => Promise<void>,
+  deleteValue: (optimistic?: boolean) => Promise<void>
 ] => {
   const [localState, setLocalState] = useState(
     typeof initialValue === "function"
       ? (initialValue as () => T)()
-      : initialValue,
+      : initialValue
   );
   const store = getStore(storeName);
 
@@ -110,7 +110,7 @@ export const useOfflineStorage = <T>(
             key,
             typeof initialValue === "function"
               ? (initialValue as () => T)()
-              : initialValue,
+              : initialValue
           );
         }
       }
@@ -132,7 +132,7 @@ export const useOfflineStorage = <T>(
         setLocalState(value);
       }
     },
-    [key],
+    [key]
   );
 
   const deleteValue = useCallback(
@@ -141,12 +141,12 @@ export const useOfflineStorage = <T>(
         setLocalState(
           typeof initialValue === "function"
             ? (initialValue as () => T)()
-            : initialValue,
+            : initialValue
         );
       }
       await store.removeItem(key);
     },
-    [key],
+    [key]
   );
 
   return [localState, setValue, deleteValue];

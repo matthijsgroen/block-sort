@@ -16,13 +16,13 @@ const getEncryptedData = async (): Promise<string> => {
   const data = await getGameData();
   const binaryData = await encryptData(data);
   const url = await QRCode.toDataURL([{ data: binaryData, mode: "byte" }], {
-    type: "image/png",
+    type: "image/png"
   });
   return url;
 };
 
 const importImageData = async (
-  file: File,
+  file: File
 ): Promise<{ success: boolean; message: string }> => {
   return new Promise((resolve) => {
     const image = new Image();
@@ -44,7 +44,7 @@ const importImageData = async (
         if (code) {
           try {
             const data = await decryptData<DataFormat>(
-              new Uint8Array(code.binaryData),
+              new Uint8Array(code.binaryData)
             );
 
             const age = (new Date().getTime() - data.timestamp) / 60_000;
@@ -52,13 +52,13 @@ const importImageData = async (
             if (data.version !== info.version) {
               return resolve({
                 success: false,
-                message: `Version mismatch: ${data.version} vs. ${info.version}`,
+                message: `Version mismatch: ${data.version} vs. ${info.version}`
               });
             }
             if (age < 0 || data.time !== data.timestamp) {
               return resolve({
                 success: false,
-                message: "Data is invalid",
+                message: "Data is invalid"
               });
             }
             if (age > DATA_VALIDITY_TIME) {
@@ -67,13 +67,13 @@ const importImageData = async (
                 message:
                   Math.ceil(age) > 90
                     ? `Data is too old: ${Math.floor(age / 60)} hours`
-                    : `Data is too old: ${Math.ceil(age)} minutes`,
+                    : `Data is too old: ${Math.ceil(age)} minutes`
               });
             }
             const importLevel = data.l;
             if (
               confirm(
-                `You are about to import data\nat level ${importLevel + 1}. Continue?`,
+                `You are about to import data\nat level ${importLevel + 1}. Continue?`
               )
             ) {
               await setGameData(data);
@@ -85,7 +85,7 @@ const importImageData = async (
           } catch (ignoreError) {
             return resolve({
               success: false,
-              message: "Could not unpack data",
+              message: "Could not unpack data"
             });
           }
         } else {
@@ -94,7 +94,7 @@ const importImageData = async (
       } else {
         return resolve({
           success: false,
-          message: "Could not load image data",
+          message: "Could not load image data"
         });
       }
     };
@@ -167,7 +167,7 @@ const DataTransfer: React.FC = () => {
               "inline-block rounded-full border border-black p-2 shadow-md",
               "text-black",
               "transition-transform active:scale-90",
-              "px-4 text-center text-sm",
+              "px-4 text-center text-sm"
             )}
           >
             <p>Import game data</p>

@@ -33,6 +33,8 @@ export default {
         wobble:
           "wobble 1s ease-in-out both infinite, smallBounce 1.3s ease-in-out both infinite",
         pulse: "pulse 1.5s ease-in-out infinite",
+        rayShift: "rayShift 6s ease-in-out alternate infinite",
+        rayShift2: "rayShift2 5.5s ease-in-out alternate infinite",
         // Somehow if the place duration is 0.3s, it won't show on iPhone in app mode
         place: "place 0.4s ease-out 2ms forwards",
         locked: "locked 0.5s ease-in-out forwards",
@@ -49,9 +51,17 @@ export default {
           "flyBottomLeft 3s ease-in-out forwards, rotate 8s linear infinite, scale 2s ease-in-out infinite",
         flyBottomRight:
           "flyBottomRight 3s ease-in-out forwards, rotate 6s linear infinite, scale 3s ease-in-out infinite",
-        lightning: "lightning 10s linear infinite",
+        lightning: "lightning 30s linear infinite",
       },
       keyframes: {
+        rayShift: {
+          "0%": { translate: "0rem 0" },
+          "100%": { translate: "3rem 0" },
+        },
+        rayShift2: {
+          "0%": { translate: "0rem 0" },
+          "100%": { translate: "2rem 0" },
+        },
         pulse: {
           "0%": { scale: "1" },
           "50%": { scale: "1.1" },
@@ -148,10 +158,10 @@ export default {
         lightning: {
           "0%": { opacity: "0" },
           "9%": { opacity: "0" },
-          "10%": { opacity: "8%" },
+          "10%": { opacity: "4%" },
           "11%": { opacity: "0" },
           "19%": { opacity: "0" },
-          "20%": { opacity: "6%" },
+          "20%": { opacity: "3%" },
           "21%": { opacity: "0" },
           "100%": { opacity: "0" },
         },

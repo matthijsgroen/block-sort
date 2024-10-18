@@ -15,7 +15,7 @@ export const PlayButton: React.FC<Props> = ({
   label,
   onClick,
   type,
-  disabled,
+  disabled
 }) => (
   <button
     onClick={onClick}
@@ -24,9 +24,9 @@ export const PlayButton: React.FC<Props> = ({
       "inline-block h-12 w-[10rem] rounded-3xl pt-3 font-bold",
       {
         "opacity-50": disabled,
-        "shadow-lg transition-transform active:scale-90": !disabled,
+        "shadow-lg transition-transform active:scale-90": !disabled
       },
-      type.buttonBackgroundClassName,
+      type.buttonBackgroundClassName
     )}
   >
     <span
@@ -39,7 +39,7 @@ export const PlayButton: React.FC<Props> = ({
         className={clsx(
           "inline-block rounded-md px-2 py-1 text-xs lowercase shadow",
           type.buttonBackgroundClassName,
-          styles.background,
+          styles.background
         )}
       >
         {type.symbol} {type.name}

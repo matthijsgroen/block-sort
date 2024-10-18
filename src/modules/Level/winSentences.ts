@@ -18,5 +18,5 @@ export const WIN_SENTENCES = [
   "Phenomenal!",
   "Extraordinary!",
   "Mind-blowing!",
-  "Outstanding!",
+  "Outstanding!"
 ];

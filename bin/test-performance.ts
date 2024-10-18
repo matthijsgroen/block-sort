@@ -58,7 +58,7 @@ const testProducer = async (producer: SettingsProducer) => {
         moves: lvl.moves.length,
         cost: lvl.generationInformation?.cost || 0,
         attempts: lvl.generationInformation?.attempts || 0,
-        duration,
+        duration
       });
     }
     console.log(

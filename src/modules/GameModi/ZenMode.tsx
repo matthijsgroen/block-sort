@@ -5,7 +5,7 @@ import { Transition } from "@/ui/Transition/Transition.tsx";
 import { sound } from "@/audio.ts";
 import {
   getUnlockableLevelTypes,
-  LevelTypeString,
+  LevelTypeString
 } from "@/game/level-types/index.ts";
 import { LevelSettings } from "@/game/types.ts";
 import { ThemeContext } from "@/modules/Layout/ThemeContext.tsx";
@@ -28,7 +28,7 @@ type Props = {
 export const ZenMode: React.FC<Props> = ({
   active,
   onOpenSettings,
-  onZenModeEnd,
+  onZenModeEnd
 }) => {
   const [zenLevelNr, setZenLevelNr] = useGameStorage("zenLevelNr", 0);
   const [levelNr] = useGameStorage<null | number>("levelNr", null);
@@ -37,7 +37,7 @@ export const ZenMode: React.FC<Props> = ({
 
   const [difficultyIndex, setDifficultyIndex] = useGameStorage(
     "zenDifficulty",
-    0,
+    0
   );
   const [levelTypeIndex, setLevelTypeIndex] = useGameStorage("zenLevelType", 0);
 
@@ -58,14 +58,14 @@ export const ZenMode: React.FC<Props> = ({
     const fallbackLevelType = levelTypes[levelTypeIndex % levelTypes.length];
     const settings = fallbackLevelType.getZenSettings(
       zenLevelNr,
-      difficultyIndex + 1,
+      difficultyIndex + 1
     );
 
     const fallbackGame = {
       title: DIFFICULTY_LEVELS[difficultyIndex].name,
       difficultyIndex,
       levelType: fallbackLevelType.type,
-      settings,
+      settings
     };
     return fallbackGame;
   });
@@ -128,14 +128,14 @@ export const ZenMode: React.FC<Props> = ({
             const difficulty = pick(difficultySettings.difficulties, random);
             const settings = levelType.getZenSettings(
               zenLevelNr,
-              difficulty + 1,
+              difficulty + 1
             );
 
             setCurrentGame({
               title: DIFFICULTY_LEVELS[difficultyIndex].name,
               difficultyIndex,
               levelType: levelType.type,
-              settings,
+              settings
             });
             // tie playback to user interaction
             sound.play(song);

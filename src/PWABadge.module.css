@@ -5,13 +5,13 @@
   height: 0;
 }
 .PWABadgeToast {
-  @apply z-10 fixed right-0 bottom-0 text-left m-4;
+  @apply fixed bottom-0 right-0 z-10 m-4 text-left;
 
   background:
     url("./assets/wood-texture.png") repeat,
     linear-gradient(#e9b466 0%, #e9b466 100%);
   background-blend-mode: multiply;
-  @apply rounded-xl border border-black p-4 drop-shadow-lg animate-fadeIn [animation-duration:0.3s];
+  @apply animate-fadeIn rounded-xl border border-black p-4 drop-shadow-lg [animation-duration:0.3s];
 }
 .PWABadgeToastMessage {
   margin-bottom: 8px;

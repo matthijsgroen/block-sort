@@ -5,7 +5,7 @@ import {
   PropsWithChildren,
   SetStateAction,
   useEffect,
-  useState,
+  useState
 } from "react";
 
 import { effectTimeout } from "@/support/effectTimeout";
@@ -59,7 +59,7 @@ export const Transition: React.FC<PropsWithChildren<Props>> = ({
   defaultStyle = {},
   className,
   containerElement = <div />,
-  children,
+  children
 }) => {
   const [state, setState] = useState<TransitionState>(
     active ? "delayStart" : "exitEnd"
@@ -73,7 +73,7 @@ export const Transition: React.FC<PropsWithChildren<Props>> = ({
         { from: "entering", to: "enterEnd", duration: duration },
 
         { from: "exitStart", to: "exiting", duration: 10 },
-        { from: "exiting", to: "exitEnd", duration: duration },
+        { from: "exiting", to: "exitEnd", duration: duration }
       ]),
     [state]
   );
@@ -100,7 +100,7 @@ export const Transition: React.FC<PropsWithChildren<Props>> = ({
     enterEnd: enterEnd,
     exitStart: exitStart,
     exiting: exitEnd,
-    exitEnd: exitEnd,
+    exitEnd: exitEnd
   };
 
   return cloneElement(
@@ -109,9 +109,9 @@ export const Transition: React.FC<PropsWithChildren<Props>> = ({
       style: {
         transition: `all ${duration}ms ease-in-out`,
         ...defaultStyle,
-        ...stateCSS[state],
+        ...stateCSS[state]
       },
-      className,
+      className
     },
     children
   );

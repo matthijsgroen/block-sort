@@ -8,12 +8,12 @@ import { LevelType } from "./types";
 
 export const getHardSettings: SettingsProducer = (difficulty) => ({
   ...getNormalSettings(difficulty),
-  hideBlockTypes: "all",
+  hideBlockTypes: "all"
 });
 
 export const getHard2Settings: SettingsProducer = (difficulty) => ({
   ...getNormalSettings(difficulty),
-  hideBlockTypes: "checker",
+  hideBlockTypes: "checker"
 });
 
 export const hard: LevelType<"hard"> = {
@@ -32,7 +32,7 @@ export const hard: LevelType<"hard"> = {
     if (difficulty > 8) {
       return pick(
         [getHard2Settings(difficulty), getHardSettings(difficulty)],
-        random,
+        random
       );
     }
 
@@ -44,5 +44,5 @@ export const hard: LevelType<"hard"> = {
       return templates[levelNr % templates.length](difficulty);
     }
     return getHardSettings(difficulty);
-  },
+  }
 };

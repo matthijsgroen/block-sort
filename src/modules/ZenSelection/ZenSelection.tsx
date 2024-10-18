@@ -34,7 +34,7 @@ export const ZenSelection: React.FC<Props> = ({
   setLevelTypeIndex,
   onZenModeEnd,
   onLevelStart,
-  onOpenSettings,
+  onOpenSettings
 }) => {
   const { setLevelType, setScreenLayout } = use(BackgroundContext);
   useEffect(() => {
@@ -72,7 +72,7 @@ export const ZenSelection: React.FC<Props> = ({
               <WoodButton
                 onClick={() => {
                   setDifficultyIndex(
-                    (a) => (a - 1 + enabledDifficulties) % enabledDifficulties,
+                    (a) => (a - 1 + enabledDifficulties) % enabledDifficulties
                   );
                 }}
               >
@@ -86,7 +86,7 @@ export const ZenSelection: React.FC<Props> = ({
                     [styles.enabled]:
                       levelNr >= selectedDifficulty.unlocksAtLevel - 1,
                     [styles.shadow]:
-                      levelNr >= selectedDifficulty.unlocksAtLevel - 1,
+                      levelNr >= selectedDifficulty.unlocksAtLevel - 1
                   })}
                 >
                   {selectedDifficulty.name}
@@ -119,7 +119,7 @@ export const ZenSelection: React.FC<Props> = ({
               <WoodButton
                 onClick={() => {
                   setLevelTypeIndex(
-                    (a) => (a - 1 + enabledLevelTypes) % enabledLevelTypes,
+                    (a) => (a - 1 + enabledLevelTypes) % enabledLevelTypes
                   );
                 }}
               >
@@ -133,7 +133,7 @@ export const ZenSelection: React.FC<Props> = ({
                     [styles.enabled]:
                       levelNr >= selectedLevelType.unlocksAtLevel - 1,
                     [styles.shadow]:
-                      levelNr >= selectedLevelType.unlocksAtLevel - 1,
+                      levelNr >= selectedLevelType.unlocksAtLevel - 1
                   })}
                 >
                   {selectedLevelType.name}
@@ -161,7 +161,7 @@ export const ZenSelection: React.FC<Props> = ({
           <button
             onClick={onZenModeEnd}
             className={clsx(
-              "inline-block h-12 rounded-3xl bg-orange-500 px-6 pt-3 font-bold shadow-lg transition-transform active:scale-90",
+              "inline-block h-12 rounded-3xl bg-orange-500 px-6 pt-3 font-bold shadow-lg transition-transform active:scale-90"
             )}
           >
             <span className={"block -translate-y-1 scale-150"}>◀︎</span>

@@ -7,7 +7,7 @@ import { ZEN_MODE } from "@/featureFlags.ts";
 import {
   getLevelSettings,
   getLevelType,
-  LevelTypeString,
+  LevelTypeString
 } from "@/game/level-types/index.ts";
 import { ThemeContext } from "@/modules/Layout/ThemeContext.tsx";
 import { LevelLoader } from "@/modules/Level/LevelLoader.tsx";
@@ -34,11 +34,11 @@ export const NormalMode: React.FC<Props> = ({
   showInstallButton,
   onInstall,
   onOpenSettings,
-  onZenModeStart,
+  onZenModeStart
 }) => {
   const [levelNr, setLevelNr] = useGameStorage("levelNr", 0);
   const [levelSeed, setLevelSeed] = useState(() =>
-    generateNewSeed(BASE_SEED, levelNr),
+    generateNewSeed(BASE_SEED, levelNr)
   );
   const [inLevel, setInLevel] = useGameStorage("inLevel", false);
 

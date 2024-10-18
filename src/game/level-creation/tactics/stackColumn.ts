@@ -21,7 +21,7 @@ export const stackColumn: Tactic = (level, _random = Math.random) => {
       index: i,
       color: topBlock.color,
       seriesLength,
-      spaceAvailable: c.columnSize - c.blocks.length,
+      spaceAvailable: c.columnSize - c.blocks.length
     };
   });
 
@@ -36,7 +36,7 @@ export const stackColumn: Tactic = (level, _random = Math.random) => {
             s.color === d.color &&
             d.index !== s.index &&
             s.seriesLength <= d.spaceAvailable
-        ),
+        )
       };
     });
 
@@ -75,7 +75,7 @@ export const stackColumn: Tactic = (level, _random = Math.random) => {
           return {
             // name: "stackColumn",
             move: { from: source.index, to: t.index },
-            weight: 10 + bonusPoints,
+            weight: 10 + bonusPoints
           };
         })
       ),

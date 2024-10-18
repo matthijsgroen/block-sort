@@ -9,7 +9,7 @@ import {
   LevelStateDTO,
   MoveDTO,
   toLevelStateDTO,
-  toMoveDTO,
+  toMoveDTO
 } from "./dto";
 
 type LevelDataDTO = {
@@ -33,7 +33,7 @@ export type DataFormat = {
 const setLevelData = async (
   storagePrefix: string,
   levelNr: number,
-  data: LevelDataDTO,
+  data: LevelDataDTO
 ) => {
   const levelState = data.s ? fromLevelStateDTO(data.s) : null;
 
@@ -42,13 +42,13 @@ const setLevelData = async (
     setGameValue<number>(`${storagePrefix}autoMoves`, data.a),
     setGameValue<LevelState | null>(
       `${storagePrefix}initialLevelState${levelNr}`,
-      levelState,
+      levelState
     ),
     setGameValue<Move[]>(`${storagePrefix}moves`, fromMoveDTO(data.m)),
     setGameValue(
       `${storagePrefix}levelState${levelNr}`,
-      levelState ? replayMoves(levelState, fromMoveDTO(data.m)) : null,
-    ),
+      levelState ? replayMoves(levelState, fromMoveDTO(data.m)) : null
+    )
   ]);
 };
 
@@ -57,7 +57,7 @@ export const setGameData = async (data: DataFormat) => {
     setGameValue("levelNr", data.l),
     setGameValue("zenLevelNr", data.z.l),
     setGameValue("zenDifficulty", data.z.d),
-    setGameValue("zenLevelType", data.z.t),
+    setGameValue("zenLevelType", data.z.t)
   ]);
 
   await Promise.all([setLevelData("", data.l, data.ld)]);
@@ -65,21 +65,21 @@ export const setGameData = async (data: DataFormat) => {
 
 const getLevelData = async (
   storagePrefix: string,
-  levelNr: number,
+  levelNr: number
 ): Promise<LevelDataDTO> => {
   const lostCounter =
     (await getGameValue<number>(`${storagePrefix}lostCounter`)) ?? 0;
   const autoMoves =
     (await getGameValue<number>(`${storagePrefix}autoMoves`)) ?? 0;
   const initial = await getGameValue<LevelState>(
-    `${storagePrefix}initialLevelState${levelNr}`,
+    `${storagePrefix}initialLevelState${levelNr}`
   );
   const moves = (await getGameValue<Move[]>(`${storagePrefix}moves`)) ?? [];
   return {
     l: lostCounter,
     a: autoMoves,
     s: initial ? toLevelStateDTO(initial) : null,
-    m: toMoveDTO(moves),
+    m: toMoveDTO(moves)
   };
 };
 
@@ -95,8 +95,8 @@ export const getGameData = async (): Promise<DataFormat> => {
     z: {
       l: zenLevelNr,
       d: zenDifficulty,
-      t: zenLevelType,
+      t: zenLevelType
     },
-    version: info.version,
+    version: info.version
   };
 };

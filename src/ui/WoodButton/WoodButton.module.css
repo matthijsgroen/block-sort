@@ -3,7 +3,7 @@
   box-shadow:
     inset -1px 1px 2px #ffedd540,
     1px 1px 2px #0004;
-  @apply relative contain-paint text-transparent;
+  @apply relative text-transparent contain-paint;
 }
 
 .woodTexture {

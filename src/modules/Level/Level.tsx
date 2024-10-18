@@ -12,7 +12,7 @@ import {
   getRevealedIndices,
   hasWon,
   isStuck,
-  revealBlocks,
+  revealBlocks
 } from "@/game/state";
 import { colorMap } from "@/game/themes/default";
 import { LevelSettings, LevelState, Move } from "@/game/types";
@@ -45,7 +45,7 @@ export const Level: React.FC<Props> = ({
   levelType,
   levelNr,
   storageKey,
-  storagePrefix = "",
+  storagePrefix = ""
 }) => {
   const [playState, setPlayState] = useState<
     "won" | "lost" | "busy" | "restarting"
@@ -60,15 +60,15 @@ export const Level: React.FC<Props> = ({
 
   const [lostCounter, setLostCounter] = useGameStorage(
     `${storagePrefix}lostCounter`,
-    0,
+    0
   );
   const [autoMoves, setAutoMoves] = useGameStorage(
     `${storagePrefix}autoMoves`,
-    0,
+    0
   );
   const [levelMoves, setLevelMoves, deleteMoves] = useGameStorage<Move[]>(
     `${storagePrefix}moves`,
-    [],
+    []
   );
   const [revealed, setRevealed, deleteRevealed] = useGameStorage<
     { col: number; row: number }[]
@@ -78,7 +78,7 @@ export const Level: React.FC<Props> = ({
 
   const autoMoveLimit = Math.min(
     getAutoMoveCount(lostCounter),
-    Math.floor(initialLevelState.moves.length * MAX_SOLVE_PERCENTAGE),
+    Math.floor(initialLevelState.moves.length * MAX_SOLVE_PERCENTAGE)
   );
 
   const [selectStart, setSelectStart] = useState<
@@ -130,7 +130,7 @@ export const Level: React.FC<Props> = ({
     levelState,
     previousLevelMoves,
     levelMoves,
-    { enabled: ghostMode },
+    { enabled: ghostMode }
   );
 
   const move = (from: number, to: number) => {
@@ -140,7 +140,7 @@ export const Level: React.FC<Props> = ({
         const revealedBlocks = getRevealedIndices(
           levelState,
           updatedLevelState,
-          from,
+          from
         ).map((i) => ({ col: from, row: i }));
         setRevealed((revealed) => revealed.concat(revealedBlocks));
       }

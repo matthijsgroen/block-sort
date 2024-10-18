@@ -5,7 +5,7 @@ export const base64encode = (data: ArrayBuffer): string =>
   btoa(String.fromCharCode(...new Uint8Array(data)));
 
 const SALT = new Uint8Array([
-  201, 65, 78, 16, 206, 35, 68, 235, 32, 50, 197, 104, 172, 225, 144, 45,
+  201, 65, 78, 16, 206, 35, 68, 235, 32, 50, 197, 104, 172, 225, 144, 45
 ]);
 
 const makeKey = async (password: string): Promise<CryptoKey> => {
@@ -22,7 +22,7 @@ const makeKey = async (password: string): Promise<CryptoKey> => {
       name: "PBKDF2",
       salt: SALT,
       iterations: 100000,
-      hash: "SHA-256",
+      hash: "SHA-256"
     },
     keyMaterial,
     { name: "AES-CTR", length: 256 },

@@ -26,14 +26,14 @@ export const CSSParticles: React.FC<Props> = ({
   scale,
   speed,
   floatDistance,
-  floatSpeed,
+  floatSpeed
 }) => {
   const random = mulberry32(SEED);
   const yStart = direction === "up" ? "calc(100vh + 50px)" : "0vh";
   const yEnd = direction === "up" ? "0vh" : "calc(100vh + 50px)";
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
+    <div className="pointer-events-none absolute inset-0">
       {timesMap(amount, (i) => {
         const movement = between(speed[0], speed[1], random);
         const delay = between(0, movement, random);
@@ -54,7 +54,7 @@ export const CSSParticles: React.FC<Props> = ({
               "--float": `${Math.round(between(floatDistance[0], floatDistance[1], random))}px`,
               "--symbol": `"${symbol}"`,
               scale: `${between(scale[0], scale[1], random)}`,
-              opacity: `${between(0.5, 0.8, random)}`,
+              opacity: `${between(0.5, 0.8, random)}`
             }}
             className={clsx(styles.float, styles.particle)}
           ></div>

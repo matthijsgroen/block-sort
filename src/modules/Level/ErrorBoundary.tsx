@@ -5,7 +5,7 @@ type Props = PropsWithChildren<{
 }>;
 
 export const ErrorContext = createContext<{ error: Error | null }>({
-  error: null,
+  error: null
 });
 
 export class ErrorBoundary extends Component<

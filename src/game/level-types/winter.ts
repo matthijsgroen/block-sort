@@ -8,7 +8,7 @@ import { LevelType } from "./types";
 
 export const getScrambledSettings: SettingsProducer = (difficulty) => ({
   ...getNormalSettings(difficulty),
-  playMoves: [7, 0.3],
+  playMoves: [7, 0.3]
 });
 
 export const winter: LevelType<"winter"> = {
@@ -20,7 +20,7 @@ export const winter: LevelType<"winter"> = {
   buttonBackgroundClassName: "bg-slate-400",
   backgroundClassName: "bg-slate-200/10",
   levelModifiers: {
-    packageMode: true,
+    packageMode: true
   },
   occurrence: (levelNr) =>
     getActiveTheme(getToday()) === "winter" &&
@@ -31,5 +31,5 @@ export const winter: LevelType<"winter"> = {
   },
   getZenSettings: (levelNr, difficulty) => {
     return normal.getZenSettings(levelNr, difficulty);
-  },
+  }
 };

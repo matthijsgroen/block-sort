@@ -16,15 +16,15 @@ export const getSpecial1Settings: SettingsProducer = (difficulty) => ({
     {
       amount: 1,
       size: difficulty > 8 ? 3 : 4,
-      limit: 0,
+      limit: 0
     },
     {
       amount: 1,
       size: difficulty > 10 ? 3 : 4,
-      limit: 0,
-    },
+      limit: 0
+    }
   ],
-  blockColorPick: "end",
+  blockColorPick: "end"
 });
 
 export const getSpecial2Settings: SettingsProducer = (difficulty) => ({
@@ -34,9 +34,9 @@ export const getSpecial2Settings: SettingsProducer = (difficulty) => ({
     4 - Math.min(Math.max(Math.round(difficulty / 2), 0), 2),
   extraPlacementLimits: Math.max(
     4 - Math.min(Math.max(Math.round(difficulty / 2), 0), 3) - 1,
-    0,
+    0
   ),
-  blockColorPick: "end",
+  blockColorPick: "end"
 });
 
 export const getSpecial3Settings: SettingsProducer = (difficulty) => ({
@@ -45,7 +45,7 @@ export const getSpecial3Settings: SettingsProducer = (difficulty) => ({
   extraPlacementStacks: 2,
   extraPlacementLimits:
     0 + Math.max(Math.min(Math.round(difficulty / 5), 2), 0),
-  blockColorPick: "end",
+  blockColorPick: "end"
 });
 
 export const getSpecial4Settings: SettingsProducer = (difficulty) => ({
@@ -56,7 +56,7 @@ export const getSpecial4Settings: SettingsProducer = (difficulty) => ({
   extraPlacementLimits: 2,
   buffers: 1,
   bufferSizes: 1,
-  blockColorPick: "end",
+  blockColorPick: "end"
 });
 
 export const getSpecial5Settings: SettingsProducer = (difficulty) => ({
@@ -69,9 +69,9 @@ export const getSpecial5Settings: SettingsProducer = (difficulty) => ({
   bufferPlacementLimits: 1,
   extraBuffers: [
     { amount: 1, size: difficulty > 4 && difficulty < 10 ? 4 : 3, limit: 1 },
-    { amount: 1, size: difficulty > 4 && difficulty < 8 ? 3 : 2, limit: 1 },
+    { amount: 1, size: difficulty > 4 && difficulty < 8 ? 3 : 2, limit: 1 }
   ],
-  blockColorPick: "end",
+  blockColorPick: "end"
 });
 
 export const special: LevelType<"special"> = {
@@ -93,7 +93,7 @@ export const special: LevelType<"special"> = {
       getSpecial2Settings,
       getSpecial3Settings,
       getSpecial4Settings,
-      getSpecial5Settings,
+      getSpecial5Settings
     ];
 
     return pick(templates, random)(difficulty);
@@ -104,8 +104,8 @@ export const special: LevelType<"special"> = {
       getSpecial2Settings,
       getSpecial3Settings,
       getSpecial4Settings,
-      getSpecial5Settings,
+      getSpecial5Settings
     ];
     return templates[zenLevel % templates.length](difficultyLevel);
-  },
+  }
 };

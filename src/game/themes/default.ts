@@ -16,7 +16,7 @@ export const shapeMap: Record<BlockColor, string> = {
   turquoise: "🔺",
   orange: "🦋",
   lightyellow: "☀️",
-  gray: "🐟",
+  gray: "🐟"
 };
 
 export const colorMap: Record<BlockColor, string> = {
@@ -35,5 +35,5 @@ export const colorMap: Record<BlockColor, string> = {
   turquoise: "#06b6d4",
   orange: "#f97316",
   lightyellow: "#f9c74f",
-  gray: "#718096",
+  gray: "#718096"
 };

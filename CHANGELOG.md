@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.10.5 - 2024-10-18
+
+### Fixed
+
+- Detection of being stuck while having a free buffer column
+- Reduced lightning effect in fall theme
+
 ## Version 1.10.4 - 2024-10-17
 
 ### Fixed

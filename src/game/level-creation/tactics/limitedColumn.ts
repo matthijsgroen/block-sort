@@ -16,7 +16,7 @@ export const limitedColumn: Tactic = (level, _random = Math.random) => {
     return {
       index: i,
       limit: c.limitColor,
-      color: topBlock?.color,
+      color: topBlock?.color
     };
   });
 
@@ -27,7 +27,7 @@ export const limitedColumn: Tactic = (level, _random = Math.random) => {
         ...d,
         sources: data.filter(
           (s): s is ColumnData => s !== undefined && s.color === d.limit
-        ),
+        )
       };
     });
 
@@ -37,7 +37,7 @@ export const limitedColumn: Tactic = (level, _random = Math.random) => {
         return {
           name: "limitColumn",
           move: { from: source.index, to: t.index },
-          weight: 15,
+          weight: 15
         };
       })
     );

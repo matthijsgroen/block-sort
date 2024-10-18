@@ -23,7 +23,7 @@ type Props = {
 
 const determineColumns = (
   maxColumnHeight: number,
-  amountColumns: number,
+  amountColumns: number
 ): string => {
   const isLandscape = window.innerHeight < window.innerWidth;
 
@@ -57,13 +57,13 @@ export const LevelLayout: React.FC<Props> = ({
   onColumnClick,
   onDrop,
   onLock,
-  onPickUp,
+  onPickUp
 }) => {
   useScreenUpdate();
 
   const maxColumnSize = levelState.columns.reduce(
     (r, c) => Math.max(r, c.columnSize),
-    0,
+    0
   );
   const cols = determineColumns(maxColumnSize, levelState.columns.length);
   return (

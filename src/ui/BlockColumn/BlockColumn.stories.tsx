@@ -23,7 +23,7 @@ const columnSettings = (
   locked = false,
   limited = false,
   amountBlocks = 0,
-  amountHidden = 0,
+  amountHidden = 0
 ): Column => {
   return {
     type,
@@ -33,8 +33,8 @@ const columnSettings = (
     blocks: Array(Math.max(Math.min(amountBlocks, columnSize), 0))
       .fill(0)
       .map<Block>((_, index, l) =>
-        createBlock("aqua", l.length - index - 1 < amountHidden),
-      ),
+        createBlock("aqua", l.length - index - 1 < amountHidden)
+      )
   };
 };
 
@@ -44,7 +44,7 @@ const meta: Meta<BlockColumnPropsAndCustomArgs> = {
   component: BlockColumn,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
-    layout: "centered",
+    layout: "centered"
   },
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ["autodocs"],
@@ -52,18 +52,18 @@ const meta: Meta<BlockColumnPropsAndCustomArgs> = {
   argTypes: {
     type: {
       options: ["placement", "buffer"],
-      control: { type: "radio" },
+      control: { type: "radio" }
     },
     hideFormat: {
       options: ["glass", "present"],
-      control: { type: "radio" },
+      control: { type: "radio" }
     },
     columnSize: {
-      control: { type: "number" },
+      control: { type: "number" }
     },
     column: {
-      table: { disable: true },
-    },
+      table: { disable: true }
+    }
   },
   args: {
     amountSuggested: 0,
@@ -80,11 +80,11 @@ const meta: Meta<BlockColumnPropsAndCustomArgs> = {
       type: "placement",
       columnSize: 1,
       locked: false,
-      blocks: [],
+      blocks: []
     },
     onDrop: fn(),
     onLock: fn(),
-    onPickUp: fn(),
+    onPickUp: fn()
   },
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#action-args
   render: (args) => {
@@ -96,11 +96,11 @@ const meta: Meta<BlockColumnPropsAndCustomArgs> = {
       locked,
       limited,
       amountBlocks,
-      amountHidden,
+      amountHidden
     );
 
     return <BlockColumn {...args} column={column} />;
-  },
+  }
 };
 
 export default meta;
@@ -110,8 +110,8 @@ type Story = StoryObj<typeof meta>;
 export const SmallPlacementColumn: Story = {
   args: {
     columnSize: 4,
-    amountBlocks: 2,
-  },
+    amountBlocks: 2
+  }
 };
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
@@ -119,8 +119,8 @@ export const SmallBufferColumn: Story = {
   args: {
     type: "buffer",
     columnSize: 4,
-    amountBlocks: 2,
-  },
+    amountBlocks: 2
+  }
 };
 
 export const LockedColumn: Story = {
@@ -128,8 +128,8 @@ export const LockedColumn: Story = {
     type: "placement",
     columnSize: 4,
     amountBlocks: 4,
-    locked: true,
-  },
+    locked: true
+  }
 };
 
 export const HiddenColumn: Story = {
@@ -137,8 +137,8 @@ export const HiddenColumn: Story = {
     type: "placement",
     columnSize: 4,
     amountBlocks: 3,
-    amountHidden: 2,
-  },
+    amountHidden: 2
+  }
 };
 
 export const LimitedColumn: Story = {
@@ -146,8 +146,8 @@ export const LimitedColumn: Story = {
     type: "placement",
     columnSize: 4,
     amountBlocks: 2,
-    limited: true,
-  },
+    limited: true
+  }
 };
 
 export const LimitedColumnSelection: Story = {
@@ -156,8 +156,8 @@ export const LimitedColumnSelection: Story = {
     columnSize: 4,
     amountBlocks: 2,
     amountSelected: 1,
-    limited: true,
-  },
+    limited: true
+  }
 };
 
 export const ColumnBlockSuggestion: Story = {
@@ -165,8 +165,8 @@ export const ColumnBlockSuggestion: Story = {
     type: "placement",
     columnSize: 4,
     amountBlocks: 3,
-    amountSuggested: 2,
-  },
+    amountSuggested: 2
+  }
 };
 
 export const ColumnSuggestion: Story = {
@@ -174,6 +174,6 @@ export const ColumnSuggestion: Story = {
     type: "placement",
     columnSize: 4,
     amountBlocks: 3,
-    suggested: true,
-  },
+    suggested: true
+  }
 };

@@ -26,18 +26,18 @@ export const Tray: React.FC<Props> = ({ locked, onLock }) => {
   return (
     <div
       style={{
-        "--cube-color": "#a07353",
+        "--cube-color": "#a07353"
       }}
-      className={clsx("relative h-8 w-block text-center -mt-top-block", {
+      className={clsx("relative -mt-top-block h-8 w-block text-center", {
         "animate-trayLocked": isLocked,
-        "translate-y-3": !isLocked,
+        "translate-y-3": !isLocked
       })}
     >
       {!locked && <div className={styles.shadow}></div>}
       <div
         className={clsx(
           styles.layer,
-          "bg-block rounded-md border border-black/10 "
+          "rounded-md border border-black/10 bg-block"
         )}
       ></div>
       <div className={clsx(styles.layer, "z-10 pt-7")}>
@@ -46,7 +46,7 @@ export const Tray: React.FC<Props> = ({ locked, onLock }) => {
       <div className={clsx(styles.layer, styles.gradient)}></div>
       <div
         className={clsx(
-          "absolute w-full h-full rounded-md",
+          "absolute h-full w-full rounded-md",
           styles.gradientLocked,
           { ["opacity-100"]: isLocked, ["opacity-0"]: !isLocked }
         )}

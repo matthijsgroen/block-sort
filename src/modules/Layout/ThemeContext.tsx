@@ -3,7 +3,7 @@ import {
   Dispatch,
   PropsWithChildren,
   useEffect,
-  useState,
+  useState
 } from "react";
 
 import { sound, Stream } from "@/audio";
@@ -20,7 +20,7 @@ export const ThemeContext = createContext<{
 }>({
   activeTheme: "default",
   setThemeOverride: () => {},
-  clearThemeOverride: () => {},
+  clearThemeOverride: () => {}
 });
 
 export const ThemeProvider: React.FC<
@@ -52,7 +52,7 @@ export const ThemeProvider: React.FC<
       value={{
         activeTheme: theme,
         setThemeOverride,
-        clearThemeOverride: () => setThemeOverride(undefined),
+        clearThemeOverride: () => setThemeOverride(undefined)
       }}
     >
       {children}

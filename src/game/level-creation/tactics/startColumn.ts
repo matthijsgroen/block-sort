@@ -14,7 +14,7 @@ export const startColumn: Tactic = (level, random = Math.random) => {
         ? r.concat({
             index: i,
             type: c.type,
-            limitColor: c.limitColor,
+            limitColor: c.limitColor
           })
         : r,
     []
@@ -45,7 +45,7 @@ export const startColumn: Tactic = (level, random = Math.random) => {
                       // name: "startColumn",
                       move: {
                         from: pos,
-                        to: emptyCol.index,
+                        to: emptyCol.index
                       },
                       weight:
                         emptyCol.limitColor !== undefined &&
@@ -59,7 +59,7 @@ export const startColumn: Tactic = (level, random = Math.random) => {
                             (emptyCol.limitColor ===
                             level.columns[pos].blocks[0]?.color
                               ? 4
-                              : 0),
+                              : 0)
                     }),
                   r
                 ),

@@ -4,35 +4,35 @@ import { colorMap, shapeMap } from "./default";
 import { colorMap as colorMapFall, shapeMap as shapeMapFall } from "./fall";
 import {
   colorMap as colorMapSpring,
-  shapeMap as shapeMapSpring,
+  shapeMap as shapeMapSpring
 } from "./spring";
 import {
   colorMap as colorMapWinter,
-  shapeMap as shapeMapWinter,
+  shapeMap as shapeMapWinter
 } from "./winter";
 
 export type BlockTheme = "default" | "halloween" | "winter" | "spring";
 
 export const getShapeMapping = (
-  theme: BlockTheme,
+  theme: BlockTheme
 ): Record<BlockColor, string> => {
   const mapping: Record<BlockTheme, Record<BlockColor, string>> = {
     default: shapeMap,
     halloween: shapeMapFall,
     winter: shapeMapWinter,
-    spring: shapeMapSpring,
+    spring: shapeMapSpring
   };
   return mapping[theme];
 };
 
 export const getColorMapping = (
-  theme: BlockTheme,
+  theme: BlockTheme
 ): Record<BlockColor, string> => {
   const mapping: Record<BlockTheme, Record<BlockColor, string>> = {
     default: colorMap,
     halloween: colorMapFall,
     winter: colorMapWinter,
-    spring: colorMapSpring,
+    spring: colorMapSpring
   };
   return mapping[theme];
 };
