@@ -12,7 +12,7 @@ import { generateRandomLevel } from "./generateRandomLevel";
 import { scoreState } from "./scoreState";
 
 const MAX_PLAY_ATTEMPTS = 1;
-const MAX_GENERATE_ATTEMPTS = 2_000;
+const MAX_GENERATE_ATTEMPTS = 200;
 const MAX_LEVEL_MOVES = 1_000;
 
 const MAX_GENERATE_COST = MAX_LEVEL_MOVES * MAX_PLAY_ATTEMPTS;

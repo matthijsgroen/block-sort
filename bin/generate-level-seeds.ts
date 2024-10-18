@@ -75,7 +75,7 @@ const produceExtraSeeds = async (
   }
 };
 
-const main = async (all: boolean) => {
+const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
   console.log(c.bold("Updating level seeds..."));
 
   const keys = Object.keys(levelSeeds);
@@ -173,7 +173,7 @@ const main = async (all: boolean) => {
 
   await updateSeeds(levelSeedsCopy);
   if (all) {
-    await main(true);
+    await main(true, levelSeedsCopy);
   }
 };
 
@@ -212,7 +212,7 @@ program
 program
   .command("run")
   .option("-a, --all", "updates all items that are broken", false)
-  .action((options: { all?: boolean }) => main(!!options.all));
+  .action((options: { all?: boolean }) => main(!!options.all, levelSeeds));
 program
   .command("verify")
   .option("-a, --all", "remove all items that are broken", false)
@@ -241,8 +241,13 @@ program
       process.exit(1);
     }
 
+    let updatedSeeds = levelSeeds;
+
     for (const key of existingKeys) {
-      const seeds = levelSeeds[`${key.hash}`];
+      const seeds = updatedSeeds[`${key.hash}`];
+      if (!seeds) {
+        continue;
+      }
       if (seeds.length < MINIMAL_LEVELS && !all) {
         console.log(
           c.red(
@@ -251,7 +256,9 @@ program
         );
         process.exit(1);
       }
-      process.stdout.write(`verifying ${key.name} ${key.difficulty + 1}...\r`);
+      process.stdout.write(
+        `Verifying "${key.name}" difficulty ${key.difficulty + 1}...      \r`,
+      );
       const seedsToTest = [
         seeds[0],
         seeds[Math.floor(seeds.length / 2)],
@@ -275,8 +282,8 @@ program
             console.log("");
             console.log(c.red("Seed has not stayed the same"));
 
-            const updatedLevelSeeds = removeSeedsForKey(key.hash, levelSeeds);
-            await updateSeeds(updatedLevelSeeds);
+            updatedSeeds = removeSeedsForKey(key.hash, updatedSeeds);
+            await updateSeeds(updatedSeeds);
 
             console.log(
               `Seeds for "${key.name}" difficulty ${key.difficulty + 1} removed. Please run 'run' to generate new ones.`,
@@ -290,9 +297,9 @@ program
         } catch (ignoreError) {
           console.log("");
           console.log(c.red("Unable to generate level"));
-          const updatedLevelSeeds = removeSeedsForKey(key.hash, levelSeeds);
+          updatedSeeds = removeSeedsForKey(key.hash, updatedSeeds);
 
-          await updateSeeds(updatedLevelSeeds);
+          await updateSeeds(updatedSeeds);
 
           console.log(
             `Seeds for "${key.name}" difficulty ${key.difficulty + 1} removed. Please run 'run' to generate new ones.`,
@@ -308,9 +315,9 @@ program
     }
     console.log("");
     if (!all) {
-      console.log("all ok!");
+      console.log("All ok!");
     } else {
-      console.log("done.");
+      console.log("Done.");
     }
   });
 
