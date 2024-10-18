@@ -1,6 +1,6 @@
 import { produce } from "immer";
 
-import { moveBlocks } from "./actions";
+import { moveBlocks, selectFromColumn } from "./actions";
 import { Block, LevelState } from "./types";
 
 export const canPlaceAmount = (
@@ -30,27 +30,49 @@ export const hasWon = (level: LevelState): boolean =>
       col.blocks.length === 0,
   );
 
+const createSignature = (level: LevelState) =>
+  level.columns.map((c) => {
+    const block = c.blocks[0];
+    return block ? block.color : c.limitColor;
+  });
+
+const countHidden = (level: LevelState) =>
+  level.columns.reduce(
+    (r, c) => r + c.blocks.filter((b) => b.revealed === true).length,
+    0,
+  );
+
+const blockedByBuffer = (level: LevelState) => {
+  const largestFreeBuffer = level.columns.reduce((acc, col) => {
+    if (
+      col.type === "buffer" &&
+      col.limitColor === undefined &&
+      col.blocks.length === 0
+    ) {
+      return Math.max(acc, col.columnSize - col.blocks.length);
+    }
+    return acc;
+  }, 0);
+
+  const smallestAvailableSeries = level.columns.reduce((acc, col, index) => {
+    if (col.blocks.length === 0) return acc;
+    const countSame = selectFromColumn(level, index).length;
+    return Math.min(acc, countSame);
+  }, Infinity);
+
+  if (largestFreeBuffer === 0) return false;
+  return largestFreeBuffer >= smallestAvailableSeries;
+};
+
+const countCompleted = (level: LevelState) =>
+  level.columns.filter(
+    (col) =>
+      col.type === "placement" &&
+      col.columnSize === col.blocks.length &&
+      col.blocks.every((b) => b.color === col.blocks[0].color),
+  ).length;
+
 export const isStuck = (level: LevelState): boolean => {
-  const createSignature = (level: LevelState) =>
-    level.columns.map((c) => {
-      const block = c.blocks[0];
-      return block ? block.color : c.limitColor;
-    });
-
-  const countHidden = (level: LevelState) =>
-    level.columns.reduce(
-      (r, c) => r + c.blocks.filter((b) => b.revealed === true).length,
-      0,
-    );
-
-  const countCompleted = (level: LevelState) =>
-    level.columns.filter(
-      (col) =>
-        col.type === "placement" &&
-        col.columnSize === col.blocks.length &&
-        col.blocks.every((b) => b.color === col.blocks[0].color),
-    ).length;
-
   const topSignature = createSignature(level);
   const originalHidden = countHidden(level);
   const originalCompleted = countCompleted(level);
@@ -68,7 +90,8 @@ export const isStuck = (level: LevelState): boolean => {
       if (
         resultHidden !== originalHidden ||
         resultCompleted !== originalCompleted ||
-        resultSig.some((c, i) => c !== topSignature[i]) ||
+        (resultSig.some((c, i) => c !== topSignature[i]) &&
+          !blockedByBuffer(playLevel)) ||
         hasWon(playLevel)
       ) {
         didChange = true;

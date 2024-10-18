@@ -72,13 +72,13 @@ describe(hasWon, () => {
         4,
         createBlocks("white", "white", "white", "white"),
         undefined,
-        true
+        true,
       ),
       createPlacementColumn(
         4,
         createBlocks("green", "green", "green", "green"),
         undefined,
-        true
+        true,
       ),
       createPlacementColumn(4),
       createPlacementColumn(4),
@@ -93,13 +93,13 @@ describe(hasWon, () => {
         4,
         createBlocks("white", "white", "green", "white"),
         undefined,
-        true
+        true,
       ),
       createPlacementColumn(
         4,
         createBlocks("green", "green", "green"),
         undefined,
-        true
+        true,
       ),
       createPlacementColumn(4, createBlocks("white")),
       createPlacementColumn(4),
@@ -116,13 +116,13 @@ describe(isStuck, () => {
         4,
         createBlocks("white", "white", "green", "white"),
         undefined,
-        true
+        true,
       ),
       createPlacementColumn(
         4,
         createBlocks("green", "green", "green"),
         undefined,
-        true
+        true,
       ),
       createPlacementColumn(4, createBlocks("white")),
       createPlacementColumn(4),
@@ -135,7 +135,7 @@ describe(isStuck, () => {
     const level = createLevelState([
       createPlacementColumn(
         4,
-        createHiddenBlocks("white", "white", "green", "white")
+        createHiddenBlocks("white", "white", "green", "white"),
       ),
       createPlacementColumn(4, createHiddenBlocks("green", "green", "green")),
       createPlacementColumn(4, createHiddenBlocks("white", "pink", "pink")),
@@ -149,15 +149,15 @@ describe(isStuck, () => {
     const level = createLevelState([
       createPlacementColumn(
         6,
-        createBlocks("white", "white", "green", "green", "green")
+        createBlocks("white", "white", "green", "green", "green"),
       ),
       createPlacementColumn(
         6,
-        createBlocks("white", "white", "green", "green", "green")
+        createBlocks("white", "white", "green", "green", "green"),
       ),
       createPlacementColumn(
         6,
-        createBlocks("white", "white", "pink", "pink", "pink")
+        createBlocks("white", "white", "pink", "pink", "pink"),
       ),
       createPlacementColumn(6, createBlocks("pink", "pink", "pink")),
     ]);
@@ -172,13 +172,13 @@ describe(isStuck, () => {
         4,
         createBlocks("white", "white", "green", "white"),
         undefined,
-        true
+        true,
       ),
       createPlacementColumn(
         4,
         createBlocks("white", "green", "green"),
         undefined,
-        true
+        true,
       ),
       createPlacementColumn(4, createBlocks("green", "red", "red")),
       createPlacementColumn(4, createBlocks("red", "red")),
@@ -194,15 +194,29 @@ describe(isStuck, () => {
       createPlacementColumn(4, createBlocks("black", "black", "red", "white")),
       createPlacementColumn(
         4,
-        createBlocks("black", "green", "green", "brown")
+        createBlocks("black", "green", "green", "brown"),
       ),
       createPlacementColumn(
         4,
-        createBlocks("black", "white", "white", "brown")
+        createBlocks("black", "white", "white", "brown"),
       ),
       createBufferColumn(4, "brown", createBlocks("brown", "brown")),
       createBufferColumn(3, "green", createBlocks("green", "green")),
       createBufferColumn(2, "red", createBlocks("red", "red")),
+    ]);
+    const result = isStuck(level);
+    expect(result).toBe(true);
+  });
+
+  it("returns true if series would not fully fit in a free buffer", () => {
+    const level = createLevelState([
+      createPlacementColumn(
+        4,
+        createBlocks("black", "black", "black", "white"),
+      ),
+      createPlacementColumn(4, createBlocks("white", "white", "white", "red")),
+      createPlacementColumn(4, createBlocks("red", "red", "red", "black")),
+      createBufferColumn(2),
     ]);
     const result = isStuck(level);
     expect(result).toBe(true);
@@ -216,13 +230,13 @@ describe(allShuffled, () => {
         4,
         createBlocks("white", "white", "white", "white"),
         undefined,
-        true
+        true,
       ),
       createPlacementColumn(
         4,
         createBlocks("green", "green", "green"),
         undefined,
-        true
+        true,
       ),
       createPlacementColumn(4, createBlocks("green")),
       createPlacementColumn(4),
@@ -237,13 +251,13 @@ describe(allShuffled, () => {
         4,
         createBlocks("white", "white", "green", "white"),
         undefined,
-        true
+        true,
       ),
       createPlacementColumn(
         4,
         createBlocks("white", "green", "green"),
         undefined,
-        true
+        true,
       ),
       createPlacementColumn(4, createBlocks("green", "red", "red")),
       createPlacementColumn(4, createBlocks("red", "red")),
