@@ -75,7 +75,7 @@ const produceExtraSeeds = async (
   }
 };
 
-const main = async () => {
+const main = async (all: boolean) => {
   console.log(c.bold("Updating level seeds..."));
 
   const keys = Object.keys(levelSeeds);
@@ -122,6 +122,7 @@ const main = async () => {
       ),
     );
     let time = Date.now();
+    let count = 0;
     await produceExtraSeeds(
       incompleteSeed,
       levelSeedsCopy,
@@ -130,6 +131,12 @@ const main = async () => {
         time = Date.now() - time;
         if (time > 60_000) {
           // longer than a minute
+          count = 0;
+          await updateSeeds(levelSeedsCopy);
+        }
+        if (time > 10_000 && count > 5) {
+          // longer than a minute
+          count = 0;
           await updateSeeds(levelSeedsCopy);
         }
         time = Date.now();
@@ -161,9 +168,13 @@ const main = async () => {
   }
   if (!incompleteSeed && !firstMissing && obsoleteKeys.length === 0) {
     console.log("All seeds are complete");
+    process.exit(0);
   }
 
   await updateSeeds(levelSeedsCopy);
+  if (all) {
+    await main(true);
+  }
 };
 
 const removeSeedsForKey = (
@@ -198,85 +209,109 @@ program
   .description("Generate or update level seeds")
   .version("0.1.0");
 
-program.command("run").action(main);
-program.command("verify").action(async () => {
-  const keys = Object.keys(levelSeeds);
+program
+  .command("run")
+  .option("-a, --all", "updates all items that are broken", false)
+  .action((options: { all?: boolean }) => main(!!options.all));
+program
+  .command("verify")
+  .option("-a, --all", "remove all items that are broken", false)
+  .action(async (options: { all?: boolean }) => {
+    const all = options.all;
 
-  const scale: number[] = [0, ...LEVEL_SCALE];
-  const currentHashes = producers.flatMap((producer) =>
-    scale.reduce<Seeder[]>((acc, _lvl, index) => {
-      const settings = producer.producer(index + 1);
-      const settingsHash = hash(JSON.stringify(settings)).toString();
-      return acc.concat({
-        hash: settingsHash,
-        name: producer.name,
-        producer: producer.producer,
-        difficulty: index,
-      });
-    }, []),
-  );
-  const existingKeys = currentHashes.filter((h) => keys.includes(h.hash));
-  const missingKeys = currentHashes.filter((h) => !keys.includes(h.hash));
-  if (missingKeys.length > 0) {
-    console.log("Keys are not complete. Please run 'run' first.");
-    process.exit(1);
-  }
+    const keys = Object.keys(levelSeeds);
 
-  for (const key of existingKeys) {
-    const seeds = levelSeeds[`${key.hash}`];
-    if (seeds.length < MINIMAL_LEVELS) {
-      console.log(
-        c.red(
-          `Seed for "${key.name}", difficulty ${key.difficulty + 1} is incomplete. Only ${seeds.length} seeds available.`,
-        ),
-      );
+    const scale: number[] = [0, ...LEVEL_SCALE];
+    const currentHashes = producers.flatMap((producer) =>
+      scale.reduce<Seeder[]>((acc, _lvl, index) => {
+        const settings = producer.producer(index + 1);
+        const settingsHash = hash(JSON.stringify(settings)).toString();
+        return acc.concat({
+          hash: settingsHash,
+          name: producer.name,
+          producer: producer.producer,
+          difficulty: index,
+        });
+      }, []),
+    );
+    const existingKeys = currentHashes.filter((h) => keys.includes(h.hash));
+    const missingKeys = currentHashes.filter((h) => !keys.includes(h.hash));
+    if (missingKeys.length > 0 && !all) {
+      console.log("Keys are not complete. Please run 'run' first.");
       process.exit(1);
     }
-    process.stdout.write(`verifying ${key.name} ${key.difficulty + 1}...\r`);
-    const seedsToTest = [
-      seeds[0],
-      seeds[Math.floor(seeds.length / 2)],
-      seeds.at(-1),
-    ];
-    for (const seed of seedsToTest) {
-      if (!seed) {
-        console.log("");
-        console.log(c.red("Seed is missing"));
+
+    for (const key of existingKeys) {
+      const seeds = levelSeeds[`${key.hash}`];
+      if (seeds.length < MINIMAL_LEVELS && !all) {
+        console.log(
+          c.red(
+            `Seed for "${key.name}", difficulty ${key.difficulty + 1} is incomplete. Only ${seeds.length} seeds available.`,
+          ),
+        );
         process.exit(1);
       }
-      const random = mulberry32(seed);
-      const settings = key.producer(key.difficulty + 1);
-      try {
-        const level = await generatePlayableLevel(settings, random, seed);
-        if (level.generationInformation?.seed !== seed) {
+      process.stdout.write(`verifying ${key.name} ${key.difficulty + 1}...\r`);
+      const seedsToTest = [
+        seeds[0],
+        seeds[Math.floor(seeds.length / 2)],
+        seeds.at(-1),
+      ];
+      for (const seed of seedsToTest) {
+        if (!seed) {
           console.log("");
-          console.log(c.red("Seed has not stayed the same"));
+          console.log(c.red("Seed is missing"));
+          if (!all) {
+            process.exit(1);
+          } else {
+            continue;
+          }
+        }
+        const random = mulberry32(seed);
+        const settings = key.producer(key.difficulty + 1);
+        try {
+          const level = await generatePlayableLevel(settings, random, seed);
+          if (level.generationInformation?.seed !== seed) {
+            console.log("");
+            console.log(c.red("Seed has not stayed the same"));
 
+            const updatedLevelSeeds = removeSeedsForKey(key.hash, levelSeeds);
+            await updateSeeds(updatedLevelSeeds);
+
+            console.log(
+              `Seeds for "${key.name}" difficulty ${key.difficulty + 1} removed. Please run 'run' to generate new ones.`,
+            );
+            if (!all) {
+              process.exit(1);
+            } else {
+              break;
+            }
+          }
+        } catch (ignoreError) {
+          console.log("");
+          console.log(c.red("Unable to generate level"));
           const updatedLevelSeeds = removeSeedsForKey(key.hash, levelSeeds);
+
           await updateSeeds(updatedLevelSeeds);
 
           console.log(
-            `Seeds for [${key.hash}] "${key.name}" difficulty ${key.difficulty + 1} removed. Please run 'run' to generate new ones.`,
+            `Seeds for "${key.name}" difficulty ${key.difficulty + 1} removed. Please run 'run' to generate new ones.`,
           );
-          process.exit(1);
+
+          if (!all) {
+            process.exit(1);
+          } else {
+            break;
+          }
         }
-      } catch (ignoreError) {
-        console.log("");
-        console.log(c.red("Unable to generate level"));
-        const updatedLevelSeeds = removeSeedsForKey(key.hash, levelSeeds);
-
-        await updateSeeds(updatedLevelSeeds);
-
-        console.log(
-          `Seeds for "${key.name}" difficulty ${key.difficulty + 1} removed. Please run 'run' to generate new ones.`,
-        );
-
-        process.exit(1);
       }
     }
-  }
-  console.log("");
-  console.log("all ok!");
-});
+    console.log("");
+    if (!all) {
+      console.log("all ok!");
+    } else {
+      console.log("done.");
+    }
+  });
 
 program.parse(process.argv);
