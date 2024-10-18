@@ -15,7 +15,7 @@ describe(generatePlayableLevel, () => {
       {
         amountColors: 2,
         stackSize: 4,
-        extraPlacementStacks: 2,
+        extraPlacementStacks: 2
       },
       random
     );
@@ -24,7 +24,7 @@ describe(generatePlayableLevel, () => {
       createPlacementColumn(4, createBlocks("white", "white", "red", "white")),
       createPlacementColumn(4, createBlocks("white", "red", "red", "red")),
       createPlacementColumn(4),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
 
     expect(level.generationInformation?.cost).toBeGreaterThan(812);
@@ -36,7 +36,7 @@ describe(generatePlayableLevel, () => {
       {
         amountColors: 5,
         stackSize: 4,
-        extraPlacementStacks: 2,
+        extraPlacementStacks: 2
       },
       random
     );
@@ -51,7 +51,7 @@ describe(generatePlayableLevel, () => {
         amountColors: 10,
         stackSize: 5,
         extraPlacementStacks: 2,
-        extraPlacementLimits: 1,
+        extraPlacementLimits: 1
       },
       random
     );
@@ -67,7 +67,7 @@ describe(generatePlayableLevel, () => {
         extraPlacementStacks: 1,
         extraPlacementLimits: 1,
         buffers: 3,
-        bufferSizes: 4,
+        bufferSizes: 4
       },
       random
     );
@@ -81,7 +81,7 @@ describe(generatePlayableLevel, () => {
         await generatePlayableLevel(
           {
             amountColors: 1,
-            extraPlacementStacks: 0,
+            extraPlacementStacks: 0
           },
           random
         )

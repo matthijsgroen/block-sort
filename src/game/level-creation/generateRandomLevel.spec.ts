@@ -6,7 +6,7 @@ import {
   createBlocks,
   createBufferColumn,
   createHiddenBlocks,
-  createPlacementColumn,
+  createPlacementColumn
 } from "../factories";
 
 import { generateRandomLevel } from "./generateRandomLevel";
@@ -20,7 +20,7 @@ describe(generateRandomLevel, () => {
       {
         amountColors: 2,
         stackSize: 4,
-        extraPlacementStacks: 2,
+        extraPlacementStacks: 2
       },
       random
     );
@@ -29,7 +29,7 @@ describe(generateRandomLevel, () => {
       createPlacementColumn(4, createBlocks("white", "white", "blue", "blue")),
       createPlacementColumn(4, createBlocks("blue", "white", "white", "blue")),
       createPlacementColumn(4),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
   });
 
@@ -40,7 +40,7 @@ describe(generateRandomLevel, () => {
         amountColors: 2,
         stackSize: 4,
         extraPlacementStacks: 2,
-        hideBlockTypes: "all",
+        hideBlockTypes: "all"
       },
       random
     );
@@ -55,7 +55,7 @@ describe(generateRandomLevel, () => {
         createHiddenBlocks("blue", "white", "white", "blue")
       ),
       createPlacementColumn(4),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
   });
 
@@ -68,7 +68,7 @@ describe(generateRandomLevel, () => {
         extraPlacementStacks: 0,
         buffers: 2,
         bufferSizes: 2,
-        hideBlockTypes: "all",
+        hideBlockTypes: "all"
       },
       random
     );
@@ -83,7 +83,7 @@ describe(generateRandomLevel, () => {
         createHiddenBlocks("blue", "white", "white", "blue")
       ),
       createBufferColumn(2),
-      createBufferColumn(2),
+      createBufferColumn(2)
     ]);
   });
 
@@ -97,7 +97,7 @@ describe(generateRandomLevel, () => {
         buffers: 2,
         bufferSizes: 2,
         extraBuffers: [{ amount: 1, size: 3, limit: 1 }],
-        hideBlockTypes: "all",
+        hideBlockTypes: "all"
       },
       random
     );
@@ -113,7 +113,7 @@ describe(generateRandomLevel, () => {
       ),
       createBufferColumn(2),
       createBufferColumn(2),
-      createBufferColumn(3, "blue"),
+      createBufferColumn(3, "blue")
     ]);
   });
 
@@ -127,7 +127,7 @@ describe(generateRandomLevel, () => {
         buffers: 2,
         bufferSizes: 2,
         bufferPlacementLimits: 2,
-        hideBlockTypes: "all",
+        hideBlockTypes: "all"
       },
       random
     );
@@ -151,7 +151,7 @@ describe(generateRandomLevel, () => {
       ),
 
       createBufferColumn(2, "yellow"),
-      createBufferColumn(2, "red"),
+      createBufferColumn(2, "red")
     ]);
   });
 
@@ -166,7 +166,7 @@ describe(generateRandomLevel, () => {
         buffers: 1,
         bufferSizes: 2,
         bufferPlacementLimits: 1,
-        hideBlockTypes: "all",
+        hideBlockTypes: "all"
       },
       random
     );
@@ -190,7 +190,7 @@ describe(generateRandomLevel, () => {
       ),
 
       createPlacementColumn(4, [], "red"),
-      createBufferColumn(2, "yellow"),
+      createBufferColumn(2, "yellow")
     ]);
   });
 });

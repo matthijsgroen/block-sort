@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   createBlocks,
   createLevelState,
-  createPlacementColumn,
+  createPlacementColumn
 } from "@/game/factories";
 import { mulberry32 } from "@/support/random";
 
@@ -20,7 +20,7 @@ describe(stackColumn, () => {
       createPlacementColumn(4, createBlocks("red", "pink", "red", "green")),
       createPlacementColumn(4, createBlocks("pink", "aqua", "green", "green")),
       createPlacementColumn(4, createBlocks("aqua")),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
     const moves = stackColumn(level, random);
 
@@ -46,7 +46,7 @@ describe(stackColumn, () => {
       createPlacementColumn(4, createBlocks("pink", "pink", "pink")),
       createPlacementColumn(4, createBlocks("purple", "purple")),
       createPlacementColumn(4, createBlocks("white", "white", "white")),
-      createPlacementColumn(4, createBlocks("red", "red", "red")),
+      createPlacementColumn(4, createBlocks("red", "red", "red"))
     ]);
     const moves = stackColumn(level, random);
 

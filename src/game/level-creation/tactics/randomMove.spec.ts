@@ -15,7 +15,7 @@ describe(randomMove, () => {
       {
         amountColors: 4,
         stackSize: 4,
-        extraPlacementStacks: 2,
+        extraPlacementStacks: 2
       },
       random
     );
@@ -32,7 +32,7 @@ describe(randomMove, () => {
       {
         amountColors: 4,
         stackSize: 4,
-        extraPlacementStacks: 2,
+        extraPlacementStacks: 2
       },
       random
     );

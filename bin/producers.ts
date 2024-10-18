@@ -1,18 +1,18 @@
 import {
   getHard2Settings,
-  getHardSettings,
+  getHardSettings
 } from "../src/game/level-types/hard";
 import {
   getNormal2Settings,
   getNormal3Settings,
-  getNormalSettings,
+  getNormalSettings
 } from "../src/game/level-types/normal";
 import {
   getSpecial1Settings,
   getSpecial2Settings,
   getSpecial3Settings,
   getSpecial4Settings,
-  getSpecial5Settings,
+  getSpecial5Settings
 } from "../src/game/level-types/special";
 import { SettingsProducer } from "../src/game/types";
 
@@ -31,5 +31,5 @@ export const producers: Producer[] = [
   { name: "Special4", producer: getSpecial4Settings },
   { name: "Special5", producer: getSpecial5Settings },
   { name: "Hard", producer: getHardSettings },
-  { name: "Hard2", producer: getHard2Settings },
+  { name: "Hard2", producer: getHard2Settings }
 ];

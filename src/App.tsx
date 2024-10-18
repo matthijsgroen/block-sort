@@ -19,7 +19,7 @@ export const App: React.FC = () => {
   const [musicEnabled, setMusicEnabled] = useGameStorage("musicEnabled", true);
   const [themesEnabled, setThemesEnabled] = useGameStorage(
     "themesEnabled",
-    true,
+    true
   );
 
   const [inZenMode, setInZenMode] = useGameStorage("inZenMode", false);

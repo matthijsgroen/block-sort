@@ -11,17 +11,17 @@ type Props = {
 export const GameTitle: React.FC<Props> = ({ onClick }) => (
   <h1
     className={clsx(
-      "text-3xl mb-2 font-extrabold flex-1 text-center text-orange-400 font-block-sort",
+      "mb-2 flex-1 text-center font-block-sort text-3xl font-extrabold text-orange-400",
       styles.header
     )}
     onClick={onClick}
   >
     Bl
-    <div className="inline-block text-sm scale-50 -mx-2 translate-y-1">
+    <div className="-mx-2 inline-block translate-y-1 scale-50 text-sm">
       <Block moved={true} color="#fb923c" shape="️⭐️" revealed />
     </div>
     ck S
-    <div className="inline-block text-sm scale-50 -mx-2 translate-y-1">
+    <div className="-mx-2 inline-block translate-y-1 scale-50 text-sm">
       <Block moved={true} color="#fb923c" shape="️🧩" revealed />
     </div>
     rt

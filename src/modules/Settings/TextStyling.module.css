@@ -2,7 +2,7 @@
   @apply text-xl font-bold;
 }
 .textStyling p {
-  @apply text-xs my-1;
+  @apply my-1 text-xs;
 }
 .textStyling h2 {
   @apply text-lg font-bold;
@@ -11,10 +11,10 @@
   @apply font-bold;
 }
 .textStyling ul {
-  @apply list-outside pl-4 list-disc;
+  @apply list-outside list-disc pl-4;
 }
 .textStyling ol {
-  @apply list-outside pl-4 list-decimal;
+  @apply list-outside list-decimal pl-4;
 }
 .textStyling li {
   @apply my-2 text-xs;

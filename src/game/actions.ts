@@ -5,7 +5,7 @@ import { Block, BlockColor, LevelState, Move } from "./types";
 
 export const selectFromColumn = (
   level: LevelState,
-  columnIndex: number,
+  columnIndex: number
 ): Block[] => {
   const result: Block[] = [];
   if (level.columns[columnIndex].locked) {
@@ -32,7 +32,7 @@ export const selectFromColumn = (
 export const moveBlocks = (
   level: LevelState,
   startColumn: number,
-  endColumn: number,
+  endColumn: number
 ): LevelState =>
   produce<LevelState>((draft) => {
     if (startColumn === endColumn) {
@@ -74,9 +74,9 @@ export const moveBlocks = (
 
 export const replayMoves = (
   levelState: LevelState,
-  moves: Move[],
+  moves: Move[]
 ): LevelState =>
   moves.reduce<LevelState>(
     (state, { from, to }) => moveBlocks(state, from, to),
-    levelState,
+    levelState
   );

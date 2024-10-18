@@ -2,7 +2,7 @@ import {
   deleteOfflineValue,
   getOfflineValue,
   setOfflineValue,
-  useOfflineStorage,
+  useOfflineStorage
 } from "@/support/useOfflineStorage";
 
 const GAME_STORE = "block-sort-store";

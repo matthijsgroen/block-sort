@@ -10,7 +10,7 @@ import {
   getSpecial3Settings,
   getSpecial4Settings,
   getSpecial5Settings,
-  special,
+  special
 } from "./special";
 
 describe(getSpecial1Settings, () => {
@@ -25,17 +25,17 @@ describe(getSpecial1Settings, () => {
         {
           amount: 1,
           limit: 0,
-          size: 4,
+          size: 4
         },
         {
           amount: 1,
           limit: 0,
-          size: 4,
-        },
+          size: 4
+        }
       ],
       extraPlacementStacks: 0,
       stackSize: 12,
-      blockColorPick: "end",
+      blockColorPick: "end"
     });
 
     const hard = getSpecial1Settings(10);
@@ -49,16 +49,16 @@ describe(getSpecial1Settings, () => {
         {
           amount: 1,
           limit: 0,
-          size: 3,
+          size: 3
         },
         {
           amount: 1,
           limit: 0,
-          size: 4,
-        },
+          size: 4
+        }
       ],
       stackSize: 13,
-      blockColorPick: "end",
+      blockColorPick: "end"
     });
 
     const veryHard = getSpecial1Settings(11);
@@ -72,16 +72,16 @@ describe(getSpecial1Settings, () => {
         {
           amount: 1,
           limit: 0,
-          size: 3,
+          size: 3
         },
         {
           amount: 1,
           limit: 0,
-          size: 3,
-        },
+          size: 3
+        }
       ],
       stackSize: 13,
-      blockColorPick: "end",
+      blockColorPick: "end"
     });
   });
 
@@ -122,9 +122,9 @@ describe(special.getSettings, () => {
         bufferPlacementLimits: 0,
         extraBuffers: [
           { amount: 1, size: 4, limit: 0 },
-          { amount: 1, size: 4, limit: 0 },
+          { amount: 1, size: 4, limit: 0 }
         ],
-        blockColorPick: "end",
+        blockColorPick: "end"
       } satisfies LevelSettings);
 
       const hardResult = special.getSettings(LEVEL_SCALE.at(-1)!, random);
@@ -138,9 +138,9 @@ describe(special.getSettings, () => {
         bufferPlacementLimits: 3,
         extraBuffers: [
           { amount: 1, size: 3, limit: 0 },
-          { amount: 1, size: 3, limit: 0 },
+          { amount: 1, size: 3, limit: 0 }
         ],
-        blockColorPick: "end",
+        blockColorPick: "end"
       } satisfies LevelSettings);
     });
   });
@@ -155,7 +155,7 @@ describe(special.getSettings, () => {
         stackSize: 3,
         extraPlacementStacks: 3,
         extraPlacementLimits: 2,
-        blockColorPick: "end",
+        blockColorPick: "end"
       } satisfies LevelSettings);
 
       const hardResult = special.getSettings(LEVEL_SCALE.at(-1)!, random);
@@ -165,7 +165,7 @@ describe(special.getSettings, () => {
         stackSize: 3,
         extraPlacementStacks: 2,
         extraPlacementLimits: 0,
-        blockColorPick: "end",
+        blockColorPick: "end"
       } satisfies LevelSettings);
     });
   });
@@ -180,7 +180,7 @@ describe(special.getSettings, () => {
         stackSize: 4,
         extraPlacementStacks: 2,
         extraPlacementLimits: 0,
-        blockColorPick: "end",
+        blockColorPick: "end"
       } satisfies LevelSettings);
 
       const hardResult = special.getSettings(LEVEL_SCALE.at(-1)!, random);
@@ -190,7 +190,7 @@ describe(special.getSettings, () => {
         stackSize: 5,
         extraPlacementStacks: 2,
         extraPlacementLimits: 2,
-        blockColorPick: "end",
+        blockColorPick: "end"
       } satisfies LevelSettings);
     });
   });
@@ -208,7 +208,7 @@ describe(special.getSettings, () => {
         buffers: 1,
         bufferSizes: 1,
         stacksPerColor: 2,
-        blockColorPick: "end",
+        blockColorPick: "end"
       } satisfies LevelSettings);
 
       const hardResult = special.getSettings(LEVEL_SCALE.at(-1)!, random);
@@ -221,7 +221,7 @@ describe(special.getSettings, () => {
         buffers: 1,
         bufferSizes: 1,
         stacksPerColor: 2,
-        blockColorPick: "end",
+        blockColorPick: "end"
       } satisfies LevelSettings);
     });
   });
@@ -241,9 +241,9 @@ describe(special.getSettings, () => {
         bufferSizes: 4,
         extraBuffers: [
           { amount: 1, size: 3, limit: 1 },
-          { amount: 1, size: 2, limit: 1 },
+          { amount: 1, size: 2, limit: 1 }
         ],
-        blockColorPick: "end",
+        blockColorPick: "end"
       } satisfies LevelSettings);
 
       const hardResult = special.getSettings(LEVEL_SCALE.at(-1)!, random);
@@ -258,9 +258,9 @@ describe(special.getSettings, () => {
         bufferSizes: 4,
         extraBuffers: [
           { amount: 1, size: 3, limit: 1 },
-          { amount: 1, size: 2, limit: 1 },
+          { amount: 1, size: 2, limit: 1 }
         ],
-        blockColorPick: "end",
+        blockColorPick: "end"
       } satisfies LevelSettings);
     });
   });

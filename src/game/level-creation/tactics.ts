@@ -60,7 +60,8 @@ export const generatePlayableLevel = async (
           generationInformation: {
             cost: generationCost,
             attempts: attempt,
-          },
+            seed
+          }
         };
       }
       return {
@@ -69,8 +70,8 @@ export const generatePlayableLevel = async (
         generationInformation: {
           cost: generationCost,
           attempts: attempt,
-          seed,
-        },
+          seed
+        }
       };
     }
   }
@@ -163,7 +164,7 @@ const isBeatable = async (
         moves.push({
           from: nextMove.move.from,
           to: nextMove.move.to,
-          tactic: nextMove.name,
+          tactic: nextMove.name
         });
 
         playLevel = moveBlocks(playLevel, nextMove.move.from, nextMove.move.to);

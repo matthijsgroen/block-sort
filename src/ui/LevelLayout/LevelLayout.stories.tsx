@@ -3,19 +3,19 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { generateRandomLevel } from "@/game/level-creation/generateRandomLevel";
 import {
   getHard2Settings,
-  getHardSettings as getHardSettings,
+  getHardSettings as getHardSettings
 } from "@/game/level-types/hard";
 import {
   getNormal2Settings,
   getNormal3Settings,
-  getNormalSettings,
+  getNormalSettings
 } from "@/game/level-types/normal";
 import {
   getSpecial1Settings,
   getSpecial2Settings,
   getSpecial3Settings,
   getSpecial4Settings,
-  getSpecial5Settings,
+  getSpecial5Settings
 } from "@/game/level-types/special";
 import { LevelSettings } from "@/game/types";
 import { mulberry32 } from "@/support/random";
@@ -44,7 +44,7 @@ const meta: Meta<CustomArgs> = {
   title: "BlockSort/LevelLayout",
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
-    layout: "centered",
+    layout: "centered"
   },
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ["autodocs"],
@@ -61,18 +61,18 @@ const meta: Meta<CustomArgs> = {
         "special2",
         "special3",
         "special4",
-        "special5",
+        "special5"
       ],
-      control: { type: "select" },
+      control: { type: "select" }
     },
     difficulty: {
-      control: { type: "number" },
-    },
+      control: { type: "number" }
+    }
   },
   args: {
     difficulty: 1,
-    levelType: "normal",
-  },
+    levelType: "normal"
+  }
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#action-args
 };
 
@@ -92,7 +92,7 @@ const settingProducer: Record<
   special2: getSpecial2Settings,
   special3: getSpecial3Settings,
   special4: getSpecial4Settings,
-  special5: getSpecial5Settings,
+  special5: getSpecial5Settings
 };
 
 const SEED = 123456789;
@@ -111,5 +111,5 @@ export const LevelLayout: Story = {
         <LevelLayoutComponent started={true} levelState={level} />
       </div>
     );
-  },
+  }
 };

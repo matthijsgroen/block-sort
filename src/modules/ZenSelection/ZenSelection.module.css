@@ -1,6 +1,6 @@
 .text {
   letter-spacing: 5px;
-  @apply text-center font-bold font-block-sort  text-xl;
+  @apply text-center font-block-sort text-xl font-bold;
 }
 
 .shadow {

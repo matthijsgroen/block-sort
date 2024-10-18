@@ -2,7 +2,7 @@ import { getActiveTheme, getToday, themeSchedule } from "@/support/themes";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
-  month: "short",
+  month: "short"
 });
 
 export const EventCalendar: React.FC = () => {

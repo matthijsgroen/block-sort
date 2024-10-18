@@ -37,8 +37,8 @@ export const createItem = <Stream>(
     loop = false,
     multipleInstances = false,
     lazy = false,
-    singleInStream,
-  }: Omit<AudioItem<Stream>, "gain" | "fileUrl" | "audioStream"> = {},
+    singleInStream
+  }: Omit<AudioItem<Stream>, "gain" | "fileUrl" | "audioStream"> = {}
 ): AudioItem<Stream> => ({
   audioStream,
   fileUrl,
@@ -46,12 +46,12 @@ export const createItem = <Stream>(
   loop,
   multipleInstances,
   lazy,
-  singleInStream,
+  singleInStream
 });
 
 const loadAndDecodeAudio = async (
   context: AudioContext,
-  fileUrl: string,
+  fileUrl: string
 ): Promise<AudioBuffer> => {
   const file = await fetch(fileUrl);
   const buffer = await file.arrayBuffer();
@@ -60,10 +60,10 @@ const loadAndDecodeAudio = async (
 
 export const audioSystem = <
   Stream extends string,
-  AudioLibrary extends Record<string, AudioItem<Stream>>,
+  AudioLibrary extends Record<string, AudioItem<Stream>>
 >(
   streams: Record<Stream, StreamItem>,
-  audioItems: AudioLibrary,
+  audioItems: AudioLibrary
 ) => {
   const loadAudio = async () => {
     const context = new AudioContext();
@@ -90,7 +90,7 @@ export const audioSystem = <
         if (v.buffer === undefined && !v.lazy) {
           v.buffer = await loadAndDecodeAudio(context, v.fileUrl);
         }
-      }),
+      })
     );
 
     const playBuffer = (item: AudioItem<Stream>) => {
@@ -99,7 +99,7 @@ export const audioSystem = <
         const targetNode = streams[item.audioStream].gainNode;
         if (!targetNode) {
           throw new Error(
-            `Audio stream for ${item.audioStream} is not yet initialized`,
+            `Audio stream for ${item.audioStream} is not yet initialized`
           );
         }
         item.gainNode = context.createGain();
@@ -140,7 +140,7 @@ export const audioSystem = <
                 lazySource.stop();
                 lazySource.disconnect();
               }
-            },
+            }
           };
         }
         const source = context.createBufferSource();
@@ -161,7 +161,7 @@ export const audioSystem = <
           stop: () => {
             source.stop();
             source.disconnect();
-          },
+          }
         };
       };
 
@@ -178,12 +178,12 @@ export const audioSystem = <
             sourcePlaying.stop();
             sourcePlaying = null;
           }
-        },
+        }
       };
     };
 
     const audioPlayers = Object.fromEntries(
-      Object.entries(audioItems).map(([k, v]) => [k, playBuffer(v)]),
+      Object.entries(audioItems).map(([k, v]) => [k, playBuffer(v)])
     ) as Record<keyof AudioLibrary, ReturnType<typeof playBuffer>>;
 
     return {
@@ -194,7 +194,7 @@ export const audioSystem = <
       },
       stop: (item: keyof typeof audioItems) => {
         audioPlayers[item].stop();
-      },
+      }
     };
   };
 
@@ -281,6 +281,6 @@ export const audioSystem = <
         s.stop(item);
         setStoppedPlaying(item);
       });
-    },
+    }
   };
 };

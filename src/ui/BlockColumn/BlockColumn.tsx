@@ -36,7 +36,7 @@ export const BlockColumn: React.FC<Props> = ({
   started = true,
   suggested = false,
   amountSelected = 0,
-  amountSuggested = 0,
+  amountSuggested = 0
 }) => {
   const [locked, setLocked] = useState(column.locked);
   const [blocksLocked, setBlocksLocked] = useState(-1);
@@ -77,7 +77,7 @@ export const BlockColumn: React.FC<Props> = ({
         className={clsx("box-content border border-transparent pb-6", {
           "contain-paint": locked,
           "rounded-b-md": column.type === "buffer",
-          "rounded-md border-t-black/60": column.type === "placement",
+          "rounded-md border-t-black/60": column.type === "placement"
         })}
       >
         {suggested && (
@@ -91,8 +91,8 @@ export const BlockColumn: React.FC<Props> = ({
             {
               [styles.buffer]: column.type === "buffer",
               "rounded-md border border-t-0 border-black/60 bg-black/20 shadow-inner":
-                column.type === "placement",
-            },
+                column.type === "placement"
+            }
           )}
           onPointerDown={onClick}
         >
@@ -145,7 +145,7 @@ export const BlockColumn: React.FC<Props> = ({
                 key={column.blocks.length + p}
                 className={`${p === 0 && column.blocks.length === 0 ? styles.bottom : styles.empty} ${styles.shade}`}
               ></div>
-            ),
+            )
           )}
         </div>
       </div>

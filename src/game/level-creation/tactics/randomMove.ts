@@ -43,7 +43,7 @@ export const randomMove: Tactic = (level, random = Math.random) => {
     {
       // name: "randomMove",
       move: { from: source.source, to: source.destinations[pickDestination] },
-      weight: 1,
-    },
+      weight: 1
+    }
   ];
 };

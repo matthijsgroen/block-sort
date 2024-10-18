@@ -2,7 +2,7 @@ import { pick } from "@/support/random";
 
 import {
   getDifficultyLevel,
-  LEVEL_SCALE,
+  LEVEL_SCALE
 } from "../level-settings/levelSettings";
 import { LevelSettings } from "../types";
 
@@ -26,14 +26,14 @@ export const easy: LevelType<"easy"> = {
 
     const easyDifficulty = Math.max(
       difficulty - Math.round(1 + random() * (difficulty - 2)),
-      2,
+      2
     );
     const lvlSimulation = LEVEL_SCALE[easyDifficulty - 1];
 
     const templates: LevelSettings[] = [
       normal.getSettings(lvlSimulation, random),
       hard.getSettings(lvlSimulation, random),
-      special.getSettings(lvlSimulation, random),
+      special.getSettings(lvlSimulation, random)
     ];
 
     return pick(templates, random);
@@ -41,5 +41,5 @@ export const easy: LevelType<"easy"> = {
   getZenSettings: () => {
     // no zen settings for easy
     return special.getSettings(1);
-  },
+  }
 };

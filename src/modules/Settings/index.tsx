@@ -33,7 +33,7 @@ export const Settings: React.FC<Props> = ({
   onSoundChange,
   onMusicChange,
   onThemesChange,
-  onClose,
+  onClose
 }) => {
   const [activeTab, setActiveTab] = useState<
     "settings" | "changes" | "attribution" | "data" | "advanced"
@@ -98,7 +98,7 @@ export const Settings: React.FC<Props> = ({
                   await navigator.share({
                     title: "Block Sort",
                     url: "https://matthijsgroen.github.io/block-sort/",
-                    text: "A block sorting puzzle game. No ads, cookies, tracking or payments. Just the pure fun!",
+                    text: "A block sorting puzzle game. No ads, cookies, tracking or payments. Just the pure fun!"
                   });
                 } catch (ignoreError) {
                   // Nothing to do, user probably canceled the share

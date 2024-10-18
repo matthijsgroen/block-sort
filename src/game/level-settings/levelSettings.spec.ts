@@ -1,10 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  getDifficultyLevel,
-  LEVEL_SCALE,
-  nextLevelAt,
-} from "./levelSettings";
+import { getDifficultyLevel, LEVEL_SCALE, nextLevelAt } from "./levelSettings";
 
 describe("Level scale", () => {
   it("reaches maximum level at level 267", () => {
