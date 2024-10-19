@@ -11,8 +11,6 @@ import { LevelSettings } from "../types";
 
 import { LEVEL_SCALE } from "./levelSettings";
 
-const TEST_SEED = 123456789;
-
 export const testDifficulties = (
   getSettings: (difficulty: number) => LevelSettings,
 ) => {
