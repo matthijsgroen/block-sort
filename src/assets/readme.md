@@ -20,9 +20,9 @@ All audio has been slightly cut or audio adjusted through [editor.audio](https:/
   Artist: [SpadeStars](https://pixabay.com/users/spadestars-24048310/)  
   [Source](https://pixabay.com/music/beats-no-way-out-a-backrooms-song-123220/) • [License](https://pixabay.com/service/license-summary/)
 
-- **Christmas Day** (Christmas theme)  
-  Artist: [Sergii Pavkin](https://pixabay.com/users/sergepavkinmusic-6130722/)  
-  [Source](https://pixabay.com/music/christmas-christmas-day-179850/) • [License](https://pixabay.com/service/license-summary/)
+- **Christmas 2** (Christmas theme)  
+  Artist: [Magenta Six](https://pixabay.com/users/magentasix-40459079/)  
+  [Source](https://pixabay.com/music/christmas-christmas-2-177696/) • [License](https://pixabay.com/service/license-summary/)
 
 ## Sound effects
 

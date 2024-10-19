@@ -15,7 +15,7 @@ type Props = {
 export const TopButton: React.FC<Props> = ({
   onClick,
   buttonType,
-  highlight = false,
+  highlight = false
 }) => {
   const button = (
     <WoodButton onClick={onClick}>
@@ -26,19 +26,19 @@ export const TopButton: React.FC<Props> = ({
             buttonType === "settings" ||
             buttonType === "close" ||
             buttonType === "install",
-          "text-4xl": buttonType === "restart",
+          "text-4xl": buttonType === "restart"
         })}
       >
         {buttonType === "back" && (
           <span className="inline-block translate-y-[2px]">&larr;</span>
         )}
         {buttonType === "restart" && (
-          <span className="inline-block -translate-y-[5px] -translate-x-[2px]">
+          <span className="inline-block -translate-x-[2px] -translate-y-[5px]">
             &#10226;
           </span>
         )}
         {buttonType === "settings" && (
-          <span className="inline-block translate-y-[2px] translate-x-[-1px]">
+          <span className="inline-block translate-x-[-1px] translate-y-[2px]">
             ⛭
           </span>
         )}

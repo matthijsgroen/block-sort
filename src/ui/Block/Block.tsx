@@ -43,12 +43,12 @@ export const Block: React.FC<Props> = ({
   selected = null,
   suggested = null,
   locked = false,
-  shadow = true,
+  shadow = true
 }) => {
   const isLocked = useDelayedToggle(locked, {
     initialValue: false,
     onDelay: 10,
-    onOn: onLock,
+    onOn: onLock
   });
   const isRevealed = useDelayedToggle(revealed, { onDelay: 10 });
 
@@ -80,15 +80,15 @@ export const Block: React.FC<Props> = ({
         "--cube-top-shape": showTopShape
           ? `'${encodeForContent(displayShape)}'`
           : "''",
-        animationDelay: !locked ? `-${index * 50}ms` : "0",
+        animationDelay: !locked ? `-${index * 50}ms` : "0"
       }}
       className={clsx(
         "relative -mt-top-block h-height-block w-block text-center",
         {
           [styles.selected]: selected && !isLocked,
           "animate-locked": !selected && isLocked,
-          "animate-place": !selected && !isLocked,
-        },
+          "animate-place": !selected && !isLocked
+        }
       )}
     >
       {shadow && <div className={styles.shadow}></div>}
@@ -99,13 +99,13 @@ export const Block: React.FC<Props> = ({
           {
             [styles.selectedOutline]: selected,
             "[transition-duration:0ms]": isRevealed,
-            "[transition-duration:500ms]": !isRevealed,
-          },
+            "[transition-duration:500ms]": !isRevealed
+          }
         )}
       ></div>
       <div
         className={clsx(styles.layer, "z-10 pt-7", {
-          [styles.suggestedOutline]: suggested,
+          [styles.suggestedOutline]: suggested
         })}
       >
         <span className={clsx("block", styles.shape)}></span>
@@ -115,14 +115,14 @@ export const Block: React.FC<Props> = ({
         className={clsx(styles.layer, {
           [styles.gradient]: revealed,
           [styles.glass]: !revealed && hideFormat === "glass",
-          [styles.present]: !revealed && hideFormat === "present",
+          [styles.present]: !revealed && hideFormat === "present"
         })}
       ></div>
       <div
         className={clsx(
           "pointer-events-none absolute h-full w-full rounded-md",
           styles.gradientLocked,
-          { ["opacity-100"]: isLocked, ["opacity-0"]: !isLocked },
+          { ["opacity-100"]: isLocked, ["opacity-0"]: !isLocked }
         )}
       ></div>
     </div>

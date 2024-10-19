@@ -6,7 +6,7 @@ import {
   createBlock,
   createBufferColumn,
   createLevelState,
-  createPlacementColumn,
+  createPlacementColumn
 } from "../factories";
 import { Column, LevelSettings, LevelState } from "../types";
 
@@ -22,7 +22,7 @@ export const generateRandomLevel = (
     extraBuffers = [],
     blockColorPick = "start",
     hideBlockTypes = "none",
-    stacksPerColor = 1,
+    stacksPerColor = 1
   }: LevelSettings,
   random: () => number
 ): LevelState => {
@@ -40,7 +40,7 @@ export const generateRandomLevel = (
   timesMap(Math.max(12 - colorPool, 0), () => random());
 
   const bufferList = [
-    { amount: buffers, size: bufferSizes, limit: bufferPlacementLimits },
+    { amount: buffers, size: bufferSizes, limit: bufferPlacementLimits }
   ].concat(extraBuffers);
 
   const blockColors = availableColors.slice(0, amountColors);

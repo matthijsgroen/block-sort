@@ -6,7 +6,7 @@ import { LevelSettings } from "../types";
 import {
   getNormal2Settings,
   getNormal3Settings,
-  getNormalSettings,
+  getNormalSettings
 } from "./normal";
 
 describe(getNormalSettings, () => {
@@ -18,8 +18,8 @@ describe(getNormalSettings, () => {
           amountColors: 2,
           extraPlacementStacks: 1,
           hideBlockTypes: "none",
-          stackSize: 4,
-        },
+          stackSize: 4
+        }
       },
       {
         difficulty: 2,
@@ -27,8 +27,8 @@ describe(getNormalSettings, () => {
           amountColors: 3,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 4,
-        },
+          stackSize: 4
+        }
       },
       {
         difficulty: 3,
@@ -36,8 +36,8 @@ describe(getNormalSettings, () => {
           amountColors: 4,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 4,
-        },
+          stackSize: 4
+        }
       },
       {
         difficulty: 4,
@@ -45,8 +45,8 @@ describe(getNormalSettings, () => {
           amountColors: 5,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 4,
-        },
+          stackSize: 4
+        }
       },
       {
         difficulty: 5,
@@ -54,8 +54,8 @@ describe(getNormalSettings, () => {
           amountColors: 6,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 4,
-        },
+          stackSize: 4
+        }
       },
       {
         difficulty: 6,
@@ -63,8 +63,8 @@ describe(getNormalSettings, () => {
           amountColors: 7,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 5,
-        },
+          stackSize: 5
+        }
       },
       {
         difficulty: 7,
@@ -72,8 +72,8 @@ describe(getNormalSettings, () => {
           amountColors: 8,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 5,
-        },
+          stackSize: 5
+        }
       },
       {
         difficulty: 8,
@@ -81,8 +81,8 @@ describe(getNormalSettings, () => {
           amountColors: 9,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 6,
-        },
+          stackSize: 6
+        }
       },
       {
         difficulty: 9,
@@ -90,8 +90,8 @@ describe(getNormalSettings, () => {
           amountColors: 10,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 6,
-        },
+          stackSize: 6
+        }
       },
       {
         difficulty: 10,
@@ -100,8 +100,8 @@ describe(getNormalSettings, () => {
           extraPlacementStacks: 2,
           extraPlacementLimits: 1,
           hideBlockTypes: "none",
-          stackSize: 7,
-        },
+          stackSize: 7
+        }
       },
       {
         difficulty: 11,
@@ -110,9 +110,9 @@ describe(getNormalSettings, () => {
           extraPlacementStacks: 2,
           extraPlacementLimits: 1,
           hideBlockTypes: "none",
-          stackSize: 7,
-        },
-      },
+          stackSize: 7
+        }
+      }
     ])("returns settings for level $difficulty", ({ difficulty, result }) => {
       const settings = getNormalSettings(difficulty);
       expect(settings).toEqual(result);
@@ -134,8 +134,8 @@ describe(getNormal2Settings, () => {
           buffers: 2,
           bufferSizes: 3,
           hideBlockTypes: "none",
-          stackSize: 7,
-        },
+          stackSize: 7
+        }
       },
       {
         difficulty: 11,
@@ -146,9 +146,9 @@ describe(getNormal2Settings, () => {
           buffers: 2,
           bufferSizes: 2,
           hideBlockTypes: "none",
-          stackSize: 7,
-        },
-      },
+          stackSize: 7
+        }
+      }
     ])("returns settings for level $difficulty", ({ difficulty, result }) => {
       const settings = getNormal2Settings(difficulty);
       expect(settings).toEqual(result);
@@ -171,8 +171,8 @@ describe(getNormal3Settings, () => {
           bufferSizes: 2,
           hideBlockTypes: "none",
           stackSize: 7,
-          extraBuffers: [{ size: 1, amount: 1, limit: 0 }],
-        },
+          extraBuffers: [{ size: 1, amount: 1, limit: 0 }]
+        }
       },
       {
         difficulty: 11,
@@ -183,9 +183,9 @@ describe(getNormal3Settings, () => {
           buffers: 2,
           bufferSizes: 2,
           hideBlockTypes: "none",
-          stackSize: 7,
-        },
-      },
+          stackSize: 7
+        }
+      }
     ])("returns settings for level $difficulty", ({ difficulty, result }) => {
       const settings = getNormal3Settings(difficulty);
       expect(settings).toEqual(result);

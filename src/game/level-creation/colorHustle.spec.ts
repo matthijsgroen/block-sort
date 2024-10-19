@@ -5,7 +5,7 @@ import { mulberry32 } from "@/support/random";
 import {
   createBlocks,
   createLevelState,
-  createPlacementColumn,
+  createPlacementColumn
 } from "../factories";
 import { LevelState } from "../types";
 
@@ -16,7 +16,7 @@ describe(colorHustle, () => {
     const random = mulberry32(123);
     const state: LevelState = createLevelState([
       createPlacementColumn(4, createBlocks("red", "green", "blue", "red")),
-      createPlacementColumn(4, createBlocks("green", "blue", "red", "green")),
+      createPlacementColumn(4, createBlocks("green", "blue", "red", "green"))
     ]);
     const newState = colorHustle(state, random);
 

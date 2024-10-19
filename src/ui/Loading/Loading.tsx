@@ -9,7 +9,7 @@ export const Loading: React.FC = () => {
   const [colors, setColors] = useState([
     "bg-blue-500",
     "bg-green-500",
-    "bg-red-500",
+    "bg-red-500"
   ]);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export const Loading: React.FC = () => {
   }, []);
 
   return (
-    <div className={clsx("flex-row flex", styles.slide)} key={colors[0]}>
+    <div className={clsx("flex flex-row", styles.slide)} key={colors[0]}>
       <div className={clsx(styles.topRight, styles.degrees180)}>
         <div className={clsx(styles.topLeft, styles.degrees90)}>
           <div className={clsx(styles.bottomLeft, styles.degrees180end)}>

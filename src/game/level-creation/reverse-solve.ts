@@ -7,7 +7,7 @@ import { BLOCK_COLORS, BlockColor } from "../blocks";
 import {
   createBlock,
   createBufferColumn,
-  createPlacementColumn,
+  createPlacementColumn
 } from "../factories";
 import { Column, LevelState } from "../types";
 
@@ -32,7 +32,7 @@ export const generateLevel = (
     buffers = 0,
     bufferSizes = 1,
     // hideBlockTypes = false,
-    amountShuffles = 15,
+    amountShuffles = 15
   }: LevelSettings
 ): LevelState => {
   const base = generateBaseLevel(random, {
@@ -41,7 +41,7 @@ export const generateLevel = (
     extraPlacementStacks,
     extraPlacementLimits,
     buffers,
-    bufferSizes,
+    bufferSizes
   });
 
   let lvl = base;
@@ -118,7 +118,7 @@ export const generateBaseLevel = (
     extraPlacementStacks = 2,
     extraPlacementLimits = 0,
     buffers = 0,
-    bufferSizes = 1,
+    bufferSizes = 1
   }: LevelSettings
 ): LevelState => {
   // Generate level, this should be extracted
@@ -155,6 +155,6 @@ export const generateBaseLevel = (
         )
       )
       .concat(timesMap(buffers, () => createBufferColumn(bufferSizes))),
-    moves: [],
+    moves: []
   };
 };

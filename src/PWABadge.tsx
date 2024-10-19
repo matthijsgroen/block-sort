@@ -12,7 +12,7 @@ function PWABadge() {
   const {
     offlineReady: [offlineReady, setOfflineReady],
     needRefresh: [needRefresh, setNeedRefresh],
-    updateServiceWorker,
+    updateServiceWorker
   } = useRegisterSW({
     onRegisteredSW(swUrl, r) {
       if (period <= 0) return;
@@ -24,7 +24,7 @@ function PWABadge() {
           if (sw.state === "activated") registerPeriodicSync(period, swUrl, r);
         });
       }
-    },
+    }
   });
 
   function close() {
@@ -48,11 +48,11 @@ function PWABadge() {
           <div className="flex flex-row gap-4">
             {needRefresh && (
               <WoodButton onClick={() => updateServiceWorker(true)}>
-                <span className="inline-block pt-1 px-2">Reload</span>
+                <span className="inline-block px-2 pt-1">Reload</span>
               </WoodButton>
             )}
             <WoodButton onClick={() => close()}>
-              <span className="inline-block pt-1 px-2">Close</span>
+              <span className="inline-block px-2 pt-1">Close</span>
             </WoodButton>
           </div>
         </div>
@@ -80,8 +80,8 @@ function registerPeriodicSync(
       cache: "no-store",
       headers: {
         cache: "no-store",
-        "cache-control": "no-cache",
-      },
+        "cache-control": "no-cache"
+      }
     });
 
     if (resp?.status === 200) await r.update();

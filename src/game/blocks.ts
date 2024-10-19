@@ -14,7 +14,7 @@ export const BLOCK_COLORS = [
   "turquoise", // triangle
   "orange", // butterfly
   "lightyellow", // sun
-  "gray", // fish
+  "gray" // fish
 ] as const;
 
 export type BlockColor = (typeof BLOCK_COLORS)[number];

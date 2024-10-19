@@ -15,7 +15,7 @@ const levelTypes = [
   easy,
   scrambled,
   winter,
-  normal,
+  normal
 ] as const satisfies LevelType<string>[];
 
 export type LevelTypeString = (typeof levelTypes)[number]["type"];
@@ -24,7 +24,7 @@ export const getLevelType = (levelNr: number): LevelType<string> =>
   levelTypes.find((level) => level.occurrence(levelNr))!;
 
 export const getLevelTypeByType = <T extends LevelTypeString>(
-  type: T,
+  type: T
 ): LevelType<T> =>
   levelTypes.find((level) => level.type === type) as LevelType<T>;
 
@@ -32,7 +32,7 @@ export const getUnlockableLevelTypes = (): Unlockable<LevelType<string>>[] =>
   (levelTypes as LevelType<string>[])
     .filter(
       (level): level is Unlockable<LevelType<string>> =>
-        level.unlocksAtLevel !== undefined,
+        level.unlocksAtLevel !== undefined
     )
     .sort((a, b) => a.unlocksAtLevel - b.unlocksAtLevel);
 
@@ -50,7 +50,7 @@ export const levelTypeBorder = (levelNr: number): string => {
 
 export const getLevelSettings = (
   levelNr: number,
-  random = Math.random,
+  random = Math.random
 ): LevelSettings => {
   const levelType = getLevelType(levelNr);
   return levelType.getSettings(levelNr, random);

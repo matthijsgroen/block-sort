@@ -8,7 +8,7 @@ export const ZenButton: React.FC<Props> = ({ onClick }) => (
   <button
     onClick={onClick}
     className={clsx(
-      "inline-block h-12 rounded-3xl shadow-lg font-bold pt-3 px-6 bg-orange-500 active:scale-90 transition-transform"
+      "inline-block h-12 rounded-3xl bg-orange-500 px-6 pt-3 font-bold shadow-lg transition-transform active:scale-90"
     )}
   >
     <span className={"block -translate-y-1 scale-150"}>️🌻 ▸</span>

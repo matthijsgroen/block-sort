@@ -11,7 +11,7 @@ export const Smiley = () => {
     smile: "🙂",
     sleep: "😴",
     yawn: "🥱",
-    think: "🤔",
+    think: "🤔"
   };
 
   useEffect(() => {

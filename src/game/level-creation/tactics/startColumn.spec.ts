@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   createBlocks,
   createLevelState,
-  createPlacementColumn,
+  createPlacementColumn
 } from "@/game/factories";
 import { mulberry32 } from "@/support/random";
 
@@ -19,7 +19,7 @@ describe(startColumn, () => {
       createPlacementColumn(4, createBlocks("aqua", "red", "pink", "red")),
       createPlacementColumn(4, createBlocks("green", "pink", "red", "pink")),
       createPlacementColumn(4, createBlocks("pink", "aqua", "green", "green")),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
     const moves = startColumn(level, random);
 
@@ -39,7 +39,7 @@ describe(startColumn, () => {
       createPlacementColumn(4, createBlocks("aqua", "red", "pink", "red")),
       createPlacementColumn(4, createBlocks("pink", "aqua", "red", "pink")),
       createPlacementColumn(4, createBlocks("pink", "aqua", "green", "green")),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
     const moves = startColumn(level, random);
 
@@ -65,7 +65,7 @@ describe(startColumn, () => {
       createPlacementColumn(4, createBlocks("aqua", "red", "pink", "red")),
       createPlacementColumn(4, createBlocks("aqua", "pink", "red", "pink")),
       createPlacementColumn(4, createBlocks("pink", "aqua", "green", "green")),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
     const moves = startColumn(level, random);
 
@@ -86,7 +86,7 @@ describe(startColumn, () => {
       createPlacementColumn(4, createBlocks("aqua", "pink", "green", "aqua")),
       createPlacementColumn(4, createBlocks("aqua", "red", "pink", "red")),
       createPlacementColumn(4, createBlocks("red", "pink", "red", "green")),
-      createPlacementColumn(4, createBlocks("pink", "aqua", "green", "green")),
+      createPlacementColumn(4, createBlocks("pink", "aqua", "green", "green"))
     ]);
     const moves = startColumn(level, random);
 
@@ -101,7 +101,7 @@ describe(startColumn, () => {
       createPlacementColumn(4, createBlocks("red", "pink", "red", "green")),
       createPlacementColumn(4, createBlocks("pink", "aqua", "green", "green")),
       createPlacementColumn(4, createBlocks("aqua")),
-      createPlacementColumn(4),
+      createPlacementColumn(4)
     ]);
     const moves = startColumn(level, random);
 

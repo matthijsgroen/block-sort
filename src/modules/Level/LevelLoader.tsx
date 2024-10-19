@@ -37,7 +37,6 @@ const generateLevelContent = async (
   levelSettings: LevelSettings,
   levelNr: number,
 ): Promise<LevelState> => {
-  const random = mulberry32(seed);
   const existingState = await getGameValue<LevelState>(storageKey);
   if (existingState !== null) {
     return existingState;
@@ -50,6 +49,7 @@ const generateLevelContent = async (
 
   const seeds = levelSeeds[settingsHash] ?? [];
   const preSeed = seeds.length > 0 ? seeds[levelNr % seeds.length] : undefined;
+  const random = mulberry32(preSeed ?? seed);
 
   let level = await generatePlayableLevel(levelSettings, random, preSeed);
   if (preSeed !== undefined && level.generationInformation?.seed === preSeed) {

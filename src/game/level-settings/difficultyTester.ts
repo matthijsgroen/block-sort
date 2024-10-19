@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import { levelSeeds } from "@/data/levelSeeds";
+import { hash } from "@/support/hash";
 import { mulberry32 } from "@/support/random";
 
 import { moveBlocks } from "../actions";
@@ -9,23 +11,35 @@ import { LevelSettings } from "../types";
 
 import { LEVEL_SCALE } from "./levelSettings";
 
-const TEST_SEED = 123456789;
-
 export const testDifficulties = (
-  getSettings: (difficulty: number) => LevelSettings
+  getSettings: (difficulty: number) => LevelSettings,
 ) => {
   describe("playability", () => {
     it.each(
       [{ difficulty: 1, level: 1 }].concat(
-        LEVEL_SCALE.map((level, i) => ({ difficulty: i + 2, level: level + 1 }))
-      )
+        LEVEL_SCALE.map((level, i) => ({
+          difficulty: i + 2,
+          level: level + 1,
+        })),
+      ),
     )(
       "can play difficulty $difficulty at level $level",
       async ({ difficulty }) => {
         const settings = getSettings(difficulty);
-        const random = mulberry32(TEST_SEED);
-        const result = await generatePlayableLevel(settings, random);
+
+        const hashVersion = { ...settings };
+        delete hashVersion["playMoves"];
+
+        const settingsHash = hash(JSON.stringify(hashVersion)).toString();
+
+        const seeds = levelSeeds[settingsHash] ?? [];
+        const preSeed = seeds[0];
+        expect(preSeed).toBeDefined();
+
+        const random = mulberry32(preSeed);
+        const result = await generatePlayableLevel(settings, random, preSeed);
         expect(result.moves.length).toBeGreaterThan(2);
+        expect(result.generationInformation?.seed).toBe(preSeed);
 
         // actual play level
         let levelState = result;
@@ -35,7 +49,7 @@ export const testDifficulties = (
         const won = hasWon(levelState);
         expect(won).toBe(true);
       },
-      90_000
+      90_000,
     );
   });
 };

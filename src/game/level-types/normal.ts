@@ -11,7 +11,7 @@ export const getNormalSettings: SettingsProducer = (difficulty) => ({
   stackSize: Math.min(Math.max(2 + Math.floor(difficulty / 2), 4), 7),
   extraPlacementStacks: difficulty < 2 ? 1 : 2,
   extraPlacementLimits: difficulty > 9 ? 1 : undefined,
-  hideBlockTypes: "none",
+  hideBlockTypes: "none"
 });
 
 export const getNormal2Settings: SettingsProducer = (difficulty) => ({
@@ -21,7 +21,7 @@ export const getNormal2Settings: SettingsProducer = (difficulty) => ({
   extraPlacementLimits: difficulty > 9 ? 1 : undefined,
   hideBlockTypes: "none",
   buffers: difficulty > 9 ? 2 : undefined,
-  bufferSizes: difficulty === 10 ? 3 : difficulty === 11 ? 2 : undefined,
+  bufferSizes: difficulty === 10 ? 3 : difficulty === 11 ? 2 : undefined
 });
 
 export const getNormal3Settings: SettingsProducer = (difficulty) => ({
@@ -33,7 +33,7 @@ export const getNormal3Settings: SettingsProducer = (difficulty) => ({
   buffers: difficulty > 9 ? 2 : undefined,
   bufferSizes: difficulty === 10 ? 2 : difficulty === 11 ? 2 : undefined,
   extraBuffers:
-    difficulty === 10 ? [{ size: 1, amount: 1, limit: 0 }] : undefined,
+    difficulty === 10 ? [{ size: 1, amount: 1, limit: 0 }] : undefined
 });
 
 export const normal: LevelType<"normal"> = {
@@ -51,7 +51,7 @@ export const normal: LevelType<"normal"> = {
     if (levelNr > 160) {
       templates.push(
         getNormal2Settings(difficulty),
-        getNormal3Settings(difficulty),
+        getNormal3Settings(difficulty)
       );
     }
     return pick(templates, random);
@@ -62,5 +62,5 @@ export const normal: LevelType<"normal"> = {
       templates.push(getNormal2Settings, getNormal3Settings);
     }
     return templates[zenLevel % templates.length](difficultyLevel);
-  },
+  }
 };

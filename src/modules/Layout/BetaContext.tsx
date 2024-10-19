@@ -5,7 +5,7 @@ export const BetaContext = createContext<{
   setShowBeta: Dispatch<boolean>;
 }>({
   showBeta: false,
-  setShowBeta: () => {},
+  setShowBeta: () => {}
 });
 
 export const BetaProvider: React.FC<PropsWithChildren> = ({ children }) => {
@@ -14,7 +14,7 @@ export const BetaProvider: React.FC<PropsWithChildren> = ({ children }) => {
     <BetaContext
       value={{
         showBeta,
-        setShowBeta,
+        setShowBeta
       }}
     >
       {children}

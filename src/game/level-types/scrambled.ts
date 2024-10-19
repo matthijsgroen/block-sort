@@ -6,7 +6,7 @@ import { LevelType } from "./types";
 
 export const getScrambledSettings: SettingsProducer = (difficulty) => ({
   ...getNormalSettings(difficulty),
-  playMoves: [7, 0.3],
+  playMoves: [7, 0.3]
 });
 
 export const scrambled: LevelType<"scrambled"> = {
@@ -26,5 +26,5 @@ export const scrambled: LevelType<"scrambled"> = {
   },
   getZenSettings: (_levelNr, difficulty) => {
     return getScrambledSettings(difficulty);
-  },
+  }
 };

@@ -18,16 +18,16 @@ export const toLevelStateDTO = (state: LevelState): LevelStateDTO => {
     c: state.columns.map((c) => ({
       b: c.blocks.map((b) => ({
         c: BLOCK_COLORS.indexOf(b.color),
-        r: !!b.revealed,
+        r: !!b.revealed
       })),
       s: c.columnSize,
       l:
         c.limitColor !== undefined
           ? BLOCK_COLORS.indexOf(c.limitColor)
           : undefined,
-      t: c.type === "placement" ? 1 : 0,
+      t: c.type === "placement" ? 1 : 0
     })),
-    m: toMoveDTO(state.moves),
+    m: toMoveDTO(state.moves)
   };
 };
 
@@ -40,9 +40,9 @@ export const fromLevelStateDTO = (dto: LevelStateDTO): LevelState => {
       c.b.reduce<BlockColor[]>(
         (r, b) =>
           r.includes(BLOCK_COLORS[b.c]) ? r : r.concat(BLOCK_COLORS[b.c]),
-        r,
+        r
       ),
-    [],
+    []
   );
   colors.sort();
 
@@ -51,14 +51,14 @@ export const fromLevelStateDTO = (dto: LevelStateDTO): LevelState => {
     columns: dto.c.map<Column>((c) => ({
       blocks: c.b.map((b) => ({
         color: BLOCK_COLORS[b.c],
-        revealed: b.r,
+        revealed: b.r
       })),
       columnSize: c.s,
       limitColor: c.l !== undefined ? BLOCK_COLORS[c.l] : undefined,
       type: c.t === 1 ? "placement" : "buffer",
-      locked: c.b.length === c.s && c.b.every((b) => b.c === c.b[0].c),
+      locked: c.b.length === c.s && c.b.every((b) => b.c === c.b[0].c)
     })),
-    moves: fromMoveDTO(dto.m),
+    moves: fromMoveDTO(dto.m)
   };
 };
 
