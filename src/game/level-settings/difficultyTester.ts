@@ -14,16 +14,16 @@ import { LEVEL_SCALE } from "./levelSettings";
 const TEST_SEED = 123456789;
 
 export const testDifficulties = (
-  getSettings: (difficulty: number) => LevelSettings
+  getSettings: (difficulty: number) => LevelSettings,
 ) => {
   describe("playability", () => {
     it.each(
       [{ difficulty: 1, level: 1 }].concat(
         LEVEL_SCALE.map((level, i) => ({
           difficulty: i + 2,
-          level: level + 1
-        }))
-      )
+          level: level + 1,
+        })),
+      ),
     )(
       "can play difficulty $difficulty at level $level",
       async ({ difficulty }) => {
@@ -38,7 +38,7 @@ export const testDifficulties = (
         const preSeed = seeds[0];
         expect(preSeed).toBeDefined();
 
-        const random = mulberry32(TEST_SEED);
+        const random = mulberry32(preSeed);
         const result = await generatePlayableLevel(settings, random, preSeed);
         expect(result.moves.length).toBeGreaterThan(2);
         expect(result.generationInformation?.seed).toBe(preSeed);
@@ -51,7 +51,7 @@ export const testDifficulties = (
         const won = hasWon(levelState);
         expect(won).toBe(true);
       },
-      90_000
+      90_000,
     );
   });
 };

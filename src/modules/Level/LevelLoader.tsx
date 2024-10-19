@@ -14,7 +14,7 @@ import { generateNewSeed, mulberry32 } from "@/support/random";
 import {
   deleteGameValue,
   getGameValue,
-  setGameValue
+  setGameValue,
 } from "@/support/useGameStorage";
 
 import { ErrorBoundary } from "./ErrorBoundary";
@@ -35,7 +35,7 @@ const generateLevelContent = async (
   seed: number,
   storageKey: string,
   levelSettings: LevelSettings,
-  levelNr: number
+  levelNr: number,
 ): Promise<LevelState> => {
   const random = mulberry32(seed);
   const existingState = await getGameValue<LevelState>(storageKey);
@@ -68,7 +68,7 @@ export const LevelLoader: React.FC<Props> = ({
   levelNr,
   title,
   levelType,
-  storagePrefix = ""
+  storagePrefix = "",
 }) => {
   const [locked] = useState({ levelNr, levelSettings, seed, title });
 
@@ -77,7 +77,7 @@ export const LevelLoader: React.FC<Props> = ({
       locked.seed,
       `${storagePrefix}initialLevelState${locked.levelNr}`,
       locked.levelSettings,
-      levelNr
+      levelNr,
     );
     // Verify level content
     const levelState = replayMoves(level, level.moves);
@@ -86,13 +86,13 @@ export const LevelLoader: React.FC<Props> = ({
       const newSeed = generateNewSeed(locked.seed, 2);
       // Level content is botched, retry
       await deleteGameValue(
-        `${storagePrefix}initialLevelState${locked.levelNr}`
+        `${storagePrefix}initialLevelState${locked.levelNr}`,
       );
       const level = await generateLevelContent(
         newSeed,
         `${storagePrefix}initialLevelState${locked.levelNr}`,
         locked.levelSettings,
-        levelNr
+        levelNr,
       );
       return level;
     }
@@ -130,7 +130,7 @@ export const LevelLoader: React.FC<Props> = ({
           onComplete={(won) => {
             if (won) {
               deleteGameValue(
-                `${storagePrefix}initialLevelState${locked.levelNr}`
+                `${storagePrefix}initialLevelState${locked.levelNr}`,
               );
             }
             onComplete(won);

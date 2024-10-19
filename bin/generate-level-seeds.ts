@@ -112,7 +112,7 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
   );
 
   if (incompleteSeed) {
-    const additionalNeeded = Math.max(
+    const additionalNeeded = Math.min(
       GENERATE_BATCH_SIZE,
       MINIMAL_LEVELS - levelSeedsCopy[incompleteSeed.hash].length,
     );
@@ -218,6 +218,7 @@ program
   .option("-a, --all", "remove all items that are broken", false)
   .action(async (options: { all?: boolean }) => {
     const all = options.all;
+    let foundIssues = false;
 
     const keys = Object.keys(levelSeeds);
 
@@ -236,9 +237,22 @@ program
     );
     const existingKeys = currentHashes.filter((h) => keys.includes(h.hash));
     const missingKeys = currentHashes.filter((h) => !keys.includes(h.hash));
-    if (missingKeys.length > 0 && !all) {
-      console.log("Keys are not complete. Please run 'run' first.");
-      process.exit(1);
+    if (missingKeys.length > 0) {
+      missingKeys
+        .filter((v, i, l) => l.indexOf(v) === i)
+        .forEach((key) => {
+          console.log(
+            c.red(
+              `Seeds missing for "${key.name} difficulty ${key.difficulty + 1}`,
+            ),
+          );
+        });
+      console.log("Please run 'run' first.\n");
+      if (!all) {
+        process.exit(1);
+      } else {
+        foundIssues = true;
+      }
     }
 
     let updatedSeeds = levelSeeds;
@@ -248,13 +262,18 @@ program
       if (!seeds) {
         continue;
       }
-      if (seeds.length < MINIMAL_LEVELS && !all) {
+      if (seeds.length < MINIMAL_LEVELS) {
+        console.log("");
         console.log(
           c.red(
-            `Seed for "${key.name}", difficulty ${key.difficulty + 1} is incomplete. Only ${seeds.length} seeds available.`,
+            `Seed for "${key.name}", difficulty ${key.difficulty + 1} is incomplete. Only ${seeds.length} seeds of the ${MINIMAL_LEVELS} available.`,
           ),
         );
-        process.exit(1);
+        if (!all) {
+          process.exit(1);
+        } else {
+          foundIssues = true;
+        }
       }
       process.stdout.write(
         `Verifying "${key.name}" difficulty ${key.difficulty + 1}...      \r`,
@@ -267,10 +286,11 @@ program
       for (const seed of seedsToTest) {
         if (!seed) {
           console.log("");
-          console.log(c.red("Seed is missing"));
+          console.log(c.red("Seed is missing"), "\n");
           if (!all) {
             process.exit(1);
           } else {
+            foundIssues = true;
             continue;
           }
         }
@@ -291,6 +311,7 @@ program
             if (!all) {
               process.exit(1);
             } else {
+              foundIssues = true;
               break;
             }
           }
@@ -308,16 +329,18 @@ program
           if (!all) {
             process.exit(1);
           } else {
+            foundIssues = true;
             break;
           }
         }
       }
     }
     console.log("");
-    if (!all) {
-      console.log("All ok!");
-    } else {
+    if (foundIssues) {
       console.log("Done.");
+      process.exit(1);
+    } else {
+      console.log("All ok!");
     }
   });
 
