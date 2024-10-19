@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Reduced lightning effect in fall theme
 - Detection of being stuck while having a free buffer column
+- Updated internal tooling for content management
 
 ## Version 1.10.4 - 2024-10-17
 
