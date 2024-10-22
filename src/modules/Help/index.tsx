@@ -30,7 +30,7 @@ export const Help: React.FC<Props> = ({ onClose }) => {
       <div
         className={clsx(
           styles.textStyling,
-          "max-h-[calc(100vh-200px)] overflow-y-auto"
+          "max-h-[calc(100vh-200px)] overflow-y-auto overscroll-y-contain"
         )}
       >
         <HelpText />

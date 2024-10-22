@@ -20,20 +20,20 @@ export const shapeMap: Record<BlockColor, string> = {
 };
 
 export const colorMap: Record<BlockColor, string> = {
-  red: "#FF6F61",
-  white: "#FFD700",
-  yellow: "#00BFFF",
-  blue: "#32CD32",
-  purple: "#FF4500",
-  black: "#20B2AA",
+  red: "#00FA9A",
+  white: "#FF4500",
+  yellow: "#FF6F61",
+  blue: "#ADFF2F",
+  purple: "#718096",
+  black: "#FFD700",
   green: "#FFDAB9",
-  darkgreen: "#ADFF2F",
-  darkblue: "#FF6347",
+  darkgreen: "#32CD32",
+  darkblue: "#20B2AA",
   aqua: "#87CEEB",
   brown: "#FFFACD",
   pink: "#FF69B4",
   turquoise: "#4682B4",
-  orange: "#FFA07A",
-  lightyellow: "#00FA9A",
-  gray: "#E0FFFF"
+  orange: "#E0FFFF",
+  lightyellow: "#00BFFF",
+  gray: "#FFA07A"
 };

@@ -11,7 +11,7 @@ import { LevelSettings } from "@/game/types.ts";
 import { ThemeContext } from "@/modules/Layout/ThemeContext.tsx";
 import { LevelLoader } from "@/modules/Level/LevelLoader.tsx";
 import { generateNewSeed, mulberry32, pick } from "@/support/random.ts";
-import { getThemeSong } from "@/support/themeMusic.tsx";
+import { getThemeSong } from "@/support/themeMusic.ts";
 import { deleteGameValue, useGameStorage } from "@/support/useGameStorage.ts";
 
 import { ZenSelection } from "../ZenSelection/ZenSelection.tsx";

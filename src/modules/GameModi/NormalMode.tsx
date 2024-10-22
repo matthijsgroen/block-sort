@@ -7,13 +7,13 @@ import { ZEN_MODE } from "@/featureFlags.ts";
 import {
   getLevelSettings,
   getLevelType,
-  LevelTypeString,
+  LevelTypeString
 } from "@/game/level-types/index.ts";
 import { ThemeContext } from "@/modules/Layout/ThemeContext.tsx";
 import { LevelLoader } from "@/modules/Level/LevelLoader.tsx";
 import { LevelTrack } from "@/modules/LevelTrack/LevelTrack.tsx";
 import { generateNewSeed, mulberry32 } from "@/support/random.ts";
-import { getThemeSong } from "@/support/themeMusic.tsx";
+import { getThemeSong } from "@/support/themeMusic.ts";
 import { useGameStorage } from "@/support/useGameStorage.ts";
 
 import { BetaContext } from "../Layout/BetaContext.tsx";
@@ -36,11 +36,11 @@ export const NormalMode: React.FC<Props> = ({
   onInstall,
   onOpenSettings,
   onZenModeStart,
-  onManual,
+  onManual
 }) => {
   const [levelNr, setLevelNr] = useGameStorage("levelNr", 0);
   const [levelSeed, setLevelSeed] = useState(() =>
-    generateNewSeed(BASE_SEED, levelNr),
+    generateNewSeed(BASE_SEED, levelNr)
   );
   const [inLevel, setInLevel] = useGameStorage("inLevel", false);
 

@@ -48,6 +48,12 @@ export const themeSchedule: ThemeSchedule[] = [
     end: { month: 4, day: 20 },
     name: "Spring",
     theme: "spring"
+  },
+  {
+    begin: { month: 7, day: 15 },
+    end: { month: 8, day: 20 },
+    name: "Summer",
+    theme: "summer"
   }
 ];
 
@@ -100,4 +106,4 @@ export const getActiveModifiers = (date: Date) =>
  * @returns the current date
  */
 export const getToday = (): Date =>
-  process.env.NODE_ENV === "production" ? new Date() : new Date();
+  process.env.NODE_ENV === "production" ? new Date() : new Date("2024-07-20");
