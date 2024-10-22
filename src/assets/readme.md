@@ -24,6 +24,10 @@ All audio has been slightly cut or audio adjusted through [editor.audio](https:/
   Artist: [Magenta Six](https://pixabay.com/users/magentasix-40459079/)  
   [Source](https://pixabay.com/music/christmas-christmas-2-177696/) • [License](https://pixabay.com/service/license-summary/)
 
+- **We're not going back** (Spring theme)  
+  Artist: [alanajordan](https://pixabay.com/users/alanajordan-25247407/)  
+  [Source](https://pixabay.com/music/funk-wex27re-not-going-back-235015/) • [License](https://pixabay.com/service/license-summary/)
+
 ## Sound effects
 
 - **Win sound**  
