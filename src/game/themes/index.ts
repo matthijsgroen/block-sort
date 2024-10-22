@@ -7,11 +7,20 @@ import {
   shapeMap as shapeMapSpring
 } from "./spring";
 import {
+  colorMap as colorMapSummer,
+  shapeMap as shapeMapSummer
+} from "./summer";
+import {
   colorMap as colorMapWinter,
   shapeMap as shapeMapWinter
 } from "./winter";
 
-export type BlockTheme = "default" | "halloween" | "winter" | "spring";
+export type BlockTheme =
+  | "default"
+  | "halloween"
+  | "winter"
+  | "spring"
+  | "summer";
 
 export const getShapeMapping = (
   theme: BlockTheme
@@ -20,7 +29,8 @@ export const getShapeMapping = (
     default: shapeMap,
     halloween: shapeMapFall,
     winter: shapeMapWinter,
-    spring: shapeMapSpring
+    spring: shapeMapSpring,
+    summer: shapeMapSummer
   };
   return mapping[theme];
 };
@@ -32,7 +42,8 @@ export const getColorMapping = (
     default: colorMap,
     halloween: colorMapFall,
     winter: colorMapWinter,
-    spring: colorMapSpring
+    spring: colorMapSpring,
+    summer: colorMapSummer
   };
   return mapping[theme];
 };
