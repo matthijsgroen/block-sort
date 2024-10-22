@@ -9,13 +9,13 @@ import styles from "./TopButton.module.css";
 type Props = {
   onClick?: VoidFunction;
   highlight?: boolean;
-  buttonType: "restart" | "back" | "settings" | "close" | "install";
+  buttonType: "restart" | "back" | "settings" | "close" | "install" | "help";
 };
 
 export const TopButton: React.FC<Props> = ({
   onClick,
   buttonType,
-  highlight = false
+  highlight = false,
 }) => {
   const button = (
     <WoodButton onClick={onClick}>
@@ -25,8 +25,9 @@ export const TopButton: React.FC<Props> = ({
             buttonType === "back" ||
             buttonType === "settings" ||
             buttonType === "close" ||
-            buttonType === "install",
-          "text-4xl": buttonType === "restart"
+            buttonType === "install" ||
+            buttonType === "help",
+          "text-4xl": buttonType === "restart",
         })}
       >
         {buttonType === "back" && (
@@ -43,8 +44,13 @@ export const TopButton: React.FC<Props> = ({
           </span>
         )}
         {buttonType === "install" && (
-          <span className="inline-block -translate-y-[1px] translate-x-[-1px] font-mono underline">
+          <span className="inline-block -translate-x-[1px] -translate-y-[1px] font-mono underline">
             <TextEmoji emoji="⬇" />
+          </span>
+        )}
+        {buttonType === "help" && (
+          <span className="inline-block -translate-x-[1px] translate-y-[1px] font-mono">
+            ?
           </span>
         )}
         {buttonType === "close" && (
