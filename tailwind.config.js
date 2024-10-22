@@ -32,6 +32,8 @@ export default {
       animation: {
         wobble:
           "wobble 1s ease-in-out both infinite, smallBounce 1.3s ease-in-out both infinite",
+        plantWiggle: "plantWiggle 527ms linear alternate infinite",
+        plantWiggleSlow: "plantWiggle 5270ms linear alternate infinite",
         pulse: "pulse 1.5s ease-in-out infinite",
         rayShift: "rayShift 6s ease-in-out alternate infinite",
         rayShift2: "rayShift2 5.5s ease-in-out alternate infinite",
@@ -66,6 +68,11 @@ export default {
           "0%": { scale: "1" },
           "50%": { scale: "1.1" },
           "100%": { scale: "1" },
+        },
+        plantWiggle: {
+          "0%": { scale: "1 1", rotate: "-2deg" },
+          "50%": { scale: "1 1.05", rotate: "0deg" },
+          "100%": { scale: "1 1", rotate: "2deg" },
         },
         rotate: {
           "0%": { rotate: "0deg" },
