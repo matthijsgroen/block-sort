@@ -30,12 +30,19 @@ export const Help: React.FC<Props> = ({ onClose }) => {
       <div
         className={clsx(
           styles.textStyling,
-          "max-h-[calc(100vh-200px)] overflow-y-auto",
+          "max-h-[calc(100vh-200px)] overflow-y-auto"
         )}
       >
         <HelpText />
         {activeTheme === "halloween" && <Halloween />}
         {activeTheme === "winter" && <Christmas />}
+        <p>
+          <strong>Thank you for playing!</strong>
+        </p>
+        <p>
+          If you like the game, don&apos;t forget to share it with friends &amp;
+          family!
+        </p>
       </div>
     </Dialog>
   );

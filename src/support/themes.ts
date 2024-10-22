@@ -26,9 +26,9 @@ export const themeSchedule: ThemeSchedule[] = [
       {
         modifiers: { ghostMode: true },
         begin: { month: 10, day: 15 },
-        end: { month: 11, day: 2 },
-      },
-    ],
+        end: { month: 11, day: 2 }
+      }
+    ]
   },
   {
     begin: { month: 12, day: 1 },
@@ -39,16 +39,16 @@ export const themeSchedule: ThemeSchedule[] = [
       {
         modifiers: { packageMode: true },
         begin: { month: 12, day: 14 },
-        end: { month: 1, day: 1 },
-      },
-    ],
+        end: { month: 1, day: 1 }
+      }
+    ]
   },
   {
     begin: { month: 3, day: 15 },
     end: { month: 4, day: 20 },
     name: "Spring",
-    theme: "spring",
-  },
+    theme: "spring"
+  }
 ];
 
 const inRange = (date: Date, begin: ScheduleDate, end: ScheduleDate) => {
@@ -66,7 +66,7 @@ const inRange = (date: Date, begin: ScheduleDate, end: ScheduleDate) => {
 
 const filterInRange = <TItem extends RangedItem>(
   date: Date,
-  items: TItem[],
+  items: TItem[]
 ): TItem[] =>
   items.filter((schedule) => {
     if (schedule.begin.month > schedule.end.month) {
@@ -88,7 +88,7 @@ export const getActiveTheme = (date: Date) => {
 
 export const getActiveModifiers = (date: Date) =>
   filterInRange(date, themeSchedule).flatMap((theme) =>
-    theme.levelModifiers ? filterInRange(date, theme.levelModifiers) : [],
+    theme.levelModifiers ? filterInRange(date, theme.levelModifiers) : []
   );
 
 /**
@@ -100,4 +100,4 @@ export const getActiveModifiers = (date: Date) =>
  * @returns the current date
  */
 export const getToday = (): Date =>
-  process.env.NODE_ENV === "production" ? new Date() : new Date("2014-03-24");
+  process.env.NODE_ENV === "production" ? new Date() : new Date();

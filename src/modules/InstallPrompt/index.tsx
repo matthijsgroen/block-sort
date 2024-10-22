@@ -24,11 +24,11 @@ export const InstallPrompt: React.FC<Props> = ({ onClose, onOpenManual }) => (
     <div
       className={clsx(
         styles.textStyling,
-        "max-h-[calc(100vh-200px)] overflow-y-auto",
+        "max-h-[calc(100vh-200px)] overflow-y-auto"
       )}
     >
-      <InstallationInstructions />
       <TransparentButton onClick={onOpenManual}>Game Manual</TransparentButton>
+      <InstallationInstructions />
     </div>
   </Dialog>
 );
