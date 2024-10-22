@@ -4,6 +4,7 @@ import { useGameStorage } from "@/support/useGameStorage.ts";
 
 import { NormalMode } from "./modules/GameModi/NormalMode.tsx";
 import { ZenMode } from "./modules/GameModi/ZenMode.tsx";
+import { Help } from "./modules/Help/index.tsx";
 import { InstallPrompt } from "./modules/InstallPrompt/index.tsx";
 import { BackgroundProvider } from "./modules/Layout/BackgroundContext.tsx";
 import { BetaProvider } from "./modules/Layout/BetaContext.tsx";
@@ -15,11 +16,12 @@ import PWABadge from "./PWABadge.tsx";
 export const App: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [installPromptOpen, setInstallPromptOpen] = useState(false);
+  const [manualOpen, setManualOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useGameStorage("soundEnabled", true);
   const [musicEnabled, setMusicEnabled] = useGameStorage("musicEnabled", true);
   const [themesEnabled, setThemesEnabled] = useGameStorage(
     "themesEnabled",
-    true
+    true,
   );
 
   const [inZenMode, setInZenMode] = useGameStorage("inZenMode", false);
@@ -41,6 +43,7 @@ export const App: React.FC = () => {
             active={!inZenMode}
             showInstallButton={!isInstalled && canInstall}
             onInstall={() => setInstallPromptOpen(true)}
+            onManual={() => setManualOpen(true)}
             onOpenSettings={() => setSettingsOpen((settings) => !settings)}
             onZenModeStart={() => setInZenMode(true)}
           />
@@ -67,8 +70,15 @@ export const App: React.FC = () => {
             />
           )}
           {installPromptOpen && (
-            <InstallPrompt onClose={() => setInstallPromptOpen(false)} />
+            <InstallPrompt
+              onClose={() => setInstallPromptOpen(false)}
+              onOpenManual={() => {
+                setInstallPromptOpen(false);
+                setManualOpen(true);
+              }}
+            />
           )}
+          {manualOpen && <Help onClose={() => setManualOpen(false)} />}
           <PWABadge />
         </BackgroundProvider>
       </ThemeProvider>

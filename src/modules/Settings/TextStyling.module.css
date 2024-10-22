@@ -22,3 +22,6 @@
 .textStyling a {
   @apply underline;
 }
+.textStyling code {
+  @apply inline-block rounded-md border border-dotted border-slate-800 p-1;
+}
