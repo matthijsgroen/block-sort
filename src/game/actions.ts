@@ -75,8 +75,10 @@ export const moveBlocks = (
 export const replayMoves = (
   levelState: LevelState,
   moves: Move[]
-): LevelState =>
-  moves.reduce<LevelState>(
-    (state, { from, to }) => moveBlocks(state, from, to),
-    levelState
-  );
+): LevelState => {
+  let state = levelState;
+  for (const { from, to } of moves) {
+    state = moveBlocks(state, from, to);
+  }
+  return state;
+};
