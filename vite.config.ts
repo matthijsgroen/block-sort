@@ -30,7 +30,7 @@ export default defineConfig({
 
       pwaAssets: {
         disabled: false,
-        config: true,
+        config: true
       },
 
       manifest: {
@@ -47,38 +47,38 @@ export default defineConfig({
           "game",
           "offline",
           "single-player",
-          "user-friendly",
+          "user-friendly"
         ],
-        dir: "ltr",
+        dir: "ltr"
       },
 
       workbox: {
         globPatterns: ["**/*.{js,css,html,svg,png,ico,mp3,aac,ttf}"],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
-        maximumFileSizeToCacheInBytes: 6_000_000,
+        maximumFileSizeToCacheInBytes: 6_000_000
       },
 
       devOptions: {
         enabled: false,
         navigateFallback: "index.html",
         suppressWarnings: true,
-        type: "module",
-      },
-    }),
+        type: "module"
+      }
+    })
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
+      "@": path.resolve(__dirname, "./src")
+    }
   },
   base: "/block-sort/",
   optimizeDeps: {
     esbuildOptions: {
-      target: "esnext",
-    },
+      target: "esnext"
+    }
   },
   build: {
-    target: "esnext",
-  },
+    target: "esnext"
+  }
 });
