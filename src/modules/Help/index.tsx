@@ -1,4 +1,3 @@
-import { use } from "react";
 import clsx from "clsx";
 
 import { Dialog } from "@/ui/Dialog/Dialog";
@@ -7,8 +6,7 @@ import { DialogTitle } from "@/ui/Dialog/DialogTitle";
 import { ReactComponent as Christmas } from "@/../docs/christmas.md";
 import { ReactComponent as Halloween } from "@/../docs/halloween.md";
 import { ReactComponent as HelpText } from "@/../docs/help.md";
-
-import { ThemeContext } from "../Layout/ThemeContext";
+import { getActiveTheme, getToday } from "@/support/themes";
 
 import styles from "../Settings/TextStyling.module.css";
 
@@ -18,7 +16,7 @@ type Props = {
 };
 
 export const Help: React.FC<Props> = ({ onClose }) => {
-  const { activeTheme } = use(ThemeContext);
+  const activeTheme = getActiveTheme(getToday());
   return (
     <Dialog
       wide={false}
