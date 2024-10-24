@@ -36,7 +36,7 @@ describe(createAnimationPath, () => {
     const expectedResult = pathBuilder()
       .move(20, 0)
       .vertical(-50)
-      .cubicBezier([0, -30], [250, -30], [250, 0])
+      .cubicBezier([0, -50], [250, -50], [250, 0])
       .vertical(200)
       .build();
 
@@ -59,7 +59,7 @@ describe(createAnimationPath, () => {
     const expectedResult = pathBuilder()
       .move(20, 0)
       .vertical(-50)
-      .cubicBezier([0, -30], [-250, -30], [-250, 0])
+      .cubicBezier([0, -50], [-250, -50], [-250, 0])
       .vertical(200)
       .build();
 
@@ -82,7 +82,7 @@ describe(createAnimationPath, () => {
     const expectedResult = pathBuilder()
       .move(20, 0)
       .vertical(-50) // move up to source column top
-      .cubicBezier([0, -30], [-250, -30], [-250, 0]) // align with target column top
+      .cubicBezier([0, -50], [-250, -50], [-250, 0]) // align with target column top
       .vertical(200) // move down to target column top
       .vertical(200)
       .build();
@@ -107,7 +107,7 @@ describe(createAnimationPath, () => {
       .move(20, 0)
       .vertical(-200) // move up to source column top
       .vertical(-200) // move up to target column top
-      .cubicBezier([0, -30], [250, -30], [250, 0]) // align with target column top
+      .cubicBezier([0, -50], [250, -50], [250, 0]) // align with target column top
       .vertical(50)
       .build();
 

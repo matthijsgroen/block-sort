@@ -4,42 +4,12 @@ export const createAnimationPath = (
   sourceColumnTop: number,
   targetColumnTop: number
 ): string => {
-  if (sourceColumnTop < targetColumnTop) {
-    // target is below source
-
-    return pathBuilder()
-      .move(20, 0) // start from middle of block
-      .vertical(sourceColumnTop - source.y) // go to top of source column
-      .cubicBezier(
-        [0, -50],
-        [target.x - source.x, -50],
-        [target.x - source.x, 0]
-      ) // horizontal to target column
-      .vertical(targetColumnTop - sourceColumnTop)
-      .vertical(target.y - targetColumnTop)
-      .build();
-  }
-  if (sourceColumnTop > targetColumnTop) {
-    // target is above source
-
-    return pathBuilder()
-      .move(20, 0) // start from middle of block
-      .vertical(sourceColumnTop - source.y) // go to top of source column
-      .vertical(targetColumnTop - sourceColumnTop)
-      .cubicBezier(
-        [0, -50],
-        [target.x - source.x, -50],
-        [target.x - source.x, 0]
-      ) // horizontal to target column
-      .vertical(target.y - targetColumnTop)
-      .build();
-  }
-  // Same level
-
   return pathBuilder()
     .move(20, 0) // start from middle of block
-    .vertical(sourceColumnTop - source.y)
-    .cubicBezier([0, -50], [target.x - source.x, -50], [target.x - source.x, 0])
+    .vertical(sourceColumnTop - source.y) // go to top of source column
+    .vertical(Math.min(0, targetColumnTop - sourceColumnTop))
+    .cubicBezier([0, -50], [target.x - source.x, -50], [target.x - source.x, 0]) // horizontal to target column
+    .vertical(Math.max(0, targetColumnTop - sourceColumnTop))
     .vertical(target.y - targetColumnTop)
     .build();
 };
@@ -65,11 +35,15 @@ export const pathBuilder = () => {
       return api;
     },
     vertical: (distance: number) => {
-      path.push(`v${distance}`);
+      if (distance !== 0) {
+        path.push(`v${distance}`);
+      }
       return api;
     },
     horizontal: (distance: number) => {
-      path.push(`h${distance}`);
+      if (distance !== 0) {
+        path.push(`h${distance}`);
+      }
       return api;
     },
     cubicBezier: (
