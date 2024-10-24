@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 
 import { Block } from "@/ui/Block/Block";
@@ -20,17 +20,21 @@ type Props = {
   theme?: BlockTheme;
   hideFormat?: "glass" | "present";
   onClick?: VoidFunction;
-  onPickUp?: VoidFunction;
+  onPickUp?: Dispatch<{ top: number; rect: DOMRect }>;
+  onPlacement?: Dispatch<{ top: number; rect: DOMRect }>;
   onDrop?: VoidFunction;
   onLock?: VoidFunction;
 };
 
+const MOTION_DURATION = 300;
+
 export const BlockColumn: React.FC<Props> = ({
-  column,
+  column: columnProp,
   onClick,
   onDrop,
   onLock,
   onPickUp,
+  onPlacement,
   theme = "default",
   hideFormat = "glass",
   started = true,
@@ -38,8 +42,35 @@ export const BlockColumn: React.FC<Props> = ({
   amountSelected = 0,
   amountSuggested = 0
 }) => {
+  const [column, setColumn] = useState(columnProp);
   const [locked, setLocked] = useState(column.locked);
   const [blocksLocked, setBlocksLocked] = useState(-1);
+
+  const firstEmptyRef = useRef<HTMLDivElement>(null);
+  const columnRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Blocks decrease, update immediately
+    if (columnProp.blocks.length < column.blocks.length) {
+      setColumn(columnProp);
+    }
+    if (columnProp.blocks.length > column.blocks.length) {
+      if (onPlacement && firstEmptyRef.current && columnRef.current) {
+        const colTop = columnRef.current.getBoundingClientRect().top;
+        onPlacement({
+          top: colTop,
+          rect: firstEmptyRef.current.getBoundingClientRect()
+        });
+      }
+      const timeoutId = setTimeout(() => {
+        setColumn(columnProp);
+      }, MOTION_DURATION); // Delay to allow for animations
+      return () => {
+        clearTimeout(timeoutId);
+        setColumn(columnProp);
+      };
+    }
+  }, [columnProp]);
 
   useEffect(() => {
     if (!column.locked) {
@@ -74,6 +105,7 @@ export const BlockColumn: React.FC<Props> = ({
   return (
     <div className={`${rowSpans[column.columnSize + 1]} justify-self-center`}>
       <div
+        ref={columnRef}
         className={clsx("box-content border border-transparent pb-6", {
           "contain-paint": locked,
           "rounded-b-md": column.type === "buffer",
@@ -118,7 +150,12 @@ export const BlockColumn: React.FC<Props> = ({
                   selected={isSelected}
                   suggested={isSuggested}
                   onDrop={onDrop}
-                  onPickUp={onPickUp}
+                  onPickUp={(rect) => {
+                    onPickUp?.({
+                      top: columnRef.current?.getBoundingClientRect().top ?? 0,
+                      rect
+                    });
+                  }}
                   onLock={onLock}
                 />
               </div>
@@ -128,6 +165,7 @@ export const BlockColumn: React.FC<Props> = ({
             l - p === l && column.limitColor !== undefined ? (
               <div
                 key={column.blocks.length + p}
+                ref={firstEmptyRef}
                 className={`${p === 0 && column.blocks.length === 0 ? styles.bottom : styles.empty} ${styles.shade}`}
               >
                 <div
@@ -143,6 +181,7 @@ export const BlockColumn: React.FC<Props> = ({
             ) : (
               <div
                 key={column.blocks.length + p}
+                ref={l - p === l ? firstEmptyRef : undefined}
                 className={`${p === 0 && column.blocks.length === 0 ? styles.bottom : styles.empty} ${styles.shade}`}
               ></div>
             )
