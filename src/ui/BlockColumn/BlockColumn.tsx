@@ -19,6 +19,7 @@ type Props = {
   started?: boolean;
   theme?: BlockTheme;
   hideFormat?: "glass" | "present";
+  motionDuration?: number;
   onClick?: VoidFunction;
   onPickUp?: Dispatch<{ top: number; rect: DOMRect }>;
   onPlacement?: Dispatch<{ top: number; rect: DOMRect }>;
@@ -40,7 +41,8 @@ export const BlockColumn: React.FC<Props> = ({
   started = true,
   suggested = false,
   amountSelected = 0,
-  amountSuggested = 0
+  amountSuggested = 0,
+  motionDuration = MOTION_DURATION
 }) => {
   const [column, setColumn] = useState(columnProp);
   const [locked, setLocked] = useState(column.locked);
@@ -64,13 +66,13 @@ export const BlockColumn: React.FC<Props> = ({
       }
       const timeoutId = setTimeout(() => {
         setColumn(columnProp);
-      }, MOTION_DURATION); // Delay to allow for animations
+      }, motionDuration); // Delay to allow for animations
       return () => {
         clearTimeout(timeoutId);
         setColumn(columnProp);
       };
     }
-  }, [columnProp]);
+  }, [columnProp, motionDuration]);
 
   useEffect(() => {
     if (!column.locked) {

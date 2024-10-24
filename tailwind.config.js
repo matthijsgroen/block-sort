@@ -54,7 +54,7 @@ export default {
           "flyBottomLeft 3s ease-in-out forwards, rotate 8s linear infinite, scale 2s ease-in-out infinite",
         flyBottomRight:
           "flyBottomRight 3s ease-in-out forwards, rotate 6s linear infinite, scale 3s ease-in-out infinite",
-        blockMove: "blockMove 410ms linear forwards",
+        blockMove: "blockMove var(--animation-duration, 410ms) linear forwards",
         lightning: "lightning 30s linear infinite"
       },
       keyframes: {

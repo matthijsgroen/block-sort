@@ -1,8 +1,10 @@
-import { Dispatch } from "react";
+import { Dispatch, use } from "react";
 
 import { BlockTheme } from "@/game/themes";
 import { LevelState } from "@/game/types";
+import { BetaContext } from "@/modules/Layout/BetaContext";
 import { colSizes } from "@/support/grid";
+import { isIos } from "@/support/isIos";
 import { useScreenUpdate } from "@/support/useScreenUpdate";
 
 import { BlockColumn } from "../BlockColumn/BlockColumn";
@@ -63,10 +65,20 @@ export const LevelLayout: React.FC<Props> = ({
   onPickUp
 }) => {
   useScreenUpdate();
+  const { showBeta } = use(BetaContext);
+
+  /**
+   * Disable block move animation on iOS, as it is not performant.
+   *
+   * Especially in standalone mode, apple is gimping the performance
+   */
+  const blockMoveAnimationDisabled = isIos() && !showBeta;
+  const moveTransitionTime = 300;
 
   const { animate, pickup, animationPaths } = useBlockAnimation(
     levelState,
-    selection
+    selection,
+    { disabled: blockMoveAnimationDisabled, transitionTime: moveTransitionTime }
   );
 
   const maxColumnSize = levelState.columns.reduce(
@@ -84,6 +96,9 @@ export const LevelLayout: React.FC<Props> = ({
                 column={bar}
                 key={i}
                 theme={theme}
+                motionDuration={
+                  blockMoveAnimationDisabled ? 0 : moveTransitionTime
+                }
                 onClick={() => {
                   onColumnClick?.(i);
                 }}
@@ -114,7 +129,12 @@ export const LevelLayout: React.FC<Props> = ({
         </div>
       </div>
       {animationPaths.map((p, i) => (
-        <BlockAnimation key={i} path={p} theme={theme} />
+        <BlockAnimation
+          key={i}
+          path={p}
+          theme={theme}
+          duration={moveTransitionTime}
+        />
       ))}
     </>
   );
