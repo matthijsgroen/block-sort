@@ -228,6 +228,7 @@ export const Level: React.FC<Props> = ({
             setPreviousLevelMoves(levelMoves);
             deleteMoves();
             setPlayState("busy");
+            setClearKey((k) => (k + 1) % 5);
           }}
           onShow={() => {
             sound.play("lose");
