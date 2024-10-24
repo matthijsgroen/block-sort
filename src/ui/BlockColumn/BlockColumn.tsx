@@ -26,7 +26,7 @@ type Props = {
   onLock?: VoidFunction;
 };
 
-const MOTION_DURATION = 300;
+const MOTION_DURATION = 400;
 
 export const BlockColumn: React.FC<Props> = ({
   column: columnProp,

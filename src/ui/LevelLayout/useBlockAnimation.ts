@@ -99,7 +99,7 @@ export const useBlockAnimation = (
         setAnimationPaths(newAnimationPaths);
         return effectTimeout(() => {
           setAnimationPaths([]);
-        }, 300);
+        }, 400);
       }
     }
   }, [levelState]);
