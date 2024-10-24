@@ -7,6 +7,9 @@ import { useScreenUpdate } from "@/support/useScreenUpdate";
 
 import { BlockColumn } from "../BlockColumn/BlockColumn";
 
+import { BlockAnimation } from "./BlockAnimation";
+import { useBlockAnimation } from "./useBlockAnimation";
+
 type Props = {
   started: boolean;
   levelState: LevelState;
@@ -61,39 +64,58 @@ export const LevelLayout: React.FC<Props> = ({
 }) => {
   useScreenUpdate();
 
+  const { animate, pickup, animationPaths } = useBlockAnimation(
+    levelState,
+    selection
+  );
+
   const maxColumnSize = levelState.columns.reduce(
     (r, c) => Math.max(r, c.columnSize),
     0
   );
   const cols = determineColumns(maxColumnSize, levelState.columns.length);
   return (
-    <div className="flex flex-1 flex-wrap justify-center p-2">
-      <div className="w-full max-w-[600px] content-center">
-        <div className={`grid grid-flow-dense ${cols}`}>
-          {levelState.columns.map((bar, i) => (
-            <BlockColumn
-              column={bar}
-              key={i}
-              theme={theme}
-              onClick={() => onColumnClick?.(i)}
-              started={started}
-              suggested={suggestionTarget === i}
-              amountSelected={
-                selection && i === selection[0] ? selection[1] : 0
-              }
-              amountSuggested={
-                suggestionSelection && i === suggestionSelection[0]
-                  ? suggestionSelection[1]
-                  : 0
-              }
-              hideFormat={hideFormat}
-              onLock={onLock}
-              onDrop={onDrop}
-              onPickUp={onPickUp}
-            />
-          ))}
+    <>
+      <div className="flex flex-1 flex-wrap justify-center p-2">
+        <div className="w-full max-w-[600px] content-center">
+          <div className={`grid grid-flow-dense ${cols}`}>
+            {levelState.columns.map((bar, i) => (
+              <BlockColumn
+                column={bar}
+                key={i}
+                theme={theme}
+                onClick={() => {
+                  onColumnClick?.(i);
+                }}
+                started={started}
+                suggested={suggestionTarget === i}
+                amountSelected={
+                  selection && i === selection[0] ? selection[1] : 0
+                }
+                amountSuggested={
+                  suggestionSelection && i === suggestionSelection[0]
+                    ? suggestionSelection[1]
+                    : 0
+                }
+                hideFormat={hideFormat}
+                onLock={onLock}
+                onDrop={onDrop}
+                onPickUp={({ top, rect }) => {
+                  pickup(top, rect);
+
+                  onPickUp?.();
+                }}
+                onPlacement={({ top, rect }) => {
+                  animate(top, rect);
+                }}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+      {animationPaths.map((p, i) => (
+        <BlockAnimation key={i} path={p} theme={theme} />
+      ))}
+    </>
   );
 };
