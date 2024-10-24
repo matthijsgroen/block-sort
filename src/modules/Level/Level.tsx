@@ -169,6 +169,8 @@ export const Level: React.FC<Props> = ({
     }
   };
 
+  const [clearKey, setClearKey] = useState(0);
+
   return (
     <div className="flex h-full flex-col">
       {playState === "restarting" && (
@@ -183,6 +185,7 @@ export const Level: React.FC<Props> = ({
             deleteMoves();
             deleteRevealed();
             setPlayState("busy");
+            setClearKey((k) => (k + 1) % 5);
           }}
           onShow={() => {
             sound.play("lose");
@@ -281,6 +284,7 @@ export const Level: React.FC<Props> = ({
         />
       </div>
       <LevelLayout
+        key={clearKey}
         levelState={levelState}
         theme={activeTheme}
         started={started}
