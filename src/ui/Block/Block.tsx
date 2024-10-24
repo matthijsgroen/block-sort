@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Dispatch, useEffect, useRef } from "react";
 import clsx from "clsx";
 
 import { encodeForContent } from "@/support/emojiEncoding";
@@ -22,7 +22,8 @@ export type Props = {
   locked?: boolean;
   shape?: string;
   shadow?: boolean;
-  onPickUp?: VoidFunction;
+  blur?: boolean;
+  onPickUp?: Dispatch<DOMRect>;
   onDrop?: VoidFunction;
   onLock?: VoidFunction;
 };
@@ -43,8 +44,10 @@ export const Block: React.FC<Props> = ({
   selected = null,
   suggested = null,
   locked = false,
-  shadow = true
+  shadow = true,
+  blur = false
 }) => {
+  const blockRef = useRef<HTMLDivElement>(null);
   const isLocked = useDelayedToggle(locked, {
     initialValue: false,
     onDelay: 10,
@@ -61,10 +64,18 @@ export const Block: React.FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    if (selected) {
-      onPickUp?.();
+    if (selected && blockRef.current) {
+      // Communicate coordinates
+      const rect = blockRef.current.getBoundingClientRect();
+      onPickUp?.(rect);
     } else {
-      onDrop?.();
+      const timeoutId = setTimeout(() => {
+        onDrop?.();
+      }, 10);
+      // Allows clearing of sound effect on column sync
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
   }, [selected]);
 
@@ -73,6 +84,7 @@ export const Block: React.FC<Props> = ({
 
   return (
     <div
+      ref={blockRef}
       style={{
         "--cube-color": revealed ? color : hiddenColor,
         "--cube-shape-opacity": revealed ? "50%" : "100%",
@@ -87,7 +99,8 @@ export const Block: React.FC<Props> = ({
         {
           [styles.selected]: selected && !isLocked,
           "animate-locked": !selected && isLocked,
-          "animate-place": !selected && !isLocked
+          "animate-place": !selected && !isLocked,
+          "blur-[2px]": blur
         }
       )}
     >

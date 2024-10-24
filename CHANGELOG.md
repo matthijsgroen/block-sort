@@ -5,7 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Version 1.12.2 - 2024-10-23
+## Version 1.13.1 - 2024-10-24
+
+### Fixed
+
+- Remove blur of animation, to make rendering lighter
+
+## Version 1.13.0 - 2024-10-24
+
+### Added
+
+- Animation of blocks moving from column to column
+
+## Version 1.12.2 - 2024-10-22
 
 ### Fixed
 
