@@ -1,10 +1,16 @@
+export type Rect = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
 export const createAnimationPath = (
-  source: DOMRect,
-  target: DOMRect,
+  source: Rect,
+  target: Rect,
   sourceColumnTop: number,
   targetColumnTop: number
-): string => {
-  return pathBuilder()
+): string =>
+  pathBuilder()
     .move(20, 0) // start from middle of block
     .vertical(sourceColumnTop - source.y) // go to top of source column
     .vertical(Math.min(0, targetColumnTop - sourceColumnTop))
@@ -12,7 +18,6 @@ export const createAnimationPath = (
     .vertical(Math.max(0, targetColumnTop - sourceColumnTop))
     .vertical(target.y - targetColumnTop)
     .build();
-};
 
 type PathElement =
   // Move to
