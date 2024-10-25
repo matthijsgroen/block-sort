@@ -52,10 +52,7 @@ export const BlockColumn: React.FC<Props> = ({
   const columnRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Blocks decrease, update immediately
-    if (columnProp.blocks.length < column.blocks.length) {
-      setColumn(columnProp);
-    }
+    // Blocks increase, delay for animation
     if (columnProp.blocks.length > column.blocks.length) {
       if (onPlacement && firstEmptyRef.current && columnRef.current) {
         const colTop = columnRef.current.getBoundingClientRect().top;
@@ -71,6 +68,8 @@ export const BlockColumn: React.FC<Props> = ({
         clearTimeout(timeoutId);
         setColumn(columnProp);
       };
+    } else {
+      setColumn(columnProp);
     }
   }, [columnProp, motionDuration]);
 

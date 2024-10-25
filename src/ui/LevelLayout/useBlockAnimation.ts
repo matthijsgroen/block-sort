@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { BlockColor, LevelState } from "@/game/types";
-import { createAnimationPath } from "@/support/createAnimationPath";
+import { createAnimationPath, Rect } from "@/support/createAnimationPath";
 import { effectTimeout } from "@/support/effectTimeout";
 
 export type AnimationPath = {
@@ -37,7 +37,7 @@ export const useBlockAnimation = (
 
   const animate = (targetTop: number, targetRect: DOMRect) => {
     animationRef.current = {
-      sourceBlocks: selectionRef.current.slice(),
+      sourceBlocks: selectionRef.current,
       targetSpot: targetRect,
       sourceColumnTop: transitionTop.current ?? 0,
       targetColumnTop: targetTop
@@ -58,7 +58,8 @@ export const useBlockAnimation = (
   useEffect(() => {
     if (
       !previousLevelState.current ||
-      levelState == previousLevelState.current
+      levelState == previousLevelState.current ||
+      disabled
     ) {
       previousLevelState.current = levelState;
       return;
@@ -90,14 +91,12 @@ export const useBlockAnimation = (
     const newAnimationPaths = Array.from({ length: blocksAdded }).map(
       (_, i) => {
         const source = animationData.sourceBlocks[i];
-        const target = new DOMRect(
-          animationData.targetSpot.x,
-          animationData.targetSpot.y - 80 + i * 30,
-          animationData.targetSpot.width,
-          animationData.targetSpot.height
-        );
-        const sourceColumnTop = animationData.sourceColumnTop - 60;
-        const targetColumnTop = animationData.targetColumnTop - 60;
+        const target: Rect = {
+          x: animationData.targetSpot.x,
+          y: animationData.targetSpot.y - 80 + i * 30,
+          width: animationData.targetSpot.width,
+          height: animationData.targetSpot.height
+        };
 
         return {
           startX: source.x,
@@ -105,8 +104,8 @@ export const useBlockAnimation = (
           path: createAnimationPath(
             source,
             target,
-            sourceColumnTop,
-            targetColumnTop
+            animationData.sourceColumnTop - 60,
+            animationData.targetColumnTop - 60
           ),
           color: blockColor
         };

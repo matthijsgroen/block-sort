@@ -1,6 +1,6 @@
 import { BlockTheme, getColorMapping, getShapeMapping } from "@/game/themes";
 
-import { Block } from "../Block/Block";
+import { BlockLight } from "../Block/BlockLight";
 
 import { AnimationPath } from "./useBlockAnimation";
 
@@ -23,13 +23,11 @@ export const BlockAnimation: React.FC<Props> = ({
       offsetRotate: "0deg",
       "--animation-duration": `${duration}ms`
     }}
-    className={`animate-blockMove pointer-events-none absolute will-change-[offset-distance]`}
+    className={`animate-blockMove pointer-events-none absolute`}
   >
-    <Block
+    <BlockLight
       color={getColorMapping(theme)[path.color]}
       shape={getShapeMapping(theme)[path.color]}
-      moved
-      shadow={false}
     />
   </div>
 );
