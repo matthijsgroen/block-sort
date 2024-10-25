@@ -20,7 +20,8 @@ type Props = {
   suggestionTarget?: number;
   hideFormat?: "glass" | "present";
   theme?: BlockTheme;
-  onColumnClick?: Dispatch<number>;
+  onColumnDown?: Dispatch<number>;
+  onColumnUp?: Dispatch<number>;
   onPickUp?: VoidFunction;
   onDrop?: VoidFunction;
   onLock?: VoidFunction;
@@ -59,7 +60,8 @@ export const LevelLayout: React.FC<Props> = ({
   suggestionTarget,
   theme = "default",
   hideFormat = "glass",
-  onColumnClick,
+  onColumnDown,
+  onColumnUp,
   onDrop,
   onLock,
   onPickUp
@@ -73,7 +75,7 @@ export const LevelLayout: React.FC<Props> = ({
    * Especially in standalone mode, apple is gimping the performance
    */
   const blockMoveAnimationDisabled = isIos() && !showBeta;
-  const moveTransitionTime = 300;
+  const moveTransitionTime = 200;
 
   const { animate, pickup, animationPaths } = useBlockAnimation(
     levelState,
@@ -99,8 +101,11 @@ export const LevelLayout: React.FC<Props> = ({
                 motionDuration={
                   blockMoveAnimationDisabled ? 0 : moveTransitionTime
                 }
-                onClick={() => {
-                  onColumnClick?.(i);
+                onPointerDown={() => {
+                  onColumnDown?.(i);
+                }}
+                onPointerUp={() => {
+                  onColumnUp?.(i);
                 }}
                 started={started}
                 suggested={suggestionTarget === i}
