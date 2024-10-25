@@ -20,7 +20,8 @@ type Props = {
   theme?: BlockTheme;
   hideFormat?: "glass" | "present";
   motionDuration?: number;
-  onClick?: VoidFunction;
+  onPointerDown?: VoidFunction;
+  onPointerUp?: VoidFunction;
   onPickUp?: Dispatch<{ top: number; rect: DOMRect }>;
   onPlacement?: Dispatch<{ top: number; rect: DOMRect }>;
   onDrop?: VoidFunction;
@@ -31,7 +32,8 @@ const MOTION_DURATION = 400;
 
 export const BlockColumn: React.FC<Props> = ({
   column: columnProp,
-  onClick,
+  onPointerDown,
+  onPointerUp,
   onDrop,
   onLock,
   onPickUp,
@@ -127,7 +129,8 @@ export const BlockColumn: React.FC<Props> = ({
                 column.type === "placement"
             }
           )}
-          onPointerDown={onClick}
+          onPointerDown={onPointerDown}
+          onPointerUp={onPointerUp}
         >
           <Tray locked={blocksLocked > 0} />
           {column.blocks.map((_b, p, l) => {

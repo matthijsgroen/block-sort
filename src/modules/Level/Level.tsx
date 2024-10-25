@@ -153,7 +153,7 @@ export const Level: React.FC<Props> = ({
     setLevelMoves((moves) => moves.concat({ from, to }));
   };
 
-  const onColumnClick = (columnIndex: number) => {
+  const onColumnDown = (columnIndex: number) => {
     if (selectStart) {
       if (selectStart[0] === columnIndex) {
         setSelectStart(null);
@@ -168,11 +168,20 @@ export const Level: React.FC<Props> = ({
       }
     }
   };
+  const onColumnUp = (columnIndex: number) => {
+    if (selectStart) {
+      if (selectStart[0] === columnIndex) {
+        return;
+      }
+      move(selectStart[0], columnIndex);
+      setAutoMoves(0);
+    }
+  };
 
   const [clearKey, setClearKey] = useState(0);
 
   return (
-    <div className="flex h-full flex-col">
+    <div className={"flex h-full flex-col"}>
       {playState === "restarting" && (
         <Message
           delay={100}
@@ -289,7 +298,8 @@ export const Level: React.FC<Props> = ({
         levelState={levelState}
         theme={activeTheme}
         started={started}
-        onColumnClick={(column) => onColumnClick(column)}
+        onColumnDown={onColumnDown}
+        onColumnUp={onColumnUp}
         selection={
           selectStart && selectStart[2] === levelState
             ? [selectStart[0], selectStart[1]]

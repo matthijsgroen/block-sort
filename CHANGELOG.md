@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.14.0 - 2024-10-25
+
+### Added
+
+- Clicking on one column and releasing on another now also moves blocks (same with touch)
+
+### Known issues
+
+- The cool new block moving animation has bad performance in iOS stand-alone mode, and is therefor
+  disabled for now. I hope to enable them for iOS soon.
+
 ## Version 1.13.6 - 2024-10-25
 
 ### Fixed
