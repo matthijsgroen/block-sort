@@ -13,7 +13,6 @@ import styles from "./BlockColumn.module.css";
 
 type Props = {
   column: Column;
-  ref?: React.Ref<HTMLDivElement>;
   amountSelected?: number;
   amountSuggested?: number;
   suggested?: boolean;
@@ -21,6 +20,8 @@ type Props = {
   theme?: BlockTheme;
   hideFormat?: "glass" | "present";
   motionDuration?: number;
+  onPointerDown?: VoidFunction;
+  onPointerUp?: VoidFunction;
   onPickUp?: Dispatch<{ top: number; rect: DOMRect }>;
   onPlacement?: Dispatch<{ top: number; rect: DOMRect }>;
   onDrop?: VoidFunction;
@@ -31,7 +32,8 @@ const MOTION_DURATION = 400;
 
 export const BlockColumn: React.FC<Props> = ({
   column: columnProp,
-  ref,
+  onPointerDown,
+  onPointerUp,
   onDrop,
   onLock,
   onPickUp,
@@ -119,7 +121,6 @@ export const BlockColumn: React.FC<Props> = ({
           </div>
         )}
         <div
-          ref={ref}
           className={clsx(
             "box-content flex w-block cursor-pointer flex-col-reverse",
             {
@@ -128,6 +129,8 @@ export const BlockColumn: React.FC<Props> = ({
                 column.type === "placement"
             }
           )}
+          onPointerDown={onPointerDown}
+          onPointerUp={onPointerUp}
         >
           <Tray locked={blocksLocked > 0} />
           {column.blocks.map((_b, p, l) => {

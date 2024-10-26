@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
 import { Message } from "@/ui/Message/Message";
@@ -153,37 +153,30 @@ export const Level: React.FC<Props> = ({
     setLevelMoves((moves) => moves.concat({ from, to }));
   };
 
-  const onColumnDown = useCallback(
-    (columnIndex: number) => {
-      if (selectStart) {
-        if (selectStart[0] === columnIndex) {
-          setSelectStart(null);
-          return;
-        }
-        move(selectStart[0], columnIndex);
-        setAutoMoves(0);
-      } else {
-        const selection = selectFromColumn(levelState, columnIndex);
-        if (selection.length > 0) {
-          setSelectStart([columnIndex, selection.length, levelState]);
-        }
+  const onColumnDown = (columnIndex: number) => {
+    if (selectStart) {
+      if (selectStart[0] === columnIndex) {
+        setSelectStart(null);
+        return;
       }
-    },
-    [selectStart]
-  );
-
-  const onColumnUp = useCallback(
-    (columnIndex: number) => {
-      if (selectStart) {
-        if (selectStart[0] === columnIndex) {
-          return;
-        }
-        move(selectStart[0], columnIndex);
-        setAutoMoves(0);
+      move(selectStart[0], columnIndex);
+      setAutoMoves(0);
+    } else {
+      const selection = selectFromColumn(levelState, columnIndex);
+      if (selection.length > 0) {
+        setSelectStart([columnIndex, selection.length, levelState]);
       }
-    },
-    [selectStart]
-  );
+    }
+  };
+  const onColumnUp = (columnIndex: number) => {
+    if (selectStart) {
+      if (selectStart[0] === columnIndex) {
+        return;
+      }
+      move(selectStart[0], columnIndex);
+      setAutoMoves(0);
+    }
+  };
 
   const [clearKey, setClearKey] = useState(0);
 
