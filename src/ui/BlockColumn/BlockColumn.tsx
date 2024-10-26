@@ -18,9 +18,12 @@ type Props = {
   amountSuggested?: number;
   suggested?: boolean;
   started?: boolean;
+  detectHover?: boolean;
   theme?: BlockTheme;
   hideFormat?: "glass" | "present";
   motionDuration?: number;
+  onPointerDown?: Dispatch<React.PointerEvent<HTMLDivElement>>;
+  onPointerUp?: Dispatch<React.PointerEvent<HTMLDivElement>>;
   onPickUp?: Dispatch<{ top: number; rect: DOMRect }>;
   onPlacement?: Dispatch<{ top: number; rect: DOMRect }>;
   onDrop?: VoidFunction;
@@ -32,11 +35,14 @@ const MOTION_DURATION = 400;
 export const BlockColumn: React.FC<Props> = ({
   column: columnProp,
   ref,
+  onPointerDown,
+  onPointerUp,
   onDrop,
   onLock,
   onPickUp,
   onPlacement,
   theme = "default",
+  detectHover = false,
   hideFormat = "glass",
   started = true,
   suggested = false,
@@ -46,10 +52,34 @@ export const BlockColumn: React.FC<Props> = ({
 }) => {
   const [column, setColumn] = useState(columnProp);
   const [locked, setLocked] = useState(column.locked);
+  const [isHovered, setIsHovered] = useState(false);
   const [blocksLocked, setBlocksLocked] = useState(-1);
 
   const firstEmptyRef = useRef<HTMLDivElement>(null);
   const columnRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (detectHover) {
+      const onPointerMove = (event: PointerEvent) => {
+        if (columnRef.current) {
+          const rect = columnRef.current.getBoundingClientRect();
+          const isInside =
+            event.clientX >= rect.left &&
+            event.clientX <= rect.right &&
+            event.clientY >= rect.top &&
+            event.clientY <= rect.bottom;
+
+          setIsHovered(isInside);
+        }
+      };
+      window.addEventListener("pointermove", onPointerMove);
+      return () => {
+        window.removeEventListener("pointermove", onPointerMove);
+      };
+    } else {
+      setIsHovered(false);
+    }
+  }, [detectHover]);
 
   useEffect(() => {
     // Blocks increase, delay for animation
@@ -104,13 +134,16 @@ export const BlockColumn: React.FC<Props> = ({
   const activeColorMap = getColorMapping(theme);
 
   return (
-    <div className={`${rowSpans[column.columnSize + 1]} justify-self-center`}>
+    <div
+      className={`${rowSpans[column.columnSize + 1]} justify-self-center pb-2`}
+    >
       <div
         ref={columnRef}
         className={clsx("box-content border border-transparent pb-6", {
           "contain-paint": locked,
           "rounded-b-md": column.type === "buffer",
-          "rounded-md border-t-black/60": column.type === "placement"
+          "rounded-md border-t-black/60": column.type === "placement",
+          "outline outline-2 outline-offset-1 outline-white/20": isHovered
         })}
       >
         {suggested && (
@@ -121,13 +154,15 @@ export const BlockColumn: React.FC<Props> = ({
         <div
           ref={ref}
           className={clsx(
-            "box-content flex w-block cursor-pointer flex-col-reverse",
+            "box-content flex w-block cursor-pointer touch-none flex-col-reverse",
             {
               [styles.buffer]: column.type === "buffer",
               "rounded-md border border-t-0 border-black/60 bg-black/20 shadow-inner":
                 column.type === "placement"
             }
           )}
+          onPointerDown={onPointerDown}
+          onPointerUp={onPointerUp}
         >
           <Tray locked={blocksLocked > 0} />
           {column.blocks.map((_b, p, l) => {

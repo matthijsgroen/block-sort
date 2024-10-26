@@ -1,11 +1,4 @@
-import {
-  Dispatch,
-  PointerEvent as ReactPointerEvent,
-  use,
-  useCallback,
-  useEffect,
-  useRef
-} from "react";
+import { Dispatch, use, useRef } from "react";
 
 import { BlockTheme } from "@/game/themes";
 import { LevelState } from "@/game/types";
@@ -86,6 +79,23 @@ export const LevelLayout: React.FC<Props> = ({
     }
   };
 
+  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    const x = event.clientX;
+    const y = event.clientY;
+
+    // Use elementFromPoint to find the element at the touch end coordinates
+    const targetElement = document.elementFromPoint(x, y);
+
+    // Find the index of the target element in refsArray
+    const targetIndex = refsArray.current.findIndex(
+      (ref) => ref && ref.contains(targetElement)
+    );
+
+    if (targetIndex !== -1) {
+      onColumnUp?.(targetIndex);
+    }
+  };
+
   /**
    * Disable block move animation on iOS, as it is not performant.
    *
@@ -100,50 +110,6 @@ export const LevelLayout: React.FC<Props> = ({
     { disabled: blockMoveAnimationDisabled, transitionTime: moveTransitionTime }
   );
 
-  const findRefIndex = (target: EventTarget | null) => {
-    return refsArray.current.findIndex(
-      (ref) => ref && ref.contains(target as Node)
-    );
-  };
-
-  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
-    const index = findRefIndex(event.target);
-    if (index !== -1) {
-      onColumnDown?.(index);
-    }
-  };
-
-  // Handler for pointer up event
-  const handlePointerUp = useCallback(
-    (event: PointerEvent) => {
-      const x = event.clientX;
-      const y = event.clientY;
-
-      // Use elementFromPoint to find the element at the touch end coordinates
-      const targetElement = document.elementFromPoint(x, y);
-
-      // Find the index of the target element in refsArray
-      const targetIndex = refsArray.current.findIndex(
-        (ref) => ref && ref.contains(targetElement)
-      );
-
-      if (targetIndex !== -1) {
-        onColumnUp?.(targetIndex);
-      }
-    },
-    [onColumnUp]
-  );
-
-  useEffect(() => {
-    // Add pointerup event listener on the window to capture it anywhere
-    window.addEventListener("pointerup", handlePointerUp);
-
-    // Clean up the event listener on unmount
-    return () => {
-      window.removeEventListener("pointerup", handlePointerUp);
-    };
-  }, [handlePointerUp]);
-
   const maxColumnSize = levelState.columns.reduce(
     (r, c) => Math.max(r, c.columnSize),
     0
@@ -151,26 +117,30 @@ export const LevelLayout: React.FC<Props> = ({
   const cols = determineColumns(maxColumnSize, levelState.columns.length);
   return (
     <>
-      <div
-        className="flex flex-1 touch-none flex-wrap justify-center p-2"
-        onPointerDown={handlePointerDown}
-      >
+      <div className="flex flex-1 touch-none flex-wrap justify-center p-2">
         <div className="w-full max-w-[600px] content-center">
           <div className={`grid grid-flow-dense ${cols}`}>
             {levelState.columns.map((bar, i) => (
               <BlockColumn
                 column={bar}
                 key={i}
+                ref={(el) => addToRefsArray(el, i)}
                 theme={theme}
                 motionDuration={
                   blockMoveAnimationDisabled ? 0 : moveTransitionTime
                 }
-                ref={(el) => addToRefsArray(el, i)}
+                onPointerDown={() => {
+                  onColumnDown?.(i);
+                }}
+                onPointerUp={(e) => {
+                  handlePointerUp(e);
+                }}
                 started={started}
                 suggested={suggestionTarget === i}
                 amountSelected={
                   selection && i === selection[0] ? selection[1] : 0
                 }
+                detectHover={!!selection}
                 amountSuggested={
                   suggestionSelection && i === suggestionSelection[0]
                     ? suggestionSelection[1]
