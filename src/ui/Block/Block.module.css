@@ -37,6 +37,18 @@
   mix-blend-mode: color-burn;
   @apply opacity-70;
 }
+.light-gradient {
+  background: var(--cube-color)
+    linear-gradient(
+      rgba(0, 0, 0, 30%) 0%,
+      rgba(0, 0, 0, 0%) 5%,
+      rgba(0, 0, 0, 0%) 30%,
+      rgba(255, 255, 255, 20%) 35%,
+      rgba(0, 0, 0, 20%) 40%,
+      rgba(0, 0, 0, 20%) 90%,
+      rgba(0, 0, 0, 50%) 100%
+    );
+}
 
 .gradient {
   background: linear-gradient(

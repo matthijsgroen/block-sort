@@ -182,8 +182,8 @@ export default {
           "100%": { opacity: "0" }
         },
         blockMove: {
-          "0%": { offsetDistance: "0%" },
-          "100%": { offsetDistance: "100%" }
+          "0%": { offsetDistance: "var(--start, 0%)" },
+          "100%": { offsetDistance: "var(--end, 100%)" }
         }
       },
       gridTemplateRows: {

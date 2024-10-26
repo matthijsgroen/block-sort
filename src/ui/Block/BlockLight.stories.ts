@@ -14,13 +14,11 @@ const meta = {
   tags: ["autodocs"],
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
-    color: { control: "color" },
-    blur: { control: "boolean" }
+    color: { control: "color" }
   },
   args: {
     shape: "✔️",
-    color: "#16a34a",
-    blur: false
+    color: "#16a34a"
   }
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#action-args
 } satisfies Meta<typeof BlockLight>;
