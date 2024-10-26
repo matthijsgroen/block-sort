@@ -1,4 +1,4 @@
-import { Dispatch, use } from "react";
+import { Dispatch, use, useRef } from "react";
 
 import { BlockTheme } from "@/game/themes";
 import { LevelState } from "@/game/types";
@@ -69,6 +69,33 @@ export const LevelLayout: React.FC<Props> = ({
   useScreenUpdate();
   const { showBeta } = use(BetaContext);
 
+  // Create an array of refs
+  const refsArray = useRef<HTMLDivElement[]>([]);
+
+  // Assign a ref to each element in the array
+  const addToRefsArray = (el: HTMLDivElement | null, index: number) => {
+    if (el && !refsArray.current.includes(el)) {
+      refsArray.current[index] = el;
+    }
+  };
+
+  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    const x = event.clientX;
+    const y = event.clientY;
+
+    // Use elementFromPoint to find the element at the touch end coordinates
+    const targetElement = document.elementFromPoint(x, y);
+
+    // Find the index of the target element in refsArray
+    const targetIndex = refsArray.current.findIndex(
+      (ref) => ref && ref.contains(targetElement)
+    );
+
+    if (targetIndex !== -1) {
+      onColumnUp?.(targetIndex);
+    }
+  };
+
   /**
    * Disable block move animation on iOS, as it is not performant.
    *
@@ -90,13 +117,14 @@ export const LevelLayout: React.FC<Props> = ({
   const cols = determineColumns(maxColumnSize, levelState.columns.length);
   return (
     <>
-      <div className="flex flex-1 flex-wrap justify-center p-2">
+      <div className="flex flex-1 touch-none flex-wrap justify-center p-2">
         <div className="w-full max-w-[600px] content-center">
           <div className={`grid grid-flow-dense ${cols}`}>
             {levelState.columns.map((bar, i) => (
               <BlockColumn
                 column={bar}
                 key={i}
+                ref={(el) => addToRefsArray(el, i)}
                 theme={theme}
                 motionDuration={
                   blockMoveAnimationDisabled ? 0 : moveTransitionTime
@@ -104,8 +132,8 @@ export const LevelLayout: React.FC<Props> = ({
                 onPointerDown={() => {
                   onColumnDown?.(i);
                 }}
-                onPointerUp={() => {
-                  onColumnUp?.(i);
+                onPointerUp={(e) => {
+                  handlePointerUp(e);
                 }}
                 started={started}
                 suggested={suggestionTarget === i}

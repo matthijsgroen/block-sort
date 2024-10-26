@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.14.2 - 2024-10-26
+
+### Fixed
+
+- Improve responsiveness of touch controls
+
+## Version 1.14.1 - 2024-10-25
+
+### Fixed
+
+- Tapping (touch) one column and releasing on another now also moves blocks (did not work before)
+
 ## Version 1.14.0 - 2024-10-25
 
 ### Added
