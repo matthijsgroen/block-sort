@@ -28,7 +28,7 @@ export const Tray: React.FC<Props> = ({ locked, onLock }) => {
       style={{
         "--cube-color": "#a07353"
       }}
-      className={clsx("relative -mt-top-block h-8 w-block text-center", {
+      className={clsx("relative -mb-2 -mt-top-block h-8 w-block text-center", {
         "animate-trayLocked": isLocked,
         "translate-y-3": !isLocked
       })}

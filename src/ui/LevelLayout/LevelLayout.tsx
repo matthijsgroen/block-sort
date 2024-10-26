@@ -140,6 +140,7 @@ export const LevelLayout: React.FC<Props> = ({
                 amountSelected={
                   selection && i === selection[0] ? selection[1] : 0
                 }
+                detectHover={!!selection}
                 amountSuggested={
                   suggestionSelection && i === suggestionSelection[0]
                     ? suggestionSelection[1]
