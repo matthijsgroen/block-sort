@@ -15,19 +15,18 @@ export const BlockAnimation: React.FC<Props> = ({
   path,
   duration = 400
 }) => (
-  <div
+  <BlockLight
     style={{
       top: path.startY,
       left: path.startX,
       offsetPath: `path('${path.path}')`,
       offsetRotate: "0deg",
+      "--start": `calc(0% + 40px * ${path.offset})`,
+      "--end": `calc(100% - 40px * ${path.count - 1 - path.offset})`,
       "--animation-duration": `${duration}ms`
     }}
     className={`animate-blockMove pointer-events-none absolute`}
-  >
-    <BlockLight
-      color={getColorMapping(theme)[path.color]}
-      shape={getShapeMapping(theme)[path.color]}
-    />
-  </div>
+    color={getColorMapping(theme)[path.color]}
+    shape={getShapeMapping(theme)[path.color]}
+  />
 );

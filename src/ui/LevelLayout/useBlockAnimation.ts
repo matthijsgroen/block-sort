@@ -3,10 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import { BlockColor, LevelState } from "@/game/types";
 import { createAnimationPath, Rect } from "@/support/createAnimationPath";
 import { effectTimeout } from "@/support/effectTimeout";
+import { timesMap } from "@/support/timeMap";
 
 export type AnimationPath = {
   startX: number;
   startY: number;
+  offset: number;
+  count: number;
   path: string;
   color: BlockColor;
 };
@@ -87,30 +90,35 @@ export const useBlockAnimation = (
       prevLevel.columns[addedColumn].blocks.length;
 
     const blockColor = levelState.columns[addedColumn].blocks[0].color;
-
-    const newAnimationPaths = Array.from({ length: blocksAdded }).map(
-      (_, i) => {
-        const source = animationData.sourceBlocks[i];
-        const target: Rect = {
-          x: animationData.targetSpot.x,
-          y: animationData.targetSpot.y - 80 + i * 30,
-          width: animationData.targetSpot.width,
-          height: animationData.targetSpot.height
-        };
-
-        return {
-          startX: source.x,
-          startY: source.top + 20,
-          path: createAnimationPath(
-            source,
-            target,
-            animationData.sourceColumnTop - 60,
-            animationData.targetColumnTop - 60
-          ),
-          color: blockColor
-        };
-      }
+    const source = animationData.sourceBlocks.at(-1)!;
+    const target: Rect = {
+      x: animationData.targetSpot.x,
+      y: animationData.targetSpot.y - 80,
+      width: animationData.targetSpot.width,
+      height: animationData.targetSpot.height
+    };
+    const path = createAnimationPath(
+      source,
+      target,
+      animationData.sourceColumnTop - 60,
+      animationData.targetColumnTop - 60
     );
+
+    const newAnimationPaths = timesMap(blocksAdded, (i) => {
+      return {
+        startX: source.x,
+        startY: source.top + 20,
+        offset: i,
+        count: blocksAdded,
+        path,
+        color: blockColor
+      };
+    });
+
+    /**
+     * Alternative approach: Creating the blocks ourselves, and placing them on a single path.
+     */
+
     setAnimationPaths(newAnimationPaths);
 
     return effectTimeout(() => {
