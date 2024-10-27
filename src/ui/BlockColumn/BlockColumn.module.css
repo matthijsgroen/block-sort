@@ -15,7 +15,8 @@
 }
 
 .shade {
-  background: linear-gradient(to right, #0006 0%, #0000 60%);
+  background: linear-gradient(to right, #0006 0%, #0000 60%, #0000 100%);
+  background-clip: content-box;
 }
 
 .limit {
@@ -44,6 +45,7 @@
   box-shadow: 8px 4px 4px #0007;
   border-color: transparent;
   background:
+    linear-gradient(to right, #0006 0%, #0000 60%, #0000 100%) content-box,
     linear-gradient(to bottom, #604532, #604532) padding-box,
     linear-gradient(to bottom, #b18c71 1.25rem, #805d43 1.5rem, #805d43)
       border-box;

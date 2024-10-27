@@ -1,7 +1,7 @@
 import { Dispatch, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 
-import { Block } from "@/ui/Block/Block";
+import { Block2 } from "@/ui/Block/Block2";
 import { Tray } from "@/ui/Tray/Tray";
 
 import { BlockTheme, getColorMapping, getShapeMapping } from "@/game/themes";
@@ -140,6 +140,7 @@ export const BlockColumn: React.FC<Props> = ({
       <div
         ref={columnRef}
         className={clsx("box-content border border-transparent pb-6", {
+          [styles.shade]: !locked,
           "contain-paint": locked,
           "rounded-b-md": column.type === "buffer",
           "rounded-md border-t-black/60": column.type === "placement",
@@ -171,30 +172,27 @@ export const BlockColumn: React.FC<Props> = ({
             const isSelected = index < amountSelected;
             const isSuggested = index < amountSuggested;
             return (
-              <div key={column.columnSize - column.blocks.length + index}>
-                <Block
-                  locked={p <= blocksLocked - 1}
-                  index={index}
-                  moved={started}
-                  shadow={column.type === "placement" || isSelected}
-                  revealed={block.revealed}
-                  color={activeColorMap[block.color]}
-                  hideFormat={hideFormat}
-                  shape={
-                    block.revealed ? activeShapeMap[block.color] : undefined
-                  }
-                  selected={isSelected}
-                  suggested={isSuggested}
-                  onDrop={onDrop}
-                  onPickUp={(rect) => {
-                    onPickUp?.({
-                      top: columnRef.current?.getBoundingClientRect().top ?? 0,
-                      rect
-                    });
-                  }}
-                  onLock={onLock}
-                />
-              </div>
+              <Block2
+                key={column.columnSize - column.blocks.length + index}
+                locked={p <= blocksLocked - 1}
+                index={index}
+                moved={started}
+                shadow={column.type === "placement" || isSelected}
+                revealed={block.revealed}
+                color={activeColorMap[block.color]}
+                hideFormat={hideFormat}
+                shape={block.revealed ? activeShapeMap[block.color] : undefined}
+                selected={isSelected}
+                suggested={isSuggested}
+                onDrop={onDrop}
+                onPickUp={(rect) => {
+                  onPickUp?.({
+                    top: columnRef.current?.getBoundingClientRect().top ?? 0,
+                    rect
+                  });
+                }}
+                onLock={onLock}
+              />
             );
           })}
           {timesMap(column.columnSize - column.blocks.length, (p, l) =>
@@ -202,7 +200,7 @@ export const BlockColumn: React.FC<Props> = ({
               <div
                 key={column.blocks.length + p}
                 ref={firstEmptyRef}
-                className={`${p === 0 && column.blocks.length === 0 ? styles.bottom : styles.empty} ${styles.shade}`}
+                className={`${p === 0 && column.blocks.length === 0 ? styles.bottom : styles.empty}`}
               >
                 <div
                   style={{ "--cube-color": activeColorMap[column.limitColor] }}
@@ -218,7 +216,7 @@ export const BlockColumn: React.FC<Props> = ({
               <div
                 key={column.blocks.length + p}
                 ref={l - p === l ? firstEmptyRef : undefined}
-                className={`${p === 0 && column.blocks.length === 0 ? styles.bottom : styles.empty} ${styles.shade}`}
+                className={`${p === 0 && column.blocks.length === 0 ? styles.bottom : styles.empty}`}
               ></div>
             )
           )}

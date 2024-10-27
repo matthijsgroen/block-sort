@@ -53,19 +53,7 @@ The game will use pre-created seeds to generate levels in a fast way on mobile (
 To generate all the seeds, run:
 
 ```
-bin/generate-level-seeds.ts
-```
-
-It will add 50 seeds to places where they are missing, and
-removes outdated seeds for settings that are no longer available.
-
-If you want to run the seeder multiple times,
-in fish you can use:
-
-```fish
-for i in (seq 10)
-  bin/generate-level-seeds.ts
-end
+bin/generate-level-seeds.ts run --all
 ```
 
 This project uses the [CC BY-NC-SA 4.0](./LICENSE) license.

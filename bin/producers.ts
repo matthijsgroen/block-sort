@@ -5,6 +5,7 @@ import {
 import {
   getNormal2Settings,
   getNormal3Settings,
+  getNormal4Settings,
   getNormalSettings
 } from "../src/game/level-types/normal";
 import {
@@ -25,6 +26,7 @@ export const producers: Producer[] = [
   { name: "Normal1", producer: getNormalSettings },
   { name: "Normal2", producer: getNormal2Settings },
   { name: "Normal3", producer: getNormal3Settings },
+  { name: "Normal4", producer: getNormal4Settings },
   { name: "Special1", producer: getSpecial1Settings },
   { name: "Special2", producer: getSpecial2Settings },
   { name: "Special3", producer: getSpecial3Settings },

@@ -8,6 +8,7 @@ import {
 import {
   getNormal2Settings,
   getNormal3Settings,
+  getNormal4Settings,
   getNormalSettings
 } from "@/game/level-types/normal";
 import {
@@ -26,6 +27,7 @@ type LevelType =
   | "normal"
   | "normal2"
   | "normal3"
+  | "normal4"
   | "hard"
   | "hard2"
   | "special1"
@@ -55,6 +57,7 @@ const meta: Meta<CustomArgs> = {
         "normal",
         "normal2",
         "normal3",
+        "normal4",
         "hard",
         "hard2",
         "special1",
@@ -86,6 +89,7 @@ const settingProducer: Record<
   normal: getNormalSettings,
   normal2: getNormal2Settings,
   normal3: getNormal3Settings,
+  normal4: getNormal4Settings,
   hard: getHardSettings,
   hard2: getHard2Settings,
   special1: getSpecial1Settings,

@@ -6,6 +6,7 @@ import { LevelSettings } from "../types";
 import {
   getNormal2Settings,
   getNormal3Settings,
+  getNormal4Settings,
   getNormalSettings
 } from "./normal";
 
@@ -193,4 +194,8 @@ describe(getNormal3Settings, () => {
   });
 
   testDifficulties(getNormal3Settings);
+});
+
+describe(getNormal4Settings, () => {
+  testDifficulties(getNormal4Settings);
 });
