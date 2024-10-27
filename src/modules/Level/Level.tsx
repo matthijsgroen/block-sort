@@ -292,7 +292,10 @@ export const Level: React.FC<Props> = ({
               if (nextMove) {
                 const selection = selectFromColumn(levelState, nextMove.from);
                 if (selection.length > 0) {
-                  setSelectStart([nextMove.from, selection.length, levelState]);
+                  setSelectStart({
+                    selection: [nextMove.from, selection.length],
+                    state: levelState
+                  });
                 }
                 setTimeout(() => {
                   move(nextMove.from, nextMove.to);
