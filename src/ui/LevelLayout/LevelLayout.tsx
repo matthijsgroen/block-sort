@@ -117,8 +117,8 @@ export const LevelLayout: React.FC<Props> = ({
   const cols = determineColumns(maxColumnSize, levelState.columns.length);
   return (
     <>
-      <div className="flex flex-1 touch-none flex-wrap justify-center p-2">
-        <div className="w-full max-w-[600px] content-center">
+      <div className="flex w-full flex-1 touch-none flex-col flex-wrap items-center justify-center">
+        <div className="w-full max-w-[600px]">
           <div className={`grid grid-flow-dense ${cols}`}>
             {levelState.columns.map((bar, i) => (
               <BlockColumn
