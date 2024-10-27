@@ -57,7 +57,7 @@
   }
 }
 
-.light-gradient {
+.blockGradient {
   background-color: var(--cube-color);
   background-image: linear-gradient(
     rgba(0, 0, 0, 30%) 0%,

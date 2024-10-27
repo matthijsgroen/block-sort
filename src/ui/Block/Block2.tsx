@@ -112,7 +112,7 @@ export const Block2: React.FC<Props> = ({
           styles.shape,
           {
             "[transition-duration:0ms]": isRevealed,
-            [styles["light-gradient"]]: revealed && !isLocked,
+            [styles.blockGradient]: revealed && !isLocked,
             [styles.gradientLocked]: revealed && isLocked,
             [styles.glass]: !revealed && hideFormat === "glass",
             [styles.present]: !revealed && hideFormat === "present",

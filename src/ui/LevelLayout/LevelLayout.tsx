@@ -9,7 +9,6 @@ import { useScreenUpdate } from "@/support/useScreenUpdate";
 
 import { BlockColumn } from "../BlockColumn/BlockColumn";
 
-import { BlockAnimation } from "./BlockAnimation";
 import { useBlockAnimation } from "./useBlockAnimation";
 
 type Props = {
@@ -102,13 +101,13 @@ export const LevelLayout: React.FC<Props> = ({
    * Especially in standalone mode, apple is gimping the performance
    */
   const blockMoveAnimationDisabled = isIos() && !showBeta;
-  const moveTransitionTime = 200;
+  const moveTransitionTime = 400;
 
-  const { animate, pickup, animationPaths } = useBlockAnimation(
-    levelState,
-    selection,
-    { disabled: blockMoveAnimationDisabled, transitionTime: moveTransitionTime }
-  );
+  const { animate, pickup } = useBlockAnimation(levelState, selection, {
+    disabled: blockMoveAnimationDisabled,
+    transitionTime: moveTransitionTime,
+    theme
+  });
 
   const maxColumnSize = levelState.columns.reduce(
     (r, c) => Math.max(r, c.columnSize),
@@ -116,60 +115,50 @@ export const LevelLayout: React.FC<Props> = ({
   );
   const cols = determineColumns(maxColumnSize, levelState.columns.length);
   return (
-    <>
-      <div className="flex w-full flex-1 touch-none flex-col flex-wrap items-center justify-center">
-        <div className="w-full max-w-[600px]">
-          <div className={`grid grid-flow-dense ${cols}`}>
-            {levelState.columns.map((bar, i) => (
-              <BlockColumn
-                column={bar}
-                key={i}
-                ref={(el) => addToRefsArray(el, i)}
-                theme={theme}
-                motionDuration={
-                  blockMoveAnimationDisabled ? 0 : moveTransitionTime
-                }
-                onPointerDown={() => {
-                  onColumnDown?.(i);
-                }}
-                onPointerUp={(e) => {
-                  handlePointerUp(e);
-                }}
-                started={started}
-                suggested={suggestionTarget === i}
-                amountSelected={
-                  selection && i === selection[0] ? selection[1] : 0
-                }
-                detectHover={!!selection}
-                amountSuggested={
-                  suggestionSelection && i === suggestionSelection[0]
-                    ? suggestionSelection[1]
-                    : 0
-                }
-                hideFormat={hideFormat}
-                onLock={onLock}
-                onDrop={onDrop}
-                onPickUp={({ top, rect }) => {
-                  pickup(top, rect);
+    <div className="flex w-full flex-1 touch-none flex-col flex-wrap items-center justify-center">
+      <div className="w-full max-w-[600px]">
+        <div className={`grid grid-flow-dense ${cols}`}>
+          {levelState.columns.map((bar, i) => (
+            <BlockColumn
+              column={bar}
+              key={i}
+              ref={(el) => addToRefsArray(el, i)}
+              theme={theme}
+              motionDuration={
+                blockMoveAnimationDisabled ? 0 : moveTransitionTime
+              }
+              onPointerDown={() => {
+                onColumnDown?.(i);
+              }}
+              onPointerUp={(e) => {
+                handlePointerUp(e);
+              }}
+              started={started}
+              suggested={suggestionTarget === i}
+              amountSelected={
+                selection && i === selection[0] ? selection[1] : 0
+              }
+              detectHover={!!selection}
+              amountSuggested={
+                suggestionSelection && i === suggestionSelection[0]
+                  ? suggestionSelection[1]
+                  : 0
+              }
+              hideFormat={hideFormat}
+              onLock={onLock}
+              onDrop={onDrop}
+              onPickUp={({ top, rect }) => {
+                pickup(top, rect);
 
-                  onPickUp?.();
-                }}
-                onPlacement={({ top, rect }) => {
-                  animate(top, rect);
-                }}
-              />
-            ))}
-          </div>
+                onPickUp?.();
+              }}
+              onPlacement={({ top, rect }) => {
+                animate(top, rect);
+              }}
+            />
+          ))}
         </div>
       </div>
-      {animationPaths.map((p, i) => (
-        <BlockAnimation
-          key={i}
-          path={p}
-          theme={theme}
-          duration={moveTransitionTime}
-        />
-      ))}
-    </>
+    </div>
   );
 };
