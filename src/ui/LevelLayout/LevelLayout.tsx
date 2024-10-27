@@ -1,10 +1,8 @@
-import { Dispatch, use, useRef } from "react";
+import { Dispatch, useRef } from "react";
 
 import { BlockTheme } from "@/game/themes";
 import { LevelState } from "@/game/types";
-import { BetaContext } from "@/modules/Layout/BetaContext";
 import { colSizes } from "@/support/grid";
-import { isIos } from "@/support/isIos";
 import { useScreenUpdate } from "@/support/useScreenUpdate";
 
 import { BlockColumn } from "../BlockColumn/BlockColumn";
@@ -19,6 +17,7 @@ type Props = {
   suggestionTarget?: number;
   hideFormat?: "glass" | "present";
   theme?: BlockTheme;
+  animateBlocks?: boolean;
   onColumnDown?: Dispatch<number>;
   onColumnUp?: Dispatch<number>;
   onPickUp?: VoidFunction;
@@ -51,12 +50,15 @@ const determineColumns = (
   return "grid-cols-6";
 };
 
+const BLOCK_ANIMATION_TIME = 400;
+
 export const LevelLayout: React.FC<Props> = ({
   started,
   levelState,
   selection,
   suggestionSelection,
   suggestionTarget,
+  animateBlocks = true,
   theme = "default",
   hideFormat = "glass",
   onColumnDown,
@@ -66,7 +68,6 @@ export const LevelLayout: React.FC<Props> = ({
   onPickUp
 }) => {
   useScreenUpdate();
-  const { showBeta } = use(BetaContext);
 
   // Create an array of refs
   const refsArray = useRef<HTMLDivElement[]>([]);
@@ -95,17 +96,9 @@ export const LevelLayout: React.FC<Props> = ({
     }
   };
 
-  /**
-   * Disable block move animation on iOS, as it is not performant.
-   *
-   * Especially in standalone mode, apple is gimping the performance
-   */
-  const blockMoveAnimationDisabled = isIos() && !showBeta;
-  const moveTransitionTime = 400;
-
   const { animate, pickup } = useBlockAnimation(levelState, selection, {
-    disabled: blockMoveAnimationDisabled,
-    transitionTime: moveTransitionTime,
+    disabled: !animateBlocks,
+    transitionTime: BLOCK_ANIMATION_TIME,
     theme
   });
 
@@ -124,9 +117,7 @@ export const LevelLayout: React.FC<Props> = ({
               key={i}
               ref={(el) => addToRefsArray(el, i)}
               theme={theme}
-              motionDuration={
-                blockMoveAnimationDisabled ? 0 : moveTransitionTime
-              }
+              motionDuration={animateBlocks ? BLOCK_ANIMATION_TIME : 0}
               onPointerDown={() => {
                 onColumnDown?.(i);
               }}

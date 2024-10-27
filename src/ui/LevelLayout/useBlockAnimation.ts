@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import styles from "@/ui/Block/Block2.module.css";
 
@@ -45,7 +45,7 @@ export const useBlockAnimation = (
     }
   }, [selection]);
 
-  const animate = (targetTop: number, targetRect: DOMRect) => {
+  const animate = useCallback((targetTop: number, targetRect: DOMRect) => {
     animationRef.current = {
       sourceBlocks: selectionRef.current,
       targetSpot: targetRect,
@@ -55,12 +55,12 @@ export const useBlockAnimation = (
 
     selectionRef.current = [];
     transitionTop.current = undefined;
-  };
+  }, []);
 
-  const pickup = (top: number, rect: DOMRect) => {
+  const pickup = useCallback((top: number, rect: DOMRect) => {
     selectionRef.current.push(rect);
     transitionTop.current = top;
-  };
+  }, []);
 
   const previousLevelState = useRef<LevelState>(undefined);
 
@@ -76,6 +76,10 @@ export const useBlockAnimation = (
 
     const prevLevel = previousLevelState.current;
     previousLevelState.current = levelState;
+
+    if (prevLevel.columns.length !== levelState.columns.length) {
+      return; // layout changed, no animation
+    }
 
     const addedColumn = levelState.columns.findIndex(
       (c, i) => c.blocks.length > prevLevel.columns[i].blocks.length
@@ -121,15 +125,6 @@ export const useBlockAnimation = (
       };
     });
 
-    /**
-     * Alternative approach: Creating the blocks ourselves, and placing them on a single path.
-     */
-
-    // setAnimationPaths(newAnimationPaths);
-
-    // return effectTimeout(() => {
-    //   setAnimationPaths([]);
-    // }, transitionTime);
     const color = getColorMapping(theme)[blockColor];
     const shape = getShapeMapping(theme)[blockColor];
 
@@ -183,8 +178,8 @@ export const useBlockAnimation = (
   }, [levelState]);
 
   if (disabled) {
-    return { animate: () => {}, pickup: () => {} }; //, animationPaths: [] };
+    return { animate: () => {}, pickup: () => {} };
   }
 
-  return { animate, pickup }; //, animationPaths };
+  return { animate, pickup };
 };

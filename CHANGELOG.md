@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version 1.15.0 - 2024-10-27
 
+### Added
+
+- Additional level template for normal levels above 230.
+
 ### Changed
 
 - Changed visual style to reduce rendering complexity
+- Updated view alignment to center content for larger screens
 
 ## Version 1.14.3 - 2024-10-26
 

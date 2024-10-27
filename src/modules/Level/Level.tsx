@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 
 import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
 import { Message } from "@/ui/Message/Message";
@@ -17,11 +17,13 @@ import {
 import { colorMap } from "@/game/themes/default";
 import { LevelSettings, LevelState, Move } from "@/game/types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
+import { isIos } from "@/support/isIos";
 import { mulberry32, pick } from "@/support/random";
 import { getActiveModifiers, getToday } from "@/support/themes";
 import { useGameStorage } from "@/support/useGameStorage";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
+import { BetaContext } from "../Layout/BetaContext";
 
 import { getAutoMoveCount, MAX_SOLVE_PERCENTAGE } from "./autoMove";
 import { ghostModeModifier } from "./ghostModeModifier";
@@ -81,9 +83,13 @@ export const Level: React.FC<Props> = ({
     Math.floor(initialLevelState.moves.length * MAX_SOLVE_PERCENTAGE)
   );
 
-  const [selectStart, setSelectStart] = useState<
-    [column: number, amount: number, state: LevelState] | null
-  >(null);
+  const [selectStart, setSelectStart] = useState<{
+    selection: [column: number, amount: number];
+    state: LevelState;
+  } | null>(null);
+
+  const activeSelectStart =
+    selectStart && selectStart.state !== levelState ? null : selectStart;
 
   const [started, setStarted] = useState(false);
   const levelTypePlugin = getLevelTypeByType(levelType);
@@ -110,9 +116,6 @@ export const Level: React.FC<Props> = ({
       setPlayState("lost");
       setLostCounter((a) => a + 1);
     }
-    if (selectStart && selectStart[2] !== levelState) {
-      setSelectStart(null);
-    }
   }, [levelState]);
 
   const levelModifiers = getActiveModifiers(getToday());
@@ -133,7 +136,7 @@ export const Level: React.FC<Props> = ({
     { enabled: ghostMode }
   );
 
-  const move = (from: number, to: number) => {
+  const move = useCallback((from: number, to: number) => {
     setLevelState((levelState) => {
       const updatedLevelState = moveBlocks(levelState, from, to);
       if (packageMode) {
@@ -151,34 +154,61 @@ export const Level: React.FC<Props> = ({
     // column, index fashion to 'reveal' fog
 
     setLevelMoves((moves) => moves.concat({ from, to }));
-  };
+  }, []);
 
-  const onColumnDown = (columnIndex: number) => {
-    if (selectStart) {
-      if (selectStart[0] === columnIndex) {
-        setSelectStart(null);
-        return;
+  const onColumnDown = useCallback(
+    (columnIndex: number) => {
+      if (activeSelectStart) {
+        if (activeSelectStart.selection[0] === columnIndex) {
+          setSelectStart(null);
+          return;
+        }
+        move(activeSelectStart.selection[0], columnIndex);
+        setAutoMoves(0);
+      } else {
+        const selection = selectFromColumn(levelState, columnIndex);
+        if (selection.length > 0) {
+          setSelectStart({
+            selection: [columnIndex, selection.length],
+            state: levelState
+          });
+        }
       }
-      move(selectStart[0], columnIndex);
-      setAutoMoves(0);
-    } else {
-      const selection = selectFromColumn(levelState, columnIndex);
-      if (selection.length > 0) {
-        setSelectStart([columnIndex, selection.length, levelState]);
+    },
+    [levelState, activeSelectStart]
+  );
+  const onColumnUp = useCallback(
+    (columnIndex: number) => {
+      if (activeSelectStart) {
+        if (activeSelectStart.selection[0] === columnIndex) {
+          return;
+        }
+        move(activeSelectStart.selection[0], columnIndex);
+        setAutoMoves(0);
       }
-    }
-  };
-  const onColumnUp = (columnIndex: number) => {
-    if (selectStart) {
-      if (selectStart[0] === columnIndex) {
-        return;
-      }
-      move(selectStart[0], columnIndex);
-      setAutoMoves(0);
-    }
-  };
+    },
+    [activeSelectStart]
+  );
 
   const [clearKey, setClearKey] = useState(0);
+  const { showBeta } = use(BetaContext);
+
+  /**
+   * Disable block move animation on iOS, as it is not performant.
+   *
+   * Especially in standalone mode, apple is gimping the performance
+   */
+  const blockAnimations = !isIos() || showBeta;
+
+  const handleLock = useCallback(() => {
+    sound.play("lock");
+  }, []);
+  const handleDrop = useCallback(() => {
+    sound.play("place");
+  }, []);
+  const handlePickUp = useCallback(() => {
+    sound.play("pickup");
+  }, []);
 
   return (
     <div className={"flex h-full flex-col"}>
@@ -298,25 +328,16 @@ export const Level: React.FC<Props> = ({
         levelState={levelState}
         theme={activeTheme}
         started={started}
+        animateBlocks={blockAnimations}
         onColumnDown={onColumnDown}
         onColumnUp={onColumnUp}
-        selection={
-          selectStart && selectStart[2] === levelState
-            ? [selectStart[0], selectStart[1]]
-            : undefined
-        }
+        selection={activeSelectStart?.selection}
         suggestionSelection={ghostSelection}
         suggestionTarget={ghostTarget}
         hideFormat={packageMode ? "present" : "glass"}
-        onLock={() => {
-          sound.play("lock");
-        }}
-        onDrop={() => {
-          sound.play("place");
-        }}
-        onPickUp={() => {
-          sound.play("pickup");
-        }}
+        onLock={handleLock}
+        onDrop={handleDrop}
+        onPickUp={handlePickUp}
       />
     </div>
   );
