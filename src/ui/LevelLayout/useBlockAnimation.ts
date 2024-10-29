@@ -5,6 +5,7 @@ import styles from "@/ui/Block/Block2.module.css";
 import { BlockTheme, getColorMapping, getShapeMapping } from "@/game/themes";
 import { BlockColor, LevelState } from "@/game/types";
 import { createAnimationPath, Rect } from "@/support/createAnimationPath";
+import { effectTimeout } from "@/support/effectTimeout";
 import { encodeForContent } from "@/support/emojiEncoding";
 import { timesMap } from "@/support/timeMap";
 
@@ -80,101 +81,105 @@ export const useBlockAnimation = (
     if (prevLevel.columns.length !== levelState.columns.length) {
       return; // layout changed, no animation
     }
-
-    const addedColumn = levelState.columns.findIndex(
-      (c, i) => c.blocks.length > prevLevel.columns[i].blocks.length
-    );
-
-    if (
-      addedColumn === -1 ||
-      !animationRef.current ||
-      animationRef.current.sourceBlocks.length === 0
-    ) {
-      return;
-    }
-
-    const animationData = animationRef.current;
-
-    const blocksAdded =
-      levelState.columns[addedColumn].blocks.length -
-      prevLevel.columns[addedColumn].blocks.length;
-
-    const blockColor = levelState.columns[addedColumn].blocks[0].color;
-    const source = animationData.sourceBlocks.at(-1)!;
-    const target: Rect = {
-      x: animationData.targetSpot.x,
-      y: animationData.targetSpot.y - 80,
-      width: animationData.targetSpot.width,
-      height: animationData.targetSpot.height
-    };
-    const path = createAnimationPath(
-      source,
-      target,
-      animationData.sourceColumnTop - 60,
-      animationData.targetColumnTop - 60
-    );
-
-    const newAnimationPaths = timesMap(blocksAdded, (i) => {
-      return {
-        startX: source.x,
-        startY: source.top + 20,
-        offset: i,
-        count: blocksAdded,
-        path,
-        color: blockColor
-      };
-    });
-
-    const color = getColorMapping(theme)[blockColor];
-    const shape = getShapeMapping(theme)[blockColor];
-
-    // create instances of blocks self, outside of react
-    newAnimationPaths.map<HTMLDivElement>((path) => {
-      const div = document.createElement("div");
-      div.style.setProperty("--cube-color", color);
-      div.style.setProperty("--shape-color", color);
-      div.style.setProperty("--cube-shape-opacity", "50%");
-      div.style.setProperty("--cube-shape", `'${encodeForContent(shape)}'`);
-      div.style.setProperty("--cube-top-shape", `'${encodeForContent(shape)}'`);
-      div.style.setProperty("top", `${path.startY}px`);
-      div.style.setProperty("left", `${path.startX}px`);
-      div.style.setProperty("offset-path", `path('${path.path}')`);
-      div.style.setProperty("offset-rotate", "0deg");
-      div.style.setProperty("--animation-duration", `${transitionTime}ms`);
-      div.classList.add(
-        "-mt-top-block",
-        "h-height-block",
-        "w-block",
-        "rounded-md",
-        "text-center",
-        "pointer-events-none",
-        "absolute",
-        styles.blockGradient,
-        styles.shape
+    effectTimeout(() => {
+      const addedColumn = levelState.columns.findIndex(
+        (c, i) => c.blocks.length > prevLevel.columns[i].blocks.length
       );
 
-      document.body.appendChild(div);
-      div.addEventListener("animationend", () => {
-        div.remove();
-      });
-      div.animate(
-        [
-          { offsetDistance: `${40 * path.offset}px` },
-          {
-            offsetDistance: `calc(100% - ${40 * (path.count - 1 - path.offset)}px)`
-          }
-        ],
-        {
-          duration: transitionTime,
-          fill: "forwards",
-          iterations: 1
-        }
-      ).onfinish = () => {
-        div.remove();
-      };
+      if (
+        addedColumn === -1 ||
+        !animationRef.current ||
+        animationRef.current.sourceBlocks.length === 0
+      ) {
+        return;
+      }
 
-      return div;
-    });
+      const animationData = animationRef.current;
+
+      const blocksAdded =
+        levelState.columns[addedColumn].blocks.length -
+        prevLevel.columns[addedColumn].blocks.length;
+
+      const blockColor = levelState.columns[addedColumn].blocks[0].color;
+      const source = animationData.sourceBlocks.at(-1)!;
+      const target: Rect = {
+        x: animationData.targetSpot.x,
+        y: animationData.targetSpot.y - 80,
+        width: animationData.targetSpot.width,
+        height: animationData.targetSpot.height
+      };
+      const path = createAnimationPath(
+        source,
+        target,
+        animationData.sourceColumnTop - 60,
+        animationData.targetColumnTop - 60
+      );
+
+      const newAnimationPaths = timesMap(blocksAdded, (i) => {
+        return {
+          startX: source.x,
+          startY: source.top + 20,
+          offset: i,
+          count: blocksAdded,
+          path,
+          color: blockColor
+        };
+      });
+
+      const color = getColorMapping(theme)[blockColor];
+      const shape = getShapeMapping(theme)[blockColor];
+
+      // create instances of blocks self, outside of react
+      newAnimationPaths.map<HTMLDivElement>((path) => {
+        const div = document.createElement("div");
+        div.style.setProperty("--cube-color", color);
+        div.style.setProperty("--shape-color", color);
+        div.style.setProperty("--cube-shape-opacity", "50%");
+        div.style.setProperty("--cube-shape", `'${encodeForContent(shape)}'`);
+        div.style.setProperty(
+          "--cube-top-shape",
+          `'${encodeForContent(shape)}'`
+        );
+        div.style.setProperty("top", `${path.startY}px`);
+        div.style.setProperty("left", `${path.startX}px`);
+        div.style.setProperty("offset-path", `path('${path.path}')`);
+        div.style.setProperty("offset-rotate", "0deg");
+        div.style.setProperty("--animation-duration", `${transitionTime}ms`);
+        div.classList.add(
+          "-mt-top-block",
+          "h-height-block",
+          "w-block",
+          "rounded-md",
+          "text-center",
+          "pointer-events-none",
+          "absolute",
+          styles.blockGradient,
+          styles.shape
+        );
+
+        document.body.appendChild(div);
+        div.addEventListener("animationend", () => {
+          div.remove();
+        });
+        div.animate(
+          [
+            { offsetDistance: `${40 * path.offset}px` },
+            {
+              offsetDistance: `calc(100% - ${40 * (path.count - 1 - path.offset)}px)`
+            }
+          ],
+          {
+            duration: transitionTime + 5,
+            fill: "forwards",
+            iterations: 1
+          }
+        ).onfinish = () => {
+          div.remove();
+        };
+
+        return div;
+      });
+    }, 2); // delay to allow the DOM to update first
   }, [levelState]);
 
   if (disabled) {
