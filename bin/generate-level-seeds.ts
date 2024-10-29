@@ -21,6 +21,8 @@ const SEED = 123456789012345;
 const MINIMAL_LEVELS = 100;
 const GENERATE_BATCH_SIZE = 50;
 
+const scale: number[] = [0, ...LEVEL_SCALE];
+
 type Seeder = {
   hash: string;
   producer: SettingsProducer;
@@ -82,7 +84,6 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
 
   const levelSeedsCopy = { ...levelSeeds };
 
-  const scale: number[] = [0, ...LEVEL_SCALE];
   const currentHashes = producers.flatMap((producer) =>
     scale.reduce<Seeder[]>((acc, _lvl, index) => {
       const settings = producer.producer(index + 1);
@@ -229,7 +230,6 @@ program
 
     const keys = Object.keys(levelSeeds);
 
-    const scale: number[] = [0, ...LEVEL_SCALE];
     const currentHashes = producers.flatMap((producer) =>
       scale.reduce<Seeder[]>((acc, _lvl, index) => {
         const settings = producer.producer(index + 1);
