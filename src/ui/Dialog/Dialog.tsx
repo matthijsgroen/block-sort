@@ -13,7 +13,7 @@ type Props = PropsWithChildren<{
 export const Dialog: React.FC<Props> = ({
   children,
   wide = false,
-  onClose,
+  onClose
 }) => {
   const dialogElement = useRef<HTMLDialogElement>(null);
 
@@ -33,13 +33,13 @@ export const Dialog: React.FC<Props> = ({
       ref={dialogElement}
       className={clsx("max-h-3/4 w-4/5 bg-transparent px-0 pb-5", {
         "max-w-[320px]": !wide,
-        "max-w-4/5": wide,
+        "max-w-4/5": wide
       })}
     >
       <div
         className={clsx(
           "max-h-3/4 animate-fadeIn rounded-xl border border-black p-4 drop-shadow-lg [animation-duration:0.3s]",
-          styles.woodBackground,
+          styles.woodBackground
         )}
       >
         {children}

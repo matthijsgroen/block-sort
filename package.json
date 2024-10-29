@@ -13,7 +13,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
+    "preview": "yarn build && vite preview",
     "test": "vitest",
     "test:performance": "bin/test-performance.ts",
     "check-types": "tsc --noEmit",
