@@ -1,4 +1,4 @@
-import { Dispatch, useRef } from "react";
+import { Dispatch, useCallback, useEffect, useRef, useState } from "react";
 
 import { BlockTheme } from "@/game/themes";
 import { LevelState } from "@/game/types";
@@ -79,28 +79,74 @@ export const LevelLayout: React.FC<Props> = ({
     }
   };
 
-  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
-    const x = event.clientX;
-    const y = event.clientY;
-
-    // Use elementFromPoint to find the element at the touch end coordinates
-    const targetElement = document.elementFromPoint(x, y);
-
-    // Find the index of the target element in refsArray
-    const targetIndex = refsArray.current.findIndex(
-      (ref) => ref && ref.contains(targetElement)
-    );
-
-    if (targetIndex !== -1) {
-      onColumnUp?.(targetIndex);
+  const [hoverColumnIndex, setHoverColumnIndex] = useState(-1);
+  // const [isHovered, setIsHovered] = useState(false);
+  useEffect(() => {
+    if (selection) {
+      const onPointerMove = (event: PointerEvent) => {
+        let hoverIndex = -1;
+        for (const ref of refsArray.current) {
+          const rect = ref.getBoundingClientRect();
+          const isInside =
+            event.clientX >= rect.left &&
+            event.clientX <= rect.right &&
+            event.clientY >= rect.top &&
+            event.clientY <= rect.bottom;
+          if (isInside) {
+            hoverIndex = refsArray.current.indexOf(ref);
+          }
+        }
+        setHoverColumnIndex(hoverIndex);
+      };
+      window.addEventListener("pointermove", onPointerMove);
+      return () => {
+        window.removeEventListener("pointermove", onPointerMove);
+      };
+    } else {
+      setHoverColumnIndex(-1);
     }
-  };
+  }, [!!selection]);
+
+  const handlePointerUp = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      const x = event.clientX;
+      const y = event.clientY;
+
+      // Use elementFromPoint to find the element at the touch end coordinates
+      const targetElement = document.elementFromPoint(x, y);
+
+      // Find the index of the target element in refsArray
+      const targetIndex = refsArray.current.findIndex(
+        (ref) => ref && ref.contains(targetElement)
+      );
+
+      if (targetIndex !== -1) {
+        onColumnUp?.(targetIndex);
+      }
+    },
+    [onColumnUp]
+  );
 
   const { animate, pickup } = useBlockAnimation(levelState, selection, {
     disabled: !animateBlocks,
     transitionTime: BLOCK_ANIMATION_TIME,
     theme
   });
+
+  const handlePickup = useCallback(
+    ({ top, rect }: { top: number; rect: DOMRect }) => {
+      pickup(top, rect);
+      onPickUp?.();
+    },
+    [onPickUp]
+  );
+
+  const handlePlacement = useCallback(
+    ({ top, rect }: { top: number; rect: DOMRect }) => {
+      animate(top, rect);
+    },
+    []
+  );
 
   const maxColumnSize = levelState.columns.reduce(
     (r, c) => Math.max(r, c.columnSize),
@@ -121,15 +167,13 @@ export const LevelLayout: React.FC<Props> = ({
               onPointerDown={() => {
                 onColumnDown?.(i);
               }}
-              onPointerUp={(e) => {
-                handlePointerUp(e);
-              }}
+              onPointerUp={handlePointerUp}
               started={started}
               suggested={suggestionTarget === i}
               amountSelected={
                 selection && i === selection[0] ? selection[1] : 0
               }
-              detectHover={!!selection}
+              hovering={hoverColumnIndex === i}
               amountSuggested={
                 suggestionSelection && i === suggestionSelection[0]
                   ? suggestionSelection[1]
@@ -138,14 +182,8 @@ export const LevelLayout: React.FC<Props> = ({
               hideFormat={hideFormat}
               onLock={onLock}
               onDrop={onDrop}
-              onPickUp={({ top, rect }) => {
-                pickup(top, rect);
-
-                onPickUp?.();
-              }}
-              onPlacement={({ top, rect }) => {
-                animate(top, rect);
-              }}
+              onPickUp={handlePickup}
+              onPlacement={handlePlacement}
             />
           ))}
         </div>

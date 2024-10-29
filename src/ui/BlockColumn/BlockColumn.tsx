@@ -18,7 +18,7 @@ type Props = {
   amountSuggested?: number;
   suggested?: boolean;
   started?: boolean;
-  detectHover?: boolean;
+  hovering?: boolean;
   theme?: BlockTheme;
   hideFormat?: "glass" | "present";
   motionDuration?: number;
@@ -42,7 +42,8 @@ export const BlockColumn: React.FC<Props> = ({
   onPickUp,
   onPlacement,
   theme = "default",
-  detectHover = false,
+  hovering,
+  // detectHover = false,
   hideFormat = "glass",
   started = true,
   suggested = false,
@@ -52,34 +53,10 @@ export const BlockColumn: React.FC<Props> = ({
 }) => {
   const [column, setColumn] = useState(columnProp);
   const [locked, setLocked] = useState(column.locked);
-  const [isHovered, setIsHovered] = useState(false);
   const [blocksLocked, setBlocksLocked] = useState(-1);
 
   const firstEmptyRef = useRef<HTMLDivElement>(null);
   const columnRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (detectHover) {
-      const onPointerMove = (event: PointerEvent) => {
-        if (columnRef.current) {
-          const rect = columnRef.current.getBoundingClientRect();
-          const isInside =
-            event.clientX >= rect.left &&
-            event.clientX <= rect.right &&
-            event.clientY >= rect.top &&
-            event.clientY <= rect.bottom;
-
-          setIsHovered(isInside);
-        }
-      };
-      window.addEventListener("pointermove", onPointerMove);
-      return () => {
-        window.removeEventListener("pointermove", onPointerMove);
-      };
-    } else {
-      setIsHovered(false);
-    }
-  }, [detectHover]);
 
   useEffect(() => {
     // Blocks increase, delay for animation
@@ -144,7 +121,7 @@ export const BlockColumn: React.FC<Props> = ({
           "contain-paint": locked,
           "rounded-b-md": column.type === "buffer",
           "rounded-md border-t-black/60": column.type === "placement",
-          "outline outline-2 outline-offset-1 outline-white/20": isHovered
+          "outline outline-2 outline-offset-1 outline-white/20": hovering
         })}
       >
         {suggested && (
