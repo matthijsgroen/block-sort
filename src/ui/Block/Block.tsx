@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { encodeForContent } from "@/support/emojiEncoding";
 import { useDelayedToggle } from "@/support/useDelayedToggle";
 
-import styles from "./Block.module.css";
+import styles from "./Block2.module.css";
 
 export type HideFormat = "glass" | "present";
 
@@ -86,8 +86,10 @@ export const Block: React.FC<Props> = ({
     <div
       ref={blockRef}
       style={{
-        "--cube-color": revealed ? color : hiddenColor,
+        "--cube-color": color,
+        "--hidden-color": hiddenColor,
         "--cube-shape-opacity": revealed ? "50%" : "100%",
+        "--shape-color": revealed ? "var(--cube-color)" : "var(--hidden-color)",
         "--cube-shape": `'${encodeForContent(displayShape)}'`,
         "--cube-top-shape": showTopShape
           ? `'${encodeForContent(displayShape)}'`
@@ -95,47 +97,29 @@ export const Block: React.FC<Props> = ({
         animationDelay: !locked ? `-${index * 50}ms` : "0"
       }}
       className={clsx(
-        "relative -mt-top-block h-height-block w-block text-center",
+        "pointer-events-none relative h-block w-block rounded-md",
         {
-          [styles.selected]: selected && !isLocked,
+          [styles.shadow]: shadow && !selected,
           "animate-locked": !selected && isLocked,
           "animate-place": !selected && !isLocked,
-          "blur-[2px]": blur
+          [styles.selected]: selected && !isLocked
         }
       )}
     >
-      {shadow && <div className={styles.shadow}></div>}
       <div
         className={clsx(
-          styles.layer,
-          "rounded-md border border-black/10 bg-block transition-colors",
+          "absolute bottom-0 h-height-block w-block rounded-md text-center",
+          styles.shape,
           {
-            [styles.selectedOutline]: selected,
             "[transition-duration:0ms]": isRevealed,
-            "[transition-duration:500ms]": !isRevealed
+            [styles.blockGradient]: revealed && !isLocked,
+            [styles.gradientLocked]: revealed && isLocked,
+            [styles.glass]: !revealed && hideFormat === "glass",
+            [styles.present]: !revealed && hideFormat === "present",
+            "blur-[2px]": blur,
+            [styles.selectedOutline]: selected,
+            [styles.suggestedOutline]: suggested
           }
-        )}
-      ></div>
-      <div
-        className={clsx(styles.layer, "z-10 pt-7", {
-          [styles.suggestedOutline]: suggested
-        })}
-      >
-        <span className={clsx("block", styles.shape)}></span>
-      </div>
-      {revealed && <div className={clsx(styles.layer, styles.texture)}></div>}
-      <div
-        className={clsx(styles.layer, {
-          [styles.gradient]: revealed,
-          [styles.glass]: !revealed && hideFormat === "glass",
-          [styles.present]: !revealed && hideFormat === "present"
-        })}
-      ></div>
-      <div
-        className={clsx(
-          "pointer-events-none absolute h-full w-full rounded-md",
-          styles.gradientLocked,
-          { ["opacity-100"]: isLocked, ["opacity-0"]: !isLocked }
         )}
       ></div>
     </div>

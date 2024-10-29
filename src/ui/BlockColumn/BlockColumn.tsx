@@ -8,7 +8,7 @@ import {
 } from "react";
 import clsx from "clsx";
 
-import { Block2 } from "@/ui/Block/Block2";
+import { Block } from "@/ui/Block/Block";
 import { Tray } from "@/ui/Tray/Tray";
 
 import { BlockTheme, getColorMapping, getShapeMapping } from "@/game/themes";
@@ -164,7 +164,7 @@ export const BlockColumn: React.FC<Props> = ({
             const isSelected = index < amountSelected;
             const isSuggested = index < amountSuggested;
             return (
-              <Block2
+              <Block
                 key={column.columnSize - column.blocks.length + index}
                 locked={p <= blocksLocked - 1}
                 index={index}
