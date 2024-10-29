@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 
-import styles from "@/ui/Block/Block2.module.css";
+import styles from "@/ui/Block/Block.module.css";
 
 import { BlockTheme, getColorMapping, getShapeMapping } from "@/game/themes";
 import { BlockColor, LevelState } from "@/game/types";

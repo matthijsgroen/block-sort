@@ -5,7 +5,7 @@ import { Block } from "./Block";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: "BlockSort/Block2",
+  title: "BlockSort/Block",
   component: Block,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout

@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { encodeForContent } from "@/support/emojiEncoding";
 import { useDelayedToggle } from "@/support/useDelayedToggle";
 
-import styles from "./Block2.module.css";
+import styles from "./Block.module.css";
 
 export type HideFormat = "glass" | "present";
 
