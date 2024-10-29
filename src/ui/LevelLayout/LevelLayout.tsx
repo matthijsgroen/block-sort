@@ -5,7 +5,7 @@ import { LevelState } from "@/game/types";
 import { colSizes } from "@/support/grid";
 import { useScreenUpdate } from "@/support/useScreenUpdate";
 
-import { BlockColumn } from "../BlockColumn/BlockColumn";
+import { MemoizedBlockColumn } from "../BlockColumn/BlockColumn";
 
 import { useBlockAnimation } from "./useBlockAnimation";
 
@@ -80,7 +80,6 @@ export const LevelLayout: React.FC<Props> = ({
   };
 
   const [hoverColumnIndex, setHoverColumnIndex] = useState(-1);
-  // const [isHovered, setIsHovered] = useState(false);
   useEffect(() => {
     if (selection) {
       const onPointerMove = (event: PointerEvent) => {
@@ -158,7 +157,7 @@ export const LevelLayout: React.FC<Props> = ({
       <div className="w-full max-w-[600px]">
         <div className={`grid grid-flow-dense ${cols}`}>
           {levelState.columns.map((bar, i) => (
-            <BlockColumn
+            <MemoizedBlockColumn
               column={bar}
               key={i}
               ref={(el) => addToRefsArray(el, i)}

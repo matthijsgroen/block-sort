@@ -1,4 +1,11 @@
-import { Dispatch, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import clsx from "clsx";
 
 import { Block2 } from "@/ui/Block/Block2";
@@ -109,6 +116,15 @@ export const BlockColumn: React.FC<Props> = ({
 
   const activeShapeMap = getShapeMapping(theme);
   const activeColorMap = getColorMapping(theme);
+  const handlePickup = useCallback(
+    (rect: DOMRect) => {
+      onPickUp?.({
+        top: columnRef.current?.getBoundingClientRect().top ?? 0,
+        rect
+      });
+    },
+    [onPickUp]
+  );
 
   return (
     <div
@@ -162,12 +178,7 @@ export const BlockColumn: React.FC<Props> = ({
                 selected={isSelected}
                 suggested={isSuggested}
                 onDrop={onDrop}
-                onPickUp={(rect) => {
-                  onPickUp?.({
-                    top: columnRef.current?.getBoundingClientRect().top ?? 0,
-                    rect
-                  });
-                }}
+                onPickUp={handlePickup}
                 onLock={onLock}
               />
             );
@@ -202,3 +213,20 @@ export const BlockColumn: React.FC<Props> = ({
     </div>
   );
 };
+
+export const MemoizedBlockColumn: React.FC<Props> = memo(
+  BlockColumn,
+  (prev, next) => {
+    return (
+      prev.column === next.column &&
+      prev.amountSelected === next.amountSelected &&
+      prev.amountSuggested === next.amountSuggested &&
+      prev.suggested === next.suggested &&
+      prev.started === next.started &&
+      prev.hovering === next.hovering &&
+      prev.theme === next.theme &&
+      prev.hideFormat === next.hideFormat &&
+      prev.motionDuration === next.motionDuration
+    );
+  }
+);
