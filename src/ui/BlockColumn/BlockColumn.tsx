@@ -50,7 +50,6 @@ export const BlockColumn: React.FC<Props> = ({
   onPlacement,
   theme = "default",
   hovering,
-  // detectHover = false,
   hideFormat = "glass",
   started = true,
   suggested = false,
