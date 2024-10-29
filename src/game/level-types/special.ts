@@ -7,7 +7,7 @@ import { LevelType } from "./types";
 
 export const getSpecial1Settings: SettingsProducer = (difficulty) => ({
   amountColors: difficulty < 4 ? 3 : 4,
-  stackSize: 12 + Math.max(Math.round(difficulty / 8), 0),
+  stackSize: Math.min(12 + Math.max(Math.round(difficulty / 8), 0), 13),
   extraPlacementStacks: 0,
   buffers: difficulty < 4 ? 2 : 4,
   bufferSizes: 4 - Math.max(Math.round((difficulty - 7) / 4), 0),
