@@ -1,7 +1,14 @@
-import { Dispatch, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import clsx from "clsx";
 
-import { Block2 } from "@/ui/Block/Block2";
+import { Block } from "@/ui/Block/Block";
 import { Tray } from "@/ui/Tray/Tray";
 
 import { BlockTheme, getColorMapping, getShapeMapping } from "@/game/themes";
@@ -18,7 +25,7 @@ type Props = {
   amountSuggested?: number;
   suggested?: boolean;
   started?: boolean;
-  detectHover?: boolean;
+  hovering?: boolean;
   theme?: BlockTheme;
   hideFormat?: "glass" | "present";
   motionDuration?: number;
@@ -42,7 +49,7 @@ export const BlockColumn: React.FC<Props> = ({
   onPickUp,
   onPlacement,
   theme = "default",
-  detectHover = false,
+  hovering,
   hideFormat = "glass",
   started = true,
   suggested = false,
@@ -52,34 +59,10 @@ export const BlockColumn: React.FC<Props> = ({
 }) => {
   const [column, setColumn] = useState(columnProp);
   const [locked, setLocked] = useState(column.locked);
-  const [isHovered, setIsHovered] = useState(false);
   const [blocksLocked, setBlocksLocked] = useState(-1);
 
   const firstEmptyRef = useRef<HTMLDivElement>(null);
   const columnRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (detectHover) {
-      const onPointerMove = (event: PointerEvent) => {
-        if (columnRef.current) {
-          const rect = columnRef.current.getBoundingClientRect();
-          const isInside =
-            event.clientX >= rect.left &&
-            event.clientX <= rect.right &&
-            event.clientY >= rect.top &&
-            event.clientY <= rect.bottom;
-
-          setIsHovered(isInside);
-        }
-      };
-      window.addEventListener("pointermove", onPointerMove);
-      return () => {
-        window.removeEventListener("pointermove", onPointerMove);
-      };
-    } else {
-      setIsHovered(false);
-    }
-  }, [detectHover]);
 
   useEffect(() => {
     // Blocks increase, delay for animation
@@ -132,6 +115,15 @@ export const BlockColumn: React.FC<Props> = ({
 
   const activeShapeMap = getShapeMapping(theme);
   const activeColorMap = getColorMapping(theme);
+  const handlePickup = useCallback(
+    (rect: DOMRect) => {
+      onPickUp?.({
+        top: columnRef.current?.getBoundingClientRect().top ?? 0,
+        rect
+      });
+    },
+    [onPickUp]
+  );
 
   return (
     <div
@@ -144,7 +136,7 @@ export const BlockColumn: React.FC<Props> = ({
           "contain-paint": locked,
           "rounded-b-md": column.type === "buffer",
           "rounded-md border-t-black/60": column.type === "placement",
-          "outline outline-2 outline-offset-1 outline-white/20": isHovered
+          "outline outline-2 outline-offset-1 outline-white/20": hovering
         })}
       >
         {suggested && (
@@ -172,7 +164,7 @@ export const BlockColumn: React.FC<Props> = ({
             const isSelected = index < amountSelected;
             const isSuggested = index < amountSuggested;
             return (
-              <Block2
+              <Block
                 key={column.columnSize - column.blocks.length + index}
                 locked={p <= blocksLocked - 1}
                 index={index}
@@ -185,12 +177,7 @@ export const BlockColumn: React.FC<Props> = ({
                 selected={isSelected}
                 suggested={isSuggested}
                 onDrop={onDrop}
-                onPickUp={(rect) => {
-                  onPickUp?.({
-                    top: columnRef.current?.getBoundingClientRect().top ?? 0,
-                    rect
-                  });
-                }}
+                onPickUp={handlePickup}
                 onLock={onLock}
               />
             );
@@ -225,3 +212,20 @@ export const BlockColumn: React.FC<Props> = ({
     </div>
   );
 };
+
+export const MemoizedBlockColumn: React.FC<Props> = memo(
+  BlockColumn,
+  (prev, next) => {
+    return (
+      prev.column === next.column &&
+      prev.amountSelected === next.amountSelected &&
+      prev.amountSuggested === next.amountSuggested &&
+      prev.suggested === next.suggested &&
+      prev.started === next.started &&
+      prev.hovering === next.hovering &&
+      prev.theme === next.theme &&
+      prev.hideFormat === next.hideFormat &&
+      prev.motionDuration === next.motionDuration
+    );
+  }
+);

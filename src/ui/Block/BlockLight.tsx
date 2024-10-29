@@ -23,14 +23,15 @@ export const BlockLight: React.FC<Props> = ({
   <div
     style={{
       "--cube-color": color,
+      "--shape-color": color,
       "--cube-shape-opacity": "50%",
       "--cube-shape": `'${encodeForContent(shape)}'`,
       "--cube-top-shape": `'${encodeForContent(shape)}'`,
       ...style
     }}
     className={clsx(
-      "-mt-top-block h-height-block w-block rounded-md pt-7 text-center",
-      styles["light-gradient"],
+      "-mt-top-block h-height-block w-block rounded-md text-center",
+      styles.blockGradient,
       styles.shape,
       className
     )}

@@ -108,7 +108,7 @@ export const LevelLayout: Story = {
   args: {},
   render: (args) => {
     const producer = settingProducer[args.levelType];
-    const settings = producer(Math.min(Math.max(args.difficulty, 1), 11));
+    const settings = producer(Math.min(Math.max(args.difficulty, 1), 12));
     const level = generateRandomLevel(settings, random);
     return (
       <div className="flex w-full flex-col">
