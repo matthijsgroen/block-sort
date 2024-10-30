@@ -17,13 +17,11 @@ import {
 import { colorMap } from "@/game/themes/default";
 import { LevelSettings, LevelState, Move } from "@/game/types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
-import { isIos } from "@/support/isIos";
 import { mulberry32, pick } from "@/support/random";
 import { getActiveModifiers, getToday } from "@/support/themes";
 import { useGameStorage } from "@/support/useGameStorage";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
-import { BetaContext } from "../Layout/BetaContext";
 
 import { getAutoMoveCount, MAX_SOLVE_PERCENTAGE } from "./autoMove";
 import { ghostModeModifier } from "./ghostModeModifier";
@@ -191,14 +189,13 @@ export const Level: React.FC<Props> = ({
   );
 
   const [clearKey, setClearKey] = useState(0);
-  const { showBeta } = use(BetaContext);
 
   /**
    * Disable block move animation on iOS, as it is not performant.
    *
    * Especially in standalone mode, apple is gimping the performance
    */
-  const blockAnimations = !isIos() || showBeta;
+  const blockAnimations = true;
 
   const handleLock = useCallback(() => {
     sound.play("lock");

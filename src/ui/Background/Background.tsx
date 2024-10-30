@@ -18,7 +18,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
   levelType = "normal",
   theme = "default",
   layout = "default",
-  musicEnabled = true,
+  musicEnabled = true
 }) => {
   const lvlType = getLevelTypeByType(levelType);
 
@@ -26,7 +26,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
     <div
       className={clsx(
         "relative h-full overflow-hidden transition-all [transition-duration:1.5s] [transition-timing-function:ease-out]",
-        lvlType?.backgroundClassName,
+        lvlType?.backgroundClassName
       )}
     >
       {theme === "halloween" && (
@@ -38,8 +38,8 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           className={clsx(
             "absolute bottom-0 left-0 text-8xl transition-all [transition-duration:2000ms]",
             {
-              "translate-x-[100vw]": layout === "zenMode",
-            },
+              "translate-x-[100vw]": layout === "zenMode"
+            }
           )}
         >
           <div
@@ -47,8 +47,8 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
               "inline-block transition-all [transition-duration:2000ms]",
               {
                 "-rotate-12": layout === "levelTrack",
-                "-translate-x-[90px] rotate-[372deg]": layout === "zenMode",
-              },
+                "-translate-x-[90px] rotate-[372deg]": layout === "zenMode"
+              }
             )}
           >
             🎃
@@ -62,8 +62,8 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
               "absolute bottom-0 right-0 origin-bottom scale-150 text-8xl transition-transform [transition-duration:1500ms]",
               {
                 "translate-y-[150%] -rotate-12": layout === "levelTrack",
-                "[transition-delay:1500ms]": layout === "zenMode",
-              },
+                "[transition-delay:1500ms]": layout === "zenMode"
+              }
             )}
           >
             🎄
@@ -73,8 +73,8 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
               "absolute bottom-0 left-0 origin-bottom scale-150 text-8xl transition-transform [transition-duration:1500ms]",
               {
                 "translate-y-[150%] rotate-12": layout === "zenMode",
-                "[transition-delay:1500ms]": layout === "levelTrack",
-              },
+                "[transition-delay:1500ms]": layout === "levelTrack"
+              }
             )}
           >
             🎄
@@ -92,13 +92,13 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           <div
             className={clsx(
               "pointer-events-none absolute right-0 top-0 origin-top-right rotate-[20deg] animate-rayShift opacity-30",
-              "h-3/4 w-[7rem] translate-x-4 bg-gradient-to-b from-[#fffffffd] via-[#ffffae90] to-[#ffffae00]",
+              "h-3/4 w-[7rem] translate-x-4 bg-gradient-to-b from-[#fffffffd] via-[#ffffae90] to-[#ffffae00]"
             )}
           ></div>
           <div
             className={clsx(
               "pointer-events-none absolute right-0 top-0 origin-top-right rotate-[20deg] animate-rayShift2 opacity-30",
-              "h-3/4 w-[8rem] -translate-x-9 bg-gradient-to-b from-[#fffffffd] via-[#ffffae90] to-[#ffffae00]",
+              "h-3/4 w-[8rem] -translate-x-9 bg-gradient-to-b from-[#fffffffd] via-[#ffffae90] to-[#ffffae00]"
             )}
           ></div>
           <div
@@ -106,14 +106,14 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
               "pointer-events-none absolute bottom-0 left-0 origin-bottom rotate-6 scale-150 text-8xl transition-transform [transition-duration:3000ms]",
               {
                 "translate-y-[180%] rotate-12": layout === "zenMode",
-                "[transition-delay:1500ms]": layout === "levelTrack",
-              },
+                "[transition-delay:1500ms]": layout === "levelTrack"
+              }
             )}
           >
             <div
               className={clsx("-mb-1 origin-bottom", {
                 ["animate-plantWiggle"]: musicEnabled,
-                ["animate-plantWiggleSlow"]: !musicEnabled,
+                ["animate-plantWiggleSlow"]: !musicEnabled
               })}
             >
               🌷
@@ -127,8 +127,8 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
             "pointer-events-none absolute bottom-0 right-1/4 -mb-1 origin-bottom translate-x-8 text-8xl",
             {
               ["animate-plantWiggle"]: musicEnabled,
-              ["animate-plantWiggleSlow"]: !musicEnabled,
-            },
+              ["animate-plantWiggleSlow"]: !musicEnabled
+            }
           )}
         >
           🌱

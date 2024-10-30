@@ -1,6 +1,6 @@
 {
   "name": "block-sorting",
-  "version": "1.15.1",
+  "version": "1.16.0",
   "description": "Mobile Block sorting game, as a Progressive Web App",
   "author": {
     "name": "Matthijs Groen",
@@ -13,7 +13,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
+    "preview": "yarn build && vite preview",
     "test": "vitest",
     "test:performance": "bin/test-performance.ts",
     "check-types": "tsc --noEmit",
