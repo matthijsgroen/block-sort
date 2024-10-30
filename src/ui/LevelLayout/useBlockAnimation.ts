@@ -4,7 +4,7 @@ import styles from "@/ui/Block/Block.module.css";
 
 import { BlockTheme, getColorMapping, getShapeMapping } from "@/game/themes";
 import { BlockColor, LevelState } from "@/game/types";
-import { createAnimationPath, Rect } from "@/support/createAnimationPath";
+import { createFrames, Rect, shiftRect } from "@/support/createFrames";
 import { effectTimeout } from "@/support/effectTimeout";
 import { encodeForContent } from "@/support/emojiEncoding";
 import { timesMap } from "@/support/timeMap";
@@ -25,7 +25,6 @@ const createBlock = (shape: string, color: string): HTMLDivElement => {
   div.style.setProperty("--cube-shape-opacity", "50%");
   div.style.setProperty("--cube-shape", `'${encodeForContent(shape)}'`);
   div.style.setProperty("--cube-top-shape", `'${encodeForContent(shape)}'`);
-  div.style.setProperty("--cube-shape-opacity", "50%");
   div.classList.add(
     "-mt-top-block",
     "h-height-block",
@@ -126,7 +125,7 @@ export const useBlockAnimation = (
       const source = animationData.sourceBlocks.at(-1)!;
       const target: Rect = {
         x: animationData.targetSpot.x,
-        y: animationData.targetSpot.y - 80,
+        y: animationData.targetSpot.y - 40,
         width: animationData.targetSpot.width,
         height: animationData.targetSpot.height
       };
@@ -134,7 +133,7 @@ export const useBlockAnimation = (
       const color = getColorMapping(theme)[blockColor];
       const shape = getShapeMapping(theme)[blockColor];
 
-      animateBlocksByPath(
+      animateBlocksByTranslate(
         source,
         target,
         animationData,
@@ -143,7 +142,7 @@ export const useBlockAnimation = (
         color,
         transitionTime
       );
-    }, 10); // delay to allow the DOM to update first
+    }, 0); // delay to allow the DOM to update first
   }, [levelState]);
 
   if (disabled) {
@@ -153,7 +152,7 @@ export const useBlockAnimation = (
   return { animate, pickup };
 };
 
-const animateBlocksByPath = (
+const animateBlocksByTranslate = (
   source: DOMRect,
   target: Rect,
   animationData: AnimationData,
@@ -161,53 +160,34 @@ const animateBlocksByPath = (
   shape: string,
   color: string,
   transitionTime: number
-) => {
-  const path = createAnimationPath(
-    source,
-    target,
-    animationData.sourceColumnTop - 60,
-    animationData.targetColumnTop - 60
-  );
+) =>
+  timesMap(blocksAdded, (i) => {
+    const start = shiftRect(source, 0, -40 * blocksAdded - 1 - i);
+    const end = shiftRect(target, 0, -40 * i);
 
-  const newAnimationPaths = timesMap(blocksAdded, (i) => {
-    return {
-      startX: source.x,
-      startY: source.top + 20,
-      offset: i,
-      count: blocksAdded
-    };
-  });
-
-  // create instances of blocks self, outside of react
-  newAnimationPaths.map<HTMLDivElement>((animation) => {
     const div = createBlock(shape, color);
-    div.style.setProperty("top", `${animation.startY}px`);
-    div.style.setProperty("left", `${animation.startX}px`);
-    div.style.setProperty("offset-path", `path('${path}')`);
-    div.style.setProperty("offset-rotate", "0deg");
-    div.style.setProperty("--animation-duration", `${transitionTime}ms`);
+    div.style.setProperty("top", `${start.y}px`);
+    div.style.setProperty("left", `${source.x}px`);
     div.classList.add("absolute");
+    const frames = createFrames(
+      start,
+      end,
+      animationData.sourceColumnTop - 60,
+      animationData.targetColumnTop - 60
+    );
 
     document.body.appendChild(div);
     div.addEventListener("animationend", () => {
       div.remove();
     });
-    div.animate(
-      [
-        { offsetDistance: `${40 * animation.offset}px` },
-        {
-          offsetDistance: `calc(100% - ${40 * (animation.count - 1 - animation.offset)}px)`
-        }
-      ],
-      {
-        duration: transitionTime,
-        fill: "forwards",
-        iterations: 1
-      }
-    ).onfinish = () => {
+    div.animate(frames, {
+      duration: transitionTime,
+      fill: "forwards",
+      easing: "ease-in-out",
+      iterations: 1
+    }).onfinish = () => {
       div.remove();
     };
 
     return div;
   });
-};
