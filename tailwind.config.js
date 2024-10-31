@@ -37,8 +37,7 @@ export default {
         pulse: "pulse 1.5s ease-in-out infinite",
         rayShift: "rayShift 6s ease-in-out alternate infinite",
         rayShift2: "rayShift2 5.5s ease-in-out alternate infinite",
-        // Somehow if the place duration is 0.3s, it won't show on iPhone in app mode
-        place: "place 0.4s ease-out 2ms forwards",
+        place: "place 0.2s ease-out 2ms forwards",
         moveBlock: "moveBlock 1.4s ease-out 2ms forwards",
         locked: "locked 0.5s ease-in-out forwards",
         trayLocked: "trayLocked 0.3s ease-in-out forwards",
@@ -130,9 +129,9 @@ export default {
           "100%": { translate: "0 1rem" }
         },
         place: {
-          "0%": { translate: "0 -2rem" },
-          "70%": { translate: "0 1.2rem" },
-          "90%": { translate: "0 0.9rem" },
+          "0%": { translate: "0 0rem" },
+          "40%": { translate: "0 1.2rem" },
+          "70%": { translate: "0 0.9rem" },
           "100%": { translate: "0 1rem" }
         },
         trayLocked: {

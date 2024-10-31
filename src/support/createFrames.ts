@@ -20,7 +20,8 @@ export const createFrames = (
   source: Rect,
   target: Rect,
   sourceColumnTop: number,
-  targetColumnTop: number
+  targetColumnTop: number,
+  zIndex: number
 ): Keyframe[] => {
   let totalDistance = 0;
   const position = { x: 0, y: 0 };
@@ -30,15 +31,19 @@ export const createFrames = (
     }
   ];
 
-  const move = (deltaX: number, deltaY: number) => {
+  const move = (deltaX: number, deltaY: number, zIndex?: number) => {
     if (deltaX === 0 && deltaY === 0) {
       return;
     }
     totalDistance += Math.abs(deltaY) + Math.abs(deltaX);
-    frames.push({
+    const frame: Keyframe = {
       transform: `translate(${position.x + deltaX}px, ${position.y + deltaY}px)`,
       offset: totalDistance
-    });
+    };
+    if (zIndex !== undefined) {
+      frame.zIndex = zIndex;
+    }
+    frames.push(frame);
     position.x += deltaX;
     position.y += deltaY;
   };
@@ -49,12 +54,12 @@ export const createFrames = (
   const xDistance = target.x - source.x;
 
   move(xDistance * 0.2, -20);
-  move(xDistance * 0.3, -10);
-  move(xDistance * 0.3, 10);
-  move(xDistance * 0.2, 20);
+  move(xDistance * 0.3, -20);
+  move(xDistance * 0.3, 20);
+  move(xDistance * 0.2, 20, zIndex);
 
-  move(0, Math.max(0, targetColumnTop - sourceColumnTop));
-  move(0, target.y - targetColumnTop);
+  move(0, Math.max(0, targetColumnTop - sourceColumnTop), zIndex);
+  move(0, target.y - targetColumnTop, zIndex);
 
   // update offsets
   frames.forEach((frame) => {

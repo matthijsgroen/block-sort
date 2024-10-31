@@ -29,33 +29,45 @@ describe(shiftRect, () => {
 describe(createFrames, () => {
   it("creates frames for a block moving from source to target (same height)", () => {
     const source = rect({ x: 10, y: 60, w: 40, h: 40 });
-    const target = rect({ x: 70, y: 60, w: 40, h: 40 });
+    const target = rect({ x: 100, y: 60, w: 40, h: 40 });
 
-    const result = createFrames(source, target, 20, 20);
+    const result = createFrames(source, target, 20, 20, 10);
     expect(result).toEqual([
       { transform: "translate(0px, 0px)" },
-      { transform: "translate(0px, -40px)", offset: 0.2 },
-      { transform: "translate(12px, -60px)", offset: 0.36 },
-      { transform: "translate(30px, -70px)", offset: 0.5 },
-      { transform: "translate(48px, -60px)", offset: 0.64 },
-      { transform: "translate(60px, -40px)", offset: 0.8 },
-      { transform: "translate(60px, 0px)", offset: 1 }
+      { transform: "translate(0px, -40px)", offset: 0.16 },
+      { transform: "translate(18px, -60px)", offset: 0.312 },
+      { transform: "translate(45px, -80px)", offset: 0.5 },
+      { transform: "translate(72px, -60px)", offset: 0.688 },
+      { transform: "translate(90px, -40px)", offset: 0.84, zIndex: 10 },
+      { transform: "translate(90px, 0px)", offset: 1, zIndex: 10 }
     ]);
   });
 
   it("creates frames for a block moving from source to target (lower target)", () => {
     const source = rect({ x: 10, y: 60, w: 40, h: 40 });
-    const target = rect({ x: 70, y: 260, w: 40, h: 40 });
+    const target = rect({ x: 110, y: 240, w: 40, h: 40 });
 
-    const result = createFrames(source, target, 20, 20);
+    const result = createFrames(source, target, 20, 20, 10);
     expect(result).toEqual([
       { transform: "translate(0px, 0px)" },
-      { transform: "translate(0px, -40px)", offset: 0.1 },
-      { transform: "translate(12px, -60px)", offset: 0.18 },
-      { transform: "translate(30px, -70px)", offset: 0.25 },
-      { transform: "translate(48px, -60px)", offset: 0.32 },
-      { transform: "translate(60px, -40px)", offset: 0.4 },
-      { transform: "translate(60px, 200px)", offset: 1 }
+      {
+        transform: "translate(0px, -40px)",
+        offset: expect.closeTo(0.16, 0.01)
+      },
+      {
+        transform: "translate(20px, -60px)",
+        offset: expect.closeTo(0.18, 0.01)
+      },
+      {
+        transform: "translate(50px, -80px)",
+        offset: expect.closeTo(0.29, 0.01)
+      },
+      {
+        transform: "translate(80px, -60px)",
+        offset: expect.closeTo(0.32, 0.01)
+      },
+      { transform: "translate(100px, -40px)", offset: 0.5, zIndex: 10 },
+      { transform: "translate(100px, 180px)", offset: 1, zIndex: 10 }
     ]);
   });
 
@@ -63,15 +75,31 @@ describe(createFrames, () => {
     const source = rect({ x: 70, y: 260, w: 40, h: 40 });
     const target = rect({ x: 10, y: 60, w: 40, h: 40 });
 
-    const result = createFrames(source, target, 20, 20);
+    const result = createFrames(source, target, 20, 20, 10);
     expect(result).toEqual([
       { transform: "translate(0px, 0px)" },
-      { transform: "translate(0px, -240px)", offset: 0.6 },
-      { transform: "translate(-12px, -260px)", offset: 0.68 },
-      { transform: "translate(-30px, -270px)", offset: 0.75 },
-      { transform: "translate(-48px, -260px)", offset: 0.82 },
-      { transform: "translate(-60px, -240px)", offset: 0.9 },
-      { transform: "translate(-60px, -200px)", offset: 1 }
+      {
+        transform: "translate(0px, -240px)",
+        offset: expect.closeTo(0.57, 0.01)
+      },
+      {
+        transform: "translate(-12px, -260px)",
+        offset: expect.closeTo(0.64, 0.01)
+      },
+      {
+        transform: "translate(-30px, -280px)",
+        offset: expect.closeTo(0.73, 0.01)
+      },
+      {
+        transform: "translate(-48px, -260px)",
+        offset: expect.closeTo(0.82, 0.01)
+      },
+      {
+        transform: "translate(-60px, -240px)",
+        offset: expect.closeTo(0.9, 0.01),
+        zIndex: 10
+      },
+      { transform: "translate(-60px, -200px)", offset: 1, zIndex: 10 }
     ]);
   });
 });
