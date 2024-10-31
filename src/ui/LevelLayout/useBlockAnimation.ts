@@ -141,9 +141,9 @@ export const useBlockAnimation = (
         blocksAdded,
         shape,
         color,
-        transitionTime
+        transitionTime - 20
       );
-    }, 0); // delay to allow the DOM to update first
+    }, 10); // delay to allow the DOM to update first
   }, [levelState]);
 
   if (disabled) {
