@@ -24,7 +24,11 @@ export const createFrames = (
 ): Keyframe[] => {
   let totalDistance = 0;
   const position = { x: 0, y: 0 };
-  const frames: Keyframe[] = [];
+  const frames: Keyframe[] = [
+    {
+      transform: `translate(0px, 0px)`
+    }
+  ];
 
   const move = (deltaX: number, deltaY: number) => {
     if (deltaX === 0 && deltaY === 0) {
@@ -54,7 +58,9 @@ export const createFrames = (
 
   // update offsets
   frames.forEach((frame) => {
-    frame.offset! /= totalDistance;
+    if (frame.offset !== undefined && frame.offset !== null) {
+      frame.offset /= totalDistance;
+    }
   });
 
   return frames;

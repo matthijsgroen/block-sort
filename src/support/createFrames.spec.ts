@@ -33,6 +33,7 @@ describe(createFrames, () => {
 
     const result = createFrames(source, target, 20, 20);
     expect(result).toEqual([
+      { transform: "translate(0px, 0px)" },
       { transform: "translate(0px, -40px)", offset: 0.2 },
       { transform: "translate(12px, -60px)", offset: 0.36 },
       { transform: "translate(30px, -70px)", offset: 0.5 },
@@ -48,6 +49,7 @@ describe(createFrames, () => {
 
     const result = createFrames(source, target, 20, 20);
     expect(result).toEqual([
+      { transform: "translate(0px, 0px)" },
       { transform: "translate(0px, -40px)", offset: 0.1 },
       { transform: "translate(12px, -60px)", offset: 0.18 },
       { transform: "translate(30px, -70px)", offset: 0.25 },
@@ -63,6 +65,7 @@ describe(createFrames, () => {
 
     const result = createFrames(source, target, 20, 20);
     expect(result).toEqual([
+      { transform: "translate(0px, 0px)" },
       { transform: "translate(0px, -240px)", offset: 0.6 },
       { transform: "translate(-12px, -260px)", offset: 0.68 },
       { transform: "translate(-30px, -270px)", offset: 0.75 },
