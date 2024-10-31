@@ -102,7 +102,7 @@ export const useBlockAnimation = (
       return; // layout changed, no animation
     }
 
-    effectTimeout(() => {
+    return effectTimeout(() => {
       const addedColumn = levelState.columns.findIndex(
         (c, i) => c.blocks.length > prevLevel.columns[i].blocks.length
       );
@@ -122,13 +122,14 @@ export const useBlockAnimation = (
         prevLevel.columns[addedColumn].blocks.length;
 
       const blockColor = levelState.columns[addedColumn].blocks[0].color;
-      const source = animationData.sourceBlocks.at(-1)!;
-      const target: Rect = {
-        x: animationData.targetSpot.x,
-        y: animationData.targetSpot.y - 40,
-        width: animationData.targetSpot.width,
-        height: animationData.targetSpot.height
-      };
+      const source = shiftRect(
+        animationData.sourceBlocks[
+          animationData.sourceBlocks.length - blocksAdded
+        ],
+        0,
+        20
+      );
+      const target = shiftRect(animationData.targetSpot, 0, -5);
 
       const color = getColorMapping(theme)[blockColor];
       const shape = getShapeMapping(theme)[blockColor];
@@ -153,7 +154,7 @@ export const useBlockAnimation = (
 };
 
 const animateBlocksByTranslate = (
-  source: DOMRect,
+  source: Rect,
   target: Rect,
   animationData: AnimationData,
   blocksAdded: number,
@@ -162,24 +163,23 @@ const animateBlocksByTranslate = (
   transitionTime: number
 ) =>
   timesMap(blocksAdded, (i) => {
-    const start = shiftRect(source, 0, -40 * blocksAdded - 1 - i);
-    const end = shiftRect(target, 0, -40 * i);
+    const start = shiftRect(source, 0, -40 * i);
+    const end = shiftRect(target, 0, -40 * (blocksAdded - 1 - i));
 
     const div = createBlock(shape, color);
     div.style.setProperty("top", `${start.y}px`);
-    div.style.setProperty("left", `${source.x}px`);
+    div.style.setProperty("left", `${start.x}px`);
     div.classList.add("absolute");
     const frames = createFrames(
       start,
       end,
       animationData.sourceColumnTop - 60,
-      animationData.targetColumnTop - 60
+      animationData.targetColumnTop - 60,
+      blocksAdded + 10 - i
     );
 
     document.body.appendChild(div);
-    div.addEventListener("animationend", () => {
-      div.remove();
-    });
+
     div.animate(frames, {
       duration: transitionTime,
       fill: "forwards",
