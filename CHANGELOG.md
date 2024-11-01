@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.17.0 - 2024-11-01
+
+### Changed
+
+- Updated difficulty curve to increase sooner, but in smaller steps (instead of the large hike at 166)
+
 ## Version 1.16.2 - 2024-10-31
 
 ### Fixed
