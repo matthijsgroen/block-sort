@@ -2,8 +2,16 @@ Welcome to Block Sort! This small guide will help you understand the mechanics i
 
 ## Basic play
 
-- Click on a column to select the top blocks of a same kind.
-- Click another column to stack the blocks on a block of the same kind.
+Click / Tap columns
+
+- Click / Tap on a column to select the top blocks of a same kind.
+- Click / Tap another column to stack the blocks on a block of the same kind.
+
+Drag motion
+
+- Press mouse / Touch and hold on a column to select the top blocks of a same kind.
+- Move to another column while keeping pressed / touched.
+- Release at another column to stack the blocks on a block of the same kind.
 
 Some mechanics can change during a **seasonal event**. If that happens, this guide will have a section about that in the bottom.
 

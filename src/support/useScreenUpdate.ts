@@ -8,16 +8,9 @@ export const useScreenUpdate = () => {
       setRerender((r) => (r + 1) % 2);
     };
     window.addEventListener("orientationchange", listener);
-    return () => {
-      window.removeEventListener("orientationchange", listener);
-    };
-  }, []);
-  useEffect(() => {
-    const listener = () => {
-      setRerender((r) => (r + 1) % 2);
-    };
     window.addEventListener("resize", listener);
     return () => {
+      window.removeEventListener("orientationchange", listener);
       window.removeEventListener("resize", listener);
     };
   }, []);

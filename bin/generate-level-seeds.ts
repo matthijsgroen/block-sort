@@ -21,6 +21,8 @@ const SEED = 123456789012345;
 const MINIMAL_LEVELS = 100;
 const GENERATE_BATCH_SIZE = 50;
 
+const scale: number[] = [0, ...LEVEL_SCALE];
+
 type Seeder = {
   hash: string;
   producer: SettingsProducer;
@@ -31,13 +33,13 @@ type Seeder = {
 const progressBar = (
   current: number,
   total: number,
-  barLength: number = 40,
+  barLength: number = 40
 ) => {
   const percentage = (current / total) * 100;
   const filledLength = Math.round((barLength * current) / total);
   const bar = "█".repeat(filledLength) + "-".repeat(barLength - filledLength);
   process.stdout.write(
-    `[${bar}] ${current}/${total} (${percentage.toFixed(2)}%)        \r`,
+    `[${bar}] ${current}/${total} (${percentage.toFixed(2)}%)        \r`
   );
 };
 
@@ -54,7 +56,7 @@ const produceExtraSeeds = async (
   firstMissing: Seeder,
   copy: Record<string, number[]>,
   amount: number,
-  onSeedAdded: (seed: number) => Promise<void> = async () => {},
+  onSeedAdded: (seed: number) => Promise<void> = async () => {}
 ) => {
   const producer = firstMissing.producer;
   const settings = producer(firstMissing.difficulty + 1);
@@ -82,7 +84,6 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
 
   const levelSeedsCopy = { ...levelSeeds };
 
-  const scale: number[] = [0, ...LEVEL_SCALE];
   const currentHashes = producers.flatMap((producer) =>
     scale.reduce<Seeder[]>((acc, _lvl, index) => {
       const settings = producer.producer(index + 1);
@@ -91,13 +92,13 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
         hash: settingsHash,
         name: producer.name,
         producer: producer.producer,
-        difficulty: index,
+        difficulty: index
       });
-    }, []),
+    }, [])
   );
   // Obsolete keys
   const obsoleteKeys = keys.filter(
-    (k) => !currentHashes.some((h) => h.hash === k),
+    (k) => !currentHashes.some((h) => h.hash === k)
   );
 
   obsoleteKeys.forEach((k) => {
@@ -108,18 +109,18 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
   const missingKeys = currentHashes.filter((h) => !keys.includes(h.hash));
 
   const incompleteSeed = existingKeys.find(
-    (k) => levelSeeds[k.hash].length < MINIMAL_LEVELS,
+    (k) => levelSeeds[k.hash].length < MINIMAL_LEVELS
   );
 
   if (incompleteSeed) {
     const additionalNeeded = Math.min(
       GENERATE_BATCH_SIZE,
-      MINIMAL_LEVELS - levelSeedsCopy[incompleteSeed.hash].length,
+      MINIMAL_LEVELS - levelSeedsCopy[incompleteSeed.hash].length
     );
     console.log(
       c.green(
-        `Generating additional ${additionalNeeded} level seeds for "${incompleteSeed.name}", difficulty ${incompleteSeed.difficulty + 1}...`,
-      ),
+        `Generating additional ${additionalNeeded} level seeds for "${incompleteSeed.name}", difficulty ${incompleteSeed.difficulty + 1}...`
+      )
     );
     let time = Date.now();
     let count = 0;
@@ -140,7 +141,7 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
           await updateSeeds(levelSeedsCopy);
         }
         time = Date.now();
-      },
+      }
     );
   }
 
@@ -148,10 +149,11 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
   if (firstMissing && !incompleteSeed) {
     console.log(
       c.green(
-        `Generating ${GENERATE_BATCH_SIZE} level seeds for "${firstMissing.name}", difficulty ${firstMissing.difficulty + 1}...`,
-      ),
+        `Generating ${GENERATE_BATCH_SIZE} level seeds for "${firstMissing.name}", difficulty ${firstMissing.difficulty + 1}...`
+      )
     );
     let time = Date.now();
+    let count = 0;
     await produceExtraSeeds(
       firstMissing,
       levelSeedsCopy,
@@ -160,10 +162,16 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
         time = Date.now() - time;
         if (time > 60_000) {
           // longer than a minute
+          count = 0;
+          await updateSeeds(levelSeedsCopy);
+        }
+        if (time > 10_000 && count > 5) {
+          // longer than a minute
+          count = 0;
           await updateSeeds(levelSeedsCopy);
         }
         time = Date.now();
-      },
+      }
     );
   }
   if (!incompleteSeed && !firstMissing && obsoleteKeys.length === 0) {
@@ -179,7 +187,7 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
 
 const removeSeedsForKey = (
   key: string,
-  seeds: Record<string, number[]>,
+  seeds: Record<string, number[]>
 ): Record<string, number[]> => {
   const keys = Object.keys(seeds);
 
@@ -199,7 +207,7 @@ const updateSeeds = async (updatedLevelSeeds: Record<string, number[]>) => {
   export const levelSeeds: Record<string, number[]> = ${JSON.stringify(updatedLevelSeeds)};`;
   const formattedCode = await prettier.format(newCode, {
     parser: "typescript",
-    trailingComma: "none",
+    trailingComma: "none"
   });
   await writeFile("src/data/levelSeeds.ts", formattedCode);
 };
@@ -222,7 +230,6 @@ program
 
     const keys = Object.keys(levelSeeds);
 
-    const scale: number[] = [0, ...LEVEL_SCALE];
     const currentHashes = producers.flatMap((producer) =>
       scale.reduce<Seeder[]>((acc, _lvl, index) => {
         const settings = producer.producer(index + 1);
@@ -231,9 +238,9 @@ program
           hash: settingsHash,
           name: producer.name,
           producer: producer.producer,
-          difficulty: index,
+          difficulty: index
         });
-      }, []),
+      }, [])
     );
     const existingKeys = currentHashes.filter((h) => keys.includes(h.hash));
     const missingKeys = currentHashes.filter((h) => !keys.includes(h.hash));
@@ -243,8 +250,8 @@ program
         .forEach((key) => {
           console.log(
             c.red(
-              `Seeds missing for "${key.name} difficulty ${key.difficulty + 1}`,
-            ),
+              `Seeds missing for "${key.name} difficulty ${key.difficulty + 1}`
+            )
           );
         });
       console.log("Please run 'run' first.\n");
@@ -266,8 +273,8 @@ program
         console.log("");
         console.log(
           c.red(
-            `Seed for "${key.name}", difficulty ${key.difficulty + 1} is incomplete. Only ${seeds.length} seeds of the ${MINIMAL_LEVELS} available.`,
-          ),
+            `Seed for "${key.name}", difficulty ${key.difficulty + 1} is incomplete. Only ${seeds.length} seeds of the ${MINIMAL_LEVELS} available.`
+          )
         );
         if (!all) {
           process.exit(1);
@@ -276,12 +283,12 @@ program
         }
       }
       process.stdout.write(
-        `Verifying "${key.name}" difficulty ${key.difficulty + 1}...      \r`,
+        `Verifying "${key.name}" difficulty ${key.difficulty + 1}...      \r`
       );
       const seedsToTest = [
         seeds[0],
         seeds[Math.floor(seeds.length / 2)],
-        seeds.at(-1),
+        seeds.at(-1)
       ];
       for (const seed of seedsToTest) {
         if (!seed) {
@@ -306,7 +313,7 @@ program
             await updateSeeds(updatedSeeds);
 
             console.log(
-              `Seeds for "${key.name}" difficulty ${key.difficulty + 1} removed. Please run 'run' to generate new ones.`,
+              `Seeds for "${key.name}" difficulty ${key.difficulty + 1} removed. Please run 'run' to generate new ones.`
             );
             if (!all) {
               process.exit(1);
@@ -323,7 +330,7 @@ program
           await updateSeeds(updatedSeeds);
 
           console.log(
-            `Seeds for "${key.name}" difficulty ${key.difficulty + 1} removed. Please run 'run' to generate new ones.`,
+            `Seeds for "${key.name}" difficulty ${key.difficulty + 1} removed. Please run 'run' to generate new ones.`
           );
 
           if (!all) {

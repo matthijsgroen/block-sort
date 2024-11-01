@@ -1,45 +1,65 @@
+.shadow {
+  background-color: #0006;
+  box-shadow: 6px 1px 2px 1px #0006;
+}
+
 .shape {
   font-size: small;
-  position: relative;
+  transition: background-color 1s;
 }
 .shape::before {
-  text-shadow:
-    0px 0px 0px color-mix(in srgb, var(--cube-color) 70%, #fff 30%),
-    0px 0px 4px #000,
-    1px 1px 2px #000;
-  opacity: var(--cube-shape-opacity, 50%);
-  color: transparent;
-  display: inline;
-  content: var(--cube-shape);
-}
-.shape::after {
-  position: absolute;
+  display: block;
   text-shadow:
     0px 0px 0px #000,
     1px -1px 0px #eee;
-  display: block;
   content: var(--cube-top-shape);
-  transform: translateY(-3rem) scaleY(0.6);
+  transform: scaleY(0.6);
   background-color: #000;
   background-clip: text;
   color: transparent;
   opacity: calc(var(--cube-shape-opacity, 50%) * 0.6);
 
-  @apply w-block;
+  @apply h-top-block w-block;
 }
 
-.layer {
-  @apply absolute h-full w-full rounded-md;
+.shape::after {
+  text-shadow:
+    0px 0px 0px color-mix(in srgb, var(--shape-color) 70%, #fff 30%),
+    0px 0px 4px #000,
+    1px 1px 2px #000;
+  opacity: var(--cube-shape-opacity, 50%);
+  color: transparent;
+  display: block;
+  content: var(--cube-shape);
+  @apply h-block pt-3;
 }
 
-.texture {
-  background: url("../../assets/wood-texture.png");
-  mix-blend-mode: color-burn;
-  @apply opacity-70;
+.selected {
+  transform: translateY(-2rem);
+  @apply animate-wobble ease-in-out;
 }
 
-.gradient {
-  background: linear-gradient(
+.selectedOutline {
+  box-shadow: 0px 0px 4px 4px var(--cube-color);
+  @apply outline outline-2 outline-white;
+}
+
+.suggestedOutline {
+  animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0px 0px 4px 2px #bbf7d080;
+  }
+  100% {
+    box-shadow: 0px 0px 6px 4px #bbf7d080;
+  }
+}
+
+.blockGradient {
+  background-color: var(--cube-color);
+  background-image: linear-gradient(
     rgba(0, 0, 0, 30%) 0%,
     rgba(0, 0, 0, 0%) 5%,
     rgba(0, 0, 0, 0%) 30%,
@@ -50,8 +70,28 @@
   );
 }
 
+.gradientLocked {
+  background-color: var(--cube-color);
+  background-image: linear-gradient(
+    rgba(0, 0, 0, 50%) 0%,
+    rgba(0, 0, 0, 30%) 5%,
+    rgba(0, 0, 0, 30%) 30%,
+    rgba(0, 0, 0, 10%) 35%,
+    rgba(0, 0, 0, 40%) 40%,
+    rgba(0, 0, 0, 40%) 90%,
+    rgba(0, 0, 0, 60%) 100%
+  );
+}
+.gradientLocked::after {
+  text-shadow:
+    0px 0px 0px color-mix(in srgb, var(--shape-color) 70%, #fff 30%),
+    0px 0px 4px #000,
+    1px 1px 2px #000;
+}
+
 .glass {
-  background: linear-gradient(
+  background-color: var(--hidden-color);
+  background-image: linear-gradient(
     rgba(0, 0, 0, 50%) 0%,
     rgba(0, 0, 0, 20%) 5%,
     rgba(0, 0, 0, 20%) 25%,
@@ -67,9 +107,15 @@
   );
 }
 
+@property --cube-color {
+  syntax: "<color>";
+  initial-value: 0;
+  inherits: false;
+}
+
 .present {
-  position: relative;
-  background: linear-gradient(
+  background-color: var(--hidden-color);
+  background-image: linear-gradient(
       rgba(0, 0, 0, 50%) 0%,
       rgba(0, 0, 0, 20%) 10%,
       rgba(200, 0, 0, 80%) 10%,
@@ -101,57 +147,12 @@
 .present::before {
   content: "🎀";
   font-size: 2rem;
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   color: transparent;
+  text-shadow: #d00 0 0 0px;
   background-color: #d00;
   background-clip: text;
   filter: drop-shadow(0px 0px 2px #000);
-}
 
-.gradientLocked {
-  transition: opacity 2s;
-  background: linear-gradient(
-    rgba(0, 0, 0, 30%) 0%,
-    rgba(0, 0, 0, 30%) 20%,
-    rgba(0, 0, 0, 30%) 85%,
-    rgba(0, 0, 0, 30%) 100%
-  );
-}
-
-.selected {
-  transform: translateY(-2rem);
-  @apply animate-wobble ease-in-out;
-}
-
-.selectedOutline {
-  box-shadow: 0px 0px 4px 4px var(--cube-color);
-  @apply outline outline-2 outline-white;
-}
-
-.suggestedOutline {
-  animation: glow 1s infinite alternate;
-}
-
-@keyframes glow {
-  0% {
-    box-shadow: 0px 0px 4px 2px #bbf7d080;
-  }
-  100% {
-    box-shadow: 0px 0px 6px 4px #bbf7d080;
-  }
-}
-
-.shadow {
-  background-color: #0006;
-  box-shadow: 6px 1px 2px 1px #0006;
-  @apply absolute h-block w-full translate-y-top-block rounded-md;
-}
-
-@property --cube-color {
-  syntax: "<color>";
-  initial-value: 0;
-  inherits: false;
+  transform: translateY(-0.3em);
+  opacity: 1;
 }

@@ -1,4 +1,11 @@
-import { Dispatch, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  memo,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import clsx from "clsx";
 
 import { Block } from "@/ui/Block/Block";
@@ -13,34 +20,42 @@ import styles from "./BlockColumn.module.css";
 
 type Props = {
   column: Column;
+  ref?: React.Ref<HTMLDivElement>;
   amountSelected?: number;
   amountSuggested?: number;
   suggested?: boolean;
   started?: boolean;
+  hovering?: boolean;
   theme?: BlockTheme;
   hideFormat?: "glass" | "present";
-  onClick?: VoidFunction;
+  motionDuration?: number;
+  onPointerDown?: Dispatch<React.PointerEvent<HTMLDivElement>>;
+  onPointerUp?: Dispatch<React.PointerEvent<HTMLDivElement>>;
   onPickUp?: Dispatch<{ top: number; rect: DOMRect }>;
   onPlacement?: Dispatch<{ top: number; rect: DOMRect }>;
   onDrop?: VoidFunction;
   onLock?: VoidFunction;
 };
 
-const MOTION_DURATION = 300;
+const MOTION_DURATION = 400;
 
 export const BlockColumn: React.FC<Props> = ({
   column: columnProp,
-  onClick,
+  ref,
+  onPointerDown,
+  onPointerUp,
   onDrop,
   onLock,
   onPickUp,
   onPlacement,
   theme = "default",
+  hovering,
   hideFormat = "glass",
   started = true,
   suggested = false,
   amountSelected = 0,
-  amountSuggested = 0
+  amountSuggested = 0,
+  motionDuration = MOTION_DURATION
 }) => {
   const [column, setColumn] = useState(columnProp);
   const [locked, setLocked] = useState(column.locked);
@@ -50,10 +65,7 @@ export const BlockColumn: React.FC<Props> = ({
   const columnRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Blocks decrease, update immediately
-    if (columnProp.blocks.length < column.blocks.length) {
-      setColumn(columnProp);
-    }
+    // Blocks increase, delay for animation
     if (columnProp.blocks.length > column.blocks.length) {
       if (onPlacement && firstEmptyRef.current && columnRef.current) {
         const colTop = columnRef.current.getBoundingClientRect().top;
@@ -64,13 +76,15 @@ export const BlockColumn: React.FC<Props> = ({
       }
       const timeoutId = setTimeout(() => {
         setColumn(columnProp);
-      }, MOTION_DURATION); // Delay to allow for animations
+      }, motionDuration); // Delay to allow for animations
       return () => {
         clearTimeout(timeoutId);
         setColumn(columnProp);
       };
+    } else {
+      setColumn(columnProp);
     }
-  }, [columnProp]);
+  }, [columnProp, motionDuration]);
 
   useEffect(() => {
     if (!column.locked) {
@@ -101,15 +115,28 @@ export const BlockColumn: React.FC<Props> = ({
 
   const activeShapeMap = getShapeMapping(theme);
   const activeColorMap = getColorMapping(theme);
+  const handlePickup = useCallback(
+    (rect: DOMRect) => {
+      onPickUp?.({
+        top: columnRef.current?.getBoundingClientRect().top ?? 0,
+        rect
+      });
+    },
+    [onPickUp]
+  );
 
   return (
-    <div className={`${rowSpans[column.columnSize + 1]} justify-self-center`}>
+    <div
+      className={`${rowSpans[column.columnSize + 1]} justify-self-center pb-2`}
+    >
       <div
         ref={columnRef}
         className={clsx("box-content border border-transparent pb-6", {
+          [styles.shade]: !locked,
           "contain-paint": locked,
           "rounded-b-md": column.type === "buffer",
-          "rounded-md border-t-black/60": column.type === "placement"
+          "rounded-md border-t-black/60": column.type === "placement",
+          "outline outline-2 outline-offset-1 outline-white/20": hovering
         })}
       >
         {suggested && (
@@ -118,15 +145,17 @@ export const BlockColumn: React.FC<Props> = ({
           </div>
         )}
         <div
+          ref={ref}
           className={clsx(
-            "box-content flex w-block cursor-pointer flex-col-reverse",
+            "box-content flex w-block cursor-pointer touch-none flex-col-reverse",
             {
               [styles.buffer]: column.type === "buffer",
               "rounded-md border border-t-0 border-black/60 bg-black/20 shadow-inner":
                 column.type === "placement"
             }
           )}
-          onPointerDown={onClick}
+          onPointerDown={onPointerDown}
+          onPointerUp={onPointerUp}
         >
           <Tray locked={blocksLocked > 0} />
           {column.blocks.map((_b, p, l) => {
@@ -135,30 +164,22 @@ export const BlockColumn: React.FC<Props> = ({
             const isSelected = index < amountSelected;
             const isSuggested = index < amountSuggested;
             return (
-              <div key={column.columnSize - column.blocks.length + index}>
-                <Block
-                  locked={p <= blocksLocked - 1}
-                  index={index}
-                  moved={started}
-                  shadow={column.type === "placement" || isSelected}
-                  revealed={block.revealed}
-                  color={activeColorMap[block.color]}
-                  hideFormat={hideFormat}
-                  shape={
-                    block.revealed ? activeShapeMap[block.color] : undefined
-                  }
-                  selected={isSelected}
-                  suggested={isSuggested}
-                  onDrop={onDrop}
-                  onPickUp={(rect) => {
-                    onPickUp?.({
-                      top: columnRef.current?.getBoundingClientRect().top ?? 0,
-                      rect
-                    });
-                  }}
-                  onLock={onLock}
-                />
-              </div>
+              <Block
+                key={column.columnSize - column.blocks.length + index}
+                locked={p <= blocksLocked - 1}
+                index={index}
+                moved={started}
+                shadow={column.type === "placement" || isSelected}
+                revealed={block.revealed}
+                color={activeColorMap[block.color]}
+                hideFormat={hideFormat}
+                shape={block.revealed ? activeShapeMap[block.color] : undefined}
+                selected={isSelected}
+                suggested={isSuggested}
+                onDrop={onDrop}
+                onPickUp={handlePickup}
+                onLock={onLock}
+              />
             );
           })}
           {timesMap(column.columnSize - column.blocks.length, (p, l) =>
@@ -166,7 +187,7 @@ export const BlockColumn: React.FC<Props> = ({
               <div
                 key={column.blocks.length + p}
                 ref={firstEmptyRef}
-                className={`${p === 0 && column.blocks.length === 0 ? styles.bottom : styles.empty} ${styles.shade}`}
+                className={`${p === 0 && column.blocks.length === 0 ? styles.bottom : styles.empty}`}
               >
                 <div
                   style={{ "--cube-color": activeColorMap[column.limitColor] }}
@@ -182,7 +203,7 @@ export const BlockColumn: React.FC<Props> = ({
               <div
                 key={column.blocks.length + p}
                 ref={l - p === l ? firstEmptyRef : undefined}
-                className={`${p === 0 && column.blocks.length === 0 ? styles.bottom : styles.empty} ${styles.shade}`}
+                className={`${p === 0 && column.blocks.length === 0 ? styles.bottom : styles.empty}`}
               ></div>
             )
           )}
@@ -191,3 +212,20 @@ export const BlockColumn: React.FC<Props> = ({
     </div>
   );
 };
+
+export const MemoizedBlockColumn: React.FC<Props> = memo(
+  BlockColumn,
+  (prev, next) => {
+    return (
+      prev.column === next.column &&
+      prev.amountSelected === next.amountSelected &&
+      prev.amountSuggested === next.amountSuggested &&
+      prev.suggested === next.suggested &&
+      prev.started === next.started &&
+      prev.hovering === next.hovering &&
+      prev.theme === next.theme &&
+      prev.hideFormat === next.hideFormat &&
+      prev.motionDuration === next.motionDuration
+    );
+  }
+);

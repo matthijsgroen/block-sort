@@ -37,8 +37,7 @@ export default {
         pulse: "pulse 1.5s ease-in-out infinite",
         rayShift: "rayShift 6s ease-in-out alternate infinite",
         rayShift2: "rayShift2 5.5s ease-in-out alternate infinite",
-        // Somehow if the place duration is 0.3s, it won't show on iPhone in app mode
-        place: "place 0.4s ease-out 2ms forwards",
+        place: "place 0.2s ease-out 2ms forwards",
         moveBlock: "moveBlock 1.4s ease-out 2ms forwards",
         locked: "locked 0.5s ease-in-out forwards",
         trayLocked: "trayLocked 0.3s ease-in-out forwards",
@@ -54,7 +53,6 @@ export default {
           "flyBottomLeft 3s ease-in-out forwards, rotate 8s linear infinite, scale 2s ease-in-out infinite",
         flyBottomRight:
           "flyBottomRight 3s ease-in-out forwards, rotate 6s linear infinite, scale 3s ease-in-out infinite",
-        blockMove: "blockMove 300ms linear forwards",
         lightning: "lightning 30s linear infinite"
       },
       keyframes: {
@@ -131,9 +129,9 @@ export default {
           "100%": { translate: "0 1rem" }
         },
         place: {
-          "0%": { translate: "0 -2rem" },
-          "70%": { translate: "0 1.2rem" },
-          "90%": { translate: "0 0.9rem" },
+          "0%": { translate: "0 0rem" },
+          "40%": { translate: "0 1.2rem" },
+          "70%": { translate: "0 0.9rem" },
           "100%": { translate: "0 1rem" }
         },
         trayLocked: {
@@ -180,10 +178,6 @@ export default {
           "20%": { opacity: "3%" },
           "21%": { opacity: "0" },
           "100%": { opacity: "0" }
-        },
-        blockMove: {
-          "0%": { offsetDistance: "0%" },
-          "100%": { offsetDistance: "100%" }
         }
       },
       gridTemplateRows: {

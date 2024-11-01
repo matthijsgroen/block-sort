@@ -6,7 +6,7 @@ import { Block, LevelState } from "./types";
 export const canPlaceAmount = (
   level: LevelState,
   columnIndex: number,
-  blocks: Block[],
+  blocks: Block[]
 ): number => {
   const column = level.columns[columnIndex];
   const spaceLeft = column.columnSize - column.blocks.length;
@@ -27,7 +27,7 @@ export const hasWon = (level: LevelState): boolean =>
       (col.type === "placement" &&
         col.columnSize === col.blocks.length &&
         col.blocks.every((b) => b.color === col.blocks[0].color)) ||
-      col.blocks.length === 0,
+      col.blocks.length === 0
   );
 
 const createSignature = (level: LevelState) =>
@@ -39,7 +39,7 @@ const createSignature = (level: LevelState) =>
 const countHidden = (level: LevelState) =>
   level.columns.reduce(
     (r, c) => r + c.blocks.filter((b) => b.revealed === true).length,
-    0,
+    0
   );
 
 const blockedByBuffer = (level: LevelState) => {
@@ -69,7 +69,7 @@ const countCompleted = (level: LevelState) =>
     (col) =>
       col.type === "placement" &&
       col.columnSize === col.blocks.length &&
-      col.blocks.every((b) => b.color === col.blocks[0].color),
+      col.blocks.every((b) => b.color === col.blocks[0].color)
   ).length;
 
 export const isStuck = (level: LevelState): boolean => {
@@ -107,13 +107,13 @@ export const allShuffled = (level: LevelState): boolean =>
     (c) =>
       c.blocks.length < c.columnSize ||
       c.blocks.map((b) => b.color).filter((b, i, l) => l.indexOf(b) === i)
-        .length > 1,
+        .length > 1
   );
 
 export const getRevealedIndices = (
   previousLevelState: LevelState,
   newLevelState: LevelState,
-  columnIndex: number,
+  columnIndex: number
 ) => {
   const previous = previousLevelState.columns[columnIndex].blocks;
   const size = newLevelState.columns[columnIndex].columnSize;
@@ -124,7 +124,7 @@ export const getRevealedIndices = (
   return newLevelState.columns[columnIndex].blocks
     .map((block, i) => ({
       i: size - blockCount + i,
-      newlyRevealed: !!block.revealed && !previous[offset + i].revealed,
+      newlyRevealed: !!block.revealed && !previous[offset + i].revealed
     }))
     .filter(({ newlyRevealed }) => newlyRevealed)
     .map(({ i }) => i);
@@ -132,7 +132,7 @@ export const getRevealedIndices = (
 
 export const revealBlocks = (
   levelState: LevelState,
-  revealed: { col: number; row: number }[],
+  revealed: { col: number; row: number }[]
 ) =>
   produce(levelState, (draft) => {
     revealed.forEach(({ col, row }) => {

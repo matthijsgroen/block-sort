@@ -15,7 +15,7 @@ type Props = {
 export const TopButton: React.FC<Props> = ({
   onClick,
   buttonType,
-  highlight = false,
+  highlight = false
 }) => {
   const button = (
     <WoodButton onClick={onClick}>
@@ -27,7 +27,7 @@ export const TopButton: React.FC<Props> = ({
             buttonType === "close" ||
             buttonType === "install" ||
             buttonType === "help",
-          "text-4xl": buttonType === "restart",
+          "text-4xl": buttonType === "restart"
         })}
       >
         {buttonType === "back" && (

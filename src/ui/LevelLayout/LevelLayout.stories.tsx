@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { generateRandomLevel } from "@/game/level-creation/generateRandomLevel";
+import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
 import {
   getHard2Settings,
   getHardSettings as getHardSettings
@@ -8,6 +9,7 @@ import {
 import {
   getNormal2Settings,
   getNormal3Settings,
+  getNormal4Settings,
   getNormalSettings
 } from "@/game/level-types/normal";
 import {
@@ -26,6 +28,7 @@ type LevelType =
   | "normal"
   | "normal2"
   | "normal3"
+  | "normal4"
   | "hard"
   | "hard2"
   | "special1"
@@ -55,6 +58,7 @@ const meta: Meta<CustomArgs> = {
         "normal",
         "normal2",
         "normal3",
+        "normal4",
         "hard",
         "hard2",
         "special1",
@@ -66,7 +70,11 @@ const meta: Meta<CustomArgs> = {
       control: { type: "select" }
     },
     difficulty: {
-      control: { type: "number" }
+      control: {
+        type: "number",
+        min: 1,
+        max: 11
+      }
     }
   },
   args: {
@@ -86,6 +94,7 @@ const settingProducer: Record<
   normal: getNormalSettings,
   normal2: getNormal2Settings,
   normal3: getNormal3Settings,
+  normal4: getNormal4Settings,
   hard: getHardSettings,
   hard2: getHard2Settings,
   special1: getSpecial1Settings,
@@ -104,10 +113,13 @@ export const LevelLayout: Story = {
   args: {},
   render: (args) => {
     const producer = settingProducer[args.levelType];
-    const settings = producer(Math.min(Math.max(args.difficulty, 1), 11));
+    const settings = producer(Math.min(Math.max(args.difficulty, 1), 12));
     const level = generateRandomLevel(settings, random);
     return (
-      <div className="flex w-full flex-col">
+      <div className="flex w-full min-w-96 flex-col">
+        <h1 className="mb-3 text-center font-mono text-xl text-white">
+          Level: {(LEVEL_SCALE[args.difficulty - 2] ?? 0) + 1}
+        </h1>
         <LevelLayoutComponent started={true} levelState={level} />
       </div>
     );

@@ -5,6 +5,111 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.17.0 - 2024-11-01
+
+### Changed
+
+- Updated difficulty curve to increase sooner, but in smaller steps (instead of the large hike at 166)
+
+## Version 1.16.2 - 2024-10-31
+
+### Fixed
+
+- Fine-tuned animation
+
+## Version 1.16.1 - 2024-10-31
+
+### Fixed
+
+- Start of block animation
+
+## Version 1.16.0 - 2024-10-30
+
+### Changed
+
+- Using different animation strategy, removing animation through path, and start using translate
+
+## Version 1.15.1 - 2024-10-27
+
+### Added
+
+- More effort to smoothen animation of blocks
+
+## Version 1.15.0 - 2024-10-27
+
+### Added
+
+- Additional level template for normal levels above 230.
+
+### Changed
+
+- Changed visual style to reduce rendering complexity
+- Updated view alignment to center content for larger screens
+
+## Version 1.14.3 - 2024-10-26
+
+### Fixed
+
+- Speed improvements for block animation
+
+## Version 1.14.2 - 2024-10-26
+
+### Fixed
+
+- Improve responsiveness of touch controls
+
+## Version 1.14.1 - 2024-10-25
+
+### Fixed
+
+- Tapping (touch) one column and releasing on another now also moves blocks (did not work before)
+
+## Version 1.14.0 - 2024-10-25
+
+### Added
+
+- Clicking on one column and releasing on another now also moves blocks (same with touch)
+
+### Known issues
+
+- The cool new block moving animation has bad performance in iOS stand-alone mode, and is therefor
+  disabled for now. I hope to enable them for iOS soon.
+
+## Version 1.13.6 - 2024-10-25
+
+### Fixed
+
+- Levels sometimes displaying a different state and resulting in weird results
+
+### Known issues
+
+- The cool new block moving animation has bad performance in iOS stand-alone mode, and is therefor
+  disabled for now. I hope to enable them for iOS soon.
+
+## Version 1.13.5 - 2024-10-24
+
+### Removed
+
+- Removed block motion on iOS. Apple is gimping the performance so badly, that the move animation is disabled.
+
+## Version 1.13.4 - 2024-10-24
+
+### Fixed
+
+- Sync of level state and render state when restarting due blocked
+
+## Version 1.13.3 - 2024-10-24
+
+### Fixed
+
+- Sync of level state and render state
+
+## Version 1.13.2 - 2024-10-24
+
+### Fixed
+
+- Tweak animation timing for better display on iPhone
+
 ## Version 1.13.1 - 2024-10-24
 
 ### Fixed

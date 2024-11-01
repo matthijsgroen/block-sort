@@ -59,17 +59,17 @@
 }
 
 .degrees180 {
-  animation: rotate180 2s linear infinite;
+  animation: rotate180 1s linear infinite;
 }
 
 .degrees90 {
-  animation: rotate90 2s linear infinite;
+  animation: rotate90 1s linear infinite;
 }
 
 .degrees180end {
-  animation: rotate180end 2s linear infinite;
+  animation: rotate180end 1s linear infinite;
 }
 
 .slide {
-  animation: slide 2s linear infinite;
+  animation: slide 1s linear infinite;
 }

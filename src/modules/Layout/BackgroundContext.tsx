@@ -3,7 +3,7 @@ import {
   Dispatch,
   PropsWithChildren,
   use,
-  useState,
+  useState
 } from "react";
 
 import { Background } from "@/ui/Background/Background";
@@ -21,14 +21,14 @@ export const BackgroundContext = createContext<{
   levelType: undefined,
   setLevelType: () => {},
   screenLayout: "",
-  setScreenLayout: () => {},
+  setScreenLayout: () => {}
 });
 
 export const BackgroundProvider: React.FC<PropsWithChildren> = ({
-  children,
+  children
 }) => {
   const [levelType, setLevelType] = useState<LevelTypeString | undefined>(
-    undefined,
+    undefined
   );
   const [screenLayout, setScreenLayout] = useState<string>("levelTrack");
   const [musicEnabled] = useGameStorage("musicEnabled", null);
@@ -39,7 +39,7 @@ export const BackgroundProvider: React.FC<PropsWithChildren> = ({
         levelType,
         setLevelType,
         screenLayout,
-        setScreenLayout,
+        setScreenLayout
       }}
     >
       <Background
