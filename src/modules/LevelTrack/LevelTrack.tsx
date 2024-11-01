@@ -154,7 +154,7 @@ export const LevelTrack: React.FC<Props> = ({
                     {
                       [styles.levelUp]: levelTransition,
                       [styles.shiftDown]:
-                        levelNr < officialLevelNr && levelNr > 2
+                        levelNr < officialLevelNr && levelNr >= 2
                     }
                   )}
                 >
@@ -196,7 +196,8 @@ export const LevelTrack: React.FC<Props> = ({
                   "flex h-height-block w-full flex-shrink-0 items-center justify-center align-middle",
                   {
                     [styles.levelUp]: levelTransition,
-                    [styles.shiftDown]: levelNr < officialLevelNr && levelNr > 2
+                    [styles.shiftDown]:
+                      levelNr < officialLevelNr && levelNr >= 2
                   }
                 )}
               >
