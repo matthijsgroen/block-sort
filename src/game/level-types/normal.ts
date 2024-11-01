@@ -8,7 +8,7 @@ import { LevelType } from "./types";
 
 export const getNormalSettings: SettingsProducer = (difficulty) => ({
   amountColors: Math.min(1 + difficulty, 10),
-  stackSize: Math.min(Math.max(2 + Math.floor(difficulty / 2), 4), 7),
+  stackSize: Math.min(Math.max(Math.floor(3 + (difficulty - 2) / 2), 4), 7),
   extraPlacementStacks: difficulty < 2 ? 1 : 2,
   extraPlacementLimits: difficulty > 9 ? 1 : undefined,
   hideBlockTypes: "none"
@@ -16,7 +16,7 @@ export const getNormalSettings: SettingsProducer = (difficulty) => ({
 
 export const getNormal2Settings: SettingsProducer = (difficulty) => ({
   amountColors: Math.min(1 + difficulty, 10),
-  stackSize: Math.min(Math.max(difficulty - 3, 4), 7),
+  stackSize: Math.min(Math.max(Math.floor(3 + (difficulty - 2) / 2), 4), 7),
   extraPlacementStacks: difficulty < 2 || difficulty > 9 ? 1 : 2,
   extraPlacementLimits: difficulty > 9 ? 1 : undefined,
   hideBlockTypes: "none",
@@ -26,7 +26,7 @@ export const getNormal2Settings: SettingsProducer = (difficulty) => ({
 
 export const getNormal3Settings: SettingsProducer = (difficulty) => ({
   amountColors: Math.min(1 + difficulty, 10),
-  stackSize: Math.min(Math.max(difficulty - 3, 4), 7),
+  stackSize: Math.min(Math.max(Math.floor(3 + (difficulty - 2) / 2), 4), 7),
   extraPlacementStacks: difficulty < 2 || difficulty > 9 ? 1 : 2,
   extraPlacementLimits: difficulty > 9 ? 1 : undefined,
   hideBlockTypes: "none",
@@ -38,7 +38,7 @@ export const getNormal3Settings: SettingsProducer = (difficulty) => ({
 
 export const getNormal4Settings: SettingsProducer = (difficulty) => ({
   amountColors: Math.min(1 + difficulty, 10),
-  stackSize: Math.min(Math.max(difficulty - 3, 4), 7),
+  stackSize: Math.min(Math.max(Math.floor(3 + (difficulty - 2) / 2), 4), 7),
   extraPlacementStacks: difficulty >= 8 ? 0 : difficulty < 2 ? 1 : 2,
   hideBlockTypes: "none",
   extraBuffers:

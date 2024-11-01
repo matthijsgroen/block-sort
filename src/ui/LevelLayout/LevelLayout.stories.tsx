@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { generateRandomLevel } from "@/game/level-creation/generateRandomLevel";
+import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
 import {
   getHard2Settings,
   getHardSettings as getHardSettings
@@ -69,7 +70,11 @@ const meta: Meta<CustomArgs> = {
       control: { type: "select" }
     },
     difficulty: {
-      control: { type: "number" }
+      control: {
+        type: "number",
+        min: 1,
+        max: 11
+      }
     }
   },
   args: {
@@ -111,7 +116,10 @@ export const LevelLayout: Story = {
     const settings = producer(Math.min(Math.max(args.difficulty, 1), 12));
     const level = generateRandomLevel(settings, random);
     return (
-      <div className="flex w-full flex-col">
+      <div className="flex w-full min-w-96 flex-col">
+        <h1 className="mb-3 text-center font-mono text-xl text-white">
+          Level: {(LEVEL_SCALE[args.difficulty - 2] ?? 0) + 1}
+        </h1>
         <LevelLayoutComponent started={true} levelState={level} />
       </div>
     );
