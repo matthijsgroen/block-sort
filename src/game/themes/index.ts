@@ -68,7 +68,7 @@ export type ThemeSchedule = RangedItem & {
 export const themeSchedule: ThemeSchedule[] = [
   {
     begin: { month: 10, day: 1 },
-    end: { month: 11, day: 8 },
+    end: { month: 11, day: 4 },
     name: "Fall/Halloween",
     theme: "halloween",
     levelModifiers: [
@@ -81,7 +81,7 @@ export const themeSchedule: ThemeSchedule[] = [
   },
   {
     begin: { month: 12, day: 1 },
-    end: { month: 1, day: 8 },
+    end: { month: 1, day: 6 },
     name: "Winter/Christmas",
     theme: "winter",
     levelModifiers: [

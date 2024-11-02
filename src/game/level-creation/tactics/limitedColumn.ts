@@ -5,7 +5,7 @@ import { Tactic, WeightedMove } from "./types";
 type ColumnData = {
   index: number;
   color?: BlockColor;
-  limit?: BlockColor;
+  limit?: BlockColor | "rainbow";
 };
 
 export const limitedColumn: Tactic = (level, _random = Math.random) => {
@@ -22,24 +22,22 @@ export const limitedColumn: Tactic = (level, _random = Math.random) => {
 
   const potentialTargets = data
     .filter((d): d is ColumnData => d !== undefined && d.limit !== undefined)
-    .map((d) => {
-      return {
-        ...d,
-        sources: data.filter(
-          (s): s is ColumnData => s !== undefined && s.color === d.limit
-        )
-      };
-    });
+    .map((d) => ({
+      ...d,
+      sources: data.filter(
+        (s): s is ColumnData => s !== undefined && s.color === d.limit
+      )
+    }));
 
-  return potentialTargets.reduce<WeightedMove[]>((r, t) => {
-    return r.concat(
-      t.sources.map((source) => {
-        return {
+  return potentialTargets.reduce<WeightedMove[]>(
+    (r, t) =>
+      r.concat(
+        t.sources.map((source) => ({
           name: "limitColumn",
           move: { from: source.index, to: t.index },
           weight: 15
-        };
-      })
-    );
-  }, []);
+        }))
+      ),
+    []
+  );
 };

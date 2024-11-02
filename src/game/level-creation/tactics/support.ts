@@ -8,6 +8,9 @@ export const canPlaceBlock = (column: Column, block: Block): boolean => {
   if (!hasSpace(column)) {
     return false;
   }
+  if (column.limitColor === "rainbow") {
+    return true;
+  }
   if (destBlock?.color === block.color) {
     return true;
   }

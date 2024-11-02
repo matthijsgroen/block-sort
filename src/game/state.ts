@@ -11,6 +11,10 @@ export const canPlaceAmount = (
   const column = level.columns[columnIndex];
   const spaceLeft = column.columnSize - column.blocks.length;
 
+  if (column.type === "buffer" && column.limitColor === "rainbow") {
+    return Math.min(spaceLeft, blocks.length);
+  }
+
   const setColor = blocks[0].color;
   if (column.limitColor && column.limitColor !== setColor) {
     return 0;
