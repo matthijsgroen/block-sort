@@ -38,7 +38,8 @@ export default [
           mp3: "always",
           json: "always",
           md: "always",
-          aac: "always"
+          aac: "always",
+          css: "always"
         }
       ],
       "import/no-useless-path-segments": ["error", { noUselessIndex: true }]

@@ -5,6 +5,7 @@ import { hard } from "./hard";
 import { normal } from "./normal";
 import { scrambled } from "./scrambled";
 import { special } from "./special";
+import { spring } from "./spring";
 import { LevelType, Unlockable } from "./types";
 import { winter } from "./winter";
 
@@ -15,6 +16,7 @@ const levelTypes = [
   easy,
   scrambled,
   winter,
+  spring,
   normal
 ] as const satisfies LevelType<string>[];
 

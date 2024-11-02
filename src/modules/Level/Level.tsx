@@ -18,7 +18,7 @@ import { colorMap } from "@/game/themes/default";
 import { LevelSettings, LevelState, Move } from "@/game/types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { mulberry32, pick } from "@/support/random";
-import { getActiveModifiers, getToday } from "@/support/themes";
+import { getActiveModifiers, getToday } from "@/game/themes";
 import { useGameStorage } from "@/support/useGameStorage";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";

@@ -21,7 +21,7 @@ export const createLevelState = (columns: Column[]): LevelState => {
 export const createPlacementColumn = (
   size: number,
   blocks: Block[] = [],
-  limitColor?: BlockColor,
+  limitColor?: BlockColor | "rainbow",
   locked = false
 ): Column => ({
   type: "placement",
@@ -33,7 +33,7 @@ export const createPlacementColumn = (
 
 export const createBufferColumn = (
   size: number,
-  limitColor?: BlockColor,
+  limitColor?: BlockColor | "rainbow",
   blocks: Block[] = []
 ): Column => ({
   type: "buffer",

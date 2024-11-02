@@ -11,7 +11,7 @@ import { THEMES } from "@/featureFlags";
 import { BlockTheme } from "@/game/themes";
 import { getThemeSong } from "@/support/themeMusic";
 
-import { getActiveTheme, getToday } from "../../support/themes";
+import { getActiveTheme, getToday } from "../../game/themes";
 
 export const ThemeContext = createContext<{
   activeTheme: BlockTheme;

@@ -71,7 +71,7 @@ export type Column = {
   /**
    * if set, the column only allows blocks of the specified color.
    */
-  limitColor?: BlockColor;
+  limitColor?: BlockColor | "rainbow";
   /**
    * Amount of blocks that fit in this column
    */
@@ -94,7 +94,12 @@ export type LevelSettings = {
   bufferSizes?: number;
   blockColorPick?: "start" | "end";
   bufferPlacementLimits?: number;
-  extraBuffers?: { size: number; amount: number; limit: number }[];
+  extraBuffers?: {
+    size: number;
+    amount: number;
+    limit: number;
+    unlimited?: boolean;
+  }[];
   playMoves?: [minCount: number, maxPercent: number];
 };
 

@@ -47,7 +47,10 @@ export const debugLevel = (level: LevelState) => {
         }
       }
       if (i === col.columnSize + 1 && col.limitColor) {
-        lineStr += ` ${shapeMap[col.limitColor]}  `;
+        lineStr +=
+          col.limitColor === "rainbow"
+            ? ` 🌈  `
+            : ` ${shapeMap[col.limitColor]}  `;
       } else if (i > col.columnSize) {
         lineStr += "     ";
       }

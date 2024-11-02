@@ -1,15 +1,8 @@
-import { getActiveTheme, getToday } from "@/support/themes";
-
-import { SettingsProducer } from "../types";
+import { getActiveTheme, getToday } from "@/game/themes";
 
 import { hard } from "./hard";
-import { getNormalSettings, normal } from "./normal";
+import { normal } from "./normal";
 import { LevelType } from "./types";
-
-export const getScrambledSettings: SettingsProducer = (difficulty) => ({
-  ...getNormalSettings(difficulty),
-  playMoves: [7, 0.3]
-});
 
 export const winter: LevelType<"winter"> = {
   type: "winter",
