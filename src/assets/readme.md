@@ -50,6 +50,9 @@ All music is from [Pixabay](https://pixabay.com/)
 - **Level track progress**  
   Artist: [Pixabay](https://pixabay.com/users/pixabay-1/)  
   [Source](https://pixabay.com/sound-effects/boings-jews-harp-7153/) • [License](https://pixabay.com/service/license-summary/)
+- **Level restart**  
+  Artist: [Crovic](https://freesound.org/people/Crovic/)  
+  [source](https://freesound.org/people/Crovic/sounds/661936/) • [License](https://creativecommons.org/publicdomain/zero/1.0/)
 
 ## Font
 

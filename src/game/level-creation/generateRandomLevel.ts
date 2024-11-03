@@ -86,9 +86,6 @@ export const generateRandomLevel = (
     .concat(
       bufferList.flatMap(({ amount, size, limit, unlimited = false }) => {
         stackLimit -= limit;
-        if (unlimited) {
-          console.log("unlimited");
-        }
 
         return timesMap(amount, (i) =>
           createBufferColumn(

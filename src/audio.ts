@@ -4,6 +4,7 @@ import music from "@/assets/music.aac";
 import pickup from "@/assets/pickup.mp3";
 import place from "@/assets/place.mp3";
 import progress from "@/assets/progress.mp3";
+import restart from "@/assets/restart.mp3";
 import spring from "@/assets/spring.aac";
 import summer from "@/assets/summer.aac";
 import win from "@/assets/win.mp3";
@@ -48,6 +49,7 @@ const audioItems = {
     singleInStream: "music"
   }),
   lose: createItem(Stream.effects, lose, 0.5),
+  restart: createItem(Stream.effects, restart, 0.5),
   place: createItem(Stream.effects, place),
   lock: createItem(Stream.effects, place, 1.0, { multipleInstances: true }),
   win: createItem(Stream.effects, win),

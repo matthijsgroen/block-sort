@@ -15,6 +15,7 @@ import {
   getSpecial4Settings,
   getSpecial5Settings
 } from "../src/game/level-types/special";
+import { getSpringSettings } from "../src/game/level-types/spring";
 import { SettingsProducer } from "../src/game/types";
 
 export type Producer = {
@@ -33,5 +34,6 @@ export const producers: Producer[] = [
   { name: "Special4", producer: getSpecial4Settings },
   { name: "Special5", producer: getSpecial5Settings },
   { name: "Hard", producer: getHardSettings },
-  { name: "Hard2", producer: getHard2Settings }
+  { name: "Hard2", producer: getHard2Settings },
+  { name: "Spring", producer: getSpringSettings }
 ];

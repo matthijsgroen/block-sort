@@ -78,8 +78,6 @@ const produceExtraSeeds = async (
 };
 
 const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
-  console.log(c.bold("Updating level seeds..."));
-
   const keys = Object.keys(levelSeeds);
 
   const levelSeedsCopy = { ...levelSeeds };
@@ -119,7 +117,7 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
     );
     console.log(
       c.green(
-        `Generating additional ${additionalNeeded} level seeds for "${incompleteSeed.name}", difficulty ${incompleteSeed.difficulty + 1}...`
+        `Generating additional ${additionalNeeded} level seeds for "${incompleteSeed.name}", difficulty ${incompleteSeed.difficulty + 1}...    `
       )
     );
     let time = Date.now();
@@ -149,7 +147,7 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
   if (firstMissing && !incompleteSeed) {
     console.log(
       c.green(
-        `Generating ${GENERATE_BATCH_SIZE} level seeds for "${firstMissing.name}", difficulty ${firstMissing.difficulty + 1}...`
+        `Generating ${GENERATE_BATCH_SIZE} level seeds for "${firstMissing.name}", difficulty ${firstMissing.difficulty + 1}...      `
       )
     );
     let time = Date.now();
@@ -220,7 +218,10 @@ program
 program
   .command("run")
   .option("-a, --all", "updates all items that are broken", false)
-  .action((options: { all?: boolean }) => main(!!options.all, levelSeeds));
+  .action(async (options: { all?: boolean }) => {
+    console.log(c.bold("Updating level seeds..."));
+    await main(!!options.all, levelSeeds);
+  });
 program
   .command("verify")
   .option("-a, --all", "remove all items that are broken", false)
