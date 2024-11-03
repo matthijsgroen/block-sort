@@ -24,7 +24,7 @@ export const colorHustle = (
       column.blocks.forEach((block) => {
         block.color = colorMap[block.color];
       });
-      if (column.limitColor) {
+      if (column.limitColor && column.limitColor !== "rainbow") {
         column.limitColor = colorMap[column.limitColor];
       }
     });

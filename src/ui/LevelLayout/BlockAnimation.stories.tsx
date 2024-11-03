@@ -4,6 +4,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { levelSeeds } from "@/data/levelSeeds";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
+import { getNormalSettings } from "@/game/level-types/normal";
 import { LevelState } from "@/game/types";
 import { hash } from "@/support/hash";
 import { mulberry32 } from "@/support/random";
@@ -11,7 +12,6 @@ import { mulberry32 } from "@/support/random";
 import { Loading } from "../Loading/Loading";
 
 import { BLOCK_ANIMATION_TIME, LevelLayout } from "./LevelLayout";
-import { getNormalSettings } from "@/game/level-types/normal";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta: Meta = {

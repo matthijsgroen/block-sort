@@ -1,4 +1,4 @@
-import { BlockColor } from "@/game/blocks";
+import { LimitColor } from "@/game/blocks";
 
 import { stackColumn } from "./stackColumn";
 import { Tactic, WeightedMove } from "./types";
@@ -7,7 +7,7 @@ export const startColumn: Tactic = (level, random = Math.random) => {
   if (stackColumn(level, random).length > 0) return [];
 
   const emptyColumns = level.columns.reduce<
-    { index: number; type: "buffer" | "placement"; limitColor?: BlockColor }[]
+    { index: number; type: "buffer" | "placement"; limitColor?: LimitColor }[]
   >(
     (r, c, i) =>
       c.blocks.length === 0

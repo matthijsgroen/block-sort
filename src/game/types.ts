@@ -1,4 +1,4 @@
-import { BlockColor } from "./blocks";
+import { BlockColor, LimitColor } from "./blocks";
 export { type BlockColor } from "./blocks";
 
 /**
@@ -71,7 +71,7 @@ export type Column = {
   /**
    * if set, the column only allows blocks of the specified color.
    */
-  limitColor?: BlockColor | "rainbow";
+  limitColor?: LimitColor;
   /**
    * Amount of blocks that fit in this column
    */

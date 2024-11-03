@@ -1,11 +1,11 @@
-import { BlockColor } from "@/game/blocks";
+import { BlockColor, LimitColor } from "@/game/blocks";
 
 import { Tactic, WeightedMove } from "./types";
 
 type ColumnData = {
   index: number;
   color?: BlockColor;
-  limit?: BlockColor | "rainbow";
+  limit?: LimitColor;
 };
 
 export const limitedColumn: Tactic = (level, _random = Math.random) => {

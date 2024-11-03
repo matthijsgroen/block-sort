@@ -18,3 +18,4 @@ export const BLOCK_COLORS = [
 ] as const;
 
 export type BlockColor = (typeof BLOCK_COLORS)[number];
+export type LimitColor = BlockColor | "rainbow";
