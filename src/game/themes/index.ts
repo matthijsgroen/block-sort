@@ -155,4 +155,4 @@ export const getActiveModifiers = (date: Date) =>
  * @returns the current date
  */
 export const getToday = (): Date =>
-  process.env.NODE_ENV === "production" ? new Date() : new Date("2021-03-15");
+  process.env.NODE_ENV === "production" ? new Date() : new Date();
