@@ -1,25 +1,25 @@
 import { use, useEffect, useState } from "react";
 
-import { Transition } from "@/ui/Transition/Transition.tsx";
+import { Transition } from "@/ui/Transition/Transition";
 
-import { sound } from "@/audio.ts";
-import { ZEN_MODE } from "@/featureFlags.ts";
+import { sound } from "@/audio";
+import { ZEN_MODE } from "@/featureFlags";
 import {
   getLevelSettings,
   getLevelType,
   LevelTypeString
-} from "@/game/level-types/index.ts";
-import { ThemeContext } from "@/modules/Layout/ThemeContext.tsx";
-import { LevelLoader } from "@/modules/Level/LevelLoader.tsx";
-import { LevelTrack } from "@/modules/LevelTrack/LevelTrack.tsx";
-import { generateNewSeed, mulberry32 } from "@/support/random.ts";
-import { getThemeSong } from "@/support/themeMusic.tsx";
-import { useGameStorage } from "@/support/useGameStorage.ts";
+} from "@/game/level-types/index";
+import { ThemeContext } from "@/modules/Layout/ThemeContext";
+import { LevelLoader } from "@/modules/Level/LevelLoader";
+import { LevelTrack } from "@/modules/LevelTrack/LevelTrack";
+import { generateNewSeed, mulberry32 } from "@/support/random";
+import { getThemeSong } from "@/support/themeMusic";
+import { useGameStorage } from "@/support/useGameStorage";
 
-import { BetaContext } from "../Layout/BetaContext.tsx";
+import { BetaContext } from "../Layout/BetaContext";
 
-import { BASE_SEED, SCREEN_TRANSITION } from "./constants.ts";
-import { ZEN_MODE_UNLOCK } from "./zenModeConstants.ts";
+import { BASE_SEED, SCREEN_TRANSITION } from "./constants";
+import { ZEN_MODE_UNLOCK } from "./zenModeConstants";
 
 type Props = {
   active: boolean;

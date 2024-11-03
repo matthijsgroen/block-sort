@@ -19,6 +19,7 @@ import {
   getSpecial4Settings,
   getSpecial5Settings
 } from "@/game/level-types/special";
+import { getSpringSettings } from "@/game/level-types/spring";
 import { LevelSettings } from "@/game/types";
 import { mulberry32 } from "@/support/random";
 
@@ -35,7 +36,8 @@ type LevelType =
   | "special2"
   | "special3"
   | "special4"
-  | "special5";
+  | "special5"
+  | "spring";
 
 type CustomArgs = {
   levelType: LevelType;
@@ -65,7 +67,8 @@ const meta: Meta<CustomArgs> = {
         "special2",
         "special3",
         "special4",
-        "special5"
+        "special5",
+        "spring"
       ],
       control: { type: "select" }
     },
@@ -101,7 +104,8 @@ const settingProducer: Record<
   special2: getSpecial2Settings,
   special3: getSpecial3Settings,
   special4: getSpecial4Settings,
-  special5: getSpecial5Settings
+  special5: getSpecial5Settings,
+  spring: getSpringSettings
 };
 
 const SEED = 123456789;

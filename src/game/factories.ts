@@ -1,3 +1,4 @@
+import { LimitColor } from "./blocks";
 import { Block, BlockColor, Column, LevelState } from "./types";
 
 export const createLevelState = (columns: Column[]): LevelState => {
@@ -21,7 +22,7 @@ export const createLevelState = (columns: Column[]): LevelState => {
 export const createPlacementColumn = (
   size: number,
   blocks: Block[] = [],
-  limitColor?: BlockColor,
+  limitColor?: LimitColor,
   locked = false
 ): Column => ({
   type: "placement",
@@ -33,7 +34,7 @@ export const createPlacementColumn = (
 
 export const createBufferColumn = (
   size: number,
-  limitColor?: BlockColor,
+  limitColor?: LimitColor,
   blocks: Block[] = []
 ): Column => ({
   type: "buffer",

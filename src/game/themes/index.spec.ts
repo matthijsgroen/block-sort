@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { getActiveTheme } from "./themes";
+import { getActiveTheme } from ".";
 
 describe(getActiveTheme, () => {
   it("returns default theme", () => {

@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.18.0 - 2024-11-03
+
+### Added
+
+- New sound for level restart
+
+### Changed
+
+- Updated duration for halloween and christmas theme
+
+### Fixed
+
+- Level track sliding down is now starting from the correct level nr.
+
 ## Version 1.17.0 - 2024-11-01
 
 ### Changed

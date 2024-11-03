@@ -189,15 +189,23 @@ export const BlockColumn: React.FC<Props> = ({
                 ref={firstEmptyRef}
                 className={`${p === 0 && column.blocks.length === 0 ? styles.bottom : styles.empty}`}
               >
-                <div
-                  style={{ "--cube-color": activeColorMap[column.limitColor] }}
-                  className={`${styles.limit} animate-fadeIn`}
-                >
-                  {amountSelected === 0 &&
-                    activeShapeMap[column.limitColor] && (
-                      <>{activeShapeMap[column.limitColor]}&#xFE0F;</>
-                    )}
-                </div>
+                {column.limitColor === "rainbow" ? (
+                  <div className={`${styles.rainbowLimit} animate-fadeIn`}>
+                    {amountSelected === 0 && <>{"🌈"}&#xFE0F;</>}
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      "--cube-color": activeColorMap[column.limitColor]
+                    }}
+                    className={`${styles.limit} animate-fadeIn`}
+                  >
+                    {amountSelected === 0 &&
+                      activeShapeMap[column.limitColor] && (
+                        <>{activeShapeMap[column.limitColor]}&#xFE0F;</>
+                      )}
+                  </div>
+                )}
               </div>
             ) : (
               <div

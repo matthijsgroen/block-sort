@@ -81,8 +81,8 @@ export const generatePlayableLevel = async (
 const generatePossibleMoves = (
   state: LevelState,
   random = Math.random
-): WeightedMove[] => {
-  return tactics
+): WeightedMove[] =>
+  tactics
     .reduce<WeightedMove[]>(
       (r, tactic) =>
         r.concat(
@@ -93,7 +93,6 @@ const generatePossibleMoves = (
       []
     )
     .map((move) => move);
-};
 
 const lookahead = (
   state: LevelState,

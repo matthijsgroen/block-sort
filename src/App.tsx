@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 
-import { useGameStorage } from "@/support/useGameStorage.ts";
+import { useGameStorage } from "@/support/useGameStorage";
 
-import { NormalMode } from "./modules/GameModi/NormalMode.tsx";
-import { ZenMode } from "./modules/GameModi/ZenMode.tsx";
-import { Help } from "./modules/Help/index.tsx";
-import { InstallPrompt } from "./modules/InstallPrompt/index.tsx";
-import { BackgroundProvider } from "./modules/Layout/BackgroundContext.tsx";
-import { BetaProvider } from "./modules/Layout/BetaContext.tsx";
-import { ThemeProvider } from "./modules/Layout/ThemeContext.tsx";
-import { Settings } from "./modules/Settings/index.tsx";
-import { sound, Stream } from "./audio.ts";
-import PWABadge from "./PWABadge.tsx";
+import { NormalMode } from "./modules/GameModi/NormalMode";
+import { ZenMode } from "./modules/GameModi/ZenMode";
+import { Help } from "./modules/Help";
+import { InstallPrompt } from "./modules/InstallPrompt";
+import { BackgroundProvider } from "./modules/Layout/BackgroundContext";
+import { BetaProvider } from "./modules/Layout/BetaContext";
+import { ThemeProvider } from "./modules/Layout/ThemeContext";
+import { Settings } from "./modules/Settings";
+import { sound, Stream } from "./audio";
+import PWABadge from "./PWABadge";
 
 export const App: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);

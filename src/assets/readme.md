@@ -12,6 +12,8 @@ All audio has been slightly cut or audio adjusted through [editor.audio](https:/
 
 ## Music
 
+All music is from [Pixabay](https://pixabay.com/)
+
 - **Relaxing Music (Tranquility in the Dew)** (Default track)  
   Artist: [Wahyu Music](https://pixabay.com/users/df_wahyumusicproduction-45033356/)  
   [Source](https://pixabay.com/music/smooth-jazz-relaxing-music-tranquility-in-the-dew-241470/) • [License](https://pixabay.com/service/license-summary/)
@@ -27,6 +29,10 @@ All audio has been slightly cut or audio adjusted through [editor.audio](https:/
 - **We're not going back** (Spring theme)  
   Artist: [alanajordan](https://pixabay.com/users/alanajordan-25247407/)  
   [Source](https://pixabay.com/music/funk-wex27re-not-going-back-235015/) • [License](https://pixabay.com/service/license-summary/)
+
+- **tropical reggae-united** (Summer theme)  
+  Artist: [Mepa_Melson](https://pixabay.com/users/mepa_melson-16213809/)  
+  [Source](https://pixabay.com/music/beats-tropical-reggae-united-129836/) • [License](https://pixabay.com/service/license-summary/)
 
 ## Sound effects
 
@@ -44,6 +50,9 @@ All audio has been slightly cut or audio adjusted through [editor.audio](https:/
 - **Level track progress**  
   Artist: [Pixabay](https://pixabay.com/users/pixabay-1/)  
   [Source](https://pixabay.com/sound-effects/boings-jews-harp-7153/) • [License](https://pixabay.com/service/license-summary/)
+- **Level restart**  
+  Artist: [Crovic](https://freesound.org/people/Crovic/)  
+  [source](https://freesound.org/people/Crovic/sounds/661936/) • [License](https://creativecommons.org/publicdomain/zero/1.0/)
 
 ## Font
 

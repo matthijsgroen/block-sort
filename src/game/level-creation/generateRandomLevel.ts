@@ -39,9 +39,16 @@ export const generateRandomLevel = (
   // resulting in a better level design
   timesMap(Math.max(12 - colorPool, 0), () => random());
 
-  const bufferList = [
-    { amount: buffers, size: bufferSizes, limit: bufferPlacementLimits }
-  ].concat(extraBuffers);
+  const bufferList = (
+    [
+      {
+        amount: buffers,
+        size: bufferSizes,
+        limit: bufferPlacementLimits,
+        unlimited: false
+      }
+    ] as Exclude<LevelSettings["extraBuffers"], undefined>
+  ).concat(extraBuffers);
 
   const blockColors = availableColors.slice(0, amountColors);
   let stackLimit = blockColors.length - extraPlacementLimits;
@@ -77,13 +84,17 @@ export const generateRandomLevel = (
       )
     )
     .concat(
-      bufferList.flatMap(({ amount, size, limit }) => {
+      bufferList.flatMap(({ amount, size, limit, unlimited = false }) => {
         stackLimit -= limit;
 
         return timesMap(amount, (i) =>
           createBufferColumn(
             size,
-            i < limit ? blockColors[stackLimit + i] : undefined
+            unlimited
+              ? "rainbow"
+              : i < limit
+                ? blockColors[stackLimit + i]
+                : undefined
           )
         );
       })

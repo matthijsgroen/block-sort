@@ -1,0 +1,9 @@
+.glasses {
+  position: relative;
+}
+
+.glasses::before {
+  position: absolute;
+  content: "🕶️";
+  translate: 0 var(--glasses-translate-y, 0);
+}

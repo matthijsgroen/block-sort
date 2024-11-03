@@ -1,4 +1,4 @@
-import { BLOCK_COLORS, BlockColor } from "@/game/blocks";
+import { BLOCK_COLORS, BlockColor, LimitColor } from "@/game/blocks";
 import { Column, LevelState, Move } from "@/game/types";
 
 export type LevelStateDTO = {
@@ -13,6 +13,22 @@ export type LevelStateDTO = {
 
 export type MoveDTO = { f: number; t: number };
 
+const toLimitColorDTO = (color: LimitColor | undefined): number | undefined =>
+  color !== undefined
+    ? color === "rainbow"
+      ? 200
+      : BLOCK_COLORS.indexOf(color)
+    : undefined;
+
+const fromLimitColorDTO = (
+  colorId: number | undefined
+): LimitColor | undefined =>
+  colorId !== undefined
+    ? colorId === 200
+      ? "rainbow"
+      : BLOCK_COLORS[colorId]
+    : undefined;
+
 export const toLevelStateDTO = (state: LevelState): LevelStateDTO => {
   return {
     c: state.columns.map((c) => ({
@@ -21,10 +37,7 @@ export const toLevelStateDTO = (state: LevelState): LevelStateDTO => {
         r: !!b.revealed
       })),
       s: c.columnSize,
-      l:
-        c.limitColor !== undefined
-          ? BLOCK_COLORS.indexOf(c.limitColor)
-          : undefined,
+      l: toLimitColorDTO(c.limitColor),
       t: c.type === "placement" ? 1 : 0
     })),
     m: toMoveDTO(state.moves)
@@ -54,7 +67,7 @@ export const fromLevelStateDTO = (dto: LevelStateDTO): LevelState => {
         revealed: b.r
       })),
       columnSize: c.s,
-      limitColor: c.l !== undefined ? BLOCK_COLORS[c.l] : undefined,
+      limitColor: fromLimitColorDTO(c.l),
       type: c.t === 1 ? "placement" : "buffer",
       locked: c.b.length === c.s && c.b.every((b) => b.c === c.b[0].c)
     })),

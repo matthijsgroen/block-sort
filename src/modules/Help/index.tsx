@@ -6,7 +6,7 @@ import { DialogTitle } from "@/ui/Dialog/DialogTitle";
 import { ReactComponent as Christmas } from "@/../docs/christmas.md";
 import { ReactComponent as Halloween } from "@/../docs/halloween.md";
 import { ReactComponent as HelpText } from "@/../docs/help.md";
-import { getActiveTheme, getToday } from "@/support/themes";
+import { getActiveTheme, getToday } from "@/game/themes";
 
 import styles from "../Settings/TextStyling.module.css";
 
@@ -28,7 +28,7 @@ export const Help: React.FC<Props> = ({ onClose }) => {
       <div
         className={clsx(
           styles.textStyling,
-          "max-h-[calc(100vh-200px)] overflow-y-auto"
+          "max-h-[calc(100vh-200px)] overflow-y-auto overscroll-y-contain"
         )}
       >
         <HelpText />

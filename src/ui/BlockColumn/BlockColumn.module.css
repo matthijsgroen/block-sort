@@ -19,6 +19,13 @@
   background-clip: content-box;
 }
 
+.rainbowLimit {
+  text-shadow:
+    0px 0px 1px #eee7,
+    2px 2px 3px #0009;
+  @apply h-block w-block pt-2 text-center;
+}
+
 .limit {
   text-shadow:
     0px 0px 1px color-mix(in srgb, var(--cube-color) 70%, #fff 30%),

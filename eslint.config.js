@@ -1,5 +1,5 @@
-import pluginJs from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
+import * as importPlugin from "eslint-plugin-import";
 import pluginReact from "eslint-plugin-react";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import unusedImports from "eslint-plugin-unused-imports";
@@ -10,20 +10,45 @@ export default [
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
   { ignores: [".yarn/*", "dist/*", ".pnp.*", "storybook-static/", "public/*"] },
   { languageOptions: { globals: { ...globals.browser, ...globals.commonjs } } },
-  pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   {
     ...pluginReact.configs.flat.recommended,
     settings: {
       react: {
-        version: "detect",
-      },
+        version: "detect"
+      }
+    }
+  },
+  {
+    plugins: {
+      import: importPlugin
     },
+    settings: {
+      "import/resolver": {
+        node: {
+          extensions: [".js", ".jsx", ".ts", ".tsx"]
+        }
+      }
+    },
+    rules: {
+      "import/extensions": [
+        "error",
+        "never",
+        {
+          mp3: "always",
+          json: "always",
+          md: "always",
+          aac: "always",
+          css: "always"
+        }
+      ],
+      "import/no-useless-path-segments": ["error", { noUselessIndex: true }]
+    }
   },
   eslintConfigPrettier,
   {
     plugins: {
-      "simple-import-sort": simpleImportSort,
+      "simple-import-sort": simpleImportSort
     },
     rules: {
       "react/prop-types": "off", // Does not work nicely with React.FC TS declarations
@@ -34,7 +59,7 @@ export default [
 
       "@typescript-eslint/no-unused-vars": [
         "error",
-        { argsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^ignore" },
+        { argsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^ignore" }
       ],
       "simple-import-sort/exports": "error",
       "simple-import-sort/imports": [
@@ -53,9 +78,9 @@ export default [
             // Other relative imports. Put same-folder imports and `.` last.
             ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
             // Style imports.
-            ["^.+\\.?(css)$"],
-          ],
-        },
+            ["^.+\\.?(css)$"]
+          ]
+        }
       ],
       "max-len": [
         "error",
@@ -65,14 +90,14 @@ export default [
           ignoreStrings: true,
           ignoreTemplateLiterals: true,
           ignoreRegExpLiterals: true,
-          ignoreComments: true,
-        },
-      ],
-    },
+          ignoreComments: true
+        }
+      ]
+    }
   },
   {
     plugins: {
-      "unused-imports": unusedImports,
+      "unused-imports": unusedImports
     },
     rules: {
       "no-unused-vars": "off", // or "@typescript-eslint/no-unused-vars": "off",
@@ -84,9 +109,9 @@ export default [
           varsIgnorePattern: "^_",
           args: "after-used",
           argsIgnorePattern: "^_",
-          caughtErrorsIgnorePattern: "^ignore",
-        },
-      ],
-    },
-  },
+          caughtErrorsIgnorePattern: "^ignore"
+        }
+      ]
+    }
+  }
 ];

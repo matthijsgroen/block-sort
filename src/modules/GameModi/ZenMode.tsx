@@ -1,23 +1,23 @@
 import { use } from "react";
 
-import { Transition } from "@/ui/Transition/Transition.tsx";
+import { Transition } from "@/ui/Transition/Transition";
 
-import { sound } from "@/audio.ts";
+import { sound } from "@/audio";
 import {
   getUnlockableLevelTypes,
   LevelTypeString
-} from "@/game/level-types/index.ts";
-import { LevelSettings } from "@/game/types.ts";
-import { ThemeContext } from "@/modules/Layout/ThemeContext.tsx";
-import { LevelLoader } from "@/modules/Level/LevelLoader.tsx";
-import { generateNewSeed, mulberry32, pick } from "@/support/random.ts";
-import { getThemeSong } from "@/support/themeMusic.tsx";
-import { deleteGameValue, useGameStorage } from "@/support/useGameStorage.ts";
+} from "@/game/level-types/index";
+import { LevelSettings } from "@/game/types";
+import { ThemeContext } from "@/modules/Layout/ThemeContext";
+import { LevelLoader } from "@/modules/Level/LevelLoader";
+import { generateNewSeed, mulberry32, pick } from "@/support/random";
+import { getThemeSong } from "@/support/themeMusic";
+import { deleteGameValue, useGameStorage } from "@/support/useGameStorage";
 
-import { ZenSelection } from "../ZenSelection/ZenSelection.tsx";
+import { ZenSelection } from "../ZenSelection/ZenSelection";
 
-import { SCREEN_TRANSITION, ZEN_BASE_SEED } from "./constants.ts";
-import { DIFFICULTY_LEVELS } from "./zenModeConstants.ts";
+import { SCREEN_TRANSITION, ZEN_BASE_SEED } from "./constants";
+import { DIFFICULTY_LEVELS } from "./zenModeConstants";
 
 type Props = {
   active: boolean;

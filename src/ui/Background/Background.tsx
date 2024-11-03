@@ -6,6 +6,8 @@ import { BlockTheme } from "@/game/themes";
 
 import { CSSParticles } from "./CSSParticles";
 
+import styles from "./Background.module.css";
+
 type Props = {
   levelType?: LevelTypeString;
   theme?: BlockTheme;
@@ -33,6 +35,41 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
         <div className="absolute left-0 top-0 h-full w-full animate-lightning bg-white"></div>
       )}
       <div className="absolute left-0 top-0 h-full w-full bg-wood-texture mix-blend-multiply"></div>
+      {theme === "summer" && (
+        <div
+          className={clsx(
+            "absolute left-0 top-0 h-full w-full",
+            styles.sunlight
+          )}
+        >
+          <div
+            className={clsx(
+              "absolute bottom-0 right-2/3 -mb-[3rem] origin-bottom -scale-x-[1] text-[10rem] transition-transform [transition-duration:1500ms]"
+            )}
+          >
+            🌴
+          </div>
+          <div
+            className={clsx(
+              "absolute bottom-0 left-2/3 -mb-[3rem] origin-bottom text-[10rem] transition-transform [transition-duration:1500ms]"
+            )}
+          >
+            🌴
+          </div>
+          <div className="absolute left-4 top-[30px] -rotate-12">
+            <div className={clsx("absolute origin-bottom text-[5rem]")}>
+              😁️
+            </div>
+            <div
+              className={clsx(
+                "relative left-2 top-4 origin-center -translate-y-2 text-[4rem]"
+              )}
+            >
+              🕶️️
+            </div>
+          </div>
+        </div>
+      )}
       {theme === "halloween" && (
         <div
           className={clsx(
@@ -92,13 +129,13 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           <div
             className={clsx(
               "pointer-events-none absolute right-0 top-0 origin-top-right rotate-[20deg] animate-rayShift opacity-30",
-              "h-3/4 w-[7rem] translate-x-4 bg-gradient-to-b from-[#fffffffd] via-[#ffffae90] to-[#ffffae00]"
+              "h-3/4 w-[7rem] translate-x-4 bg-gradient-to-b from-[#ffff80fd] via-[#ffffae90] to-[#ffffae00]"
             )}
           ></div>
           <div
             className={clsx(
               "pointer-events-none absolute right-0 top-0 origin-top-right rotate-[20deg] animate-rayShift2 opacity-30",
-              "h-3/4 w-[8rem] -translate-x-9 bg-gradient-to-b from-[#fffffffd] via-[#ffffae90] to-[#ffffae00]"
+              "h-3/4 w-[8rem] -translate-x-9 bg-gradient-to-b from-[#ffffa0fd] via-[#ffffae90] to-[#ffffae00]"
             )}
           ></div>
           <div
@@ -168,6 +205,18 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           speed={[40, 80]}
           floatDistance={[20, 100]}
           floatSpeed={[5, 10]}
+        />
+      )}
+      {theme === "summer" && (
+        <CSSParticles
+          symbol="🫧"
+          amount={10}
+          direction="up"
+          shift={400}
+          scale={[0.7, 1.8]}
+          speed={[30, 50]}
+          floatDistance={[10, 30]}
+          floatSpeed={[8, 12]}
         />
       )}
     </div>
