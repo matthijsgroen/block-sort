@@ -35,7 +35,6 @@ const RAW_RUNTIME_STATE =
           ["@storybook/addon-essentials", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5"],\
           ["@storybook/addon-interactions", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5"],\
           ["@storybook/addon-links", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5"],\
-          ["@storybook/addon-onboarding", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5"],\
           ["@storybook/blocks", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5"],\
           ["@storybook/react", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5"],\
           ["@storybook/react-vite", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5"],\
@@ -4387,29 +4386,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["@storybook/addon-onboarding", [\
-      ["npm:8.3.5", {\
-        "packageLocation": "../../../.yarn/berry/cache/@storybook-addon-onboarding-npm-8.3.5-47f5e27103-10c0.zip/node_modules/@storybook/addon-onboarding/",\
-        "packageDependencies": [\
-          ["@storybook/addon-onboarding", "npm:8.3.5"]\
-        ],\
-        "linkType": "SOFT"\
-      }],\
-      ["virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5", {\
-        "packageLocation": "./.yarn/__virtual__/@storybook-addon-onboarding-virtual-1ec54ca983/4/.yarn/berry/cache/@storybook-addon-onboarding-npm-8.3.5-47f5e27103-10c0.zip/node_modules/@storybook/addon-onboarding/",\
-        "packageDependencies": [\
-          ["@storybook/addon-onboarding", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5"],\
-          ["@types/storybook", null],\
-          ["react-confetti", "virtual:b1fde31781e2f6a16fe36f4ad8a0d9f70f0fd708641881cb3e7d48ce92cab8159eb1c59dd3ea74ccbf7d3382b676cf53b3cc5426a68fc27f1f51bbd3c9318760#npm:6.1.0"],\
-          ["storybook", "npm:8.3.5"]\
-        ],\
-        "packagePeers": [\
-          "@types/storybook",\
-          "storybook"\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["@storybook/addon-outline", [\
       ["npm:8.3.5", {\
         "packageLocation": "../../../.yarn/berry/cache/@storybook-addon-outline-npm-8.3.5-922467a161-10c0.zip/node_modules/@storybook/addon-outline/",\
@@ -6795,7 +6771,6 @@ const RAW_RUNTIME_STATE =
           ["@storybook/addon-essentials", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5"],\
           ["@storybook/addon-interactions", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5"],\
           ["@storybook/addon-links", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5"],\
-          ["@storybook/addon-onboarding", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5"],\
           ["@storybook/blocks", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5"],\
           ["@storybook/react", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5"],\
           ["@storybook/react-vite", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:8.3.5"],\
