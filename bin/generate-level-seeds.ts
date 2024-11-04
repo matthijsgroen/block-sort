@@ -352,4 +352,37 @@ program
     }
   });
 
+program
+  .command("erase")
+  .argument("levelType", "The level type to erase")
+  .argument("difficulty", "The difficulty to erase")
+  .action(async (levelType, difficulty) => {
+    const producer = producers.find(
+      (p) => p.name.toLowerCase() === levelType.toLowerCase()
+    );
+    if (!producer) {
+      console.log(c.red(`Producer for ${levelType} not found`));
+      console.log(
+        `Available producers: ${producers.map((p) => p.name).join(", ")}`
+      );
+      process.exit(1);
+    }
+    if (
+      isNaN(parseInt(difficulty)) ||
+      parseInt(difficulty) < 1 ||
+      parseInt(difficulty) > 11
+    ) {
+      console.log(c.red("Difficulty must be a number between 1 and 11"));
+      process.exit(1);
+    }
+    console.log(
+      c.bold(`Erasing seeds for ${levelType} difficulty ${difficulty}`)
+    );
+    const settings = producer.producer(difficulty);
+    const settingsHash = hash(JSON.stringify(settings)).toString();
+
+    const updatedSeeds = removeSeedsForKey(settingsHash, levelSeeds);
+
+    await updateSeeds(updatedSeeds);
+  });
 program.parse(process.argv);
