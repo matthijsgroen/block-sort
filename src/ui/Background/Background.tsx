@@ -123,6 +123,26 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           ⛄️
         </div>
       )}
+      {theme === "spring" && (
+        <div
+          className={clsx(
+            "pointer-events-none absolute bottom-0 left-0 origin-bottom rotate-6 scale-150 text-8xl transition-transform [transition-duration:3000ms]",
+            {
+              "translate-y-[180%] rotate-12": layout === "zenMode",
+              "[transition-delay:1500ms]": layout === "levelTrack"
+            }
+          )}
+        >
+          <div
+            className={clsx("-mb-1 origin-bottom", {
+              ["animate-plantWiggle"]: musicEnabled,
+              ["animate-plantWiggleSlow"]: !musicEnabled
+            })}
+          >
+            🌷
+          </div>
+        </div>
+      )}
       <div className="absolute left-0 top-0 h-safe-area w-full">{children}</div>
       {theme === "spring" && (
         <>
@@ -138,30 +158,12 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
               "h-3/4 w-[8rem] -translate-x-9 bg-gradient-to-b from-[#ffffa0fd] via-[#ffffae90] to-[#ffffae00]"
             )}
           ></div>
-          <div
-            className={clsx(
-              "pointer-events-none absolute bottom-0 left-0 origin-bottom rotate-6 scale-150 text-8xl transition-transform [transition-duration:3000ms]",
-              {
-                "translate-y-[180%] rotate-12": layout === "zenMode",
-                "[transition-delay:1500ms]": layout === "levelTrack"
-              }
-            )}
-          >
-            <div
-              className={clsx("-mb-1 origin-bottom", {
-                ["animate-plantWiggle"]: musicEnabled,
-                ["animate-plantWiggleSlow"]: !musicEnabled
-              })}
-            >
-              🌷
-            </div>
-          </div>
         </>
       )}
       {theme === "spring" && (
         <div
           className={clsx(
-            "pointer-events-none absolute bottom-0 right-1/4 -mb-1 origin-bottom translate-x-8 text-8xl",
+            "pointer-events-none absolute bottom-0 right-1/4 -mb-6 origin-bottom translate-x-8 text-8xl",
             {
               ["animate-plantWiggle"]: musicEnabled,
               ["animate-plantWiggleSlow"]: !musicEnabled
