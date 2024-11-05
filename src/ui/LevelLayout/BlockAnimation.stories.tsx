@@ -132,17 +132,16 @@ const Loader: React.FC<{ level: Promise<LevelState> }> = ({ level }) => {
         const result = selectFromColumn(levelState, move.from);
         setSelection([move.from, result.length]);
       }
-    }, 1000 + BLOCK_ANIMATION_TIME);
+    }, 100 + BLOCK_ANIMATION_TIME);
 
     const moveTimeoutId = setTimeout(() => {
       const move = state.moves[item];
       if (move) {
-        console.log(move.tactic);
         setLevelState((state) => moveBlocks(state, move));
         setSelection(undefined);
         setItem((item) => item + 1);
       }
-    }, 1500 + BLOCK_ANIMATION_TIME);
+    }, 300 + BLOCK_ANIMATION_TIME);
 
     return () => {
       clearTimeout(selectTimeoutId);
