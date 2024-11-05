@@ -4,7 +4,8 @@ import { stackColumn } from "./stackColumn";
 import { Tactic, WeightedMove } from "./types";
 
 export const startColumn: Tactic = (level, random = Math.random) => {
-  if (stackColumn(level, random).length > 0) return [];
+  const canStack = stackColumn(level, random);
+  if (canStack.length > 0) return canStack;
 
   const emptyColumns = level.columns.reduce<
     { index: number; type: "buffer" | "placement"; limitColor?: LimitColor }[]
@@ -42,7 +43,7 @@ export const startColumn: Tactic = (level, random = Math.random) => {
                 emptyColumns.reduce(
                   (r, emptyCol) =>
                     r.concat({
-                      // name: "startColumn",
+                      name: "startColumn",
                       move: {
                         from: pos,
                         to: emptyCol.index
@@ -50,11 +51,13 @@ export const startColumn: Tactic = (level, random = Math.random) => {
                       weight:
                         emptyCol.limitColor !== undefined &&
                         level.columns[pos].blocks[0]?.color !==
-                          emptyCol.limitColor
+                          emptyCol.limitColor &&
+                        emptyCol.limitColor !== "rainbow"
                           ? -2000
                           : positions.length * 4 +
                             // Prefer placement columns
-                            (emptyCol.type === "placement" ? 2 : 0) +
+                            (level.columns[pos].type === "buffer" ? 2 : 0) +
+                            (emptyCol.type === "buffer" ? -3 : 1) +
                             // Prefer columns with the same color as the limit color
                             (emptyCol.limitColor ===
                             level.columns[pos].blocks[0]?.color

@@ -22,3 +22,12 @@ export const canPlaceBlock = (column: Column, block: Block): boolean => {
   }
   return false;
 };
+
+export const isColumnCorrectlySorted = (column: Column): boolean => {
+  if (column.blocks.length === 0) return false;
+  const firstColor = column.blocks[0].color;
+  return (
+    column.blocks.every((block) => block.color === firstColor) &&
+    column.type === "placement"
+  );
+};

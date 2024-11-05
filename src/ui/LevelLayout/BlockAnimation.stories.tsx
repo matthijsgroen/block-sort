@@ -137,7 +137,8 @@ const Loader: React.FC<{ level: Promise<LevelState> }> = ({ level }) => {
     const moveTimeoutId = setTimeout(() => {
       const move = state.moves[item];
       if (move) {
-        setLevelState((state) => moveBlocks(state, move.from, move.to));
+        console.log(move.tactic);
+        setLevelState((state) => moveBlocks(state, move));
         setSelection(undefined);
         setItem((item) => item + 1);
       }
@@ -150,12 +151,17 @@ const Loader: React.FC<{ level: Promise<LevelState> }> = ({ level }) => {
   }, [state, item]);
 
   return (
-    <LevelLayout
-      started={true}
-      levelState={levelState}
-      animateBlocks={true}
-      selection={selection}
-    />
+    <>
+      <h1 className="mb-4 text-center text-white">
+        Moves: {state.moves.length}
+      </h1>
+      <LevelLayout
+        started={true}
+        levelState={levelState}
+        animateBlocks={true}
+        selection={selection}
+      />
+    </>
   );
 };
 

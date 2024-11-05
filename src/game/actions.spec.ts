@@ -110,7 +110,7 @@ describe(moveBlocks, () => {
       createPlacementColumn(4)
     ]);
 
-    const result = moveBlocks(level, 0, 3);
+    const result = moveBlocks(level, { from: 0, to: 3 });
     const expected: LevelState = {
       colors: ["black", "green", "white"],
       columns: [
@@ -149,7 +149,7 @@ describe(moveBlocks, () => {
       createPlacementColumn(4)
     ]);
 
-    const result = moveBlocks(level, 0, 1);
+    const result = moveBlocks(level, { from: 0, to: 1 });
     expect(result).toEqual(level);
   });
 
@@ -171,7 +171,7 @@ describe(moveBlocks, () => {
       createPlacementColumn(4)
     ]);
 
-    const result = moveBlocks(level, 0, 3);
+    const result = moveBlocks(level, { from: 0, to: 3 });
     expect(result).toEqual(level);
   });
 
@@ -193,7 +193,7 @@ describe(moveBlocks, () => {
       createPlacementColumn(4)
     ]);
 
-    const result = moveBlocks(level, 0, 3);
+    const result = moveBlocks(level, { from: 0, to: 3 });
     const expected: LevelState = {
       colors: ["black", "green", "white"],
       columns: [
@@ -232,7 +232,7 @@ describe(moveBlocks, () => {
       createPlacementColumn(4)
     ]);
 
-    const result = moveBlocks(level, 0, 3);
+    const result = moveBlocks(level, { from: 0, to: 3 });
     const expected: LevelState = {
       colors: ["black", "green", "white"],
       columns: [
@@ -268,7 +268,7 @@ describe(moveBlocks, () => {
       createPlacementColumn(4)
     ]);
 
-    const result = moveBlocks(level, 2, 2);
+    const result = moveBlocks(level, { from: 2, to: 2 });
     const expected: LevelState = {
       colors: ["black", "green", "white"],
       columns: [
@@ -306,7 +306,7 @@ describe(moveBlocks, () => {
       createPlacementColumn(4),
       createPlacementColumn(4)
     ]);
-    const result = moveBlocks(level, 0, 3);
+    const result = moveBlocks(level, { from: 0, to: 3 });
 
     const expected: LevelState = {
       colors: ["black", "green", "white"],
@@ -350,7 +350,7 @@ describe(moveBlocks, () => {
       createPlacementColumn(4, createBlocks("white", "white")),
       createPlacementColumn(4)
     ]);
-    const result = moveBlocks(level, 0, 3);
+    const result = moveBlocks(level, { from: 0, to: 3 });
     expect(result.columns[3].locked).toBe(true);
   });
 });

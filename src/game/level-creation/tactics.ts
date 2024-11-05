@@ -9,7 +9,7 @@ import { stackColumn } from "./tactics/stackColumn";
 import { startColumn } from "./tactics/startColumn";
 import { Tactic, WeightedMove } from "./tactics/types";
 import { generateRandomLevel } from "./generateRandomLevel";
-import { scoreState } from "./scoreState";
+import { scoreState, scoreStateWithMove } from "./scoreState";
 
 const MAX_PLAY_ATTEMPTS = 1;
 const MAX_GENERATE_ATTEMPTS = 20;
@@ -50,10 +50,7 @@ export const generatePlayableLevel = async (
         );
         const playedLevel = moves
           .slice(0, movesToPlay)
-          .reduce(
-            (state, move) => moveBlocks(state, move.from, move.to),
-            level
-          );
+          .reduce((state, move) => moveBlocks(state, move), level);
         return {
           ...playedLevel,
           moves: moves.slice(movesToPlay),
@@ -88,20 +85,22 @@ const generatePossibleMoves = (
         r.concat(
           tactic(state, random)
             .sort((a, b) => a.weight - b.weight)
-            .slice(0, 3) // take the 3 best moves
+            .slice(0, 3)
         ),
       []
     )
-    .map((move) => move);
+    .sort((a, b) => a.weight - b.weight);
 
 const lookahead = (
   state: LevelState,
+  move: Move,
   depth: number,
   random = Math.random
 ): number => {
   if (depth === 0) {
-    return scoreState(state); // Base case: return the score of the current state
+    return scoreStateWithMove(state, move); // Base case: return the score of the current state
   }
+  const nextState = moveBlocks(state, move);
 
   const moves = generatePossibleMoves(state, random);
   if (moves.length === 0) {
@@ -110,8 +109,7 @@ const lookahead = (
 
   let bestScore = -Infinity;
   for (const move of moves) {
-    const newState = moveBlocks(state, move.move.from, move.move.to);
-    const score = lookahead(newState, depth - 1, random); // Recursive lookahead
+    const score = lookahead(nextState, move.move, depth - 1, random); // Recursive lookahead
     bestScore = Math.max(bestScore, score); // Track the best score
   }
 
@@ -128,8 +126,7 @@ const evaluateBestMove = (
   let bestScore = -Infinity;
 
   for (const move of possibleMoves) {
-    const nextState = moveBlocks(initialState, move.move.from, move.move.to);
-    const moveScore = lookahead(nextState, 2, random); // Look 1 move ahead (so total of 2 moves including this one)
+    const moveScore = lookahead(initialState, move.move, 3, random); // Look 1 move ahead (so total of 2 moves including this one)
 
     if (moveScore > bestScore) {
       bestScore = moveScore;
@@ -166,7 +163,7 @@ const isBeatable = async (
           tactic: nextMove.name
         });
 
-        playLevel = moveBlocks(playLevel, nextMove.move.from, nextMove.move.to);
+        playLevel = moveBlocks(playLevel, nextMove.move);
         if (moves.length % 10 === 0) {
           await delay(2);
         }

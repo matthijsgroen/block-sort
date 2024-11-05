@@ -136,7 +136,7 @@ export const Level: React.FC<Props> = ({
 
   const move = useCallback((from: number, to: number) => {
     setLevelState((levelState) => {
-      const updatedLevelState = moveBlocks(levelState, from, to);
+      const updatedLevelState = moveBlocks(levelState, { from, to });
       if (packageMode) {
         const revealedBlocks = getRevealedIndices(
           levelState,

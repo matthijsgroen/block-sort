@@ -1,4 +1,7 @@
-import { canPlaceBlock } from "./support";
+import { pick } from "@/support/random";
+import { timesMap } from "@/support/timeMap";
+
+import { canPlaceBlock, isColumnCorrectlySorted } from "./support";
 import { Tactic } from "./types";
 
 export const randomMove: Tactic = (level, random = Math.random) => {
@@ -10,6 +13,9 @@ export const randomMove: Tactic = (level, random = Math.random) => {
     }
     const block = c.blocks[0];
     if (block === undefined) {
+      return r;
+    }
+    if (isColumnCorrectlySorted(c)) {
       return r;
     }
 
@@ -33,17 +39,15 @@ export const randomMove: Tactic = (level, random = Math.random) => {
   if (sourceOptions.length === 0) {
     return [];
   }
-  const pickSource = Math.round(random() * (sourceOptions.length - 1));
-  const source = sourceOptions[pickSource];
-  const pickDestination = Math.round(
-    random() * (source.destinations.length - 1)
-  );
 
-  return [
-    {
-      // name: "randomMove",
-      move: { from: source.source, to: source.destinations[pickDestination] },
+  return timesMap(2, () => {
+    const source = pick(sourceOptions, random);
+    const pickDestination = pick(source.destinations, random);
+
+    return {
+      name: "randomMove",
+      move: { from: source.source, to: pickDestination },
       weight: 1
-    }
-  ];
+    };
+  });
 };

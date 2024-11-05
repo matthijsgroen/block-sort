@@ -44,7 +44,7 @@ export const testDifficulties = (
         // actual play level
         let levelState = result;
         for (const move of result.moves) {
-          levelState = moveBlocks(levelState, move.from, move.to);
+          levelState = moveBlocks(levelState, move);
         }
         const won = hasWon(levelState);
         expect(won).toBe(true);

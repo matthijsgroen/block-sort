@@ -87,7 +87,7 @@ export const isStuck = (level: LevelState): boolean => {
 
     level.columns.forEach((_dest, destIndex) => {
       if (sourceIndex === destIndex) return false;
-      playLevel = moveBlocks(playLevel, sourceIndex, destIndex);
+      playLevel = moveBlocks(playLevel, { from: sourceIndex, to: destIndex });
       const resultSig = createSignature(playLevel);
       const resultHidden = countHidden(playLevel);
       const resultCompleted = countCompleted(playLevel);
