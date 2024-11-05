@@ -126,7 +126,7 @@ const evaluateBestMove = (
   let bestScore = -Infinity;
 
   for (const move of possibleMoves) {
-    const moveScore = lookahead(initialState, move.move, 3, random); // Look 1 move ahead (so total of 2 moves including this one)
+    const moveScore = lookahead(initialState, move.move, 2, random);
 
     if (moveScore > bestScore) {
       bestScore = moveScore;
