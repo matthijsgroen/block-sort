@@ -16,6 +16,7 @@ export const stackColumn: Tactic = (level, _random = Math.random) => {
   const data = level.columns.map<ColumnData | undefined>((c, i) => {
     const topBlock = c.blocks[0];
     if (!topBlock) return undefined;
+    if (c.locked) return undefined;
     const seriesLength = selectFromColumn(level, i).length;
 
     return {

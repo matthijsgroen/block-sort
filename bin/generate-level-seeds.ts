@@ -6,7 +6,11 @@ import { writeFile } from "fs/promises";
 import * as prettier from "prettier";
 
 import { levelSeeds } from "../src/data/levelSeeds";
-import { generatePlayableLevel } from "../src/game/level-creation/tactics";
+import { debugLevel } from "../src/game/debugLevel";
+import {
+  generatePlayableLevel,
+  slowSolve
+} from "../src/game/level-creation/tactics";
 import { LEVEL_SCALE } from "../src/game/level-settings/levelSettings";
 import { SettingsProducer } from "../src/game/types";
 import { hash } from "../src/support/hash";
@@ -49,12 +53,15 @@ const progressBar = (
   );
 };
 
-const generateLevel = async (settings, seed) => {
+const generateLevel = async (settings, seed, depth = 0) => {
+  if (depth > 50) {
+    throw new Error("Too many retries (${depth * MAX_GENERATE_ATTEMPTS})");
+  }
   const random = mulberry32(seed);
   try {
     return await generatePlayableLevel(settings, random);
   } catch (ignoreError) {
-    return await generateLevel(settings, seed + 1000);
+    return await generateLevel(settings, seed + 1000, depth + 1);
   }
 };
 
@@ -399,4 +406,61 @@ program
 
     await updateSeeds(updatedSeeds);
   });
+
+program
+  .command("solve")
+  .argument("levelType", "The level type to solve")
+  .argument("difficulty", "The difficulty to solve")
+  .action(async (levelType, difficulty) => {
+    const producer = producers.find(
+      (p) => p.name.toLowerCase() === levelType.toLowerCase()
+    );
+    if (!producer) {
+      console.log(c.red(`Producer for ${levelType} not found`));
+      console.log(
+        `Available producers: ${producers.map((p) => p.name).join(", ")}`
+      );
+      process.exit(1);
+    }
+    if (
+      isNaN(parseInt(difficulty)) ||
+      parseInt(difficulty) < 1 ||
+      parseInt(difficulty) > 11
+    ) {
+      console.log(c.red("Difficulty must be a number between 1 and 11"));
+      process.exit(1);
+    }
+    const settings = producer.producer(difficulty);
+
+    const clearScreen = () => {
+      console.clear();
+    };
+    clearScreen();
+
+    const wait = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    const random = mulberry32(SEED);
+    await slowSolve(
+      settings,
+      async (state, move, moveIndex) => {
+        clearScreen();
+        console.log(
+          "Move: ",
+          moveIndex,
+          " from: ",
+          move.from,
+          " to: ",
+          move.to
+        );
+        debugLevel(state);
+        await wait(1000);
+
+        return true;
+      },
+      random
+    );
+    console.log("ended");
+  });
+
 program.parse(process.argv);

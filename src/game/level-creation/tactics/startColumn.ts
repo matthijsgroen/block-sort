@@ -26,6 +26,7 @@ export const startColumn: Tactic = (level, random = Math.random) => {
   const colorCount = level.columns.reduce<Record<string, number[]>>(
     (r, c, i) => {
       const block = c.blocks[0];
+      if (c.locked) return r;
       if (block) {
         r[block.color] = (r[block.color] ?? []).concat(i);
       }

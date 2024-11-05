@@ -79,17 +79,15 @@ const generatePossibleMoves = (
   state: LevelState,
   random = Math.random
 ): WeightedMove[] =>
-  tactics
-    .reduce<WeightedMove[]>(
-      (r, tactic) =>
-        r.concat(
-          tactic(state, random)
-            .sort((a, b) => a.weight - b.weight)
-            .slice(0, 3)
-        ),
-      []
-    )
-    .sort((a, b) => a.weight - b.weight);
+  tactics.reduce<WeightedMove[]>(
+    (r, tactic) =>
+      r.concat(
+        tactic(state, random)
+          .sort((a, b) => a.weight - b.weight)
+          .slice(0, 3)
+      ),
+    []
+  );
 
 const lookahead = (
   state: LevelState,
@@ -139,7 +137,12 @@ const evaluateBestMove = (
 
 const isBeatable = async (
   level: LevelState,
-  random = Math.random
+  random = Math.random,
+  displayState?: (
+    state: LevelState,
+    move: Move,
+    moveIndex: number
+  ) => Promise<boolean>
 ): Promise<[beatable: boolean, moves: Move[], cost: number]> => {
   let attempt = 0;
 
@@ -164,6 +167,16 @@ const isBeatable = async (
         });
 
         playLevel = moveBlocks(playLevel, nextMove.move);
+        if (displayState) {
+          const keepSolving = await displayState(
+            playLevel,
+            nextMove.move,
+            moves.length
+          );
+          if (!keepSolving) {
+            return [false, [], 0];
+          }
+        }
         if (moves.length % 10 === 0) {
           await delay(2);
         }
@@ -176,4 +189,36 @@ const isBeatable = async (
   }
 
   return [false, [], 0];
+};
+
+export const slowSolve = async (
+  settings: LevelSettings,
+  displayState: (
+    state: LevelState,
+    move: Move,
+    moveIndex: number
+  ) => Promise<boolean>,
+  random = Math.random,
+  seed: number | null = null
+): Promise<Move[]> => {
+  // Start logging level seeds for faster reproduction
+  const startSeed = seed ?? Math.floor(random() * 1e9);
+
+  const generationRandom = mulberry32(startSeed);
+
+  let level = generateRandomLevel(settings, generationRandom);
+
+  while (isStuck(level) || !allShuffled(level)) {
+    level = generateRandomLevel(settings, generationRandom);
+  }
+
+  const [beatable, moves] = await isBeatable(
+    level,
+    generationRandom,
+    displayState
+  );
+  if (beatable) {
+    return moves;
+  }
+  return [];
 };
