@@ -30,6 +30,11 @@ type Seeder = {
   name: string;
 };
 
+const clearLine = () => {
+  process.stdout.clearLine(0);
+  process.stdout.cursorTo(0);
+};
+
 const progressBar = (
   current: number,
   total: number,
@@ -38,8 +43,9 @@ const progressBar = (
   const percentage = (current / total) * 100;
   const filledLength = Math.round((barLength * current) / total);
   const bar = "█".repeat(filledLength) + "-".repeat(barLength - filledLength);
+  clearLine();
   process.stdout.write(
-    `[${bar}] ${current}/${total} (${percentage.toFixed(2)}%)        \r`
+    `[${bar}] ${current}/${total} (${percentage.toFixed(2)}%)\r`
   );
 };
 
@@ -75,6 +81,7 @@ const produceExtraSeeds = async (
     }
     progressBar(i + 1, amount);
   }
+  clearLine();
 };
 
 const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
@@ -117,7 +124,7 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
     );
     console.log(
       c.green(
-        `Generating additional ${additionalNeeded} level seeds for "${incompleteSeed.name}", difficulty ${incompleteSeed.difficulty + 1}...    `
+        `Seeding ${additionalNeeded} more for "${incompleteSeed.name}" - ${incompleteSeed.difficulty + 1}...    `
       )
     );
     let time = Date.now();
@@ -128,12 +135,13 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
       GENERATE_BATCH_SIZE,
       async () => {
         time = Date.now() - time;
-        if (time > 60_000) {
+        count++;
+        if (time > 45_000) {
           // longer than a minute
           count = 0;
           await updateSeeds(levelSeedsCopy);
         }
-        if (time > 10_000 && count > 5) {
+        if (time * count > 45_000) {
           // longer than a minute
           count = 0;
           await updateSeeds(levelSeedsCopy);
@@ -147,7 +155,7 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
   if (firstMissing && !incompleteSeed) {
     console.log(
       c.green(
-        `Generating ${GENERATE_BATCH_SIZE} level seeds for "${firstMissing.name}", difficulty ${firstMissing.difficulty + 1}...      `
+        `Seeding ${GENERATE_BATCH_SIZE} for "${firstMissing.name}" - ${firstMissing.difficulty + 1}...      `
       )
     );
     let time = Date.now();
@@ -158,12 +166,13 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
       GENERATE_BATCH_SIZE,
       async () => {
         time = Date.now() - time;
-        if (time > 60_000) {
+        count++;
+        if (time > 45_000) {
           // longer than a minute
           count = 0;
           await updateSeeds(levelSeedsCopy);
         }
-        if (time > 10_000 && count > 5) {
+        if (time * count > 45_000) {
           // longer than a minute
           count = 0;
           await updateSeeds(levelSeedsCopy);
