@@ -49,9 +49,35 @@ const progressBar = (
   const percentage = (current / total) * 100;
   const filledLength = Math.round((barLength * current) / total);
   const bar = "█".repeat(filledLength) + "-".repeat(barLength - filledLength);
-  clearLine();
   process.stdout.write(
     `[${bar}] ${current}/${total} (${percentage.toFixed(2)}%)\r`
+  );
+};
+
+const doubleProgressBar = (
+  currentStep: number,
+  totalSteps: number,
+  current: number,
+  total: number,
+  barLength = 40
+) => {
+  const percentage = (currentStep / totalSteps) * 100;
+
+  const filledLength = Math.round((barLength * current) / total);
+  const filledStepLength = Math.round((barLength * currentStep) / totalSteps);
+  const both = Math.min(filledLength, filledStepLength);
+  const barFilledLength = Math.max(filledLength, filledStepLength);
+
+  let bar = "█".repeat(both);
+  if (filledLength > filledStepLength) {
+    bar += "▄".repeat(barFilledLength - both);
+  } else {
+    bar += "▀".repeat(barFilledLength - both);
+  }
+  bar += "-".repeat(barLength - barFilledLength);
+
+  process.stdout.write(
+    `[${bar}] ${currentStep}/${totalSteps} (${percentage.toFixed(2)}%) - ${current}/${total}\r`
   );
 };
 
@@ -77,6 +103,7 @@ const produceExtraSeeds = async (
   const settings = producer(firstMissing.difficulty + 1);
   const existing = copy[firstMissing.hash]?.length ?? 0;
 
+  clearLine();
   progressBar(0, amount);
   for (let i = 0; i < amount; i++) {
     const seed = SEED + i + existing;
@@ -88,6 +115,7 @@ const produceExtraSeeds = async (
       copy[firstMissing.hash].push(level.generationInformation.seed);
       await onSeedAdded(level.generationInformation.seed);
     }
+    clearLine();
     progressBar(i + 1, amount);
   }
   clearLine();
@@ -252,10 +280,14 @@ program
 program
   .command("verify")
   .option("-a, --all", "remove all items that are broken", false)
-  .option("--quick", "test a single seed per setting", false)
-  .action(async (options: { all?: boolean; quick?: boolean }) => {
+  .option(
+    "-s, --sample <amount>",
+    "amount of seeds to test per setting (default is 5)",
+    (v) => parseInt(v, 10)
+  )
+  .action(async (options: { all?: boolean; sample: number }) => {
     const all = options.all;
-    const quick = options.quick;
+    const sampleSize = options.sample ?? VERIFICATION_STEPS;
     let foundIssues = false;
 
     const keys = Object.keys(levelSeeds);
@@ -284,8 +316,8 @@ program
             )
           );
         });
-      console.log("Please run 'run' first.\n");
       if (!all) {
+        console.log("Please run 'run' first.\n");
         process.exit(1);
       } else {
         foundIssues = true;
@@ -307,20 +339,16 @@ program
           )
         );
         if (!all) {
+          console.log("Please run 'run' to generate extra seeds.\n");
           process.exit(1);
         } else {
           foundIssues = true;
         }
       }
-      process.stdout.write(
-        `Verifying "${key.name}" difficulty ${key.difficulty + 1}...\n`
-      );
 
-      const steps = quick ? 1 : VERIFICATION_STEPS;
-
-      const stepSize = seeds.length / steps;
+      const stepSize = seeds.length / sampleSize;
       const seedsToTest = timesMap(
-        steps,
+        sampleSize,
         (i) => seeds[Math.floor(i * stepSize)]
       );
       for (const seed of seedsToTest) {
@@ -336,22 +364,34 @@ program
         }
         const random = mulberry32(seed);
         const settings = key.producer(key.difficulty + 1);
-        if (seedsToTest.length > 1) {
-          progressBar(seedsToTest.indexOf(seed), seedsToTest.length);
+        clearLine();
+        process.stdout.write(
+          `Verifying "${key.name}" difficulty ${key.difficulty + 1}... `
+        );
+        if (sampleSize > 1) {
+          doubleProgressBar(
+            existingKeys.indexOf(key),
+            existingKeys.length,
+
+            seedsToTest.indexOf(seed),
+            seedsToTest.length
+          );
+        } else {
+          progressBar(existingKeys.indexOf(key), existingKeys.length);
         }
+
         try {
           const level = await generatePlayableLevel(settings, random, seed);
           clearLine();
           if (level.generationInformation?.seed !== seed) {
-            console.log(c.red("Seed has not stayed the same"));
-
             updatedSeeds = removeSeedsForKey(key.hash, updatedSeeds);
             await updateSeeds(updatedSeeds);
 
             console.log(
-              `Seeds for "${key.name}" difficulty ${key.difficulty + 1} removed. Please run 'run' to generate new ones.`
+              `Seeds for "${key.name}" difficulty ${key.difficulty + 1} did not stay the same, and was removed.`
             );
             if (!all) {
+              console.log("Please run 'run' to regenerate the seeds.\n");
               process.exit(1);
             } else {
               foundIssues = true;
@@ -359,17 +399,16 @@ program
             }
           }
         } catch (ignoreError) {
-          console.log("");
-          console.log(c.red("Unable to generate level"));
           updatedSeeds = removeSeedsForKey(key.hash, updatedSeeds);
 
           await updateSeeds(updatedSeeds);
 
           console.log(
-            `Seeds for "${key.name}" difficulty ${key.difficulty + 1} removed. Please run 'run' to generate new ones.`
+            `Unable to generate level using seed for "${key.name}" difficulty ${key.difficulty + 1}. Removed seeds.`
           );
 
           if (!all) {
+            console.log("Please run 'run' to regenerate the seeds.\n");
             process.exit(1);
           } else {
             foundIssues = true;
@@ -380,7 +419,7 @@ program
     }
     console.log("");
     if (foundIssues) {
-      console.log("Done.");
+      console.log("Please run 'run' to regenerate the seeds.\n");
       process.exit(1);
     } else {
       console.log("All ok!");
