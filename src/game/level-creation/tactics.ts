@@ -141,6 +141,7 @@ const isBeatable = async (
   displayState?: (
     state: LevelState,
     move: Move,
+    tactic: string,
     moveIndex: number
   ) => Promise<boolean>
 ): Promise<[beatable: boolean, moves: Move[], cost: number]> => {
@@ -171,6 +172,7 @@ const isBeatable = async (
           const keepSolving = await displayState(
             playLevel,
             nextMove.move,
+            nextMove.name ?? "unknown",
             moves.length
           );
           if (!keepSolving) {
@@ -196,6 +198,7 @@ export const slowSolve = async (
   displayState: (
     state: LevelState,
     move: Move,
+    tactic: string,
     moveIndex: number
   ) => Promise<boolean>,
   random = Math.random,

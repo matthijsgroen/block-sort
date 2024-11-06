@@ -8,6 +8,7 @@ type ColumnData = {
   color: BlockColor;
   seriesLength: number;
   spaceAvailable: number;
+  bottomStacked: boolean;
   columnType: "placement" | "buffer";
 };
 
@@ -24,6 +25,7 @@ export const stackColumn: Tactic = (level, _random = Math.random) => {
       color: topBlock.color,
       seriesLength,
       spaceAvailable: c.columnSize - c.blocks.length,
+      bottomStacked: c.blocks.length === seriesLength,
       columnType: c.type
     };
   });
@@ -38,7 +40,7 @@ export const stackColumn: Tactic = (level, _random = Math.random) => {
             s !== undefined &&
             s.color === d.color &&
             d.index !== s.index &&
-            s.seriesLength <= d.spaceAvailable
+            (s.seriesLength <= d.spaceAvailable || d.bottomStacked)
         )
       };
     });
@@ -62,18 +64,15 @@ export const stackColumn: Tactic = (level, _random = Math.random) => {
           if (targetData !== undefined && targetData.spaceAvailable < 2) {
             bonusPoints += 5; // prefer filling up columns
           }
-          if (
-            targetData !== undefined &&
-            targetData.seriesLength === level.columns[t.index].blocks.length
-          ) {
+          if (targetData !== undefined && targetData.bottomStacked) {
             bonusPoints += 10; // single color column should have top priority
           }
           if (
             targetData !== undefined &&
-            targetData.seriesLength === level.columns[t.index].blocks.length &&
+            targetData.bottomStacked &&
             level.columns[t.index].type === "placement"
           ) {
-            bonusPoints += 30; // single color column should have top priority
+            bonusPoints += level.columns[t.index].blocks.length * 4; // single color column should have top priority
           }
 
           if (revealedColor === undefined) {

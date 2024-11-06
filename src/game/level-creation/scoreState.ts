@@ -132,7 +132,7 @@ export const scoreStateWithMove = (state: LevelState, move: Move): number => {
   let score = scoreState(newState);
 
   if (isBufferMove(state, move)) {
-    score -= 20;
+    score -= 10;
   }
 
   if (isPartialMove(state, move)) {

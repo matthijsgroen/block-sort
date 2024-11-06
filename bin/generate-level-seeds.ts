@@ -15,6 +15,7 @@ import { LEVEL_SCALE } from "../src/game/level-settings/levelSettings";
 import { SettingsProducer } from "../src/game/types";
 import { hash } from "../src/support/hash";
 import { mulberry32 } from "../src/support/random";
+import { timesMap } from "../src/support/timeMap";
 
 import { producers } from "./producers";
 
@@ -24,6 +25,7 @@ const SEED = 123456789012345;
 
 const MINIMAL_LEVELS = 100;
 const GENERATE_BATCH_SIZE = 50;
+const VERIFICATION_STEPS = 5;
 
 const scale: number[] = [0, ...LEVEL_SCALE];
 
@@ -91,7 +93,15 @@ const produceExtraSeeds = async (
   clearLine();
 };
 
-const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
+program
+  .name("generate-level-seeds")
+  .description("Generate or update level seeds")
+  .version("0.1.0");
+
+const updateLevelSeeds = async (
+  all: boolean,
+  levelSeeds: Record<string, number[]>
+) => {
   const keys = Object.keys(levelSeeds);
 
   const levelSeedsCopy = { ...levelSeeds };
@@ -195,7 +205,7 @@ const main = async (all: boolean, levelSeeds: Record<string, number[]>) => {
 
   await updateSeeds(levelSeedsCopy);
   if (all) {
-    await main(true, levelSeedsCopy);
+    await updateLevelSeeds(true, levelSeedsCopy);
   }
 };
 
@@ -232,17 +242,13 @@ const updateSeeds = async (updatedLevelSeeds: Record<string, number[]>) => {
 };
 
 program
-  .name("generate-level-seeds")
-  .description("Generate or update level seeds")
-  .version("0.1.0");
-
-program
   .command("run")
   .option("-a, --all", "updates all items that are broken", false)
   .action(async (options: { all?: boolean }) => {
     console.log(c.bold("Updating level seeds..."));
-    await main(!!options.all, levelSeeds);
+    await updateLevelSeeds(!!options.all, levelSeeds);
   });
+
 program
   .command("verify")
   .option("-a, --all", "remove all items that are broken", false)
@@ -305,13 +311,14 @@ program
         }
       }
       process.stdout.write(
-        `Verifying "${key.name}" difficulty ${key.difficulty + 1}...      \r`
+        `Verifying "${key.name}" difficulty ${key.difficulty + 1}...\n`
       );
-      const seedsToTest = [
-        seeds[0],
-        seeds[Math.floor(seeds.length / 2)],
-        seeds.at(-1)
-      ];
+
+      const stepSize = seeds.length / VERIFICATION_STEPS;
+      const seedsToTest = timesMap(
+        VERIFICATION_STEPS,
+        (i) => seeds[Math.floor(i * stepSize)]
+      );
       for (const seed of seedsToTest) {
         if (!seed) {
           console.log("");
@@ -325,10 +332,11 @@ program
         }
         const random = mulberry32(seed);
         const settings = key.producer(key.difficulty + 1);
+        progressBar(seedsToTest.indexOf(seed), seedsToTest.length);
         try {
           const level = await generatePlayableLevel(settings, random, seed);
+          clearLine();
           if (level.generationInformation?.seed !== seed) {
-            console.log("");
             console.log(c.red("Seed has not stayed the same"));
 
             updatedSeeds = removeSeedsForKey(key.hash, updatedSeeds);
@@ -443,7 +451,7 @@ program
     const random = mulberry32(SEED);
     await slowSolve(
       settings,
-      async (state, move, moveIndex) => {
+      async (state, move, tactic, moveIndex) => {
         clearScreen();
         console.log(
           "Move: ",
@@ -451,7 +459,9 @@ program
           " from: ",
           move.from,
           " to: ",
-          move.to
+          move.to,
+          " tactic: ",
+          tactic
         );
         debugLevel(state);
         await wait(1000);
