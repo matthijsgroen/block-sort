@@ -21,7 +21,7 @@ describe(randomMove, () => {
     );
     const moves = randomMove(level, random);
 
-    expect(moves).toHaveLength(1);
+    expect(moves).toHaveLength(2);
     expect(moves[0].weight).toEqual(1);
     expect(moves[0].move).toEqual({ from: 3, to: 4 });
   });
@@ -39,8 +39,8 @@ describe(randomMove, () => {
     randomMove(level, random);
     const moves = randomMove(level, random);
 
-    expect(moves).toHaveLength(1);
+    expect(moves).toHaveLength(2);
     expect(moves[0].weight).toEqual(1);
-    expect(moves[0].move).toEqual({ from: 3, to: 4 });
+    expect(moves[0].move).toEqual({ from: 1, to: 4 });
   });
 });

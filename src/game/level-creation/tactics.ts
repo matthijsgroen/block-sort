@@ -39,8 +39,13 @@ export const generatePlayableLevel = async (
     if (isStuck(level) || !allShuffled(level)) {
       continue;
     }
-    const [beatable, moves, cost] = await isBeatable(level, generationRandom);
+    const [beatable, solveMoves, cost] = await isBeatable(
+      level,
+      generationRandom
+    );
     const generationCost = cost + attempt * MAX_GENERATE_COST;
+    // Scrub name from moves
+    const moves = solveMoves.map<Move>(({ from, to }) => ({ from, to }));
     if (beatable) {
       if (settings.playMoves !== undefined) {
         const [minMoves, maxMovesPercentage] = settings.playMoves;

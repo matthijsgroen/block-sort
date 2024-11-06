@@ -25,10 +25,10 @@ describe(startColumn, () => {
 
     expect(moves).toHaveLength(2);
 
-    expect(moves[0].weight).toEqual(10);
+    expect(moves[0].weight).toEqual(9);
     expect(moves[0].move).toEqual({ from: 0, to: 4 });
 
-    expect(moves[1].weight).toEqual(10);
+    expect(moves[1].weight).toEqual(9);
     expect(moves[1].move).toEqual({ from: 1, to: 4 });
   });
 
@@ -45,16 +45,16 @@ describe(startColumn, () => {
 
     expect(moves).toHaveLength(4);
 
-    expect(moves[0].weight).toEqual(10);
+    expect(moves[0].weight).toEqual(9);
     expect(moves[0].move).toEqual({ from: 0, to: 4 });
 
-    expect(moves[1].weight).toEqual(10);
+    expect(moves[1].weight).toEqual(9);
     expect(moves[1].move).toEqual({ from: 1, to: 4 });
 
-    expect(moves[2].weight).toEqual(10);
+    expect(moves[2].weight).toEqual(9);
     expect(moves[2].move).toEqual({ from: 2, to: 4 });
 
-    expect(moves[3].weight).toEqual(10);
+    expect(moves[3].weight).toEqual(9);
     expect(moves[3].move).toEqual({ from: 3, to: 4 });
   });
 
@@ -70,13 +70,13 @@ describe(startColumn, () => {
     const moves = startColumn(level, random);
 
     expect(moves).toHaveLength(3);
-    expect(moves[0].weight).toEqual(14);
+    expect(moves[0].weight).toEqual(13);
     expect(moves[0].move).toEqual({ from: 0, to: 4 });
 
-    expect(moves[1].weight).toEqual(14);
+    expect(moves[1].weight).toEqual(13);
     expect(moves[1].move).toEqual({ from: 1, to: 4 });
 
-    expect(moves[2].weight).toEqual(14);
+    expect(moves[2].weight).toEqual(13);
     expect(moves[2].move).toEqual({ from: 2, to: 4 });
   });
 
@@ -93,7 +93,7 @@ describe(startColumn, () => {
     expect(moves).toHaveLength(0);
   });
 
-  it("does not return moves when there is need to create new column", () => {
+  it("returns stacking moves when there is need to create new column", () => {
     const random = mulberry32(TEST_SEED);
     const level = createLevelState([
       createPlacementColumn(4, createBlocks("aqua", "pink", "green", "aqua")),
@@ -105,6 +105,7 @@ describe(startColumn, () => {
     ]);
     const moves = startColumn(level, random);
 
-    expect(moves).toHaveLength(0);
+    expect(moves).toHaveLength(2);
+    expect(moves[0].name).toEqual("stackColumn");
   });
 });
