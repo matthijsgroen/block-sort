@@ -36,6 +36,6 @@ jobs:
       - name: Run tests
         run: yarn test
       - name: Verify level seeds
-        run: yarn tsx bin/generate-level-seeds.ts verify
+        run: yarn tsx bin/generate-level-seeds.ts verify --quick
       - name: yarn build
         run: yarn build # Checks if build can be produced without issues

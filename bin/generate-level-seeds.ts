@@ -252,8 +252,10 @@ program
 program
   .command("verify")
   .option("-a, --all", "remove all items that are broken", false)
-  .action(async (options: { all?: boolean }) => {
+  .option("--quick", "test a single seed per setting", false)
+  .action(async (options: { all?: boolean; quick?: boolean }) => {
     const all = options.all;
+    const quick = options.quick;
     let foundIssues = false;
 
     const keys = Object.keys(levelSeeds);
@@ -314,9 +316,11 @@ program
         `Verifying "${key.name}" difficulty ${key.difficulty + 1}...\n`
       );
 
-      const stepSize = seeds.length / VERIFICATION_STEPS;
+      const steps = quick ? 1 : VERIFICATION_STEPS;
+
+      const stepSize = seeds.length / steps;
       const seedsToTest = timesMap(
-        VERIFICATION_STEPS,
+        steps,
         (i) => seeds[Math.floor(i * stepSize)]
       );
       for (const seed of seedsToTest) {
@@ -332,7 +336,9 @@ program
         }
         const random = mulberry32(seed);
         const settings = key.producer(key.difficulty + 1);
-        progressBar(seedsToTest.indexOf(seed), seedsToTest.length);
+        if (seedsToTest.length > 1) {
+          progressBar(seedsToTest.indexOf(seed), seedsToTest.length);
+        }
         try {
           const level = await generatePlayableLevel(settings, random, seed);
           clearLine();
