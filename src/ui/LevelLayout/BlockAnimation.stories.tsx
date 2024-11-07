@@ -150,8 +150,8 @@ const Loader: React.FC<{ level: Promise<LevelState> }> = ({ level }) => {
   }, [state, item]);
 
   return (
-    <>
-      <h1 className="mb-4 text-center text-white">
+    <div className="flex w-full min-w-96 flex-col">
+      <h1 className="mb-3 text-center font-mono text-xl text-white">
         Moves: {state.moves.length}
       </h1>
       <LevelLayout
@@ -160,7 +160,7 @@ const Loader: React.FC<{ level: Promise<LevelState> }> = ({ level }) => {
         animateBlocks={true}
         selection={selection}
       />
-    </>
+    </div>
   );
 };
 
