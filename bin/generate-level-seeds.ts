@@ -6,6 +6,7 @@ import { Command } from "commander";
 import { levelSeeds } from "../src/data/levelSeeds";
 import { debugLevel } from "../src/game/debugLevel";
 import { slowSolve } from "../src/game/level-creation/tactics";
+import { SEED } from "../src/modules/SeedGenerator/constants";
 import { updateLevelSeeds } from "../src/modules/SeedGenerator/generateSeeds";
 import { producers } from "../src/modules/SeedGenerator/producers";
 import { removeSeedsForKey } from "../src/modules/SeedGenerator/removeSeeds";
