@@ -1,3 +1,5 @@
+import { LevelSettings } from "@/game/types";
+
 // Source: https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
 export const hash = (str: string): number => {
   let hash = 0,
@@ -10,4 +12,13 @@ export const hash = (str: string): number => {
     hash |= 0; // Convert to 32bit integer
   }
   return hash;
+};
+
+export const settingsHash = (settings: LevelSettings): string => {
+  const hashVersion: LevelSettings = {
+    ...settings,
+    hideBlockTypes: settings.hideBlockTypes ?? "none",
+    extraBuffers: (settings.extraBuffers ?? []).filter((b) => b.amount > 0)
+  };
+  return hash(JSON.stringify(hashVersion)).toString();
 };
