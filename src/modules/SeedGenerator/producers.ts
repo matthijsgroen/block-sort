@@ -1,22 +1,22 @@
-import {
-  getHard2Settings,
-  getHardSettings
-} from "../src/game/level-types/hard";
+import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
 import {
   getNormal2Settings,
   getNormal3Settings,
   getNormal4Settings,
   getNormalSettings
-} from "../src/game/level-types/normal";
+} from "@/game/level-types/normal";
 import {
   getSpecial1Settings,
   getSpecial2Settings,
   getSpecial3Settings,
   getSpecial4Settings,
   getSpecial5Settings
-} from "../src/game/level-types/special";
-import { getSpringSettings } from "../src/game/level-types/spring";
-import { SettingsProducer } from "../src/game/types";
+} from "@/game/level-types/special";
+import { getSpringSettings } from "@/game/level-types/spring";
+import { SettingsProducer } from "@/game/types";
+import { settingsHash } from "@/support/hash";
+
+import { getHard2Settings, getHardSettings } from "../../game/level-types/hard";
 
 export type Producer = {
   name: string;
@@ -37,3 +37,24 @@ export const producers: Producer[] = [
   { name: "Hard2", producer: getHard2Settings },
   { name: "Spring", producer: getSpringSettings }
 ];
+
+const scale: number[] = [0, ...LEVEL_SCALE];
+
+export type Seeder = {
+  hash: string;
+  producer: SettingsProducer;
+  difficulty: number;
+  name: string;
+};
+
+export const levelProducers = producers.flatMap((producer) =>
+  scale.reduce<Seeder[]>((acc, _lvl, index) => {
+    const settings = producer.producer(index + 1);
+    return acc.concat({
+      hash: settingsHash(settings),
+      name: producer.name,
+      producer: producer.producer,
+      difficulty: index
+    });
+  }, [])
+);
