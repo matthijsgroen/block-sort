@@ -20,7 +20,7 @@ import {
 } from "@/game/level-types/special";
 import { getSpringSettings } from "@/game/level-types/spring";
 import { LevelSettings, LevelState } from "@/game/types";
-import { hash } from "@/support/hash";
+import { settingsHash } from "@/support/hash";
 import { mulberry32 } from "@/support/random";
 
 import { Loading } from "../Loading/Loading";
@@ -170,12 +170,9 @@ export const BlockAnimation: Story = {
   render: (args) => {
     const producer = settingProducer[args.levelType];
     const levelSettings = producer(Math.min(Math.max(args.difficulty, 1), 12));
-    const hashVersion = { ...levelSettings };
-    delete hashVersion["playMoves"];
+    const hash = settingsHash(levelSettings);
 
-    const settingsHash = hash(JSON.stringify(hashVersion)).toString();
-
-    const seeds = levelSeeds[settingsHash] ?? [];
+    const seeds = levelSeeds[hash] ?? [];
     const preSeed = seeds[0];
     const random = mulberry32(preSeed);
     const level = generatePlayableLevel(levelSettings, random, preSeed);
