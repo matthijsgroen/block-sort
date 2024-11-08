@@ -2,6 +2,7 @@ import { levelModifiers } from "@/game/level-types/types";
 
 import { BlockColor } from "../types";
 
+import { colorMap as colorMapDaily, shapeMap as shapeMapDaily } from "./daily";
 import { colorMap, shapeMap } from "./default";
 import { colorMap as colorMapFall, shapeMap as shapeMapFall } from "./fall";
 import {
@@ -22,7 +23,8 @@ export type BlockTheme =
   | "halloween"
   | "winter"
   | "spring"
-  | "summer";
+  | "summer"
+  | "daily";
 
 export const getShapeMapping = (
   theme: BlockTheme
@@ -32,7 +34,8 @@ export const getShapeMapping = (
     halloween: shapeMapFall,
     winter: shapeMapWinter,
     spring: shapeMapSpring,
-    summer: shapeMapSummer
+    summer: shapeMapSummer,
+    daily: shapeMapDaily
   };
   return mapping[theme];
 };
@@ -45,7 +48,8 @@ export const getColorMapping = (
     halloween: colorMapFall,
     winter: colorMapWinter,
     spring: colorMapSpring,
-    summer: colorMapSummer
+    summer: colorMapSummer,
+    daily: colorMapDaily
   };
   return mapping[theme];
 };

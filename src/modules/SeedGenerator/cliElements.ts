@@ -36,7 +36,7 @@ export const doubleProgressBar = (
   } else {
     bar += "▀".repeat(barFilledLength - both);
   }
-  bar += "-".repeat(barLength - barFilledLength);
+  bar += "-".repeat(Math.max(barLength - barFilledLength, 0));
 
   process.stdout.write(
     `[${bar}] ${currentStep}/${totalSteps} (${percentage.toFixed(2)}%) - ${current}/${total}\r`
