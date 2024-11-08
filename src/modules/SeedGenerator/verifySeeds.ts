@@ -27,7 +27,7 @@ export const verifySeeds = async (
       .forEach((key) => {
         console.log(
           c.red(
-            `Seeds missing for "${key.name} difficulty ${key.difficulty + 1}`
+            `Seeds missing for "${key.name}" difficulty ${key.difficulty + 1}`
           )
         );
       });

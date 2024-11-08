@@ -148,7 +148,8 @@ export const LevelLayout: React.FC<Props> = ({
   );
 
   const maxColumnSize = levelState.columns.reduce(
-    (r, c) => Math.max(r, c.columnSize),
+    (r, c) =>
+      Math.max(r, c.columnSize + (c.paddingBottom ?? 0) + (c.paddingTop ?? 0)),
     0
   );
   const cols = determineColumns(maxColumnSize, levelState.columns.length);

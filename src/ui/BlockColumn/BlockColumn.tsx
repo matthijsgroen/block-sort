@@ -13,7 +13,7 @@ import { Tray } from "@/ui/Tray/Tray";
 
 import { BlockTheme, getColorMapping, getShapeMapping } from "@/game/themes";
 import { Column } from "@/game/types";
-import { rowSpans } from "@/support/grid";
+import { colPadding, rowSpans } from "@/support/grid";
 import { timesMap } from "@/support/timeMap";
 
 import styles from "./BlockColumn.module.css";
@@ -127,7 +127,7 @@ export const BlockColumn: React.FC<Props> = ({
 
   return (
     <div
-      className={`${rowSpans[column.columnSize + 1]} justify-self-center pb-2`}
+      className={`${rowSpans[column.columnSize + 1 + (column.paddingBottom ?? 0) + (column.paddingTop ?? 0)]} justify-self-center pb-2 ${colPadding[column.paddingTop ?? 0]}`}
     >
       <div
         ref={columnRef}

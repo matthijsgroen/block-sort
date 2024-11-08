@@ -20,5 +20,6 @@ export const settingsHash = (settings: LevelSettings): string => {
     hideBlockTypes: settings.hideBlockTypes ?? "none",
     extraBuffers: (settings.extraBuffers ?? []).filter((b) => b.amount > 0)
   };
+  delete hashVersion.layoutMap;
   return hash(JSON.stringify(hashVersion)).toString();
 };

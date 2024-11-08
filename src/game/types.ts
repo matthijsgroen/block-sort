@@ -81,6 +81,8 @@ export type Column = {
    * the first index is always the top block.
    */
   blocks: Block[];
+  paddingTop?: number;
+  paddingBottom?: number;
 };
 
 export type LevelSettings = {
@@ -101,6 +103,16 @@ export type LevelSettings = {
     unlimited?: boolean;
   }[];
   playMoves?: [minCount: number, maxPercent: number];
+  layoutMap?: LayoutMap;
 };
 
 export type SettingsProducer = (difficulty: number) => LevelSettings;
+
+export type LayoutMap = {
+  columns: {
+    fromColumn: number;
+    toColumn: number;
+    paddingTop?: number;
+    paddingBottom?: number;
+  }[];
+};
