@@ -27,7 +27,9 @@ export const InstallPrompt: React.FC<Props> = ({ onClose, onOpenManual }) => (
         "max-h-[calc(100vh-200px)] overflow-y-auto"
       )}
     >
-      <TransparentButton onClick={onOpenManual}>Game Manual</TransparentButton>
+      <TransparentButton onClick={onOpenManual} icon="question_mark">
+        Game Manual
+      </TransparentButton>
       <InstallationInstructions />
     </div>
   </Dialog>

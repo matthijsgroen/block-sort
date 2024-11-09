@@ -8,7 +8,6 @@ import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";
 
 import info from "@/../package.json";
 import { THEMES } from "@/featureFlags";
-import { TextEmoji } from "@/support/Emoji";
 
 import { Attribution } from "./Attribution";
 import { Changelog } from "./Changelog";
@@ -43,7 +42,7 @@ export const Settings: React.FC<Props> = ({
 
   return (
     <Dialog
-      wide={activeTab === "changes" || activeTab === "attribution"}
+      wide={activeTab === "changes"}
       onClose={() => {
         onClose?.();
       }}
@@ -72,9 +71,8 @@ export const Settings: React.FC<Props> = ({
               <div>
                 <TransparentButton
                   onClick={() => setShowThemes((show) => !show)}
-                >
-                  📅
-                </TransparentButton>
+                  icon="calendar_month"
+                ></TransparentButton>
               </div>
             </div>
           )}
@@ -104,8 +102,9 @@ export const Settings: React.FC<Props> = ({
                   // Nothing to do, user probably canceled the share
                 }
               }}
+              icon="share"
             >
-              <TextEmoji emoji="❤︎" className="text-xl" /> Share
+              Share
             </TransparentButton>
           )}
           <p className="text-xs">
@@ -123,9 +122,10 @@ export const Settings: React.FC<Props> = ({
             <TransparentButton onClick={() => setActiveTab("advanced")}>
               Advanced
             </TransparentButton>
-            <TransparentButton href={"https://buymeacoffee.com/matthijsgroen"}>
-              <TextEmoji emoji="☕️" className="text-xl" />
-            </TransparentButton>
+            <TransparentButton
+              href={"https://buymeacoffee.com/matthijsgroen"}
+              icon="coffee"
+            ></TransparentButton>
             <TransparentButton onClick={() => setActiveTab("attribution")}>
               Attribution
             </TransparentButton>
@@ -134,17 +134,27 @@ export const Settings: React.FC<Props> = ({
       )}
       {activeTab === "advanced" && (
         <div className="flex flex-col gap-3 pb-4">
-          <TransparentButton onClick={() => setActiveTab("settings")}>
+          <TransparentButton
+            onClick={() => setActiveTab("settings")}
+            icon="arrow_back"
+          >
             Back
           </TransparentButton>
-          <TransparentButton onClick={() => setActiveTab("changes")}>
+          <TransparentButton
+            onClick={() => setActiveTab("changes")}
+            icon="update"
+          >
             Recent changes
           </TransparentButton>
-          <TransparentButton href={"https://buymeacoffee.com/matthijsgroen"}>
-            <TextEmoji emoji="☕️" className="text-md" /> Buy me a coffee
+          <TransparentButton
+            href={"https://buymeacoffee.com/matthijsgroen"}
+            icon="coffee"
+          >
+            Buy me a coffee
           </TransparentButton>
           <TransparentButton
             href={`mailto:matthijs.groen@gmail.com?subject=[BlockSort]-Feedback`}
+            icon="mail"
           >
             Feedback
           </TransparentButton>
@@ -152,6 +162,7 @@ export const Settings: React.FC<Props> = ({
             onClick={() => {
               setActiveTab("data");
             }}
+            icon={"cloud_upload"}
           >
             Transfer game data
           </TransparentButton>
@@ -159,7 +170,10 @@ export const Settings: React.FC<Props> = ({
       )}
       {activeTab === "changes" && (
         <div className="flex flex-col gap-3 pb-4">
-          <TransparentButton onClick={() => setActiveTab("advanced")}>
+          <TransparentButton
+            onClick={() => setActiveTab("advanced")}
+            icon="arrow_back"
+          >
             Back
           </TransparentButton>
           <Suspense fallback={<div>Loading...</div>}>
@@ -169,7 +183,10 @@ export const Settings: React.FC<Props> = ({
       )}
       {activeTab === "attribution" && (
         <div className="flex flex-col gap-3 pb-4">
-          <TransparentButton onClick={() => setActiveTab("settings")}>
+          <TransparentButton
+            onClick={() => setActiveTab("settings")}
+            icon="arrow_back"
+          >
             Back
           </TransparentButton>
           <Attribution />
@@ -177,7 +194,10 @@ export const Settings: React.FC<Props> = ({
       )}
       {activeTab === "data" && (
         <div className="flex flex-col gap-3 pb-4">
-          <TransparentButton onClick={() => setActiveTab("advanced")}>
+          <TransparentButton
+            onClick={() => setActiveTab("advanced")}
+            icon="arrow_back"
+          >
             Back
           </TransparentButton>
           <DataTransfer />

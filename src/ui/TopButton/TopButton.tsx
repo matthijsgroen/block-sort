@@ -1,15 +1,20 @@
 import clsx from "clsx";
 
-import { TextEmoji } from "@/support/Emoji";
-
 import { WoodButton } from "../WoodButton/WoodButton";
 
 import styles from "./TopButton.module.css";
+type ButtonType =
+  | "restart"
+  | "back"
+  | "settings"
+  | "close"
+  | "install"
+  | "help";
 
 type Props = {
   onClick?: VoidFunction;
   highlight?: boolean;
-  buttonType: "restart" | "back" | "settings" | "close" | "install" | "help";
+  buttonType: ButtonType;
 };
 
 export const TopButton: React.FC<Props> = ({
@@ -17,45 +22,19 @@ export const TopButton: React.FC<Props> = ({
   buttonType,
   highlight = false
 }) => {
+  const iconMap: Record<ButtonType, string> = {
+    back: "arrow_back",
+    restart: "replay",
+    settings: "settings",
+    install: "download",
+    help: "question_mark",
+    close: "close"
+  };
+  const icon = iconMap[buttonType];
   const button = (
     <WoodButton onClick={onClick}>
-      <span
-        className={clsx({
-          "text-2xl":
-            buttonType === "back" ||
-            buttonType === "settings" ||
-            buttonType === "close" ||
-            buttonType === "install" ||
-            buttonType === "help",
-          "text-4xl": buttonType === "restart"
-        })}
-      >
-        {buttonType === "back" && (
-          <span className="inline-block translate-y-[2px]">&larr;</span>
-        )}
-        {buttonType === "restart" && (
-          <span className="inline-block -translate-x-[2px] -translate-y-[5px]">
-            &#10226;
-          </span>
-        )}
-        {buttonType === "settings" && (
-          <span className="inline-block translate-x-[-1px] translate-y-[2px]">
-            ⛭
-          </span>
-        )}
-        {buttonType === "install" && (
-          <span className="inline-block -translate-x-[1px] -translate-y-[1px] font-mono underline">
-            <TextEmoji emoji="⬇" />
-          </span>
-        )}
-        {buttonType === "help" && (
-          <span className="inline-block -translate-x-[1px] translate-y-[1px] font-mono">
-            ?
-          </span>
-        )}
-        {buttonType === "close" && (
-          <span className="inline-block -translate-x-[1px]">&times;</span>
-        )}
+      <span className={"align-middle text-3xl"}>
+        <span className="material-icons align-top text-3xl">{icon}</span>
       </span>
     </WoodButton>
   );
