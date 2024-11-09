@@ -68,7 +68,7 @@ export const spring: LevelType<"spring"> = {
   occurrence: (levelNr) =>
     getActiveTheme(getToday()) === "spring" &&
     levelNr > 20 &&
-    (levelNr - 1) % 4 === 0,
+    (levelNr - 1) % 6 === 0,
   getSettings: (levelNr, random) => {
     const difficulty = getDifficultyLevel(levelNr);
     const templates: LevelSettings[] = [getSpringSettings(difficulty)];
