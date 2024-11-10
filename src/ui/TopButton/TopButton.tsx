@@ -33,8 +33,8 @@ export const TopButton: React.FC<Props> = ({
   const icon = iconMap[buttonType];
   const button = (
     <WoodButton onClick={onClick}>
-      <span className={"align-middle text-3xl"}>
-        <span className="material-icons align-top text-3xl">{icon}</span>
+      <span className="material-icons -ml-[2px] pt-1 text-center align-middle !text-xl">
+        {icon}
       </span>
     </WoodButton>
   );
