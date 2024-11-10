@@ -36,6 +36,6 @@ Keep trying!
 
 ### Auto moves
 
-If you fail more than 15 times, an **Auto move** button will appear, and will give you some hints how to start, and the number of auto moves will increase in further tries, but no further than half the solve.
+If you fail more than 15 times, an **Auto move** button will appear, and will give you some hints how to start, and the number of auto moves will increase in further tries.
 
 By pressing the auto move button, the game will perform one move for you. The number on the button will decrease by one. You can keep pressing this button until all moves are depleted. The moves will return if you restart the level. If you perform a move of your own, the auto move button will disappear.
