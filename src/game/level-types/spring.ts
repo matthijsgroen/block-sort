@@ -60,7 +60,6 @@ export const spring: LevelType<"spring"> = {
   type: "spring",
   name: "Spring",
   symbol: "️🌈",
-  unlocksAtLevel: 1,
   borderClassName: "border-2 border-yellow-200",
   textClassName: "text-blue-300",
   buttonBackgroundClassName: "bg-pink-400",

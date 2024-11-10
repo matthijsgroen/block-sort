@@ -9,7 +9,7 @@ import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { LevelTypeString } from "@/game/level-types";
 import { hasWon } from "@/game/state";
 import { LevelSettings, LevelState } from "@/game/types";
-import { hash } from "@/support/hash";
+import { settingsHash } from "@/support/hash";
 import { generateNewSeed, mulberry32 } from "@/support/random";
 import {
   deleteGameValue,
@@ -45,9 +45,9 @@ const generateLevelContent = async (
   const hashVersion = { ...levelSettings };
   delete hashVersion["playMoves"];
 
-  const settingsHash = hash(JSON.stringify(hashVersion)).toString();
+  const hash = settingsHash(levelSettings);
 
-  const seeds = levelSeeds[settingsHash] ?? [];
+  const seeds = levelSeeds[hash] ?? [];
   const preSeed = seeds.length > 0 ? seeds[levelNr % seeds.length] : undefined;
   const random = mulberry32(preSeed ?? seed);
 
