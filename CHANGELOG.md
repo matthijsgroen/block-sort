@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Level solver logic, making solves more efficient
+- Level solver logic, making solves more efficient,
+  this caused recreated levels though.
 - Add new icons in the app to align items
 
 ### Fixed
