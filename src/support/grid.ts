@@ -17,6 +17,17 @@ export const rowSpans: Record<number, string> = {
   16: "row-span-16"
 };
 
+export const colPadding: Record<number, string> = {
+  0: "",
+  1: "pt-[3.5rem]",
+  2: "pt-[6rem]",
+  3: "pt-[8.5rem]",
+  4: "pt-[11rem]",
+  5: "pt-[13.5rem]",
+  6: "pt-[16rem]",
+  7: "pt-[18.5rem]"
+};
+
 export const rowSizes: Record<number, string> = {
   1: "grid-rows-1",
   2: "grid-rows-2",

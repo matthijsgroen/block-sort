@@ -1,5 +1,14 @@
 import { shapeMap } from "./themes/default";
-import { LevelState } from "./types";
+import { BlockColor, LevelState } from "./types";
+
+const shape = (color: BlockColor) => {
+  const char = shapeMap[color];
+
+  if (color === "lightyellow") {
+    return `${char} `;
+  }
+  return char;
+};
 
 export const debugLevel = (level: LevelState) => {
   // top of columns
@@ -34,7 +43,7 @@ export const debugLevel = (level: LevelState) => {
           if (block.revealed === false) {
             lineStr += `│﹖│ `;
           } else {
-            lineStr += `│${shapeMap[block.color]}│ `;
+            lineStr += `│${shape(block.color)}│ `;
           }
         }
       }
@@ -50,7 +59,7 @@ export const debugLevel = (level: LevelState) => {
         lineStr +=
           col.limitColor === "rainbow"
             ? ` 🌈  `
-            : ` ${shapeMap[col.limitColor]}  `;
+            : ` ${shape(col.limitColor)}  `;
       } else if (i > col.columnSize) {
         lineStr += "     ";
       }

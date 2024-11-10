@@ -77,6 +77,14 @@ export const audioSystem = <
       }
     });
 
+    document.addEventListener(
+      "pointerdown",
+      () => {
+        context.resume();
+      },
+      { once: true }
+    );
+
     // initialize streams
     for (const stream of Object.values<StreamItem>(streams)) {
       stream.gainNode = context.createGain();

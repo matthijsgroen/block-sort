@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { levelSeeds } from "@/data/levelSeeds";
-import { hash } from "@/support/hash";
+import { settingsHash } from "@/support/hash";
 import { mulberry32 } from "@/support/random";
 
 import { moveBlocks } from "../actions";
@@ -27,12 +27,9 @@ export const testDifficulties = (
       async ({ difficulty }) => {
         const settings = getSettings(difficulty);
 
-        const hashVersion = { ...settings };
-        delete hashVersion["playMoves"];
+        const hash = settingsHash(settings);
 
-        const settingsHash = hash(JSON.stringify(hashVersion)).toString();
-
-        const seeds = levelSeeds[settingsHash] ?? [];
+        const seeds = levelSeeds[hash] ?? [];
         const preSeed = seeds[0];
         expect(preSeed).toBeDefined();
 
@@ -44,7 +41,7 @@ export const testDifficulties = (
         // actual play level
         let levelState = result;
         for (const move of result.moves) {
-          levelState = moveBlocks(levelState, move.from, move.to);
+          levelState = moveBlocks(levelState, move);
         }
         const won = hasWon(levelState);
         expect(won).toBe(true);

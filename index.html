@@ -32,5 +32,47 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Block Sort",
+        "url": "https://matthijsgroen.github.io/block-sort/",
+        "description": "A block sorting puzzle game. No ads, cookies, tracking or payments. Just the pure fun!",
+        "image": "https://matthijsgroen.github.io/block-sort/og-image.jpg",
+        "applicationCategory": "Game",
+        "applicationSubCategory": "Puzzle",
+        "operatingSystem": "Web",
+        "softwareVersion": "APP_VERSION",
+        "storageRequirements": "18MB",
+        "releaseNotes": "https://github.com/matthijsgroen/block-sort/blob/main/CHANGELOG.md",
+        "license": "https://github.com/matthijsgroen/block-sort/blob/main/LICENSE",
+        "creator": {
+          "@type": "Person",
+          "name": "Matthijs Groen",
+          "url": "https://github.com/matthijsgroen/",
+          "image": "https://gravatar.com/avatar/990b740fdf7c52fb94b7a8a42362bfa806abdd7e15a05736e3562ad6e759b02a?s=600"
+        },
+        "offers": {
+          "@type": "Offer",
+          "description": "Free",
+          "price": 0.0,
+          "priceCurrency": "USD"
+        },
+        "potentialAction": {
+          "@type": "PlayGameAction",
+          "gameAvailabilityType": "FullGameAvailability",
+          "target": {
+            "@type": "EntryPoint",
+            "actionPlatform": [
+              "GenericWebPlatform",
+              "MobileWebPlatform",
+              "DesktopWebPlatform"
+            ],
+            "urlTemplate": "https://matthijsgroen.github.io/block-sort/"
+          }
+        }
+      }
+    </script>
   </body>
 </html>

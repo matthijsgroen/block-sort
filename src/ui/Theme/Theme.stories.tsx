@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { generateRandomLevel } from "@/game/level-creation/generateRandomLevel";
+import { getDailySettings } from "@/game/level-types/daily";
 import { getSpecial2Settings } from "@/game/level-types/special";
 import { BlockTheme } from "@/game/themes";
 import { mulberry32 } from "@/support/random";
@@ -23,7 +24,7 @@ const meta: Meta<CustomArgs> = {
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
     theme: {
-      options: ["default", "halloween", "winter", "spring", "summer"],
+      options: ["default", "halloween", "winter", "spring", "summer", "daily"],
       control: { type: "select" }
     }
   },
@@ -44,7 +45,8 @@ const random = mulberry32(SEED);
 export const Theme: Story = {
   args: {},
   render: (args) => {
-    const settings = getSpecial2Settings(11);
+    const settings =
+      args.theme === "daily" ? getDailySettings(11) : getSpecial2Settings(11);
     const level = generateRandomLevel(settings, random);
     return (
       <div className="flex w-full flex-col">

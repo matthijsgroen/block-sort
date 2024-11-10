@@ -2,18 +2,15 @@ import { use, useEffect, useState } from "react";
 
 import { Transition } from "@/ui/Transition/Transition";
 
-import { sound } from "@/audio";
 import { ZEN_MODE } from "@/featureFlags";
 import {
   getLevelSettings,
   getLevelType,
   LevelTypeString
 } from "@/game/level-types/index";
-import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { LevelLoader } from "@/modules/Level/LevelLoader";
 import { LevelTrack } from "@/modules/LevelTrack/LevelTrack";
 import { generateNewSeed, mulberry32 } from "@/support/random";
-import { getThemeSong } from "@/support/themeMusic";
 import { useGameStorage } from "@/support/useGameStorage";
 
 import { BetaContext } from "../Layout/BetaContext";
@@ -51,9 +48,6 @@ export const NormalMode: React.FC<Props> = ({
   const random = mulberry32(levelSeed);
   const settings = getLevelSettings(levelNr, random);
 
-  const { activeTheme } = use(ThemeContext);
-  const song = getThemeSong(activeTheme);
-
   const { showBeta } = use(BetaContext);
 
   return (
@@ -69,8 +63,6 @@ export const NormalMode: React.FC<Props> = ({
           hasZenMode={levelNr >= ZEN_MODE_UNLOCK - 1 && ZEN_MODE}
           showInstallButton={showInstallButton || showBeta}
           onLevelStart={() => {
-            // tie playback to user interaction
-            sound.play(song);
             setInLevel(true);
           }}
           onOpenSettings={onOpenSettings}

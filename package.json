@@ -1,6 +1,6 @@
 {
   "name": "block-sorting",
-  "version": "1.18.0",
+  "version": "1.19.0",
   "description": "Mobile Block sorting game, as a Progressive Web App",
   "author": {
     "name": "Matthijs Groen",
@@ -42,7 +42,6 @@
     "@storybook/addon-essentials": "^8.3.5",
     "@storybook/addon-interactions": "^8.3.5",
     "@storybook/addon-links": "^8.3.5",
-    "@storybook/addon-onboarding": "^8.3.5",
     "@storybook/blocks": "^8.3.5",
     "@storybook/react": "^8.3.5",
     "@storybook/react-vite": "^8.3.5",

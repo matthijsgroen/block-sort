@@ -46,7 +46,7 @@ const isBeatable = (
           break;
         }
         moves.push(nextMove);
-        playLevel = moveBlocks(playLevel, nextMove.from, nextMove.to);
+        playLevel = moveBlocks(playLevel, nextMove);
       }
       if (hasWon(playLevel)) {
         return [true, moves];

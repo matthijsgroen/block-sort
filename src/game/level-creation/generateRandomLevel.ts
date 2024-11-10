@@ -8,7 +8,7 @@ import {
   createLevelState,
   createPlacementColumn
 } from "../factories";
-import { Column, LevelSettings, LevelState } from "../types";
+import { Column, LayoutMap, LevelSettings, LevelState } from "../types";
 
 export const generateRandomLevel = (
   {
@@ -22,7 +22,8 @@ export const generateRandomLevel = (
     extraBuffers = [],
     blockColorPick = "start",
     hideBlockTypes = "none",
-    stacksPerColor = 1
+    stacksPerColor = 1,
+    layoutMap
   }: LevelSettings,
   random: () => number
 ): LevelState => {
@@ -100,5 +101,49 @@ export const generateRandomLevel = (
       })
     );
 
-  return createLevelState(columns);
+  const levelState = createLevelState(columns);
+  return applyLayoutMap(levelState, layoutMap);
+};
+export const applyLayoutMap = (
+  levelState: LevelState,
+  layoutMap: LayoutMap | undefined
+): LevelState => {
+  if (!layoutMap) return levelState;
+
+  const offsetPos = (fromColumn: number) => {
+    if (fromColumn > -1) return fromColumn;
+    return levelState.columns.length + fromColumn;
+  };
+
+  const matchColumn = (fromColumn: number, index: number) => {
+    if (offsetPos(fromColumn) === index) return true;
+    return false;
+  };
+
+  const unaffectedColumns = levelState.columns.filter(
+    (_c, i) => !layoutMap.columns.some((l) => matchColumn(l.fromColumn, i))
+  );
+
+  const reorderedColumns = Array.from<Column | null>({
+    length: levelState.columns.length
+  }).fill(null);
+
+  layoutMap.columns.forEach((c) => {
+    const column = levelState.columns.find((_, i) =>
+      matchColumn(c.fromColumn, i)
+    );
+    if (!column) {
+      throw new Error("Column not found");
+    }
+    reorderedColumns[offsetPos(c.toColumn)] = {
+      ...column,
+      paddingTop: c.paddingTop,
+      paddingBottom: c.paddingBottom
+    };
+  });
+  const newColumns = reorderedColumns.map<Column>(
+    (c): Column => c ?? (unaffectedColumns.shift() as Column)
+  );
+
+  return { ...levelState, columns: newColumns };
 };

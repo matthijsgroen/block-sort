@@ -9,7 +9,7 @@ import { stackColumn } from "./tactics/stackColumn";
 import { startColumn } from "./tactics/startColumn";
 import { Tactic, WeightedMove } from "./tactics/types";
 import { generateRandomLevel } from "./generateRandomLevel";
-import { scoreState } from "./scoreState";
+import { scoreState, scoreStateWithMove } from "./scoreState";
 
 const MAX_PLAY_ATTEMPTS = 1;
 const MAX_GENERATE_ATTEMPTS = 20;
@@ -39,8 +39,13 @@ export const generatePlayableLevel = async (
     if (isStuck(level) || !allShuffled(level)) {
       continue;
     }
-    const [beatable, moves, cost] = await isBeatable(level, generationRandom);
+    const [beatable, solveMoves, cost] = await isBeatable(
+      level,
+      generationRandom
+    );
     const generationCost = cost + attempt * MAX_GENERATE_COST;
+    // Scrub name from moves
+    const moves = solveMoves.map<Move>(({ from, to }) => ({ from, to }));
     if (beatable) {
       if (settings.playMoves !== undefined) {
         const [minMoves, maxMovesPercentage] = settings.playMoves;
@@ -50,10 +55,7 @@ export const generatePlayableLevel = async (
         );
         const playedLevel = moves
           .slice(0, movesToPlay)
-          .reduce(
-            (state, move) => moveBlocks(state, move.from, move.to),
-            level
-          );
+          .reduce((state, move) => moveBlocks(state, move), level);
         return {
           ...playedLevel,
           moves: moves.slice(movesToPlay),
@@ -82,26 +84,26 @@ const generatePossibleMoves = (
   state: LevelState,
   random = Math.random
 ): WeightedMove[] =>
-  tactics
-    .reduce<WeightedMove[]>(
-      (r, tactic) =>
-        r.concat(
-          tactic(state, random)
-            .sort((a, b) => a.weight - b.weight)
-            .slice(0, 3) // take the 3 best moves
-        ),
-      []
-    )
-    .map((move) => move);
+  tactics.reduce<WeightedMove[]>(
+    (r, tactic) =>
+      r.concat(
+        tactic(state, random)
+          .sort((a, b) => a.weight - b.weight)
+          .slice(0, 3)
+      ),
+    []
+  );
 
 const lookahead = (
   state: LevelState,
+  move: Move,
   depth: number,
   random = Math.random
 ): number => {
   if (depth === 0) {
-    return scoreState(state); // Base case: return the score of the current state
+    return scoreStateWithMove(state, move); // Base case: return the score of the current state
   }
+  const nextState = moveBlocks(state, move);
 
   const moves = generatePossibleMoves(state, random);
   if (moves.length === 0) {
@@ -110,8 +112,7 @@ const lookahead = (
 
   let bestScore = -Infinity;
   for (const move of moves) {
-    const newState = moveBlocks(state, move.move.from, move.move.to);
-    const score = lookahead(newState, depth - 1, random); // Recursive lookahead
+    const score = lookahead(nextState, move.move, depth - 1, random); // Recursive lookahead
     bestScore = Math.max(bestScore, score); // Track the best score
   }
 
@@ -128,8 +129,7 @@ const evaluateBestMove = (
   let bestScore = -Infinity;
 
   for (const move of possibleMoves) {
-    const nextState = moveBlocks(initialState, move.move.from, move.move.to);
-    const moveScore = lookahead(nextState, 2, random); // Look 1 move ahead (so total of 2 moves including this one)
+    const moveScore = lookahead(initialState, move.move, 2, random);
 
     if (moveScore > bestScore) {
       bestScore = moveScore;
@@ -142,7 +142,13 @@ const evaluateBestMove = (
 
 const isBeatable = async (
   level: LevelState,
-  random = Math.random
+  random = Math.random,
+  displayState?: (
+    state: LevelState,
+    move: Move,
+    tactic: string,
+    moveIndex: number
+  ) => Promise<boolean>
 ): Promise<[beatable: boolean, moves: Move[], cost: number]> => {
   let attempt = 0;
 
@@ -166,7 +172,18 @@ const isBeatable = async (
           tactic: nextMove.name
         });
 
-        playLevel = moveBlocks(playLevel, nextMove.move.from, nextMove.move.to);
+        playLevel = moveBlocks(playLevel, nextMove.move);
+        if (displayState) {
+          const keepSolving = await displayState(
+            playLevel,
+            nextMove.move,
+            nextMove.name ?? "unknown",
+            moves.length
+          );
+          if (!keepSolving) {
+            return [false, [], 0];
+          }
+        }
         if (moves.length % 10 === 0) {
           await delay(2);
         }
@@ -179,4 +196,37 @@ const isBeatable = async (
   }
 
   return [false, [], 0];
+};
+
+export const slowSolve = async (
+  settings: LevelSettings,
+  displayState: (
+    state: LevelState,
+    move: Move,
+    tactic: string,
+    moveIndex: number
+  ) => Promise<boolean>,
+  random = Math.random,
+  seed: number | null = null
+): Promise<Move[]> => {
+  // Start logging level seeds for faster reproduction
+  const startSeed = seed ?? Math.floor(random() * 1e9);
+
+  const generationRandom = mulberry32(startSeed);
+
+  let level = generateRandomLevel(settings, generationRandom);
+
+  while (isStuck(level) || !allShuffled(level)) {
+    level = generateRandomLevel(settings, generationRandom);
+  }
+
+  const [beatable, moves] = await isBeatable(
+    level,
+    generationRandom,
+    displayState
+  );
+  if (beatable) {
+    return moves;
+  }
+  return [];
 };

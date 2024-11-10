@@ -5,6 +5,8 @@ import { defineConfig } from "vite";
 import { Mode, plugin as markDown } from "vite-plugin-markdown";
 import { VitePWA } from "vite-plugin-pwa";
 
+import info from "./package.json";
+
 const md = markdownIt();
 const defaultRender =
   md.renderer.rules.link_open ||
@@ -19,11 +21,21 @@ md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
   return defaultRender(tokens, idx, options, env, self);
 };
 
+const htmlPlugin = () => {
+  return {
+    name: "html-transform",
+    transformIndexHtml(html: string) {
+      return html.replace(/APP_VERSION/, info.version);
+    }
+  };
+};
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     markDown({ mode: [Mode.REACT], markdownIt: md }),
+    htmlPlugin(),
     VitePWA({
       registerType: "prompt",
       injectRegister: false,
@@ -53,11 +65,12 @@ export default defineConfig({
       },
 
       workbox: {
-        globPatterns: ["**/*.{js,css,html,svg,png,ico,mp3,aac,ttf}"],
+        globPatterns: ["**/*.{js,css,html,svg,png,ico,mp3,aac,ttf,otf}"],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         maximumFileSizeToCacheInBytes: 6_000_000
       },
+      includeAssets: ["/og-image.png"],
 
       devOptions: {
         enabled: false,

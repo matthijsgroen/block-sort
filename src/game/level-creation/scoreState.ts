@@ -1,16 +1,21 @@
-import { Column, LevelState } from "../types";
+import { moveBlocks } from "../actions";
+import { Column, LevelState, Move } from "../types";
 
-const columnCompletionScore = (state: LevelState): number => {
-  return state.columns.reduce((score, col) => {
+import { canPlaceBlock, isColumnCorrectlySorted } from "./tactics/support";
+
+const columnCompletionScore = (state: LevelState): number =>
+  state.columns.reduce((score, col) => {
     if (col.blocks.length === 0) return score; // Empty column, neutral
+    const max = col.type === "placement" ? 10 : 5;
     const firstColor = col.blocks[0].color;
     const sameColorBlocks = col.blocks.filter(
       (b) => b.color === firstColor
     ).length;
     const completion = sameColorBlocks / col.blocks.length;
-    return score + (completion === 1 ? 10 : completion * 5); // Bonus for completed columns
+    return (
+      score + (completion === 1 ? max * 2 * sameColorBlocks : completion * max)
+    ); // Bonus for completed columns
   }, 0);
-};
 
 const bufferPenalty = (state: LevelState): number => {
   return state.columns.reduce((penalty, col) => {
@@ -21,8 +26,8 @@ const bufferPenalty = (state: LevelState): number => {
   }, 0);
 };
 
-const blockingPenalty = (state: LevelState): number => {
-  return state.columns.reduce((penalty, col) => {
+const blockingPenalty = (state: LevelState): number =>
+  state.columns.reduce((penalty, col) => {
     for (let i = 1; i < col.blocks.length; i++) {
       if (col.blocks[i].color !== col.blocks[i - 1].color) {
         penalty -= 5; // Penalty for each block that is blocked by a different color
@@ -30,25 +35,10 @@ const blockingPenalty = (state: LevelState): number => {
     }
     return penalty;
   }, 0);
-};
 
 const isValidMove = (from: Column, to: Column): boolean => {
   if (from.blocks.length === 0) return false;
-  if (to.blocks.length === 0 && to.limitColor === undefined) return true;
-
-  const topBlock = from.blocks[0];
-  if (topBlock.color === to.limitColor && to.blocks.length < to.columnSize)
-    return true;
-
-  const targetBlock = to.blocks[0];
-  if (
-    targetBlock !== undefined &&
-    topBlock.color === targetBlock.color &&
-    to.columnSize > to.blocks.length
-  )
-    return true;
-
-  return false;
+  return canPlaceBlock(to, from.blocks[0]);
 };
 
 const futureMovePotential = (state: LevelState): number => {
@@ -73,9 +63,49 @@ const lockedColumnReward = (state: LevelState): number => {
 };
 
 const balanceScore = (state: LevelState): number => {
-  const maxBlocks = Math.max(...state.columns.map((col) => col.blocks.length));
-  const minBlocks = Math.min(...state.columns.map((col) => col.blocks.length));
+  const maxBlocks = Math.max(
+    ...state.columns
+      .filter((c) => c.type === "placement")
+      .map((col) => col.blocks.length)
+  );
+  const minBlocks = Math.min(
+    ...state.columns
+      .filter((c) => c.type === "placement")
+      .map((col) => col.blocks.length)
+  );
   return (maxBlocks - minBlocks) * -1; // Negative score for imbalance
+};
+
+const splittingPenalty = (state: LevelState, move: Move): number => {
+  const fromColumn = state.columns[move.from];
+  if (isColumnCorrectlySorted(fromColumn)) {
+    return -10; // Arbitrary penalty value for breaking a sorted column
+  }
+  return 0;
+};
+
+const isBufferMove = (state: LevelState, move: Move): boolean => {
+  const fromColumn = state.columns[move.from];
+  const toColumn = state.columns[move.to];
+
+  return (
+    fromColumn.type === "buffer" &&
+    toColumn.type === "buffer" &&
+    fromColumn.columnSize === toColumn.columnSize &&
+    toColumn.blocks.length === 0
+  );
+};
+
+const isPartialMove = (state: LevelState, move: Move): boolean => {
+  const fromColumn = state.columns[move.from];
+  return (
+    fromColumn.blocks.length > 0 &&
+    fromColumn.blocks.some(
+      (block, index) =>
+        index < fromColumn.blocks.length - 1 &&
+        block.color !== fromColumn.blocks[0].color
+    )
+  );
 };
 
 export const scoreState = (state: LevelState): number => {
@@ -94,4 +124,20 @@ export const scoreState = (state: LevelState): number => {
     lockedReward +
     balance
   );
+};
+
+export const scoreStateWithMove = (state: LevelState, move: Move): number => {
+  const newState = moveBlocks(state, move);
+
+  let score = scoreState(newState);
+
+  if (isBufferMove(state, move)) {
+    score -= 10;
+  }
+
+  if (isPartialMove(state, move)) {
+    score -= 5;
+  }
+  score += splittingPenalty(state, move);
+  return score;
 };

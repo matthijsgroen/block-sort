@@ -76,7 +76,9 @@ export const ZenSelection: React.FC<Props> = ({
                   );
                 }}
               >
-                <span className="inline-block translate-y-[5px] px-2">◀</span>︎
+                <span className={"material-icons align-middle !text-3xl"}>
+                  ︎keyboard_arrow_left
+                </span>
               </WoodButton>
               <div className="w-[200px]">
                 <div
@@ -106,8 +108,9 @@ export const ZenSelection: React.FC<Props> = ({
                   setDifficultyIndex((a) => (a + 1) % enabledDifficulties);
                 }}
               >
-                <span className="inline-block translate-y-[5px] px-2">▶</span>︎
-                ︎
+                <span className={"material-icons align-middle !text-3xl"}>
+                  ︎keyboard_arrow_right
+                </span>
               </WoodButton>
             </div>
           </div>
@@ -123,7 +126,9 @@ export const ZenSelection: React.FC<Props> = ({
                   );
                 }}
               >
-                <span className="inline-block translate-y-[5px] px-2">◀</span>︎
+                <span className={"material-icons align-middle !text-3xl"}>
+                  ︎keyboard_arrow_left
+                </span>
               </WoodButton>
               <div className="w-[200px]">
                 <div
@@ -149,7 +154,9 @@ export const ZenSelection: React.FC<Props> = ({
                   setLevelTypeIndex((a) => (a + 1) % enabledLevelTypes);
                 }}
               >
-                <span className="inline-block translate-y-[5px] px-2">▶</span>︎
+                <span className={"material-icons align-middle !text-3xl"}>
+                  ︎keyboard_arrow_right
+                </span>
                 ︎
               </WoodButton>
             </div>
@@ -161,10 +168,12 @@ export const ZenSelection: React.FC<Props> = ({
           <button
             onClick={onZenModeEnd}
             className={clsx(
-              "inline-block h-12 rounded-3xl bg-orange-500 px-6 pt-3 font-bold shadow-lg transition-transform active:scale-90"
+              "inline-block h-12 rounded-3xl bg-orange-500 px-6 font-bold shadow-lg transition-transform active:scale-90"
             )}
           >
-            <span className={"block -translate-y-1 scale-150"}>◀︎</span>
+            <span className={"material-icons align-middle !text-4xl"}>
+              ︎keyboard_arrow_left
+            </span>
           </button>
         </div>
         <PlayButton

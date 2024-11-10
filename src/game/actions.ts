@@ -29,34 +29,30 @@ export const selectFromColumn = (
   return result;
 };
 
-export const moveBlocks = (
-  level: LevelState,
-  startColumn: number,
-  endColumn: number
-): LevelState =>
+export const moveBlocks = (level: LevelState, move: Move): LevelState =>
   produce<LevelState>((draft) => {
-    if (startColumn === endColumn) {
+    if (move.from === move.to) {
       return;
     }
-    const blocks = selectFromColumn(draft, startColumn);
+    const blocks = selectFromColumn(draft, move.from);
     if (blocks.length === 0) return;
-    const amountToMove = canPlaceAmount(draft, endColumn, blocks);
-    const moving = draft.columns[startColumn].blocks.splice(0, amountToMove);
+    const amountToMove = canPlaceAmount(draft, move.to, blocks);
+    const moving = draft.columns[move.from].blocks.splice(0, amountToMove);
     if (moving.length === 0) return;
 
-    const topBlockOrigin = draft.columns[startColumn].blocks[0];
+    const topBlockOrigin = draft.columns[move.from].blocks[0];
     if (topBlockOrigin?.revealed === false) {
       topBlockOrigin.revealed = true;
 
       let index = 1;
-      let nextBlockOrigin = draft.columns[startColumn].blocks[index];
+      let nextBlockOrigin = draft.columns[move.from].blocks[index];
       while (nextBlockOrigin?.color === topBlockOrigin.color) {
         nextBlockOrigin.revealed = true;
         index++;
-        nextBlockOrigin = draft.columns[startColumn].blocks[index];
+        nextBlockOrigin = draft.columns[move.from].blocks[index];
       }
     }
-    const endCol = draft.columns[endColumn];
+    const endCol = draft.columns[move.to];
     endCol.blocks.unshift(...moving);
     const moveColor = moving[0].color;
 
@@ -77,8 +73,8 @@ export const replayMoves = (
   moves: Move[]
 ): LevelState => {
   let state = levelState;
-  for (const { from, to } of moves) {
-    state = moveBlocks(state, from, to);
+  for (const move of moves) {
+    state = moveBlocks(state, move);
   }
   return state;
 };
