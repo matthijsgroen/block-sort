@@ -1,8 +1,7 @@
 import { getActiveTheme, getToday } from "@/game/themes/index";
-import { pick } from "@/support/random";
 
 import { getDifficultyLevel } from "../level-settings/levelSettings";
-import { LevelSettings, SettingsProducer } from "../types";
+import { SettingsProducer } from "../types";
 
 import { LevelType } from "./types";
 
@@ -64,14 +63,14 @@ export const spring: LevelType<"spring"> = {
   textClassName: "text-blue-300",
   buttonBackgroundClassName: "bg-pink-400",
   backgroundClassName: "bg-pink-200/10",
+  inBetaTest: true,
   occurrence: (levelNr) =>
     getActiveTheme(getToday()) === "spring" &&
-    levelNr > 20 &&
+    levelNr > 200 &&
     (levelNr - 1) % 6 === 0,
-  getSettings: (levelNr, random) => {
-    const difficulty = getDifficultyLevel(levelNr);
-    const templates: LevelSettings[] = [getSpringSettings(difficulty)];
-    return pick(templates, random);
+  getSettings: (levelNr) => {
+    const difficulty = getDifficultyLevel(levelNr - 199);
+    return getSpringSettings(difficulty);
   },
   getZenSettings: (_levelNr, difficulty) => {
     return getSpringSettings(difficulty);
