@@ -30,13 +30,15 @@ export const getLevelTypeByType = <T extends LevelTypeString>(
 ): LevelType<T> =>
   levelTypes.find((level) => level.type === type) as LevelType<T>;
 
-export const getUnlockableLevelTypes = (): Unlockable<LevelType<string>>[] =>
+export const getUnlockableLevelTypes = (
+  showBeta = false
+): Unlockable<LevelType<string>>[] =>
   (levelTypes as LevelType<string>[])
     .filter(
       (level): level is Unlockable<LevelType<string>> =>
-        level.unlocksAtLevel !== undefined
+        level.unlocksAtLevel !== undefined || (!!level.inBetaTest && showBeta)
     )
-    .sort((a, b) => a.unlocksAtLevel - b.unlocksAtLevel);
+    .sort((a, b) => (a.unlocksAtLevel ?? 1000) - (b.unlocksAtLevel ?? 1000));
 
 export const levelTypeTextColor = (levelNr: number): string => {
   const levelType = getLevelType(levelNr);

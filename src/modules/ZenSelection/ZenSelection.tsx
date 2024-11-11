@@ -12,6 +12,7 @@ import { timesMap } from "@/support/timeMap";
 
 import { DIFFICULTY_LEVELS } from "../GameModi/zenModeConstants";
 import { BackgroundContext } from "../Layout/BackgroundContext";
+import { BetaContext } from "../Layout/BetaContext";
 
 import styles from "./ZenSelection.module.css";
 
@@ -42,8 +43,9 @@ export const ZenSelection: React.FC<Props> = ({
     setScreenLayout("zenMode");
   }, []);
 
+  const { showBeta } = use(BetaContext);
   // Synch with offline state
-  const levelTypes = getUnlockableLevelTypes();
+  const levelTypes = getUnlockableLevelTypes(showBeta);
 
   const selectedDifficulty = DIFFICULTY_LEVELS[difficultyIndex];
   const selectedLevelType = levelTypes[levelTypeIndex % levelTypes.length];
@@ -136,9 +138,11 @@ export const ZenSelection: React.FC<Props> = ({
                     [styles.disabled]:
                       levelNr < selectedLevelType.unlocksAtLevel - 1,
                     [styles.enabled]:
-                      levelNr >= selectedLevelType.unlocksAtLevel - 1,
+                      levelNr >= selectedLevelType.unlocksAtLevel - 1 ||
+                      (selectedLevelType.inBetaTest && showBeta),
                     [styles.shadow]:
-                      levelNr >= selectedLevelType.unlocksAtLevel - 1
+                      levelNr >= selectedLevelType.unlocksAtLevel - 1 ||
+                      (selectedLevelType.inBetaTest && showBeta)
                   })}
                 >
                   {selectedLevelType.name}
@@ -148,6 +152,11 @@ export const ZenSelection: React.FC<Props> = ({
                     Unlocks at level {selectedLevelType.unlocksAtLevel}
                   </div>
                 )}
+                {selectedLevelType.inBetaTest &&
+                  showBeta &&
+                  selectedLevelType.unlocksAtLevel === undefined && (
+                    <div className="-mt-2 text-center">Beta test</div>
+                  )}
               </div>
               <WoodButton
                 onClick={() => {

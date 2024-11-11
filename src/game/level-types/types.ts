@@ -11,6 +11,7 @@ export type LevelType<T extends string> = {
   type: T;
   name: string;
   unlocksAtLevel?: number;
+  inBetaTest?: boolean;
   symbol?: string;
   color?: string;
   borderClassName: string;
