@@ -13,7 +13,7 @@ export const WoodButton: React.FC<PropsWithChildren<Props>> = ({
   <button
     onClick={onClick}
     className={clsx(
-      "inline-block h-block min-w-block rounded-3xl border border-black px-2",
+      "inline-block h-block min-w-block rounded-3xl border border-black px-2 focus-visible:outline-none",
       styles.woodBackground
     )}
   >
