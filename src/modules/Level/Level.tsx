@@ -271,7 +271,7 @@ export const Level: React.FC<Props> = ({
           }}
         />
       )}
-      <div className="flex flex-row items-center gap-x-2 pl-safeLeft pr-safeRight pt-2">
+      <div className="pt-safeTop flex flex-row items-center gap-x-2 pl-safeLeft pr-safeRight">
         <TopButton
           buttonType="back"
           onClick={() => {

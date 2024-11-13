@@ -21,7 +21,8 @@ export default {
       },
       padding: {
         safeLeft: "max(env(safe-area-inset-left, 0.5rem), 0.5rem)",
-        safeRight: "max(env(safe-area-inset-right, 0.5rem), 0.5rem)"
+        safeRight: "max(env(safe-area-inset-right, 0.5rem), 0.5rem)",
+        safeTop: "max(env(safe-area-inset-top, 0.5rem), 0.5rem)"
       },
       colors: {
         block: "var(--cube-color)",

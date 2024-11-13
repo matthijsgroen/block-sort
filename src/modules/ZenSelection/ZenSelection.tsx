@@ -54,7 +54,7 @@ export const ZenSelection: React.FC<Props> = ({
 
   return (
     <div className="flex h-full flex-col items-center">
-      <div className="flex w-full flex-row gap-x-2 p-2">
+      <div className="pt-safeTop flex w-full flex-row gap-x-2 pb-2 pl-safeLeft pr-safeRight">
         {onOpenSettings && (
           <TopButton buttonType="settings" onClick={onOpenSettings} />
         )}
