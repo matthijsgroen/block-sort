@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update styling behind status bar on mobile
 
+### Fixes
+
+- Removed visible ring around button
+
 ## Version 1.20.1 - 2024-11-11
 
 ### Fixes
