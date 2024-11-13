@@ -3,7 +3,9 @@ window.addEventListener("load", () => {
   (
     document.getElementsByTagName("HTML").item(0)! as HTMLHtmlElement
   ).style.setProperty("height", "100vh");
-  (
-    document.getElementsByTagName("HTML").item(0)! as HTMLHtmlElement
-  ).style.setProperty("height", "100dvh");
+  setTimeout(() => {
+    (
+      document.getElementsByTagName("HTML").item(0)! as HTMLHtmlElement
+    ).style.setProperty("height", "100dvh");
+  }, 50);
 });
