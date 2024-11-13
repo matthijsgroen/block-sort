@@ -19,9 +19,13 @@ body {
 }
 
 :root,
-html,
+html {
+  height: 100dvh;
+  overflow: hidden;
+}
+
 body,
 #root {
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
 }
