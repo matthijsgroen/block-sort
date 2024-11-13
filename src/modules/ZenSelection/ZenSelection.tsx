@@ -172,12 +172,12 @@ export const ZenSelection: React.FC<Props> = ({
           </div>
         </div>
       </div>
-      <div className="flex w-full flex-row justify-between px-5 pb-10 text-center">
+      <div className="flex w-full flex-row justify-between px-5 pb-7 text-center">
         <div className={"block w-22"}>
           <button
             onClick={onZenModeEnd}
             className={clsx(
-              "inline-block h-12 rounded-3xl bg-orange-500 px-6 font-bold shadow-lg transition-transform active:scale-90"
+              "inline-block h-12 rounded-3xl bg-orange-500 px-4 font-bold shadow-lg transition-transform active:scale-90"
             )}
           >
             <span className={"material-icons align-middle !text-4xl"}>

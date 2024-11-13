@@ -268,15 +268,15 @@ export const LevelTrack: React.FC<Props> = ({
           );
         })}
       </ol>
-      <div className="flex w-full flex-row justify-between px-5 pb-10 text-center">
-        <div className="w-24"></div>
+      <div className="flex w-full flex-row justify-between px-5 pb-7 text-center">
+        <div className="w-22"></div>
         <PlayButton
           label={`Level ${officialLevelNr + 1}`}
           onClick={onLevelStart}
           type={getLevelType(officialLevelNr)}
         />
         <div
-          className={clsx("block w-24 transition-opacity", {
+          className={clsx("block w-22 transition-opacity", {
             ["opacity-0"]: !hasZenMode,
             ["opacity-100"]: hasZenMode
           })}
