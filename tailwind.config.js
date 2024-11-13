@@ -16,8 +16,7 @@ export default {
         "wood-texture": "url('./assets/wood-texture.png')"
       },
       height: {
-        "safe-area":
-          "calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom))"
+        "safe-area": "calc(100% - env(safe-area-inset-bottom))"
       },
       padding: {
         safeLeft: "max(env(safe-area-inset-left, 0.5rem), 0.5rem)",
