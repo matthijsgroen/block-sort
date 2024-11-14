@@ -2,45 +2,13 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import { generateRandomLevel } from "@/game/level-creation/generateRandomLevel";
 import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
-import {
-  getHard2Settings,
-  getHardSettings as getHardSettings
-} from "@/game/level-types/hard";
-import {
-  getNormal2Settings,
-  getNormal3Settings,
-  getNormal4Settings,
-  getNormalSettings
-} from "@/game/level-types/normal";
-import {
-  getSpecial1Settings,
-  getSpecial2Settings,
-  getSpecial3Settings,
-  getSpecial4Settings,
-  getSpecial5Settings
-} from "@/game/level-types/special";
-import { getSpringSettings } from "@/game/level-types/spring";
-import { LevelSettings } from "@/game/types";
+import { levelProducers, producers } from "@/modules/SeedGenerator/producers";
 import { mulberry32 } from "@/support/random";
 
 import { LevelLayout as LevelLayoutComponent } from "./LevelLayout";
 
-type LevelType =
-  | "normal"
-  | "normal2"
-  | "normal3"
-  | "normal4"
-  | "hard"
-  | "hard2"
-  | "special1"
-  | "special2"
-  | "special3"
-  | "special4"
-  | "special5"
-  | "spring";
-
 type CustomArgs = {
-  levelType: LevelType;
+  levelType: string;
   difficulty: number;
 };
 
@@ -56,20 +24,7 @@ const meta: Meta<CustomArgs> = {
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
     levelType: {
-      options: [
-        "normal",
-        "normal2",
-        "normal3",
-        "normal4",
-        "hard",
-        "hard2",
-        "special1",
-        "special2",
-        "special3",
-        "special4",
-        "special5",
-        "spring"
-      ],
+      options: producers.map((p) => p.name),
       control: { type: "select" }
     },
     difficulty: {
@@ -90,24 +45,6 @@ const meta: Meta<CustomArgs> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const settingProducer: Record<
-  LevelType,
-  (difficulty: number) => LevelSettings
-> = {
-  normal: getNormalSettings,
-  normal2: getNormal2Settings,
-  normal3: getNormal3Settings,
-  normal4: getNormal4Settings,
-  hard: getHardSettings,
-  hard2: getHard2Settings,
-  special1: getSpecial1Settings,
-  special2: getSpecial2Settings,
-  special3: getSpecial3Settings,
-  special4: getSpecial4Settings,
-  special5: getSpecial5Settings,
-  spring: getSpringSettings
-};
-
 const SEED = 123456789;
 
 const random = mulberry32(SEED);
@@ -116,8 +53,13 @@ const random = mulberry32(SEED);
 export const LevelLayout: Story = {
   args: {},
   render: (args) => {
-    const producer = settingProducer[args.levelType];
-    const settings = producer(Math.min(Math.max(args.difficulty, 1), 12));
+    const seeder = levelProducers.find((p) => p.name === args.levelType);
+    if (!seeder) {
+      throw new Error("Producer not found");
+    }
+    const settings = seeder.producer(
+      Math.min(Math.max(args.difficulty, 1), 12)
+    );
     const level = generateRandomLevel(settings, random);
     return (
       <div className="flex w-full min-w-96 flex-col">
