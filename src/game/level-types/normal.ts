@@ -52,6 +52,19 @@ export const getNormal4Settings: SettingsProducer = (difficulty) => ({
       : undefined
 });
 
+export const getNormal5Settings: SettingsProducer = () => ({
+  amountColors: 16,
+  stackSize: 4,
+  extraPlacementStacks: 0,
+  hideBlockTypes: "none",
+  extraBuffers: [
+    { size: 2, amount: 1, limit: 0 },
+    { size: 1, amount: 1, limit: 0 },
+    { size: 2, amount: 1, limit: 0 },
+    { size: 1, amount: 1, limit: 0 }
+  ]
+});
+
 export const normal: LevelType<"normal"> = {
   type: "normal",
   name: "Normal",
@@ -73,6 +86,9 @@ export const normal: LevelType<"normal"> = {
     if (levelNr > 230) {
       templates.push(getNormal4Settings(difficulty));
     }
+    if (levelNr > 300) {
+      templates.push(getNormal5Settings(difficulty));
+    }
     return pick(templates, random);
   },
   getZenSettings: (zenLevel, difficultyLevel) => {
@@ -83,6 +99,9 @@ export const normal: LevelType<"normal"> = {
         getNormal3Settings,
         getNormal4Settings
       );
+    }
+    if (difficultyLevel >= 11) {
+      templates.push(getNormal5Settings);
     }
     return templates[zenLevel % templates.length](difficultyLevel);
   }

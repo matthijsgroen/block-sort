@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Tutorial on level 1 for new players
+- New 'normal' level template for players at level 300 and higher
 
 ## Version 1.21.0 - 2024-11-13
 
