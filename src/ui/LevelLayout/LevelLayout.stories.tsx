@@ -53,10 +53,9 @@ const random = mulberry32(SEED);
 export const LevelLayout: Story = {
   args: {},
   render: (args) => {
-    const seeder = levelProducers.find((p) => p.name === args.levelType);
-    if (!seeder) {
-      throw new Error("Producer not found");
-    }
+    const seeder =
+      levelProducers.find((p) => p.name === args.levelType) ??
+      levelProducers[0];
     const settings = seeder.producer(
       Math.min(Math.max(args.difficulty, 1), 12)
     );

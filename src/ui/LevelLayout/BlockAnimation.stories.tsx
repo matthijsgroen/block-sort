@@ -109,10 +109,10 @@ const Loader: React.FC<{ level: Promise<LevelState> }> = ({ level }) => {
 export const BlockAnimation: Story = {
   args: {},
   render: (args) => {
-    const seeder = levelProducers.find((p) => p.name === args.levelType);
-    if (!seeder) {
-      throw new Error("Producer not found");
-    }
+    const seeder =
+      levelProducers.find((p) => p.name === args.levelType) ??
+      levelProducers[0];
+
     const levelSettings = seeder.producer(
       Math.min(Math.max(args.difficulty, 1), 12)
     );
