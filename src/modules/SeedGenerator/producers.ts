@@ -48,14 +48,19 @@ export type Seeder = {
   name: string;
 };
 
-export const levelProducers = producers.flatMap((producer) =>
-  scale.reduce<Seeder[]>((acc, _lvl, index) => {
-    const settings = producer.producer(index + 1);
-    return acc.concat({
-      hash: settingsHash(settings),
-      name: producer.name,
-      producer: producer.producer,
-      difficulty: index
-    });
-  }, [])
-);
+export const levelProducers = producers
+  .flatMap((producer) =>
+    scale.reduce<Seeder[]>((acc, _lvl, index) => {
+      const settings = producer.producer(index + 1);
+      return acc.concat({
+        hash: settingsHash(settings),
+        name: producer.name,
+        producer: producer.producer,
+        difficulty: index
+      });
+    }, [])
+  )
+  .filter(
+    (seeder, index, seeders) =>
+      seeders.findIndex((s) => s.hash === seeder.hash) === index
+  );
