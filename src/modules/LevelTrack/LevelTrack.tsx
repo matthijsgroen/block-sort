@@ -115,7 +115,7 @@ export const LevelTrack: React.FC<Props> = ({
 
   return (
     <div className="flex h-full flex-col items-center">
-      <div className="pt-safeTop flex w-full flex-row gap-x-2 pl-safeLeft pr-safeRight">
+      <div className="flex w-full flex-row gap-x-2 pl-safeLeft pr-safeRight pt-safeTop">
         <TopButton buttonType="settings" onClick={onOpenSettings} />
         <GameTitle
           onClick={() => {
@@ -271,8 +271,13 @@ export const LevelTrack: React.FC<Props> = ({
       <div className="flex w-full flex-row justify-between px-5 pb-7 text-center">
         <div className="w-22"></div>
         <PlayButton
-          label={`Level ${officialLevelNr + 1}`}
+          label={
+            officialLevelNr < 9
+              ? `Play level ${officialLevelNr + 1}`
+              : `Level ${officialLevelNr + 1}`
+          }
           onClick={onLevelStart}
+          highlight={officialLevelNr === 0}
           type={getLevelType(officialLevelNr)}
         />
         <div

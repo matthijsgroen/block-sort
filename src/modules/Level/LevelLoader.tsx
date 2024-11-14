@@ -28,6 +28,7 @@ type Props = {
   levelNr: number;
   title: string;
   levelType: LevelTypeString;
+  showTutorial?: boolean;
   storagePrefix?: string;
 };
 
@@ -68,6 +69,7 @@ export const LevelLoader: React.FC<Props> = ({
   levelNr,
   title,
   levelType,
+  showTutorial = false,
   storagePrefix = ""
 }) => {
   const [locked] = useState({ levelNr, levelSettings, seed, title });
@@ -125,6 +127,7 @@ export const LevelLoader: React.FC<Props> = ({
           storageKey={`${storagePrefix}levelState${locked.levelNr}`}
           storagePrefix={storagePrefix}
           levelNr={levelNr}
+          showTutorial={showTutorial}
           levelSettings={levelSettings}
           levelType={levelType}
           onComplete={(won) => {

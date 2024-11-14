@@ -35,6 +35,7 @@ export default {
         plantWiggle: "plantWiggle 527ms linear alternate infinite",
         plantWiggleSlow: "plantWiggle 5270ms linear alternate infinite",
         pulse: "pulse 1.5s ease-in-out infinite",
+        pulseEase: "pulseEase 2s ease-in-out infinite",
         rayShift: "rayShift 6s ease-in-out alternate infinite",
         rayShift2: "rayShift2 5.5s ease-in-out alternate infinite",
         place: "place 0.2s ease-out 2ms forwards",
@@ -63,6 +64,11 @@ export default {
         rayShift2: {
           "0%": { translate: "0rem 0" },
           "100%": { translate: "2rem 0" }
+        },
+        pulseEase: {
+          "0%": { scale: "1" },
+          "50%": { scale: "1.05" },
+          "100%": { scale: "1" }
         },
         pulse: {
           "0%": { scale: "1" },

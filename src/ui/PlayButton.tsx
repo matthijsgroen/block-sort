@@ -7,6 +7,7 @@ import styles from "./PlayButton.module.css";
 type Props = {
   label: string;
   disabled?: boolean;
+  highlight?: boolean;
   type: LevelType<string>;
   onClick: VoidFunction;
 };
@@ -15,6 +16,7 @@ export const PlayButton: React.FC<Props> = ({
   label,
   onClick,
   type,
+  highlight,
   disabled
 }) => (
   <button
@@ -24,7 +26,8 @@ export const PlayButton: React.FC<Props> = ({
       "inline-block h-12 w-[10rem] rounded-3xl pt-3 font-bold",
       {
         "opacity-50": disabled,
-        "shadow-lg transition-transform active:scale-90": !disabled
+        "shadow-lg transition-transform active:scale-90": !disabled,
+        "animate-pulseEase": highlight
       },
       type.buttonBackgroundClassName
     )}

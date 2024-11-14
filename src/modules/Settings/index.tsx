@@ -96,7 +96,7 @@ export const Settings: React.FC<Props> = ({
                   await navigator.share({
                     title: "Block Sort",
                     url: "https://matthijsgroen.github.io/block-sort/",
-                    text: "A block sorting puzzle game. No ads, cookies, tracking or payments. Just the pure fun!"
+                    text: "A block sorting puzzle game, without ads or tracking. Becomes very challenging, with different level types and seasonal themes."
                   });
                 } catch (ignoreError) {
                   // Nothing to do, user probably canceled the share
