@@ -49,7 +49,8 @@ const generateLevelContent = async (
   const hash = settingsHash(levelSettings);
 
   const seeds = levelSeeds[hash] ?? [];
-  const preSeed = seeds.length > 0 ? seeds[levelNr % seeds.length] : undefined;
+  const preSeed =
+    seeds.length > 0 ? seeds[levelNr % seeds.length]?.[0] : undefined;
   const random = mulberry32(preSeed ?? seed);
 
   let level = await generatePlayableLevel(levelSettings, random, preSeed);

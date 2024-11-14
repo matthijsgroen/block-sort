@@ -30,7 +30,7 @@ export const testDifficulties = (
         const hash = settingsHash(settings);
 
         const seeds = levelSeeds[hash] ?? [];
-        const preSeed = seeds[0];
+        const preSeed = seeds[0]?.[0];
         expect(preSeed).toBeDefined();
 
         const random = mulberry32(preSeed);

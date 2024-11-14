@@ -1,5 +1,6 @@
 import c from "ansi-colors";
 
+import { SeedMap } from "@/data/levelSeeds";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { LevelSettings, LevelState } from "@/game/types";
 import { mulberry32 } from "@/support/random";
@@ -27,7 +28,7 @@ const generateLevel = async (
 
 const produceExtraSeeds = async (
   firstMissing: Seeder,
-  copy: Record<string, number[]>,
+  copy: SeedMap,
   amount: number,
   onSeedAdded: (seed: number) => Promise<void> = async () => {},
   prefix = "",
@@ -52,7 +53,10 @@ const produceExtraSeeds = async (
       copy[firstMissing.hash] = [];
     }
     if (level.generationInformation?.seed) {
-      copy[firstMissing.hash].push(level.generationInformation.seed);
+      copy[firstMissing.hash].push([
+        level.generationInformation.seed,
+        level.moves.length
+      ]);
       await onSeedAdded(level.generationInformation.seed);
     }
     clearLine();
@@ -74,7 +78,7 @@ const produceExtraSeeds = async (
 const produceSeeds = async (
   amount: number,
   seeder: Seeder,
-  levelSeedsCopy: Record<string, number[]>,
+  levelSeedsCopy: SeedMap,
   infoLine: string,
   totalSeedsMissing: number,
   seedsProduced: number
@@ -108,7 +112,7 @@ const produceSeeds = async (
 
 export const updateLevelSeeds = async (
   all: boolean,
-  levelSeeds: Record<string, number[]>,
+  levelSeeds: SeedMap,
   seedsMissing: number | null = null
 ) => {
   const keys = Object.keys(levelSeeds);

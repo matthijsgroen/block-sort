@@ -119,7 +119,7 @@ export const BlockAnimation: Story = {
     const hash = settingsHash(levelSettings);
 
     const seeds = levelSeeds[hash] ?? [];
-    const preSeed = seeds[0];
+    const preSeed = seeds[0]?.[0];
     const random = mulberry32(preSeed);
     const level = generatePlayableLevel(levelSettings, random, preSeed);
     return (

@@ -1,10 +1,9 @@
-export const removeSeedsForKey = (
-  key: string,
-  seeds: Record<string, number[]>
-): Record<string, number[]> => {
+import { SeedMap } from "@/data/levelSeeds";
+
+export const removeSeedsForKey = (key: string, seeds: SeedMap): SeedMap => {
   const keys = Object.keys(seeds);
 
-  return keys.reduce<Record<string, number[]>>((acc, k) => {
+  return keys.reduce<SeedMap>((acc, k) => {
     if (k !== key) {
       acc[k] = seeds[k];
     }
