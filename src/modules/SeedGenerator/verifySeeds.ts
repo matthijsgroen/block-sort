@@ -75,7 +75,7 @@ export const verifySeeds = async (
           continue;
         }
       }
-      const random = mulberry32(seed);
+      const random = mulberry32(seed[0]);
       const settings = key.producer(key.difficulty + 1);
       clearLine();
       process.stdout.write(
@@ -94,9 +94,9 @@ export const verifySeeds = async (
       }
 
       try {
-        const level = await generatePlayableLevel(settings, random, seed);
+        const level = await generatePlayableLevel(settings, random, seed[0]);
         clearLine();
-        if (level.generationInformation?.seed !== seed) {
+        if (level.generationInformation?.seed !== seed[0]) {
           updatedSeeds = removeSeedsForKey(key.hash, updatedSeeds);
           await updateSeeds(updatedSeeds);
 

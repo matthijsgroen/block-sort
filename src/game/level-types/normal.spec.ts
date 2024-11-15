@@ -7,6 +7,7 @@ import {
   getNormal2Settings,
   getNormal3Settings,
   getNormal4Settings,
+  getNormal5Settings,
   getNormalSettings
 } from "./normal";
 
@@ -198,4 +199,8 @@ describe(getNormal3Settings, () => {
 
 describe(getNormal4Settings, () => {
   testDifficulties(getNormal4Settings);
+});
+
+describe(getNormal5Settings, () => {
+  testDifficulties(getNormal5Settings, [11]);
 });

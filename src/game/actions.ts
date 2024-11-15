@@ -38,7 +38,7 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
     if (blocks.length === 0) return;
     const amountToMove = canPlaceAmount(draft, move.to, blocks);
     const moving = draft.columns[move.from].blocks.splice(0, amountToMove);
-    if (moving.length === 0) return;
+    if (moving.length === 0 || amountToMove === 0) return;
 
     const topBlockOrigin = draft.columns[move.from].blocks[0];
     if (topBlockOrigin?.revealed === false) {

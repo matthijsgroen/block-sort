@@ -1,9 +1,9 @@
 import { writeFile } from "node:fs/promises";
 import * as prettier from "prettier";
 
-export const updateSeeds = async (
-  updatedLevelSeeds: Record<string, number[]>
-) => {
+import { SeedMap } from "@/data/levelSeeds";
+
+export const updateSeeds = async (updatedLevelSeeds: SeedMap) => {
   const sortedSeeds = Object.fromEntries(
     Object.entries(updatedLevelSeeds).sort(
       ([a], [b]) => parseInt(a) - parseInt(b)
@@ -13,7 +13,8 @@ export const updateSeeds = async (
   const newCode = `/**
     * This file is generated. Do not modify. Run "yarn generate-level-seeds" to update.
   */
-  export const levelSeeds: Record<string, number[]> = ${JSON.stringify(sortedSeeds)};`;
+  export type SeedMap = Record<string, [seed: number, moves: number][]>;
+  export const levelSeeds: SeedMap = ${JSON.stringify(sortedSeeds)};`;
   const formattedCode = await prettier.format(newCode, {
     parser: "typescript",
     trailingComma: "none"

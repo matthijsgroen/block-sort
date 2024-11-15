@@ -25,6 +25,7 @@ import { BackgroundContext } from "../Layout/BackgroundContext";
 
 import { getAutoMoveCount, MAX_SOLVE_PERCENTAGE } from "./autoMove";
 import { ghostModeModifier } from "./ghostModeModifier";
+import { Tutorial } from "./Tutorial";
 import { WIN_SENTENCES } from "./winSentences";
 
 type Props = {
@@ -34,6 +35,7 @@ type Props = {
   levelNr: number;
   levelType: LevelTypeString;
   levelSettings: LevelSettings;
+  showTutorial?: boolean;
   storageKey: string;
   storagePrefix?: string;
 };
@@ -45,6 +47,7 @@ export const Level: React.FC<Props> = ({
   levelType,
   levelNr,
   storageKey,
+  showTutorial = false,
   storagePrefix = ""
 }) => {
   const [playState, setPlayState] = useState<
@@ -138,6 +141,9 @@ export const Level: React.FC<Props> = ({
     setLevelState((levelState) => {
       const updatedLevelState = moveBlocks(levelState, { from, to });
       if (packageMode) {
+        // Detect revealed item on 'from' column, mark as revealed in
+        // column, index fashion to 'reveal' fog
+
         const revealedBlocks = getRevealedIndices(
           levelState,
           updatedLevelState,
@@ -145,13 +151,13 @@ export const Level: React.FC<Props> = ({
         ).map((i) => ({ col: from, row: i }));
         setRevealed((revealed) => revealed.concat(revealedBlocks));
       }
+      const hasMoved = updatedLevelState !== levelState;
+      if (hasMoved) {
+        setLevelMoves((moves) => moves.concat({ from, to }));
+      }
 
       return updatedLevelState;
     });
-    // Detect revealed item on 'from' column, mark as revealed in
-    // column, index fashion to 'reveal' fog
-
-    setLevelMoves((moves) => moves.concat({ from, to }));
   }, []);
 
   const onColumnDown = useCallback(
@@ -271,7 +277,7 @@ export const Level: React.FC<Props> = ({
           }}
         />
       )}
-      <div className="pt-safeTop flex flex-row items-center gap-x-2 pl-safeLeft pr-safeRight">
+      <div className="flex flex-row items-center gap-x-2 pl-safeLeft pr-safeRight pt-safeTop">
         <TopButton
           buttonType="back"
           onClick={() => {
@@ -328,6 +334,16 @@ export const Level: React.FC<Props> = ({
         levelState={levelState}
         theme={activeTheme}
         started={started}
+        tutorialContent={
+          showTutorial ? (
+            <Tutorial
+              selection={activeSelectStart?.selection}
+              activeTheme={activeTheme}
+              levelState={levelState}
+              levelMoves={levelMoves}
+            />
+          ) : undefined
+        }
         animateBlocks={blockAnimations}
         onColumnDown={onColumnDown}
         onColumnUp={onColumnUp}

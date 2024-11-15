@@ -5,6 +5,7 @@ import {
   getNormal2Settings,
   getNormal3Settings,
   getNormal4Settings,
+  getNormal5Settings,
   getNormalSettings
 } from "@/game/level-types/normal";
 import {
@@ -28,6 +29,7 @@ export const producers: Producer[] = [
   { name: "Normal2", producer: getNormal2Settings },
   { name: "Normal3", producer: getNormal3Settings },
   { name: "Normal4", producer: getNormal4Settings },
+  { name: "Normal5", producer: getNormal5Settings },
   { name: "Special1", producer: getSpecial1Settings },
   { name: "Special2", producer: getSpecial2Settings },
   { name: "Special3", producer: getSpecial3Settings },
@@ -48,14 +50,19 @@ export type Seeder = {
   name: string;
 };
 
-export const levelProducers = producers.flatMap((producer) =>
-  scale.reduce<Seeder[]>((acc, _lvl, index) => {
-    const settings = producer.producer(index + 1);
-    return acc.concat({
-      hash: settingsHash(settings),
-      name: producer.name,
-      producer: producer.producer,
-      difficulty: index
-    });
-  }, [])
-);
+export const levelProducers = producers
+  .flatMap((producer) =>
+    scale.reduce<Seeder[]>((acc, _lvl, index) => {
+      const settings = producer.producer(index + 1);
+      return acc.concat({
+        hash: settingsHash(settings),
+        name: producer.name,
+        producer: producer.producer,
+        difficulty: index
+      });
+    }, [])
+  )
+  .filter(
+    (seeder, index, seeders) =>
+      seeders.findIndex((s) => s.hash === seeder.hash) === index
+  );

@@ -28,6 +28,7 @@ type Props = {
   levelNr: number;
   title: string;
   levelType: LevelTypeString;
+  showTutorial?: boolean;
   storagePrefix?: string;
 };
 
@@ -48,7 +49,8 @@ const generateLevelContent = async (
   const hash = settingsHash(levelSettings);
 
   const seeds = levelSeeds[hash] ?? [];
-  const preSeed = seeds.length > 0 ? seeds[levelNr % seeds.length] : undefined;
+  const preSeed =
+    seeds.length > 0 ? seeds[levelNr % seeds.length]?.[0] : undefined;
   const random = mulberry32(preSeed ?? seed);
 
   let level = await generatePlayableLevel(levelSettings, random, preSeed);
@@ -68,6 +70,7 @@ export const LevelLoader: React.FC<Props> = ({
   levelNr,
   title,
   levelType,
+  showTutorial = false,
   storagePrefix = ""
 }) => {
   const [locked] = useState({ levelNr, levelSettings, seed, title });
@@ -125,6 +128,7 @@ export const LevelLoader: React.FC<Props> = ({
           storageKey={`${storagePrefix}levelState${locked.levelNr}`}
           storagePrefix={storagePrefix}
           levelNr={levelNr}
+          showTutorial={showTutorial}
           levelSettings={levelSettings}
           levelType={levelType}
           onComplete={(won) => {

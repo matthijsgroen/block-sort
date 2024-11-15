@@ -1,4 +1,10 @@
-import { Dispatch, useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  Dispatch,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 
 import { BlockTheme } from "@/game/themes";
 import { LevelState } from "@/game/types";
@@ -17,6 +23,7 @@ type Props = {
   suggestionTarget?: number;
   hideFormat?: "glass" | "present";
   theme?: BlockTheme;
+  tutorialContent?: React.ReactNode;
   animateBlocks?: boolean;
   onColumnDown?: Dispatch<number>;
   onColumnUp?: Dispatch<number>;
@@ -58,6 +65,7 @@ export const LevelLayout: React.FC<Props> = ({
   selection,
   suggestionSelection,
   suggestionTarget,
+  tutorialContent,
   animateBlocks = true,
   theme = "default",
   hideFormat = "glass",
@@ -155,6 +163,7 @@ export const LevelLayout: React.FC<Props> = ({
   const cols = determineColumns(maxColumnSize, levelState.columns.length);
   return (
     <div className="flex w-full flex-1 touch-none flex-col flex-wrap items-center justify-center">
+      {tutorialContent}
       <div className="w-full max-w-[600px]">
         <div className={`grid grid-flow-dense ${cols}`}>
           {levelState.columns.map((bar, i) => (
