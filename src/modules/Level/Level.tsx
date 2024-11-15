@@ -63,7 +63,7 @@ export const Level: React.FC<Props> = ({
 
   const [lostCounter, setLostCounter] = useGameStorage(
     `${storagePrefix}lostCounter`,
-    50
+    0
   );
   const [usedAutoMoves, setUsedAutoMoves] = useGameStorage(
     `${storagePrefix}usedAutoMoves`,
