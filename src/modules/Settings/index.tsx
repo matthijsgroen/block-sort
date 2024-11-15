@@ -3,11 +3,13 @@ import { Dispatch, lazy, Suspense, useState } from "react";
 import { Checkbox } from "@/ui/Checkbox";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import { DialogTitle } from "@/ui/Dialog/DialogTitle";
+import { Switch } from "@/ui/Switch";
 import { Transition } from "@/ui/Transition/Transition";
 import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";
 
 import info from "@/../package.json";
 import { THEMES } from "@/featureFlags";
+import { useGameStorage } from "@/support/useGameStorage";
 
 import { Attribution } from "./Attribution";
 import { Changelog } from "./Changelog";
@@ -39,6 +41,7 @@ export const Settings: React.FC<Props> = ({
   >("settings");
 
   const [showThemes, setShowThemes] = useState(false);
+  const [hintMode, setHintMode] = useGameStorage("hintMode", "standard");
 
   return (
     <Dialog
@@ -88,6 +91,29 @@ export const Settings: React.FC<Props> = ({
               <EventCalendar />
             </div>
           </Transition>
+          <div className="flex flex-row items-center gap-2 text-sm">
+            <span>Hint mode:</span>
+            <Switch
+              items={[
+                { name: "Eager", value: "eager" },
+                { name: "Standard", value: "standard" },
+                { name: "Off", value: "off" }
+              ]}
+              selected={hintMode}
+              onSelectionChange={setHintMode}
+            />
+          </div>
+          <div className="text-center">
+            {hintMode === "eager" && (
+              <p className="text-sm italic">show hints early</p>
+            )}
+            {hintMode === "standard" && (
+              <p className="text-sm italic">show hints after 15 attempts</p>
+            )}
+            {hintMode === "off" && (
+              <p className="text-sm italic">Never show any hints</p>
+            )}
+          </div>
           {"share" in navigator && (
             <TransparentButton
               size="large"

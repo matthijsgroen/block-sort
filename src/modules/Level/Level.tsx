@@ -23,7 +23,7 @@ import { useGameStorage } from "@/support/useGameStorage";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
 
-import { getAutoMoveCount, MAX_SOLVE_PERCENTAGE } from "./autoMove";
+import { getAutoMoveCount, HintMode } from "./autoMove";
 import { ghostModeModifier } from "./ghostModeModifier";
 import { Tutorial } from "./Tutorial";
 import { WIN_SENTENCES } from "./winSentences";
@@ -63,10 +63,10 @@ export const Level: React.FC<Props> = ({
 
   const [lostCounter, setLostCounter] = useGameStorage(
     `${storagePrefix}lostCounter`,
-    0
+    50
   );
-  const [autoMoves, setAutoMoves] = useGameStorage(
-    `${storagePrefix}autoMoves`,
+  const [usedAutoMoves, setUsedAutoMoves] = useGameStorage(
+    `${storagePrefix}usedAutoMoves`,
     0
   );
   const [levelMoves, setLevelMoves, deleteMoves] = useGameStorage<Move[]>(
@@ -79,10 +79,17 @@ export const Level: React.FC<Props> = ({
   const [previousLevelMoves, setPreviousLevelMoves, deletePreviousMoves] =
     useGameStorage<Move[]>(`${storagePrefix}previousMoves`, []);
 
-  const autoMoveLimit = Math.min(
-    getAutoMoveCount(lostCounter),
-    Math.floor(initialLevelState.moves.length * MAX_SOLVE_PERCENTAGE)
+  const [hintMode] = useGameStorage<HintMode | null>("hintMode", null);
+
+  const autoMoveLimit = getAutoMoveCount(
+    lostCounter,
+    initialLevelState.moves.length,
+    hintMode ?? "standard"
   );
+  const autoMoves =
+    usedAutoMoves === -1
+      ? 0
+      : Math.max(0, autoMoveLimit - Math.max(usedAutoMoves, 0));
 
   const [selectStart, setSelectStart] = useState<{
     selection: [column: number, amount: number];
@@ -168,7 +175,7 @@ export const Level: React.FC<Props> = ({
           return;
         }
         move(activeSelectStart.selection[0], columnIndex);
-        setAutoMoves(0);
+        setUsedAutoMoves(-1);
       } else {
         const selection = selectFromColumn(levelState, columnIndex);
         if (selection.length > 0) {
@@ -188,7 +195,7 @@ export const Level: React.FC<Props> = ({
           return;
         }
         move(activeSelectStart.selection[0], columnIndex);
-        setAutoMoves(0);
+        setUsedAutoMoves(-1);
       }
     },
     [activeSelectStart]
@@ -223,7 +230,7 @@ export const Level: React.FC<Props> = ({
           shape="&#10226;"
           afterShow={() => {
             setLevelState(initialLevelState);
-            setAutoMoves(autoMoveLimit);
+            setUsedAutoMoves(0);
             deleteMoves();
             deleteRevealed();
             setPlayState("busy");
@@ -265,7 +272,7 @@ export const Level: React.FC<Props> = ({
             } else {
               setLevelState(initialLevelState);
             }
-            setAutoMoves(autoMoveLimit);
+            setUsedAutoMoves(0);
             deleteRevealed();
             setPreviousLevelMoves(levelMoves);
             deleteMoves();
@@ -290,7 +297,7 @@ export const Level: React.FC<Props> = ({
           <WoodButton
             onClick={() => {
               const moveIndex = autoMoveLimit - autoMoves;
-              setAutoMoves((a) => a - 1);
+              setUsedAutoMoves((a) => a + 1);
               const nextMove = initialLevelState.moves[moveIndex];
               if (nextMove) {
                 const selection = selectFromColumn(levelState, nextMove.from);
