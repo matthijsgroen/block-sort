@@ -86,10 +86,17 @@ export const Level: React.FC<Props> = ({
     initialLevelState.moves.length,
     hintMode ?? "standard"
   );
+
+  const movesInSync = levelMoves.every(
+    (move, i) =>
+      initialLevelState.moves[i].from === move.from &&
+      initialLevelState.moves[i].to === move.to
+  );
+
   const autoMoves =
-    usedAutoMoves === -1
+    usedAutoMoves === -1 || !movesInSync
       ? 0
-      : Math.max(0, autoMoveLimit - Math.max(usedAutoMoves, 0));
+      : Math.max(0, autoMoveLimit - Math.max(levelMoves.length, 0));
 
   const [selectStart, setSelectStart] = useState<{
     selection: [column: number, amount: number];

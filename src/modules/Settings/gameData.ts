@@ -39,7 +39,7 @@ const setLevelData = async (
 
   await Promise.all([
     setGameValue<number>(`${storagePrefix}lostCounter`, data.l),
-    setGameValue<number>(`${storagePrefix}autoMoves`, data.a),
+    setGameValue<number>(`${storagePrefix}usedAutoMoves`, data.a),
     setGameValue<LevelState | null>(
       `${storagePrefix}initialLevelState${levelNr}`,
       levelState
@@ -69,15 +69,15 @@ const getLevelData = async (
 ): Promise<LevelDataDTO> => {
   const lostCounter =
     (await getGameValue<number>(`${storagePrefix}lostCounter`)) ?? 0;
-  const autoMoves =
-    (await getGameValue<number>(`${storagePrefix}autoMoves`)) ?? 0;
+  const usedAutoMoves =
+    (await getGameValue<number>(`${storagePrefix}usedAutoMoves`)) ?? 0;
   const initial = await getGameValue<LevelState>(
     `${storagePrefix}initialLevelState${levelNr}`
   );
   const moves = (await getGameValue<Move[]>(`${storagePrefix}moves`)) ?? [];
   return {
     l: lostCounter,
-    a: autoMoves,
+    a: usedAutoMoves,
     s: initial ? toLevelStateDTO(initial) : null,
     m: toMoveDTO(moves)
   };
