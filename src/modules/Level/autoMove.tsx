@@ -18,8 +18,8 @@ const hintSystems: Record<HintMode, HintSystem> = {
   },
   eager: {
     minLoseCount: 5,
-    initialSteps: 10,
-    increaseStep: 5,
+    initialSteps: 5,
+    increaseStep: 3,
     loseIterationCount: 1,
     maxSolvePercentage: 0.95
   },
