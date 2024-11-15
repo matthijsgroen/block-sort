@@ -11,17 +11,18 @@ import { LevelSettings } from "../types";
 
 import { LEVEL_SCALE } from "./levelSettings";
 
+const ALL_DIFFICULTIES = [1].concat(LEVEL_SCALE.map((_level, i) => i + 2));
+
 export const testDifficulties = (
-  getSettings: (difficulty: number) => LevelSettings
+  getSettings: (difficulty: number) => LevelSettings,
+  difficulties = ALL_DIFFICULTIES
 ) => {
   describe("playability", () => {
     it.each(
-      [{ difficulty: 1, level: 1 }].concat(
-        LEVEL_SCALE.map((level, i) => ({
-          difficulty: i + 2,
-          level: level + 1
-        }))
-      )
+      difficulties.map((difficulty) => ({
+        difficulty,
+        level: (LEVEL_SCALE[difficulty - 2] ?? 0) + 1
+      }))
     )(
       "can play difficulty $difficulty at level $level",
       async ({ difficulty }) => {
