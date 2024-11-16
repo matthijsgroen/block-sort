@@ -26,6 +26,7 @@ type Props = {
   onComplete: (won: boolean) => void;
   levelSettings: LevelSettings;
   levelNr: number;
+  useStreak?: boolean;
   title: string;
   levelType: LevelTypeString;
   showTutorial?: boolean;
@@ -69,6 +70,7 @@ export const LevelLoader: React.FC<Props> = ({
   levelSettings,
   levelNr,
   title,
+  useStreak = false,
   levelType,
   showTutorial = false,
   storagePrefix = ""
@@ -128,6 +130,7 @@ export const LevelLoader: React.FC<Props> = ({
           storageKey={`${storagePrefix}levelState${locked.levelNr}`}
           storagePrefix={storagePrefix}
           levelNr={levelNr}
+          useStreak={useStreak}
           showTutorial={showTutorial}
           levelSettings={levelSettings}
           levelType={levelType}

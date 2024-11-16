@@ -27,9 +27,9 @@ export const Tutorial: React.FC<Props> = ({
       <p>Click on the right column to move the selected blocks there.</p>
     )}
     {levelMoves.length === 1 && !selection && (
-      <p>
+      <div>
         Well done! Now select the other{" "}
-        <span className="inline-block scale-75 text-sm">
+        <div className="inline-block scale-75 text-sm">
           <Block
             moved={true}
             color={
@@ -43,9 +43,9 @@ export const Tutorial: React.FC<Props> = ({
               ]
             }
           />
-        </span>{" "}
+        </div>{" "}
         to stack on the right column.
-      </p>
+      </div>
     )}
     {levelMoves.length === 1 &&
       selection &&

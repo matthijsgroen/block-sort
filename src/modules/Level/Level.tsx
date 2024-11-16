@@ -31,6 +31,7 @@ import { WIN_SENTENCES } from "./winSentences";
 type Props = {
   onComplete: (won: boolean) => void;
   level: Promise<LevelState>;
+  useStreak?: boolean;
   title: string;
   levelNr: number;
   levelType: LevelTypeString;
@@ -47,6 +48,7 @@ export const Level: React.FC<Props> = ({
   levelType,
   levelNr,
   storageKey,
+  useStreak = false,
   showTutorial = false,
   storagePrefix = ""
 }) => {
@@ -109,6 +111,7 @@ export const Level: React.FC<Props> = ({
   const [started, setStarted] = useState(false);
   const levelTypePlugin = getLevelTypeByType(levelType);
   const { setThemeOverride, clearThemeOverride } = use(ThemeContext);
+  const [, setStreak] = useGameStorage<number | null>("streak", null);
 
   const { setLevelType } = use(BackgroundContext);
   useEffect(() => {
@@ -152,6 +155,9 @@ export const Level: React.FC<Props> = ({
   );
 
   const move = useCallback((from: number, to: number) => {
+    if (hintMode !== "off" && hintMode !== null && useStreak) {
+      setStreak(0);
+    }
     setLevelState((levelState) => {
       const updatedLevelState = moveBlocks(levelState, { from, to });
       if (packageMode) {
@@ -255,6 +261,9 @@ export const Level: React.FC<Props> = ({
           color={colorMap["green"]}
           shape="✔️"
           afterShow={async () => {
+            if (hintMode === "off" && useStreak) {
+              setStreak((s) => (s ? s + 1 : 1));
+            }
             onComplete(playState === "won");
             deleteMoves();
             deletePreviousMoves();
