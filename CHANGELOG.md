@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   >
   > The streak counter is visible in the settings screen.
 
+> Note: There is no real value in this streak counter other than some social bragging. Feel free to use the other modes as well!
+
 ### Fixed
 
 - The Hint mode button now also responds to slides.
