@@ -23,8 +23,8 @@ const getEncryptedData = async (): Promise<string> => {
 
 const importImageData = async (
   file: File
-): Promise<{ success: boolean; message: string }> => {
-  return new Promise((resolve) => {
+): Promise<{ success: boolean; message: string }> =>
+  new Promise((resolve) => {
     const image = new Image();
     image.onload = async () => {
       // Create a canvas element
@@ -100,7 +100,6 @@ const importImageData = async (
     };
     image.src = URL.createObjectURL(file);
   });
-};
 
 const DataTransfer: React.FC = () => {
   const [startDownload, setStartDownload] = useState(false);

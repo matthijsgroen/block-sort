@@ -1,16 +1,55 @@
-const MIN_LOSE_COUNT = 15;
-const INITIAL_STEPS = 5;
-const INCREASE_STEP = 5;
-const LOSE_ITERATION_COUNT = 3;
-export const MAX_SOLVE_PERCENTAGE = 0.95;
+export type HintMode = "standard" | "eager" | "off";
 
-export const getAutoMoveCount = (lostCounter: number) => {
-  if (lostCounter < MIN_LOSE_COUNT) {
+type HintSystem = {
+  minLoseCount: number;
+  initialSteps: number;
+  increaseStep: number;
+  loseIterationCount: number;
+  maxSolvePercentage: number;
+};
+
+const hintSystems: Record<HintMode, HintSystem> = {
+  standard: {
+    minLoseCount: 15,
+    initialSteps: 5,
+    increaseStep: 5,
+    loseIterationCount: 3,
+    maxSolvePercentage: 0.5
+  },
+  eager: {
+    minLoseCount: 5,
+    initialSteps: 5,
+    increaseStep: 3,
+    loseIterationCount: 1,
+    maxSolvePercentage: 0.95
+  },
+  off: {
+    minLoseCount: 15,
+    initialSteps: 0,
+    increaseStep: 1,
+    loseIterationCount: 0,
+    maxSolvePercentage: 0
+  }
+};
+
+export const getAutoMoveCount = (
+  lostCounter: number,
+  solverMoves: number,
+  hintMode: HintMode = "standard"
+) => {
+  const system = hintSystems[hintMode];
+
+  if (lostCounter < system.minLoseCount) {
     return 0;
   }
-  return (
-    INITIAL_STEPS +
-    Math.floor((lostCounter - MIN_LOSE_COUNT) / LOSE_ITERATION_COUNT) *
-      INCREASE_STEP
+  const autoMoves =
+    system.initialSteps +
+    Math.floor(
+      (lostCounter - system.minLoseCount) / system.loseIterationCount
+    ) *
+      system.increaseStep;
+  return Math.min(
+    autoMoves,
+    Math.floor(solverMoves * system.maxSolvePercentage)
   );
 };
