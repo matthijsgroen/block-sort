@@ -115,8 +115,8 @@ export const Settings: React.FC<Props> = ({
               <p className="text-sm italic">
                 Never show any hints.
                 <br />
-                Current level streak: <strong>{streak ?? "0"}</strong>{" "}
-                {streak !== 1 ? "levels" : "level"} 🔥
+                Last <strong>{streak ?? "0"}</strong>{" "}
+                {streak !== 1 ? "levels" : "level"} were solved without hints.
               </p>
             )}
           </div>

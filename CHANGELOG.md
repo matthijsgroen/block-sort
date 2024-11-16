@@ -9,13 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Streak counter
-  > If you complete a level with Hint Mode "Off", your streak counter increases.
-  > If you make a move with Streak mode 'Standard' or 'Eager' your streak counter resets.
-  >
-  > The streak counter is visible in the settings screen.
-
-> Note: There is no real value in this streak counter other than some social bragging. Feel free to use the other modes as well!
+- Counter to show amount of last levels completed without hints.
 
 ### Fixed
 
