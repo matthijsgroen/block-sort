@@ -4,27 +4,67 @@ import { LevelState, Move } from "@/game/types";
 import { getGameValue, setGameValue } from "@/support/useGameStorage";
 
 import {
+  fromHintModeDTO,
   fromLevelStateDTO,
   fromMoveDTO,
   LevelStateDTO,
   MoveDTO,
+  toHintModeDTO,
   toLevelStateDTO,
   toMoveDTO
 } from "./dto";
 
 type LevelDataDTO = {
+  /**
+   * Lost counter
+   */
   l: number;
+  /**
+   * Used auto moves
+   */
   a: number;
+  /**
+   * Level state
+   */
   s: LevelStateDTO | null;
+  /**
+   * Moves
+   */
   m: MoveDTO[];
 };
 
 export type DataFormat = {
+  /**
+   * Level number
+   */
   l: number;
+  /**
+   * Level data
+   */
   ld: LevelDataDTO;
+  /**
+   * Streak
+   */
+  s: number;
+  /**
+   * Hint mode
+   */
+  h: number;
+  /**
+   * Zen mode data
+   */
   z: {
+    /**
+     * Zen level number
+     */
     l: number;
+    /**
+     * Zen difficulty
+     */
     d: number;
+    /**
+     * Zen level type
+     */
     t: number;
   };
   version: string;
@@ -57,7 +97,9 @@ export const setGameData = async (data: DataFormat) => {
     setGameValue("levelNr", data.l),
     setGameValue("zenLevelNr", data.z.l),
     setGameValue("zenDifficulty", data.z.d),
-    setGameValue("zenLevelType", data.z.t)
+    setGameValue("zenLevelType", data.z.t),
+    setGameValue("hintMode", fromHintModeDTO(data.h)),
+    setGameValue("streak", data.s)
   ]);
 
   await Promise.all([setLevelData("", data.l, data.ld)]);
@@ -88,10 +130,16 @@ export const getGameData = async (): Promise<DataFormat> => {
   const zenLevelNr = (await getGameValue<number>("zenLevelNr")) ?? 0;
   const zenDifficulty = (await getGameValue<number>("zenDifficulty")) ?? 0;
   const zenLevelType = (await getGameValue<number>("zenLevelType")) ?? 0;
+  const hintMode =
+    (await getGameValue<"standard" | "eager" | "off">("hintMode")) ??
+    "standard";
+  const streak = (await getGameValue<number>("streak")) ?? 0;
 
   return {
     l: levelNr,
     ld: await getLevelData("", levelNr),
+    h: toHintModeDTO(hintMode),
+    s: streak,
     z: {
       l: zenLevelNr,
       d: zenDifficulty,

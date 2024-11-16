@@ -89,6 +89,7 @@ export const NormalMode: React.FC<Props> = ({
               setLevelNr((nr) => nr + 1);
             }
           }}
+          useStreak
           levelNr={levelNr}
           levelType={getLevelType(levelNr).type as LevelTypeString}
           showTutorial={levelNr === 0}

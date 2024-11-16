@@ -62,6 +62,6 @@ All music is from [Pixabay](https://pixabay.com/)
 
 ## Icons
 
-- **Material UI Icons**
+- **Material UI Icons**  
   Artist: Google  
   [Source](https://fonts.google.com/icons?icon.size=24&icon.color=%23e8eaed&icon.platform=web&selected=Material+Symbols+Rounded:arrow_back:FILL@1;wght@500;GRAD@0;opsz@24&icon.style=Rounded) • [License](https://www.apache.org/licenses/LICENSE-2.0)

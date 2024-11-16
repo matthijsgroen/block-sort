@@ -2,10 +2,25 @@ import { BLOCK_COLORS, BlockColor, LimitColor } from "@/game/blocks";
 import { Column, LevelState, Move } from "@/game/types";
 
 export type LevelStateDTO = {
+  /**
+   * Columns
+   */
   c: {
+    /**
+     * Blocks
+     */
     b: { c: number; r: boolean }[];
+    /**
+     * Column size
+     */
     s: number;
+    /**
+     * Limit color
+     */
     l?: number;
+    /**
+     * Column type
+     */
     t: number;
   }[];
   m: MoveDTO[];
@@ -77,3 +92,25 @@ export const fromLevelStateDTO = (dto: LevelStateDTO): LevelState => {
 
 export const fromMoveDTO = (moves: MoveDTO[]): Move[] =>
   moves.map((m) => ({ from: m.f, to: m.t }));
+
+export const toHintModeDTO = (
+  hintMode: "standard" | "eager" | "off"
+): number => {
+  if (hintMode === "standard") {
+    return 0;
+  } else if (hintMode === "eager") {
+    return 1;
+  }
+  return 2;
+};
+
+export const fromHintModeDTO = (
+  hintMode: number
+): "standard" | "eager" | "off" => {
+  if (hintMode === 0) {
+    return "standard";
+  } else if (hintMode === 1) {
+    return "eager";
+  }
+  return "off";
+};

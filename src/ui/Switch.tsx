@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import clsx from "clsx";
 
 import styles from "./Dialog/Dialog.module.css";
@@ -43,10 +43,27 @@ export const Switch: React.FC<SwitchProps> = ({
     }
   }, []);
 
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (itemRef.current) {
+        for (let i = 0; i < itemRef.current.children.length; i++) {
+          const item = itemRef.current.children[i] as HTMLLabelElement;
+          if (
+            e.clientX >= item.getBoundingClientRect().left &&
+            e.clientX <= item.getBoundingClientRect().right
+          ) {
+            onSelectionChange(items[i].value);
+          }
+        }
+      }
+    },
+    []
+  );
+
   return (
     <div
       className={
-        "relative inline-block rounded-full border border-black/50 bg-black/10 text-center align-middle text-black shadow-inner"
+        "relative inline-block touch-none select-none rounded-full border border-black/50 bg-black/10 text-center align-middle text-black shadow-inner"
       }
     >
       <div
@@ -59,7 +76,17 @@ export const Switch: React.FC<SwitchProps> = ({
       >
         {selectedItem.name}
       </div>
-      <div className="z-10" ref={itemRef}>
+      <div
+        className="z-10"
+        ref={itemRef}
+        onPointerDown={(e) => {
+          e.currentTarget.setPointerCapture(e.pointerId);
+        }}
+        onPointerMove={handlePointerMove}
+        onPointerUp={(e) => {
+          e.currentTarget.releasePointerCapture(e.pointerId);
+        }}
+      >
         {items.map((item) => (
           <label
             key={item.value}

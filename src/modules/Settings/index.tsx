@@ -42,6 +42,7 @@ export const Settings: React.FC<Props> = ({
 
   const [showThemes, setShowThemes] = useState(false);
   const [hintMode, setHintMode] = useGameStorage("hintMode", "standard");
+  const [streak] = useGameStorage<number | null>("streak", null);
 
   return (
     <Dialog
@@ -111,7 +112,12 @@ export const Settings: React.FC<Props> = ({
               <p className="text-sm italic">show hints after 15 attempts</p>
             )}
             {hintMode === "off" && (
-              <p className="text-sm italic">Never show any hints</p>
+              <p className="text-sm italic">
+                Never show any hints.
+                <br />
+                Last <strong>{streak ?? "0"}</strong>{" "}
+                {streak !== 1 ? "levels" : "level"} were solved without hints.
+              </p>
             )}
           </div>
           {"share" in navigator && (
