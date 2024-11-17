@@ -1,0 +1,33 @@
+.glow {
+  text-shadow: var(--color) 0 0 20px;
+}
+.recolor {
+  color: transparent;
+  background-color: var(--shapeColor);
+  background-clip: text;
+  text-shadow:
+    var(--color) 0 0 20px,
+    var(--shapeColor) 0 0 0;
+}
+
+.levelTitle {
+  background-image: linear-gradient(
+    35deg,
+    #ffffff00,
+    #ffffff00,
+    var(--color),
+    var(--color)
+  );
+  color: transparent;
+  background-clip: text;
+  background-size: 30% 400px;
+  background-position: center bottom;
+}
+
+.background {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--color), #000 60%) 0%,
+    #00000000 40%
+  );
+}

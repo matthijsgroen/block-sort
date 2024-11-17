@@ -15,6 +15,8 @@ export const winter: LevelType<"winter"> = {
   levelModifiers: {
     packageMode: true
   },
+  showIntro: true,
+  introTextColor: "#e2e8f0",
   occurrence: (levelNr) =>
     getActiveTheme(getToday()) === "winter" &&
     levelNr > 20 &&

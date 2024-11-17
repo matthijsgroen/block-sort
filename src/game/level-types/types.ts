@@ -13,12 +13,20 @@ export type LevelType<T extends string> = {
   unlocksAtLevel?: number;
   inBetaTest?: boolean;
   symbol?: string;
+  /**
+   * Must be a hex code
+   */
   color?: string;
   borderClassName: string;
   buttonBackgroundClassName: string;
   textClassName: string;
   backgroundClassName?: string;
   levelModifiers?: levelModifiers;
+  showIntro?: boolean;
+  /**
+   * Must be a hex code
+   */
+  introTextColor?: string;
   occurrence: (levelNr: number) => boolean;
   getSettings: (levelNr: number, random?: () => number) => LevelSettings;
   getZenSettings: (levelNr: number, difficulty: number) => LevelSettings;

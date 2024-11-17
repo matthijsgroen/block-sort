@@ -64,6 +64,8 @@ export const spring: LevelType<"spring"> = {
   buttonBackgroundClassName: "bg-pink-400",
   backgroundClassName: "bg-pink-200/10",
   inBetaTest: true,
+  showIntro: true,
+  introTextColor: "#ec4899",
   occurrence: (levelNr) =>
     getActiveTheme(getToday()) === "spring" &&
     levelNr > 200 &&

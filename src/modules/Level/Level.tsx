@@ -2,6 +2,7 @@ import { use, useCallback, useEffect, useState } from "react";
 
 import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
 import { Message } from "@/ui/Message/Message";
+import { StartAnimation } from "@/ui/StartAnimation/StartAnimation";
 import { TopButton } from "@/ui/TopButton/TopButton";
 import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
@@ -52,10 +53,6 @@ export const Level: React.FC<Props> = ({
   showTutorial = false,
   storagePrefix = ""
 }) => {
-  const [playState, setPlayState] = useState<
-    "won" | "lost" | "busy" | "restarting"
-  >("busy");
-
   const initialLevelState = use(level);
 
   const localRandom = mulberry32(levelNr * 386);
@@ -75,6 +72,10 @@ export const Level: React.FC<Props> = ({
     `${storagePrefix}moves`,
     []
   );
+  const [playState, setPlayState] = useState<
+    "won" | "lost" | "starting" | "busy" | "restarting"
+  >("starting");
+
   const [revealed, setRevealed, deleteRevealed] = useGameStorage<
     { col: number; row: number }[]
   >(`${storagePrefix}revealed`, []);
@@ -135,6 +136,12 @@ export const Level: React.FC<Props> = ({
       setLostCounter((a) => a + 1);
     }
   }, [levelState]);
+
+  useEffect(() => {
+    if (playState === "starting" && levelMoves.length > 0) {
+      setPlayState("busy");
+    }
+  }, [playState, levelMoves]);
 
   const levelModifiers = getActiveModifiers(getToday());
 
@@ -235,6 +242,23 @@ export const Level: React.FC<Props> = ({
 
   return (
     <div className={"flex h-full flex-col"}>
+      {playState === "starting" &&
+        levelMoves.length === 0 &&
+        levelTypePlugin.showIntro && (
+          <StartAnimation
+            delay={10}
+            message={levelTypePlugin.name}
+            color={levelTypePlugin.introTextColor ?? "#fff"}
+            shape={levelTypePlugin.symbol}
+            shapeColor={levelTypePlugin.color}
+            afterShow={() => {
+              setPlayState("busy");
+            }}
+            onShow={() => {
+              // sound.play("restart");
+            }}
+          />
+        )}
       {playState === "restarting" && (
         <Message
           delay={100}
