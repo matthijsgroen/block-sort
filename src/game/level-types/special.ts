@@ -84,6 +84,8 @@ export const special: LevelType<"special"> = {
   textClassName: "text-purple-500",
   buttonBackgroundClassName: "bg-purple-500",
   backgroundClassName: "bg-purple-500/40",
+  showIntro: true,
+  introTextColor: "#a855f7",
   occurrence: (levelNr) => (levelNr + 1) % 7 === 0 || (levelNr + 1) % 25 === 0,
   getSettings(levelNr, random = Math.random) {
     const difficulty = getDifficultyLevel(levelNr);

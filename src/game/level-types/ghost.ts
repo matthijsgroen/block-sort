@@ -16,7 +16,6 @@ export const ghost: LevelType<"ghost"> = {
   textClassName: "text-green-300",
   buttonBackgroundClassName: "bg-green-400",
   backgroundClassName: "bg-green-200/10",
-  unlocksAtLevel: 350,
   levelModifiers: {
     theme: "halloween",
     ghostMode: true

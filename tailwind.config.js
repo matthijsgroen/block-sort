@@ -54,9 +54,53 @@ export default {
           "flyBottomLeft 3s ease-in-out forwards, rotate 8s linear infinite, scale 2s ease-in-out infinite",
         flyBottomRight:
           "flyBottomRight 3s ease-in-out forwards, rotate 6s linear infinite, scale 3s ease-in-out infinite",
-        lightning: "lightning 30s linear infinite"
+        lightning: "lightning 30s linear infinite",
+        "center-tl": "center-tl 3s ease-in-out forwards",
+        "center-tr": "center-tr 3s ease-in-out forwards",
+        "center-bl": "center-bl 3s ease-in-out forwards",
+        "center-br": "center-br 3s ease-in-out forwards",
+        "bg-shift": "bg-shift 3s ease-in-out forwards",
+        "intro-bg": "intro-bg 3s ease-in-out forwards"
       },
       keyframes: {
+        "center-tl": {
+          "0%": { translate: "0 0", scale: "1.5" },
+          "30%": { translate: "49dvw 40dvh", scale: "1.5" },
+          "33%": { translate: "49dvw 40dvh", scale: "4.5" },
+          "80%": { translate: "49dvw 35dvh", scale: "4.5" },
+          "90%": { translate: "49dvw 35dvh", scale: "5.5", opacity: "1" },
+          "100%": { translate: "49dvw 35dvh", scale: "0.5", opacity: "0" }
+        },
+        "center-tr": {
+          "0%": { translate: "0 0", scale: "1.5" },
+          "30%": { translate: "-49dvw 40dvh", scale: "1.5" },
+          "90%": { translate: "-40dvw 35dvh", scale: "1", opacity: "1" },
+          "100%": { translate: "-40dvw 35dvh", scale: "0.3", opacity: "0" }
+        },
+        "center-bl": {
+          "0%": { translate: "0 100dvh", scale: "1.5" },
+          "30%": { translate: "49dvw 40dvh", scale: "1.5" },
+          "90%": { translate: "40dvw 35dvh", scale: "1", opacity: "1" },
+          "100%": { translate: "40dvw 35dvh", scale: "0.3", opacity: "0" }
+        },
+        "center-br": {
+          "0%": { translate: "0 100dvh", scale: "1.5" },
+          "30%": { translate: "-49dvw 40dvh", scale: "1.5", opacity: "1" },
+          "55%": { translate: "-49dvw 40dvh", scale: "1.5", opacity: "0" },
+          "100%": { translate: "-49dvw 40dvh", scale: "1.5", opacity: "0" }
+        },
+        "bg-shift": {
+          "0%": { backgroundPosition: "0 100%" },
+          "50%": { backgroundPosition: "0 0" },
+          "80%": { backgroundPosition: "0 0" },
+          "100%": { backgroundPosition: "0 100%" }
+        },
+        "intro-bg": {
+          "0%": { opacity: "0" },
+          "20%": { opacity: "1" },
+          "90%": { opacity: "1" },
+          "100%": { opacity: "0" }
+        },
         rayShift: {
           "0%": { translate: "0rem 0" },
           "100%": { translate: "3rem 0" }
