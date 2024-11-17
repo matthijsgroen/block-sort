@@ -45,7 +45,11 @@ export const Switch: React.FC<SwitchProps> = ({
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
-      if (itemRef.current) {
+      if (
+        itemRef.current &&
+        (e.pointerType === "touch" ||
+          (e.pointerType === "mouse" && e.buttons === 1))
+      ) {
         for (let i = 0; i < itemRef.current.children.length; i++) {
           const item = itemRef.current.children[i] as HTMLLabelElement;
           if (
@@ -70,7 +74,7 @@ export const Switch: React.FC<SwitchProps> = ({
         ref={selectionRef}
         className={clsx(
           "pointer-events-none absolute -left-1 -top-1 z-0 inline-block rounded-xl border border-black px-3 py-2",
-          "transition-transform",
+          "shadow-md transition-transform",
           styles.woodBackground
         )}
       >
