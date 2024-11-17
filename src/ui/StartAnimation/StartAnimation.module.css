@@ -12,11 +12,11 @@
 
 .levelTitle {
   background-image: linear-gradient(
-    35deg,
+    45deg,
     #ffffff00,
     #ffffff00,
     var(--color),
-    var(--color)
+    color-mix(in srgb, var(--color), #fff 70%)
   );
   color: transparent;
   background-clip: text;

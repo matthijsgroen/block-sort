@@ -35,7 +35,7 @@ export const StartAnimation: FC<Props> = ({
     if (started) {
       const timeOut = setTimeout(() => {
         afterShow?.();
-      }, 3000);
+      }, 2000);
       return () => clearTimeout(timeOut);
     }
   }, [started]);
