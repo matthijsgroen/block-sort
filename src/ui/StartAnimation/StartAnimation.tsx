@@ -53,7 +53,7 @@ export const StartAnimation: FC<Props> = ({
       ></div>
       <div
         className={clsx(
-          "animate-center-tr absolute right-0 top-0",
+          "animate-center-tr absolute left-1/2 top-0",
           shapeColor ? styles.recolor : styles.glow
         )}
       >
@@ -61,7 +61,7 @@ export const StartAnimation: FC<Props> = ({
       </div>
       <div
         className={clsx(
-          "animate-center-br absolute right-0 top-0",
+          "animate-center-br absolute left-1/2 top-0",
           shapeColor ? styles.recolor : styles.glow
         )}
       >
@@ -69,7 +69,7 @@ export const StartAnimation: FC<Props> = ({
       </div>
       <div
         className={clsx(
-          "animate-center-bl absolute left-0 top-0",
+          "animate-center-bl absolute left-1/2 top-0",
           shapeColor ? styles.recolor : styles.glow
         )}
       >
@@ -77,7 +77,7 @@ export const StartAnimation: FC<Props> = ({
       </div>
       <div
         className={clsx(
-          "animate-center-tl absolute left-0 top-0",
+          "animate-center-tl absolute left-1/2 top-0",
           shapeColor ? styles.recolor : styles.glow
         )}
       >
