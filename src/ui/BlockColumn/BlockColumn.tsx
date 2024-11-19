@@ -57,7 +57,12 @@ export const BlockColumn: React.FC<Props> = ({
   amountSuggested = 0,
   motionDuration = MOTION_DURATION
 }) => {
-  const [column, setColumn] = useState(columnProp);
+  const [columnState, setColumn] = useState(columnProp);
+  const column =
+    columnProp !== columnState &&
+    columnProp.blocks.length > columnProp.blocks.length
+      ? columnProp
+      : columnState;
   const [locked, setLocked] = useState(column.locked);
   const [blocksLocked, setBlocksLocked] = useState(-1);
 
