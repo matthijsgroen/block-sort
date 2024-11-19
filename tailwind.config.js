@@ -64,41 +64,61 @@ export default {
       },
       keyframes: {
         "center-tl": {
-          "0%": { translate: "0 0", scale: "1.5" },
-          "10%": { translate: "49dvw 40dvh", scale: "1.5" },
-          "33%": { translate: "49dvw 40dvh", scale: "3.5" },
-          "80%": { translate: "49dvw 35dvh", scale: "3.5" },
-          "90%": { translate: "49dvw 35dvh", scale: "4.5", opacity: "1" },
-          "100%": { translate: "49dvw 35dvh", scale: "0.5", opacity: "0" }
+          "0%": { translate: "-49dvw 0", fontSize: "1.5rem" },
+          "10%": { translate: "-0.75rem 40dvh", fontSize: "1.5rem" },
+          "33%": { translate: "-1.75rem 38dvh", fontSize: "3.5rem" },
+          "80%": { translate: "-1.75rem 33dvh", fontSize: "3.5rem" },
+          "90%": {
+            translate: "-2.25rem 33dvh",
+            fontSize: "4.5rem",
+            opacity: "1"
+          },
+          "100%": {
+            translate: "-0.25rem 33dvh",
+            fontSize: "0.5rem",
+            opacity: "0"
+          }
         },
         "center-tr": {
-          "0%": { translate: "0 0", scale: "1.5" },
-          "10%": { translate: "-49dvw 40dvh", scale: "1.5" },
-          "90%": { translate: "-35dvw 35dvh", scale: "1", opacity: "1" },
-          "100%": { translate: "-38dvw 35dvh", scale: "0.3", opacity: "0" }
+          "0%": { translate: "49dvw 0", fontSize: "1.5rem" },
+          "10%": { translate: "-0.75rem 40dvh", fontSize: "1.5rem" },
+          "90%": { translate: "-100px 35dvh", fontSize: "1rem", opacity: "1" },
+          "100%": { translate: "-60px 35dvh", fontSize: "0.3rem", opacity: "0" }
         },
         "center-bl": {
-          "0%": { translate: "0 100dvh", scale: "1.5" },
-          "10%": { translate: "49dvw 40dvh", scale: "1.5" },
-          "90%": { translate: "35dvw 35dvh", scale: "1", opacity: "1" },
-          "100%": { translate: "38dvw 35dvh", scale: "0.3", opacity: "0" }
+          "0%": { translate: "-49dvw 100dvh", fontSize: "1.5rem" },
+          "10%": { translate: "-0.75rem 40dvh", fontSize: "1.5rem" },
+          "90%": { translate: "100px 35dvh", fontSize: "1rem", opacity: "1" },
+          "100%": { translate: "60px 35dvh", fontSize: "0.3rem", opacity: "0" }
         },
         "center-br": {
-          "0%": { translate: "0 100dvh", scale: "1.5" },
-          "10%": { translate: "-49dvw 40dvh", scale: "1.5", opacity: "1" },
-          "55%": { translate: "-49dvw 40dvh", scale: "1.5", opacity: "0" },
-          "100%": { translate: "-49dvw 40dvh", scale: "1.5", opacity: "0" }
+          "0%": { translate: "49dvw 100dvh", fontSize: "1.5rem" },
+          "10%": {
+            translate: "-0.75rem 40dvh",
+            fontSize: "1.5rem",
+            opacity: "1"
+          },
+          "55%": {
+            translate: "-0.75rem 40dvh",
+            fontSize: "1.5rem",
+            opacity: "0"
+          },
+          "100%": {
+            translate: "-0.75rem 40dvh",
+            fontSize: "1.5rem",
+            opacity: "0"
+          }
         },
         "bg-shift": {
           "0%": { backgroundPosition: "0 100%" },
           "70%": { backgroundPosition: "0 0" },
-          "95%": { backgroundPosition: "0 0" },
-          "100%": { backgroundPosition: "0 100%" }
+          "90%": { backgroundPosition: "0 0", opacity: "1" },
+          "100%": { backgroundPosition: "0 100%", opacity: "0" }
         },
         "intro-bg": {
           "0%": { opacity: "0" },
           "20%": { opacity: "1" },
-          "95%": { opacity: "1" },
+          "90%": { opacity: "1" },
           "100%": { opacity: "0" }
         },
         rayShift: {

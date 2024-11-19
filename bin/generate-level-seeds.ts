@@ -10,6 +10,7 @@ import { SEED } from "../src/modules/SeedGenerator/constants";
 import { updateLevelSeeds } from "../src/modules/SeedGenerator/generateSeeds";
 import { producers } from "../src/modules/SeedGenerator/producers";
 import { removeSeedsForKey } from "../src/modules/SeedGenerator/removeSeeds";
+import { showSeedStatistics } from "../src/modules/SeedGenerator/seedInformation";
 import { updateSeeds } from "../src/modules/SeedGenerator/updateSeeds";
 import { verifySeeds } from "../src/modules/SeedGenerator/verifySeeds";
 import { settingsHash } from "../src/support/hash";
@@ -44,6 +45,11 @@ program
 
     await verifySeeds(all ?? false, sampleSize);
   });
+
+program.command("info").action(() => {
+  console.log("Level template statistics:");
+  showSeedStatistics();
+});
 
 program
   .command("erase")

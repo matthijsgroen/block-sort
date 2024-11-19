@@ -12,7 +12,7 @@
 
 .levelTitle {
   background-image: linear-gradient(
-    45deg,
+    35deg,
     #ffffff00,
     #ffffff00,
     var(--color),
@@ -20,7 +20,7 @@
   );
   color: transparent;
   background-clip: text;
-  background-size: 30% 400px;
+  background-size: 500px 500px;
   background-position: center bottom;
 }
 

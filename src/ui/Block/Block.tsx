@@ -64,7 +64,10 @@ export const Block: React.FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    if (selected && blockRef.current) {
+    if (!blockRef.current) {
+      return;
+    }
+    if (selected) {
       // Communicate coordinates
       const rect = blockRef.current.getBoundingClientRect();
       onPickUp?.(rect);

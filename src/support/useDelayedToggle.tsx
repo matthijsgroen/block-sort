@@ -14,7 +14,7 @@ export const useDelayedToggle = (
   const [delayedValue, setDelayedValue] = useState(initialValue ?? value);
 
   useEffect(() => {
-    if (value) {
+    if (value && value !== delayedValue) {
       if (onDelay === 0) {
         setDelayedValue(value);
       } else {
@@ -24,7 +24,7 @@ export const useDelayedToggle = (
         }, onDelay);
         return () => clearTimeout(clear);
       }
-    } else {
+    } else if (value !== delayedValue) {
       if (offDelay === 0) {
         setDelayedValue(value);
       } else {
