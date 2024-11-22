@@ -64,32 +64,73 @@ export default {
       },
       keyframes: {
         "center-tl": {
-          "0%": { translate: "-49dvw 0", fontSize: "1.5rem" },
-          "10%": { translate: "-0.75rem 40dvh", fontSize: "1.5rem" },
-          "33%": { translate: "-1.75rem 38dvh", fontSize: "3.5rem" },
-          "80%": { translate: "-1.75rem 33dvh", fontSize: "3.5rem" },
+          "0%": { translate: "-49dvw 0", fontSize: "4.5rem", scale: "0.3" },
+          "10%": {
+            translate: "-2.25rem 40dvh",
+            fontSize: "4.5rem",
+            scale: "0.3"
+          },
+          "33%": {
+            translate: "-2.25rem 38dvh",
+            fontSize: "4.5rem",
+            scale: "0.75"
+          },
+          "80%": {
+            translate: "-2.25rem 33dvh",
+            fontSize: "4.5rem",
+            scale: "0.75"
+          },
           "90%": {
             translate: "-2.25rem 33dvh",
             fontSize: "4.5rem",
             opacity: "1"
           },
           "100%": {
-            translate: "-0.25rem 33dvh",
-            fontSize: "0.5rem",
+            translate: "-2.25rem 33dvh",
+            fontSize: "4.5rem",
+            scale: "0.1",
             opacity: "0"
           }
         },
         "center-tr": {
           "0%": { translate: "49dvw 0", fontSize: "1.5rem" },
-          "10%": { translate: "-0.75rem 40dvh", fontSize: "1.5rem" },
-          "90%": { translate: "-100px 35dvh", fontSize: "1rem", opacity: "1" },
-          "100%": { translate: "-60px 35dvh", fontSize: "0.3rem", opacity: "0" }
+          "10%": {
+            translate: "-0.75rem 40dvh",
+            fontSize: "1.5rem",
+            scale: "1"
+          },
+          "90%": {
+            translate: "-100px 35dvh",
+            fontSize: "1.5rem",
+            opacity: "1",
+            scale: "0.66"
+          },
+          "100%": {
+            translate: "-60px 35dvh",
+            fontSize: "1.5rem",
+            opacity: "0",
+            scale: "0.2"
+          }
         },
         "center-bl": {
           "0%": { translate: "-49dvw 100dvh", fontSize: "1.5rem" },
-          "10%": { translate: "-0.75rem 40dvh", fontSize: "1.5rem" },
-          "90%": { translate: "100px 35dvh", fontSize: "1rem", opacity: "1" },
-          "100%": { translate: "60px 35dvh", fontSize: "0.3rem", opacity: "0" }
+          "10%": {
+            translate: "-0.75rem 40dvh",
+            fontSize: "1.5rem",
+            scale: "1"
+          },
+          "90%": {
+            translate: "80px 35dvh",
+            fontSize: "1.5rem",
+            opacity: "1",
+            scale: "0.66"
+          },
+          "100%": {
+            translate: "50px 35dvh",
+            fontSize: "1.5rem",
+            opacity: "0",
+            scale: "0.2"
+          }
         },
         "center-br": {
           "0%": { translate: "49dvw 100dvh", fontSize: "1.5rem" },
