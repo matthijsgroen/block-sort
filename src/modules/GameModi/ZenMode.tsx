@@ -16,8 +16,11 @@ import { deleteGameValue, useGameStorage } from "@/support/useGameStorage";
 
 import { ZenSelection } from "../ZenSelection/ZenSelection";
 
-import { SCREEN_TRANSITION, ZEN_BASE_SEED } from "./constants";
-import { DIFFICULTY_LEVELS } from "./zenModeConstants";
+import {
+  DIFFICULTY_LEVELS,
+  SCREEN_TRANSITION,
+  ZEN_BASE_SEED
+} from "./constants";
 
 type Props = {
   active: boolean;

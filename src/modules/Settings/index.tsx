@@ -100,7 +100,7 @@ export const Settings: React.FC<Props> = ({
                 { name: "Standard", value: "standard" },
                 { name: "Off", value: "off" }
               ]}
-              selected={hintMode}
+              selected={hintMode ?? "standard"}
               onSelectionChange={setHintMode}
             />
           </div>
