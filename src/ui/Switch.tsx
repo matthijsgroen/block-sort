@@ -73,16 +73,10 @@ export const Switch: React.FC<SwitchProps> = ({
       <div
         ref={selectionRef}
         className={clsx(
-          "pointer-events-none absolute -left-1 -top-1 z-0 inline-block rounded-xl border border-black px-3 py-2",
+          "absolute -left-1 -top-1 z-0 inline-block rounded-xl border border-black px-3 py-2",
           "shadow-md transition-transform",
           styles.woodBackground
         )}
-      >
-        {selectedItem.name}
-      </div>
-      <div
-        className="z-10"
-        ref={itemRef}
         onPointerDown={(e) => {
           e.currentTarget.setPointerCapture(e.pointerId);
         }}
@@ -91,6 +85,9 @@ export const Switch: React.FC<SwitchProps> = ({
           e.currentTarget.releasePointerCapture(e.pointerId);
         }}
       >
+        {selectedItem.name}
+      </div>
+      <div className="z-10" ref={itemRef}>
         {items.map((item) => (
           <label
             key={item.value}
