@@ -3,6 +3,7 @@ import {
   Dispatch,
   PropsWithChildren,
   useEffect,
+  useReducer,
   useState
 } from "react";
 
@@ -31,6 +32,24 @@ export const ThemeProvider: React.FC<
     themeOverride ??
     (themesEnabled && THEMES ? getActiveTheme(getToday()) : "default");
   const song = getThemeSong(theme);
+
+  const [, forceRerender] = useReducer((x) => x + 1, 0);
+  useEffect(() => {
+    if (!themesEnabled || !THEMES) {
+      return;
+    }
+    const today = getToday();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    if (getActiveTheme(today) !== getActiveTheme(tomorrow)) {
+      const timeUntilMidnight = tomorrow.getTime() - today.getTime();
+      const timeoutId = setTimeout(() => {
+        forceRerender();
+      }, timeUntilMidnight);
+      return () => clearTimeout(timeoutId);
+    }
+  }, []);
 
   useEffect(() => {
     if (musicEnabled) {
