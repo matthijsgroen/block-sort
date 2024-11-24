@@ -15,8 +15,7 @@ import { useGameStorage } from "@/support/useGameStorage";
 
 import { BetaContext } from "../Layout/BetaContext";
 
-import { BASE_SEED, SCREEN_TRANSITION } from "./constants";
-import { ZEN_MODE_UNLOCK } from "./zenModeConstants";
+import { BASE_SEED, SCREEN_TRANSITION, ZEN_MODE_UNLOCK } from "./constants";
 
 type Props = {
   active: boolean;

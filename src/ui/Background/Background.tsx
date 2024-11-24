@@ -34,7 +34,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
       {theme === "halloween" && (
         <div className="absolute left-0 top-0 h-full w-full animate-lightning bg-white"></div>
       )}
-      <div className="absolute left-0 top-0 h-full w-full bg-wood-texture mix-blend-multiply"></div>
+      <div className="absolute left-0 top-0 h-full w-full bg-wood-texture bg-top mix-blend-multiply"></div>
       {theme === "summer" && (
         <div
           className={clsx(

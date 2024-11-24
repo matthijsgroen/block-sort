@@ -32,10 +32,10 @@
     transform: translateY(0);
   }
   50% {
-    transform: translateY(3.5rem);
+    transform: translateY(calc(var(--distance, -3.5rem) * -1));
   }
   100% {
-    transform: translateY(3.5rem);
+    transform: translateY(calc(var(--distance, -3.5rem) * -1));
   }
 }
 
@@ -62,19 +62,20 @@
     scale: 1 0.8;
   }
   50% {
-    translate: calc(var(--direction, 0rem) * 0.5) -6rem;
+    translate: calc(var(--direction, 0rem) * 0.5)
+      calc(var(--distance, -3.5rem) - 2.5rem);
     scale: 1 1.2;
   }
   80% {
-    translate: var(--direction, 0rem) calc(-3.5rem);
+    translate: var(--direction, 0rem) var(--distance, -3.5rem);
     scale: 1 0.8;
   }
   90% {
-    translate: var(--direction, 0rem) calc(-3.7rem);
+    translate: var(--direction, 0rem) calc(var(--distance, -3.5rem) - 0.2rem);
     scale: 1 0.9;
   }
   100% {
-    translate: var(--direction, 0rem) calc(-3.5rem);
+    translate: var(--direction, 0rem) var(--distance, -3.5rem);
     scale: 1 1;
   }
 }

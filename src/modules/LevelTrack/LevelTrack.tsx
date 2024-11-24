@@ -20,6 +20,7 @@ import { PlayButton } from "../../ui/PlayButton";
 import { BackgroundContext } from "../Layout/BackgroundContext";
 import { BetaContext } from "../Layout/BetaContext";
 
+import { DifficultyBar } from "./DifficultyBar";
 import { LevelTypeIcon } from "./LevelTypeIcon";
 
 import styles from "./levelTrack.module.css";
@@ -141,18 +142,37 @@ export const LevelTrack: React.FC<Props> = ({
         )}
       </div>
 
-      <ol className="flex w-full flex-1 flex-col-reverse overflow-y-hidden">
+      <ol
+        className="flex w-full flex-1 flex-col-reverse overflow-y-hidden"
+        style={{
+          "--distance": LEVEL_SCALE.includes(officialLevelNr)
+            ? "-4.5rem"
+            : "-3.5rem"
+        }}
+      >
         {levelNrs.map((i) => {
           const offset = i % 8;
           const levelTransition = LEVEL_SCALE.includes(i);
           return (
             <Fragment key={i}>
+              {levelTransition && (
+                <li
+                  className={clsx(
+                    "flex w-full flex-shrink-0 items-center justify-center border-b-2 border-b-black/10 align-middle",
+                    {
+                      [styles.shiftDown]:
+                        levelNr < officialLevelNr && levelNr >= 2
+                    }
+                  )}
+                >
+                  <DifficultyBar levelNr={i} />
+                </li>
+              )}
               {levelNr < officialLevelNr && i === levelNr && (
                 <li
                   className={clsx(
                     "relative -top-7 z-10 flex h-0 w-full flex-shrink-0 items-center justify-center align-middle",
                     {
-                      [styles.levelUp]: levelTransition,
                       [styles.shiftDown]:
                         levelNr < officialLevelNr && levelNr >= 2
                     }
@@ -195,7 +215,6 @@ export const LevelTrack: React.FC<Props> = ({
                 className={clsx(
                   "flex h-height-block w-full flex-shrink-0 items-center justify-center align-middle",
                   {
-                    [styles.levelUp]: levelTransition,
                     [styles.shiftDown]:
                       levelNr < officialLevelNr && levelNr >= 2
                   }

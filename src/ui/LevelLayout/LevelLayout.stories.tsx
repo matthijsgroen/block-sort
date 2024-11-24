@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import { generateRandomLevel } from "@/game/level-creation/generateRandomLevel";
 import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
-import { levelProducers, producers } from "@/modules/SeedGenerator/producers";
+import { producers } from "@/modules/SeedGenerator/producers";
 import { mulberry32 } from "@/support/random";
 
 import { LevelLayout as LevelLayoutComponent } from "./LevelLayout";
@@ -54,8 +54,7 @@ export const LevelLayout: Story = {
   args: {},
   render: (args) => {
     const seeder =
-      levelProducers.find((p) => p.name === args.levelType) ??
-      levelProducers[0];
+      producers.find((p) => p.name === args.levelType) ?? producers[0];
     const settings = seeder.producer(
       Math.min(Math.max(args.difficulty, 1), 12)
     );

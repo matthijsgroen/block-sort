@@ -15,7 +15,10 @@ import {
   getSpecial4Settings,
   getSpecial5Settings
 } from "@/game/level-types/special";
-import { getSpringSettings } from "@/game/level-types/spring";
+import {
+  getEasySpringSettings,
+  getSpringSettings
+} from "@/game/level-types/spring";
 import { SettingsProducer } from "@/game/types";
 import { settingsHash } from "@/support/hash";
 
@@ -38,6 +41,7 @@ export const producers: Producer[] = [
   { name: "Hard", producer: getHardSettings },
   { name: "Hard2", producer: getHard2Settings },
   { name: "Spring", producer: getSpringSettings },
+  { name: "SpringEasy", producer: getEasySpringSettings },
   { name: "Daily", producer: getDailySettings }
 ];
 

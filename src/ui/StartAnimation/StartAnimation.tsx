@@ -47,13 +47,13 @@ export const StartAnimation: FC<Props> = ({
     >
       <div
         className={clsx(
-          "animate-intro-bg pointer-events-none absolute left-0 top-0 h-full w-full",
+          "pointer-events-none absolute left-0 top-0 h-full w-full animate-intro-bg",
           styles.background
         )}
       ></div>
       <div
         className={clsx(
-          "animate-center-tr absolute left-1/2 top-0",
+          "absolute left-1/2 top-0 animate-center-tr text-2xl",
           shapeColor ? styles.recolor : styles.glow
         )}
       >
@@ -61,7 +61,7 @@ export const StartAnimation: FC<Props> = ({
       </div>
       <div
         className={clsx(
-          "animate-center-br absolute left-1/2 top-0",
+          "absolute left-1/2 top-0 animate-center-br text-2xl",
           shapeColor ? styles.recolor : styles.glow
         )}
       >
@@ -69,7 +69,7 @@ export const StartAnimation: FC<Props> = ({
       </div>
       <div
         className={clsx(
-          "animate-center-bl absolute left-1/2 top-0",
+          "absolute left-1/2 top-0 animate-center-bl text-2xl",
           shapeColor ? styles.recolor : styles.glow
         )}
       >
@@ -77,7 +77,7 @@ export const StartAnimation: FC<Props> = ({
       </div>
       <div
         className={clsx(
-          "animate-center-tl absolute left-1/2 top-0",
+          "absolute left-1/2 top-0 animate-center-tl text-2xl",
           shapeColor ? styles.recolor : styles.glow
         )}
       >
@@ -85,7 +85,7 @@ export const StartAnimation: FC<Props> = ({
       </div>
       <div
         className={clsx(
-          "animate-bg-shift absolute top-[47dvh] w-full text-center font-block-sort text-4xl tracking-widest",
+          "absolute top-[47dvh] w-full animate-bg-shift text-center font-block-sort text-4xl tracking-widest",
           styles.levelTitle
         )}
       >

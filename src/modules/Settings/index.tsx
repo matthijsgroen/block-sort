@@ -14,6 +14,7 @@ import { useGameStorage } from "@/support/useGameStorage";
 import { Attribution } from "./Attribution";
 import { Changelog } from "./Changelog";
 import { EventCalendar } from "./EventCalendar";
+import { ShareGame } from "./ShareGame";
 
 type Props = {
   soundEnabled?: boolean;
@@ -37,7 +38,7 @@ export const Settings: React.FC<Props> = ({
   onClose
 }) => {
   const [activeTab, setActiveTab] = useState<
-    "settings" | "changes" | "attribution" | "data" | "advanced"
+    "settings" | "changes" | "attribution" | "data" | "advanced" | "sharing"
   >("settings");
 
   const [showThemes, setShowThemes] = useState(false);
@@ -100,7 +101,7 @@ export const Settings: React.FC<Props> = ({
                 { name: "Standard", value: "standard" },
                 { name: "Off", value: "off" }
               ]}
-              selected={hintMode}
+              selected={hintMode ?? "standard"}
               onSelectionChange={setHintMode}
             />
           </div>
@@ -120,25 +121,15 @@ export const Settings: React.FC<Props> = ({
               </p>
             )}
           </div>
-          {"share" in navigator && (
-            <TransparentButton
-              size="large"
-              onClick={async () => {
-                try {
-                  await navigator.share({
-                    title: "Block Sort",
-                    url: "https://matthijsgroen.github.io/block-sort/",
-                    text: "A block sorting puzzle game, without ads or tracking. Becomes very challenging, with different level types and seasonal themes."
-                  });
-                } catch (ignoreError) {
-                  // Nothing to do, user probably canceled the share
-                }
-              }}
-              icon="share"
-            >
-              Share
-            </TransparentButton>
-          )}
+          <TransparentButton
+            size="large"
+            onClick={() => {
+              setActiveTab("sharing");
+            }}
+            icon="share"
+          >
+            Share Game
+          </TransparentButton>
           <p className="text-xs">
             <a
               href="https://github.com/matthijsgroen"
@@ -163,6 +154,9 @@ export const Settings: React.FC<Props> = ({
             </TransparentButton>
           </div>
         </div>
+      )}
+      {activeTab === "sharing" && (
+        <ShareGame onBack={() => setActiveTab("settings")} />
       )}
       {activeTab === "advanced" && (
         <div className="flex flex-col gap-3 pb-4">
