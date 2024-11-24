@@ -5,7 +5,7 @@ import { levelSeeds } from "@/data/levelSeeds";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { LevelState } from "@/game/types";
-import { levelProducers } from "@/modules/SeedGenerator/producers";
+import { producers } from "@/modules/SeedGenerator/producers";
 import { settingsHash } from "@/support/hash";
 import { mulberry32 } from "@/support/random";
 
@@ -30,7 +30,7 @@ const meta: Meta<CustomArgs> = {
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
     levelType: {
-      options: levelProducers.map((p) => p.name),
+      options: producers.map((p) => p.name),
       control: { type: "select" }
     },
     difficulty: {
@@ -110,8 +110,7 @@ export const BlockAnimation: Story = {
   args: {},
   render: (args) => {
     const seeder =
-      levelProducers.find((p) => p.name === args.levelType) ??
-      levelProducers[0];
+      producers.find((p) => p.name === args.levelType) ?? producers[0];
 
     const levelSettings = seeder.producer(
       Math.min(Math.max(args.difficulty, 1), 12)
