@@ -175,6 +175,12 @@ export const verifySeeds = async (
             updatedSeeds[key.hash] = updatedSeeds[key.hash].filter(
               (s) => s[0] !== seed[0]
             );
+            if (level.generationInformation?.seed) {
+              updatedSeeds[key.hash].push([
+                level.generationInformation?.seed,
+                level.moves.length
+              ]);
+            }
             removedSeeds++;
           }
         } catch (ignoreError) {
