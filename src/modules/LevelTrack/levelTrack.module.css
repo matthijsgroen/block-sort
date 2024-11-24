@@ -62,7 +62,8 @@
     scale: 1 0.8;
   }
   50% {
-    translate: calc(var(--direction, 0rem) * 0.5) calc(var(--distance, -3.5rem) - 2.5rem);
+    translate: calc(var(--direction, 0rem) * 0.5)
+      calc(var(--distance, -3.5rem) - 2.5rem);
     scale: 1 1.2;
   }
   80% {
