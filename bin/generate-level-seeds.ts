@@ -33,18 +33,32 @@ program
 
 program
   .command("verify")
-  .option("-a, --all", "remove all items that are broken", false)
+  .option(
+    "-a, --all",
+    "verify all items if they are broken, instead of quitting on first mismatch",
+    false
+  )
+  .option("-t, --type <levelType>", "levelType to test")
+  .option("-p, --purge", "remove all seeds that are no longer valid", false)
   .option(
     "-s, --sample <amount>",
     "amount of seeds to test per setting (default is 5)",
     (v) => parseInt(v, 10)
   )
-  .action(async (options: { all?: boolean; sample: number | undefined }) => {
-    const all = options.all;
-    const sampleSize = options.sample;
+  .action(
+    async (options: {
+      all?: boolean;
+      sample: number | undefined;
+      purge?: boolean;
+      type?: string;
+    }) => {
+      const all = options.all;
+      const purge = options.purge;
+      const sampleSize = options.sample;
 
-    await verifySeeds(all ?? false, sampleSize);
-  });
+      await verifySeeds(all ?? false, sampleSize, purge ?? false, options.type);
+    }
+  );
 
 program.command("info").action(() => {
   console.log("Level template statistics:");
