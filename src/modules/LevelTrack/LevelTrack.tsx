@@ -142,7 +142,14 @@ export const LevelTrack: React.FC<Props> = ({
         )}
       </div>
 
-      <ol className="flex w-full flex-1 flex-col-reverse overflow-y-hidden">
+      <ol
+        className="flex w-full flex-1 flex-col-reverse overflow-y-hidden"
+        style={{
+          "--distance": LEVEL_SCALE.includes(officialLevelNr)
+            ? "-4.5rem"
+            : "-3.5rem"
+        }}
+      >
         {levelNrs.map((i) => {
           const offset = i % 8;
           const levelTransition = LEVEL_SCALE.includes(i);
@@ -151,7 +158,7 @@ export const LevelTrack: React.FC<Props> = ({
               {levelTransition && (
                 <li
                   className={clsx(
-                    "flex w-full flex-shrink-0 items-center justify-center bg-black/10 align-middle",
+                    "flex w-full flex-shrink-0 items-center justify-center border-b-2 border-b-black/10 align-middle",
                     {
                       [styles.shiftDown]:
                         levelNr < officialLevelNr && levelNr >= 2
@@ -194,9 +201,6 @@ export const LevelTrack: React.FC<Props> = ({
                         })}
                         style={{
                           "--direction": jumpRight ? "2.6rem" : "-2.4rem",
-                          "--distance": LEVEL_SCALE.includes(officialLevelNr)
-                            ? "-4.5rem"
-                            : "-3.5rem",
                           "--rotateDirection": jumpRight ? "40deg" : "-40deg"
                         }}
                       >

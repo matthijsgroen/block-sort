@@ -32,10 +32,10 @@
     transform: translateY(0);
   }
   50% {
-    transform: translateY(3.5rem);
+    transform: translateY(calc(var(--distance, -3.5rem) * -1));
   }
   100% {
-    transform: translateY(3.5rem);
+    transform: translateY(calc(var(--distance, -3.5rem) * -1));
   }
 }
 
