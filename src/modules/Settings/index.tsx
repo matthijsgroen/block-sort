@@ -121,17 +121,15 @@ export const Settings: React.FC<Props> = ({
               </p>
             )}
           </div>
-          {"share" in navigator && (
-            <TransparentButton
-              size="large"
-              onClick={() => {
-                setActiveTab("sharing");
-              }}
-              icon="share"
-            >
-              Share Game
-            </TransparentButton>
-          )}
+          <TransparentButton
+            size="large"
+            onClick={() => {
+              setActiveTab("sharing");
+            }}
+            icon="share"
+          >
+            Share Game
+          </TransparentButton>
           <p className="text-xs">
             <a
               href="https://github.com/matthijsgroen"

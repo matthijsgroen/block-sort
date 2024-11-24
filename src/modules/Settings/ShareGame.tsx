@@ -43,24 +43,28 @@ export const ShareGame: FC<Props> = ({ onBack }) => {
         Back
       </TransparentButton>
       <p className="text-sm">Thank you for sharing the game with others!</p>
-      <TransparentButton
-        size="large"
-        onClick={async () => {
-          try {
-            await navigator.share({
-              title: "Block Sort",
-              url: "https://matthijsgroen.github.io/block-sort/",
-              text: "A block sorting puzzle game, without ads or tracking. Becomes very challenging, with different level types and seasonal themes."
-            });
-          } catch (ignoreError) {
-            // Nothing to do, user probably canceled the share
-          }
-        }}
-        icon="group"
-      >
-        Share as message
-      </TransparentButton>
-      <p className="text-sm">or, let others scan this QR!</p>
+      {"share" in navigator && (
+        <>
+          <TransparentButton
+            size="large"
+            onClick={async () => {
+              try {
+                await navigator.share({
+                  title: "Block Sort",
+                  url: "https://matthijsgroen.github.io/block-sort/",
+                  text: "A block sorting puzzle game, without ads or tracking. Becomes very challenging, with different level types and seasonal themes."
+                });
+              } catch (ignoreError) {
+                // Nothing to do, user probably canceled the share
+              }
+            }}
+            icon="group"
+          >
+            Share as message
+          </TransparentButton>
+          <p className="text-sm">or, let others scan this QR!</p>
+        </>
+      )}
       <div className="flex justify-center">
         <Suspense
           fallback={
