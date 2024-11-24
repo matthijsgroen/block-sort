@@ -17,7 +17,7 @@ export const TransparentButton: React.FC<Props> = ({
 }) => {
   const classNames = clsx(
     "inline-block select-none rounded-full border border-black p-2 shadow-md",
-    "text-center align-middle text-black",
+    "text-center align-middle text-black focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black",
     "transition-transform active:scale-90",
     {
       "px-4 text-sm": size === "default"
