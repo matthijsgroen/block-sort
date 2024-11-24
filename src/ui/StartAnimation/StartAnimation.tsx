@@ -53,7 +53,7 @@ export const StartAnimation: FC<Props> = ({
       ></div>
       <div
         className={clsx(
-          "absolute left-1/2 top-0 animate-center-tr text-2xl",
+          "absolute left-1/2 top-0 animate-center-tr text-2xl/[4.5rem]",
           shapeColor ? styles.recolor : styles.glow
         )}
       >
@@ -61,7 +61,7 @@ export const StartAnimation: FC<Props> = ({
       </div>
       <div
         className={clsx(
-          "absolute left-1/2 top-0 animate-center-br text-2xl",
+          "absolute left-1/2 top-0 animate-center-br text-2xl/[4.5rem]",
           shapeColor ? styles.recolor : styles.glow
         )}
       >
@@ -69,7 +69,7 @@ export const StartAnimation: FC<Props> = ({
       </div>
       <div
         className={clsx(
-          "absolute left-1/2 top-0 animate-center-bl text-2xl",
+          "absolute left-1/2 top-0 animate-center-bl text-2xl/[4.5rem]",
           shapeColor ? styles.recolor : styles.glow
         )}
       >
@@ -77,7 +77,7 @@ export const StartAnimation: FC<Props> = ({
       </div>
       <div
         className={clsx(
-          "absolute left-1/2 top-0 animate-center-tl text-2xl",
+          "absolute left-1/2 top-0 animate-center-tl text-2xl/[4.5rem]",
           shapeColor ? styles.recolor : styles.glow
         )}
       >
