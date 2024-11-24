@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- Auto update when theme changes at midnight
+
 ### Changed
 
 - Improved indication of difficulty increase on level track
+- Updated Share mechanic, added share through QR
 
 ### Fixed
 
