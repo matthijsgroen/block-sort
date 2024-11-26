@@ -220,6 +220,41 @@ describe(isStuck, () => {
     expect(result).toBe(true);
   });
 
+  it("returns false if series can be combined in buffer", () => {
+    const s = createBlockSeries;
+    const b = createBlocks;
+    const level = createLevelState([
+      createPlacementColumn(7, s(6, "blue")),
+      createPlacementColumn(7, [
+        ...s(3, "darkblue"),
+        ...b("purple", "darkblue", "red")
+      ]),
+      createPlacementColumn(7, [...s(3, "red"), ...b("aqua")]),
+      createPlacementColumn(7, [...s(5, "darkgreen"), ...b("aqua")]),
+      createPlacementColumn(7, [...s(5, "aqua"), ...b("blue")]),
+      createPlacementColumn(7, [...s(5, "pink"), ...b("red", "black")]),
+      createPlacementColumn(7, [...s(5, "purple"), ...b("yellow", "red")]),
+      createPlacementColumn(7, [
+        ...s(3, "brown"),
+        ...s(2, "darkgreen"),
+        ...b("purple", "darkblue")
+      ]),
+      createPlacementColumn(7, [
+        // ...s(3, "black"),
+        ...b("pink", "darkblue", "darkblue")
+      ]),
+      createPlacementColumn(7, [
+        ...s(4, "brown"),
+        ...b("black", "red", "pink")
+      ]),
+      createPlacementColumn(7, s(6, "yellow"), "yellow"),
+      createBufferColumn(2, undefined, createBlocks("black")),
+      createBufferColumn(3, undefined, createBlocks("black", "black"))
+    ]);
+    const result = isStuck(level);
+    expect(result).toBe(false);
+  });
+
   it("returns true if series can not be distributed over free buffers", () => {
     const s = createBlockSeries;
     const b = createBlocks;
@@ -287,7 +322,74 @@ describe(isStuck, () => {
       createBufferColumn(3, undefined, createBlocks("black", "black"))
     ]);
     const result = isStuck(level);
-    expect(result).toBe(true);
+    expect(result).toBe(false);
+  });
+
+  it("returns false if series can be distributed over free buffers and columns", () => {
+    const s = createBlockSeries;
+    const b = createBlocks;
+    const level = createLevelState([
+      createPlacementColumn(7, s(6, "blue")),
+      createPlacementColumn(7, [
+        ...s(3, "darkblue"),
+        ...b("purple", "darkblue", "red")
+      ]),
+      createPlacementColumn(7, [...s(3, "red"), ...b("aqua")]),
+      createPlacementColumn(7, [...s(5, "darkgreen"), ...b("aqua")]),
+      createPlacementColumn(7, [...s(5, "aqua"), ...b("blue")]),
+      createPlacementColumn(7, [...b("black"), ...s(4, "pink"), ...b("red")]),
+      createPlacementColumn(7, [...s(5, "purple"), ...b("yellow", "red")]),
+      createPlacementColumn(7, [
+        ...s(3, "brown"),
+        ...s(2, "darkgreen"),
+        ...b("purple", "darkblue")
+      ]),
+      createPlacementColumn(7, [
+        ...s(3, "black"),
+        ...b("pink", "darkblue", "darkblue")
+      ]),
+      createPlacementColumn(7, [
+        ...s(4, "brown"),
+        ...b("black", "red", "pink")
+      ]),
+      createPlacementColumn(7, s(6, "yellow"), "yellow"),
+      createBufferColumn(2, undefined),
+      createBufferColumn(2, undefined, createBlocks("black", "black"))
+    ]);
+    const result = isStuck(level);
+    expect(result).toBe(false);
+  });
+
+  it("returns false if move can clear buffers", () => {
+    const s = createBlockSeries;
+    const b = createBlocks;
+    const level = createLevelState([
+      createPlacementColumn(7, s(6, "blue")),
+      createPlacementColumn(7, [
+        ...s(3, "darkblue"),
+        ...b("purple", "darkblue", "red")
+      ]),
+      createPlacementColumn(7, [...s(3, "red"), ...b("aqua")]),
+      createPlacementColumn(7, [...s(5, "darkgreen"), ...b("aqua")]),
+      createPlacementColumn(7, [...s(5, "aqua"), ...b("blue")]),
+      createPlacementColumn(7, [...s(4, "pink"), ...b("red")]),
+      createPlacementColumn(7, [...s(5, "purple"), ...b("yellow", "red")]),
+      createPlacementColumn(7, [
+        ...s(3, "brown"),
+        ...s(2, "darkgreen"),
+        ...b("purple", "darkblue")
+      ]),
+      createPlacementColumn(7, [...s(4, "black"), ...b("darkblue")]),
+      createPlacementColumn(7, [
+        ...s(4, "brown"),
+        ...b("black", "red", "pink")
+      ]),
+      createPlacementColumn(7, s(6, "yellow"), "yellow"),
+      createBufferColumn(2, undefined),
+      createBufferColumn(2, undefined, createBlocks("black", "black"))
+    ]);
+    const result = isStuck(level);
+    expect(result).toBe(false);
   });
 
   it("returns false if series would be able to redistribute", () => {

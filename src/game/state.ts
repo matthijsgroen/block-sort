@@ -46,43 +46,105 @@ const countHidden = (level: LevelState) =>
     0
   );
 
-const blockedByBuffer = (level: LevelState) => {
-  const smallestAvailableSeries = level.columns.reduce<
-    [BlockColor, amount: number]
-  >(
-    (acc, col, index) => {
-      if (col.blocks.length === 0) return acc;
-      if (col.type !== "placement") return acc;
-      const countSame = selectFromColumn(level, index).length;
-      if (countSame < acc[1]) {
-        return [col.blocks[0].color, countSame];
+const blockedByPlacement = (level: LevelState) => {
+  const smallestSeries: [BlockColor, amount: number, index: number][] = [];
+  level.columns.forEach((col, index) => {
+    if (col.blocks.length === 0) return;
+    if (col.type !== "buffer") return;
+    const countSame = selectFromColumn(level, index).length;
+    smallestSeries.push([col.blocks[0].color, countSame, index]);
+  });
+
+  const placementSpaceForColor = (blockColor: BlockColor, index: number) =>
+    level.columns.reduce((acc, col, i) => {
+      if (i === index) return acc;
+      if (
+        col.type === "placement" &&
+        (col.limitColor === blockColor ||
+          col.blocks[0]?.color === blockColor ||
+          (col.limitColor === undefined && col.blocks.length === 0))
+      ) {
+        return acc + col.columnSize - col.blocks.length;
+      }
+      if (col.type === "buffer" && col.limitColor === "rainbow") {
+        return acc + col.columnSize - col.blocks.length;
+      }
+      if (
+        col.type === "buffer" &&
+        (col.limitColor === blockColor || col.blocks[0]?.color === blockColor)
+      ) {
+        return acc + col.columnSize - col.blocks.length;
       }
       return acc;
-    },
-    ["red", Infinity]
-  );
+    }, 0);
 
-  const blockColor = smallestAvailableSeries[0];
+  const hasPlacementSpace = smallestSeries.some(([color, _amount, index]) => {
+    const largestFreeBufferSpace = placementSpaceForColor(color, index);
+    return largestFreeBufferSpace > 0;
+  });
+  if (!hasPlacementSpace) return true;
 
-  const largestFreeBufferSpace = level.columns.reduce((acc, col) => {
-    if (
-      col.type === "buffer" &&
-      col.limitColor === undefined &&
-      col.blocks.length === 0
-    ) {
-      return acc + col.columnSize;
-    }
-    if (
-      col.type === "buffer" &&
-      (col.limitColor === blockColor || col.blocks[0]?.color === blockColor)
-    ) {
-      return acc + col.columnSize - col.blocks.length;
-    }
-    return acc;
-  }, 0);
+  const canFit = smallestSeries.some(([color, amount, index]) => {
+    const largestFreeBufferSpace = placementSpaceForColor(color, index);
 
-  if (largestFreeBufferSpace === 0) return false;
-  return smallestAvailableSeries[1] > largestFreeBufferSpace;
+    return amount <= largestFreeBufferSpace;
+  });
+
+  return !canFit;
+};
+
+const blockedByBuffer = (level: LevelState) => {
+  const smallestSeries: [BlockColor, amount: number, index: number][] = [];
+  level.columns.forEach((col, index) => {
+    if (col.blocks.length === 0) return;
+    if (col.type !== "placement") return;
+    const countSame = selectFromColumn(level, index).length;
+    smallestSeries.push([col.blocks[0].color, countSame, index]);
+  });
+
+  const bufferSpaceForColor = (blockColor: BlockColor, index: number) =>
+    level.columns.reduce((acc, col, i) => {
+      if (i === index) return acc;
+      if (
+        col.type === "buffer" &&
+        col.limitColor === undefined &&
+        col.blocks.length === 0
+      ) {
+        return acc + col.columnSize;
+      }
+      if (col.type === "buffer" && col.limitColor === "rainbow") {
+        return acc + col.columnSize - col.blocks.length;
+      }
+      if (
+        col.type === "buffer" &&
+        (col.limitColor === blockColor || col.blocks[0]?.color === blockColor)
+      ) {
+        return acc + col.columnSize - col.blocks.length;
+      }
+      if (
+        col.type === "placement" &&
+        (col.limitColor === blockColor ||
+          col.blocks[0]?.color === blockColor ||
+          (col.limitColor === undefined && col.blocks.length === 0))
+      ) {
+        return acc + col.columnSize - col.blocks.length;
+      }
+      return acc;
+    }, 0);
+
+  const hasBufferSpace = smallestSeries.some(([color, _amount, index]) => {
+    const largestFreeBufferSpace = bufferSpaceForColor(color, index);
+    return largestFreeBufferSpace > 0;
+  });
+  if (!hasBufferSpace) return true;
+
+  const canFit = smallestSeries.some(([color, amount, index]) => {
+    const largestFreeBufferSpace = bufferSpaceForColor(color, index);
+
+    return amount <= largestFreeBufferSpace;
+  });
+
+  return !canFit;
 };
 
 const countCompleted = (level: LevelState) =>
@@ -93,12 +155,18 @@ const countCompleted = (level: LevelState) =>
       col.blocks.every((b) => b.color === col.blocks[0].color)
   ).length;
 
-export const isStuck = (level: LevelState): boolean => {
+export const isStuck = (level: LevelState, bufferCheck = true): boolean => {
   const topSignature = createSignature(level);
   const originalHidden = countHidden(level);
   const originalCompleted = countCompleted(level);
 
-  const initialBlocked = blockedByBuffer(level);
+  const hasBuffers = level.columns.some((c) => c.type === "buffer");
+
+  const initialBlocked =
+    bufferCheck &&
+    hasBuffers &&
+    blockedByBuffer(level) &&
+    blockedByPlacement(level);
   if (initialBlocked) return true;
 
   return level.columns.every((_source, sourceIndex) => {
@@ -110,11 +178,17 @@ export const isStuck = (level: LevelState): boolean => {
       const resultSig = createSignature(playLevel);
       const resultHidden = countHidden(playLevel);
       const resultCompleted = countCompleted(playLevel);
+
+      const resultBlocked =
+        bufferCheck &&
+        hasBuffers &&
+        blockedByBuffer(playLevel) &&
+        blockedByPlacement(playLevel);
+
       if (
         resultHidden !== originalHidden ||
         resultCompleted !== originalCompleted ||
-        (resultSig.some((c, i) => c !== topSignature[i]) &&
-          !blockedByBuffer(playLevel)) ||
+        (resultSig.some((c, i) => c !== topSignature[i]) && !resultBlocked) ||
         hasWon(playLevel)
       ) {
         return true;

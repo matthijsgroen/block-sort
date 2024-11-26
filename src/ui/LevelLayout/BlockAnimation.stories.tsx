@@ -4,6 +4,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { levelSeeds } from "@/data/levelSeeds";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
+import { isStuck } from "@/game/state";
 import { LevelState } from "@/game/types";
 import { producers } from "@/modules/SeedGenerator/producers";
 import { settingsHash } from "@/support/hash";
@@ -67,6 +68,10 @@ const Loader: React.FC<{ level: Promise<LevelState> }> = ({ level }) => {
   }, [level]);
 
   useEffect(() => {
+    if (isStuck(levelState)) {
+      console.log("Stuck");
+      return;
+    }
     const selectTimeoutId = setTimeout(() => {
       const move = state.moves[item];
       if (move) {
