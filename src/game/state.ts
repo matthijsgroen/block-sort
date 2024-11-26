@@ -1,7 +1,7 @@
 import { produce } from "immer";
 
 import { moveBlocks, selectFromColumn } from "./actions";
-import { Block, LevelState } from "./types";
+import { Block, BlockColor, LevelState } from "./types";
 
 export const canPlaceAmount = (
   level: LevelState,
@@ -47,6 +47,23 @@ const countHidden = (level: LevelState) =>
   );
 
 const blockedByBuffer = (level: LevelState) => {
+  const smallestAvailableSeries = level.columns.reduce<
+    [BlockColor, amount: number]
+  >(
+    (acc, col, index) => {
+      if (col.blocks.length === 0) return acc;
+      if (col.type !== "placement") return acc;
+      const countSame = selectFromColumn(level, index).length;
+      if (countSame < acc[1]) {
+        return [col.blocks[0].color, countSame];
+      }
+      return acc;
+    },
+    ["red", Infinity]
+  );
+
+  const blockColor = smallestAvailableSeries[0];
+
   const largestFreeBufferSpace = level.columns.reduce((acc, col) => {
     if (
       col.type === "buffer" &&
@@ -55,17 +72,17 @@ const blockedByBuffer = (level: LevelState) => {
     ) {
       return acc + col.columnSize;
     }
+    if (
+      col.type === "buffer" &&
+      (col.limitColor === blockColor || col.blocks[0]?.color === blockColor)
+    ) {
+      return acc + col.columnSize - col.blocks.length;
+    }
     return acc;
   }, 0);
 
-  const smallestAvailableSeries = level.columns.reduce((acc, col, index) => {
-    if (col.blocks.length === 0) return acc;
-    const countSame = selectFromColumn(level, index).length;
-    return Math.min(acc, countSame);
-  }, Infinity);
-
   if (largestFreeBufferSpace === 0) return false;
-  return smallestAvailableSeries > largestFreeBufferSpace;
+  return smallestAvailableSeries[1] > largestFreeBufferSpace;
 };
 
 const countCompleted = (level: LevelState) =>
@@ -81,11 +98,13 @@ export const isStuck = (level: LevelState): boolean => {
   const originalHidden = countHidden(level);
   const originalCompleted = countCompleted(level);
 
+  const initialBlocked = blockedByBuffer(level);
+  if (initialBlocked) return true;
+
   return level.columns.every((_source, sourceIndex) => {
-    let didChange = false;
     let playLevel = level;
 
-    level.columns.forEach((_dest, destIndex) => {
+    const didChange = level.columns.some((_dest, destIndex) => {
       if (sourceIndex === destIndex) return false;
       playLevel = moveBlocks(playLevel, { from: sourceIndex, to: destIndex });
       const resultSig = createSignature(playLevel);
@@ -98,8 +117,9 @@ export const isStuck = (level: LevelState): boolean => {
           !blockedByBuffer(playLevel)) ||
         hasWon(playLevel)
       ) {
-        didChange = true;
+        return true;
       }
+      return false;
     });
 
     return !didChange;

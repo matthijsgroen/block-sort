@@ -52,5 +52,8 @@ export const createBlock = (color: BlockColor, hidden?: boolean) => ({
 export const createBlocks = (...color: BlockColor[]) =>
   color.map((c) => createBlock(c));
 
+export const createBlockSeries = (amount: number, color: BlockColor) =>
+  Array.from({ length: amount }, () => createBlock(color));
+
 export const createHiddenBlocks = (...color: BlockColor[]) =>
   color.map((c, i) => createBlock(c, i > 0));
