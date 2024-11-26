@@ -47,12 +47,12 @@ const countHidden = (level: LevelState) =>
   );
 
 const blockedByPlacement = (level: LevelState) => {
-  const smallestSeries: [BlockColor, amount: number, index: number][] = [];
+  const bufferSeries: [BlockColor, amount: number, index: number][] = [];
   level.columns.forEach((col, index) => {
     if (col.blocks.length === 0) return;
     if (col.type !== "buffer") return;
     const countSame = selectFromColumn(level, index).length;
-    smallestSeries.push([col.blocks[0].color, countSame, index]);
+    bufferSeries.push([col.blocks[0].color, countSame, index]);
   });
 
   const placementSpaceForColor = (blockColor: BlockColor, index: number) =>
@@ -78,15 +78,14 @@ const blockedByPlacement = (level: LevelState) => {
       return acc;
     }, 0);
 
-  const hasPlacementSpace = smallestSeries.some(([color, _amount, index]) => {
+  const hasPlacementSpace = bufferSeries.some(([color, _amount, index]) => {
     const largestFreeBufferSpace = placementSpaceForColor(color, index);
     return largestFreeBufferSpace > 0;
   });
   if (!hasPlacementSpace) return true;
 
-  const canFit = smallestSeries.some(([color, amount, index]) => {
+  const canFit = bufferSeries.some(([color, amount, index]) => {
     const largestFreeBufferSpace = placementSpaceForColor(color, index);
-
     return amount <= largestFreeBufferSpace;
   });
 
@@ -94,12 +93,12 @@ const blockedByPlacement = (level: LevelState) => {
 };
 
 const blockedByBuffer = (level: LevelState) => {
-  const smallestSeries: [BlockColor, amount: number, index: number][] = [];
+  const placementSeries: [BlockColor, amount: number, index: number][] = [];
   level.columns.forEach((col, index) => {
     if (col.blocks.length === 0) return;
     if (col.type !== "placement") return;
     const countSame = selectFromColumn(level, index).length;
-    smallestSeries.push([col.blocks[0].color, countSame, index]);
+    placementSeries.push([col.blocks[0].color, countSame, index]);
   });
 
   const bufferSpaceForColor = (blockColor: BlockColor, index: number) =>
@@ -132,13 +131,13 @@ const blockedByBuffer = (level: LevelState) => {
       return acc;
     }, 0);
 
-  const hasBufferSpace = smallestSeries.some(([color, _amount, index]) => {
+  const hasBufferSpace = placementSeries.some(([color, _amount, index]) => {
     const largestFreeBufferSpace = bufferSpaceForColor(color, index);
     return largestFreeBufferSpace > 0;
   });
   if (!hasBufferSpace) return true;
 
-  const canFit = smallestSeries.some(([color, amount, index]) => {
+  const canFit = placementSeries.some(([color, amount, index]) => {
     const largestFreeBufferSpace = bufferSpaceForColor(color, index);
 
     return amount <= largestFreeBufferSpace;
@@ -155,7 +154,7 @@ const countCompleted = (level: LevelState) =>
       col.blocks.every((b) => b.color === col.blocks[0].color)
   ).length;
 
-export const isStuck = (level: LevelState, bufferCheck = true): boolean => {
+export const isStuck = (level: LevelState): boolean => {
   const topSignature = createSignature(level);
   const originalHidden = countHidden(level);
   const originalCompleted = countCompleted(level);
@@ -163,10 +162,7 @@ export const isStuck = (level: LevelState, bufferCheck = true): boolean => {
   const hasBuffers = level.columns.some((c) => c.type === "buffer");
 
   const initialBlocked =
-    bufferCheck &&
-    hasBuffers &&
-    blockedByBuffer(level) &&
-    blockedByPlacement(level);
+    hasBuffers && blockedByBuffer(level) && blockedByPlacement(level);
   if (initialBlocked) return true;
 
   return level.columns.every((_source, sourceIndex) => {
@@ -180,7 +176,6 @@ export const isStuck = (level: LevelState, bufferCheck = true): boolean => {
       const resultCompleted = countCompleted(playLevel);
 
       const resultBlocked =
-        bufferCheck &&
         hasBuffers &&
         blockedByBuffer(playLevel) &&
         blockedByPlacement(playLevel);
