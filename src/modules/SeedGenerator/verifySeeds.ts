@@ -99,7 +99,10 @@ export const verifySeeds = async (
       }
 
       try {
-        const level = await generatePlayableLevel(settings, random, seed[0]);
+        const level = await generatePlayableLevel(settings, {
+          random,
+          seed: seed[0]
+        });
         clearLine();
         if (level.generationInformation?.seed !== seed[0]) {
           if (!keysToPurge.includes(key)) {
@@ -170,7 +173,10 @@ export const verifySeeds = async (
         const random = mulberry32(seed[0]);
         const settings = key.producer(key.difficulty + 1);
         try {
-          const level = await generatePlayableLevel(settings, random, seed[0]);
+          const level = await generatePlayableLevel(settings, {
+            random,
+            seed: seed[0]
+          });
           if (level.generationInformation?.seed !== seed[0]) {
             updatedSeeds[key.hash] = updatedSeeds[key.hash].filter(
               (s) => s[0] !== seed[0]

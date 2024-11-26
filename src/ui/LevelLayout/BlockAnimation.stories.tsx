@@ -125,7 +125,10 @@ export const BlockAnimation: Story = {
     const seeds = levelSeeds[hash] ?? [];
     const preSeed = seeds[0]?.[0];
     const random = mulberry32(preSeed);
-    const level = generatePlayableLevel(levelSettings, random, preSeed);
+    const level = generatePlayableLevel(levelSettings, {
+      random,
+      seed: preSeed
+    });
     return (
       <div className="flex w-full flex-col">
         <Suspense

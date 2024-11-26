@@ -358,7 +358,7 @@ describe(moveBlocks, () => {
 describe(replayMoves, () => {
   it("executes a list of moves on a levelState", async () => {
     const random = mulberry32(TEST_SEED);
-    const level = await generatePlayableLevel(getNormalSettings(1), random);
+    const level = await generatePlayableLevel(getNormalSettings(1), { random });
     const finishedLevel = replayMoves(level, level.moves);
     expect(hasWon(finishedLevel)).toBe(true);
   });

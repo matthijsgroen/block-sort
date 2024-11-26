@@ -12,7 +12,6 @@ import { generateRandomLevel } from "./generateRandomLevel";
 import { scoreState, scoreStateWithMove } from "./scoreState";
 
 const MAX_PLAY_ATTEMPTS = 1;
-const MAX_GENERATE_ATTEMPTS = 1;
 const MAX_LEVEL_MOVES = 1_000;
 
 const MAX_GENERATE_COST = MAX_LEVEL_MOVES * MAX_PLAY_ATTEMPTS;
@@ -23,14 +22,17 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const generatePlayableLevel = async (
   settings: LevelSettings,
-  random = Math.random,
-  seed: number | null = null
+  {
+    random = Math.random,
+    seed = null,
+    attempts = 1
+  }: { random?: () => number; seed?: number | null; attempts?: number } = {}
 ): Promise<LevelState> => {
   // Start logging level seeds for faster reproduction
   const startSeed = seed ?? Math.floor(random() * 1e9);
 
   let attempt = 0;
-  while (attempt < MAX_GENERATE_ATTEMPTS) {
+  while (attempt < attempts) {
     const seed = startSeed + attempt;
     const generationRandom = mulberry32(seed);
 
