@@ -18,7 +18,7 @@ export const scrambled: LevelType<"scrambled"> = {
   textClassName: "text-slate-400",
   buttonBackgroundClassName: "bg-slate-400",
   backgroundClassName: "bg-slate-400/40",
-  unlocksAtLevel: 200,
+  unlocksAtLevel: 230,
   showIntro: true,
   introTextColor: "#94a3b8",
   occurrence: (levelNr) => levelNr > 180 && levelNr % 9 === 0,

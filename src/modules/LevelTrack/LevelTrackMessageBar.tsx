@@ -1,10 +1,5 @@
 import clsx from "clsx";
 
-import { getDifficultyLevel } from "@/game/level-settings/levelSettings";
-import { timesMap } from "@/support/timeMap";
-
-import { DIFFICULTIES } from "../GameModi/constants";
-
 const translates = [
   "",
   "translate-x-10",
@@ -17,8 +12,10 @@ const translates = [
   "-translate-x-10"
 ];
 
-export const DifficultyBar: React.FC<{ levelNr: number }> = ({ levelNr }) => {
-  const difficulty = DIFFICULTIES[getDifficultyLevel(levelNr) - 1];
+export const LevelTrackMessageBar: React.FC<{
+  levelNr: number;
+  message: string;
+}> = ({ levelNr, message }) => {
   const offset = levelNr % 8;
   return (
     <div
@@ -27,8 +24,7 @@ export const DifficultyBar: React.FC<{ levelNr: number }> = ({ levelNr }) => {
         translates[offset]
       )}
     >
-      {timesMap(difficulty.stars, () => "⭐️").join("")} {difficulty.name}{" "}
-      {timesMap(difficulty.stars, () => "⭐️").join("")}
+      {message}
     </div>
   );
 };
