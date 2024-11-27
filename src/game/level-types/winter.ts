@@ -1,4 +1,5 @@
-import { getActiveTheme, getToday } from "@/game/themes";
+import { getActiveTheme } from "@/game/themes";
+import { getToday } from "@/support/schedule";
 
 import { hard } from "./hard";
 import { normal } from "./normal";

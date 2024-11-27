@@ -9,10 +9,9 @@ import {
 
 import { sound, Stream } from "@/audio";
 import { THEMES } from "@/featureFlags";
-import { BlockTheme } from "@/game/themes";
+import { type BlockTheme, getActiveTheme } from "@/game/themes";
+import { getToday } from "@/support/schedule";
 import { getThemeSong } from "@/support/themeMusic";
-
-import { getActiveTheme, getToday } from "../../game/themes";
 
 export const ThemeContext = createContext<{
   activeTheme: BlockTheme;

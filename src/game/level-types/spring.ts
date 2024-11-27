@@ -1,4 +1,5 @@
-import { getActiveTheme, getToday } from "@/game/themes/index";
+import { getActiveTheme } from "@/game/themes/index";
+import { getToday } from "@/support/schedule";
 
 import { getDifficultyLevel } from "../level-settings/levelSettings";
 import { LayoutMap, SettingsProducer } from "../types";

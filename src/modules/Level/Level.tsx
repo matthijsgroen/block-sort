@@ -15,11 +15,12 @@ import {
   isStuck,
   revealBlocks
 } from "@/game/state";
-import { getActiveModifiers, getToday } from "@/game/themes";
+import { getActiveModifiers } from "@/game/themes";
 import { colorMap } from "@/game/themes/default";
 import { LevelSettings, LevelState, Move } from "@/game/types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { mulberry32, pick } from "@/support/random";
+import { getToday } from "@/support/schedule";
 import { useGameStorage } from "@/support/useGameStorage";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
