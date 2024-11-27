@@ -17,7 +17,7 @@ describe(generatePlayableLevel, () => {
         stackSize: 4,
         extraPlacementStacks: 2
       },
-      random
+      { random }
     );
     expect(level.colors).toEqual(["red", "white"]);
     expect(level.columns).toEqual([
@@ -38,7 +38,7 @@ describe(generatePlayableLevel, () => {
         stackSize: 4,
         extraPlacementStacks: 2
       },
-      random
+      { random }
     );
     expect(level.colors).toHaveLength(5);
     expect(level.generationInformation?.cost).toBeGreaterThan(815);
@@ -53,7 +53,7 @@ describe(generatePlayableLevel, () => {
         extraPlacementStacks: 2,
         extraPlacementLimits: 1
       },
-      random
+      { random, attempts: 10 }
     );
     expect(level.colors).toHaveLength(10);
   });
@@ -69,7 +69,7 @@ describe(generatePlayableLevel, () => {
         buffers: 3,
         bufferSizes: 4
       },
-      random
+      { random }
     );
     expect(level.colors).toHaveLength(4);
   }, 10_000);
@@ -83,7 +83,7 @@ describe(generatePlayableLevel, () => {
             amountColors: 1,
             extraPlacementStacks: 0
           },
-          random
+          { random }
         )
     ).rejects.toThrow("Can't generate playable level");
   });

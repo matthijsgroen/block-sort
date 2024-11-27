@@ -20,7 +20,7 @@ const generateLevel = async (
   }
   const random = mulberry32(seed);
   try {
-    return await generatePlayableLevel(settings, random);
+    return await generatePlayableLevel(settings, { random, attempts: 30 });
   } catch (ignoreError) {
     return await generateLevel(settings, seed + 1000, depth + 1);
   }

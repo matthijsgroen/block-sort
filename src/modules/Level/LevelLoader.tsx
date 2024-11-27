@@ -54,7 +54,10 @@ const generateLevelContent = async (
     seeds.length > 0 ? seeds[levelNr % seeds.length]?.[0] : undefined;
   const random = mulberry32(preSeed ?? seed);
 
-  let level = await generatePlayableLevel(levelSettings, random, preSeed);
+  let level = await generatePlayableLevel(levelSettings, {
+    random,
+    seed: preSeed
+  });
   if (preSeed !== undefined && level.generationInformation?.seed === preSeed) {
     level = colorHustle(level, random);
   }

@@ -7,20 +7,30 @@ import { TopButton } from "@/ui/TopButton/TopButton";
 import { ZenButton } from "@/ui/ZenButton";
 
 import { sound } from "@/audio";
-import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
+import {
+  getDifficultyLevel,
+  LEVEL_SCALE
+} from "@/game/level-settings/levelSettings";
 import {
   getLevelType,
+  getLevelTypeByUnlock,
   levelTypeBorder,
   levelTypeTextColor
 } from "@/game/level-types";
 import { effectTimeout } from "@/support/effectTimeout";
+import { timesMap } from "@/support/timeMap";
 import { useGameStorage } from "@/support/useGameStorage";
 
 import { PlayButton } from "../../ui/PlayButton";
+import {
+  DIFFICULTIES,
+  DIFFICULTY_LEVELS,
+  ZEN_MODE_UNLOCK
+} from "../GameModi/constants";
 import { BackgroundContext } from "../Layout/BackgroundContext";
 import { BetaContext } from "../Layout/BetaContext";
 
-import { DifficultyBar } from "./DifficultyBar";
+import { LevelTrackMessageBar } from "./LevelTrackMessageBar";
 import { LevelTypeIcon } from "./LevelTypeIcon";
 
 import styles from "./levelTrack.module.css";
@@ -46,6 +56,30 @@ const translates = [
   "-translate-x-20",
   "-translate-x-10"
 ];
+
+const getLevelMessage = (levelNr: number): string | undefined => {
+  if (LEVEL_SCALE.includes(levelNr)) {
+    const difficulty = DIFFICULTIES[getDifficultyLevel(levelNr) - 1];
+    const message = `${timesMap(difficulty.stars, () => "⭐️").join("")} ${difficulty.name} ${timesMap(difficulty.stars, () => "⭐️").join("")}`;
+    return message;
+  }
+  if (ZEN_MODE_UNLOCK - 1 === levelNr) {
+    return "🌻 Zen mode unlocked";
+  }
+  const unlockedZenDifficulty = DIFFICULTY_LEVELS.find(
+    (d) => d.unlocksAtLevel - 1 === levelNr
+  );
+  if (unlockedZenDifficulty) {
+    return `🌻 Zen difficulty ${unlockedZenDifficulty.name} unlocked`;
+  }
+
+  const unlockedZenType = getLevelTypeByUnlock(levelNr);
+  if (unlockedZenType) {
+    return `🌻 Zen level type ${unlockedZenType.name} unlocked`;
+  }
+
+  return undefined;
+};
 
 export const LevelTrack: React.FC<Props> = ({
   levelNr: officialLevelNr,
@@ -114,6 +148,8 @@ export const LevelTrack: React.FC<Props> = ({
 
   const jumpRight = (levelNr + 2) % 8 < 4;
 
+  const hasMessage = getLevelMessage(officialLevelNr) !== undefined;
+
   return (
     <div className="flex h-full flex-col items-center">
       <div className="flex w-full flex-row gap-x-2 pl-safeLeft pr-safeRight pt-safeTop">
@@ -145,17 +181,17 @@ export const LevelTrack: React.FC<Props> = ({
       <ol
         className="flex w-full flex-1 flex-col-reverse overflow-y-hidden"
         style={{
-          "--distance": LEVEL_SCALE.includes(officialLevelNr)
-            ? "-4.5rem"
-            : "-3.5rem"
+          "--distance": hasMessage ? "-4.5rem" : "-3.5rem"
         }}
       >
         {levelNrs.map((i) => {
           const offset = i % 8;
-          const levelTransition = LEVEL_SCALE.includes(i);
+
+          const levelMessage = getLevelMessage(i);
+
           return (
             <Fragment key={i}>
-              {levelTransition && (
+              {levelMessage !== undefined && (
                 <li
                   className={clsx(
                     "flex w-full flex-shrink-0 items-center justify-center border-b-2 border-b-black/10 align-middle",
@@ -165,7 +201,7 @@ export const LevelTrack: React.FC<Props> = ({
                     }
                   )}
                 >
-                  <DifficultyBar levelNr={i} />
+                  <LevelTrackMessageBar levelNr={i} message={levelMessage} />
                 </li>
               )}
               {levelNr < officialLevelNr && i === levelNr && (

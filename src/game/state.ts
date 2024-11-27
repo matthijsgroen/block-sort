@@ -1,7 +1,7 @@
 import { produce } from "immer";
 
 import { moveBlocks, selectFromColumn } from "./actions";
-import { Block, LevelState } from "./types";
+import { Block, BlockColor, LevelState } from "./types";
 
 export const canPlaceAmount = (
   level: LevelState,
@@ -46,26 +46,104 @@ const countHidden = (level: LevelState) =>
     0
   );
 
-const blockedByBuffer = (level: LevelState) => {
-  const largestFreeBufferSpace = level.columns.reduce((acc, col) => {
-    if (
-      col.type === "buffer" &&
-      col.limitColor === undefined &&
-      col.blocks.length === 0
-    ) {
-      return acc + col.columnSize;
-    }
-    return acc;
-  }, 0);
-
-  const smallestAvailableSeries = level.columns.reduce((acc, col, index) => {
-    if (col.blocks.length === 0) return acc;
+const blockedByPlacement = (level: LevelState) => {
+  const bufferSeries: [BlockColor, amount: number, index: number][] = [];
+  level.columns.forEach((col, index) => {
+    if (col.blocks.length === 0) return;
+    if (col.type !== "buffer") return;
     const countSame = selectFromColumn(level, index).length;
-    return Math.min(acc, countSame);
-  }, Infinity);
+    bufferSeries.push([col.blocks[0].color, countSame, index]);
+  });
 
-  if (largestFreeBufferSpace === 0) return false;
-  return smallestAvailableSeries > largestFreeBufferSpace;
+  const placementSpaceForColor = (blockColor: BlockColor, index: number) =>
+    level.columns.reduce((acc, col, i) => {
+      if (i === index) return acc;
+      if (
+        col.type === "placement" &&
+        (col.limitColor === blockColor ||
+          col.blocks[0]?.color === blockColor ||
+          (col.limitColor === undefined && col.blocks.length === 0))
+      ) {
+        return acc + col.columnSize - col.blocks.length;
+      }
+      if (col.type === "buffer" && col.limitColor === "rainbow") {
+        return acc + col.columnSize - col.blocks.length;
+      }
+      if (
+        col.type === "buffer" &&
+        (col.limitColor === blockColor || col.blocks[0]?.color === blockColor)
+      ) {
+        return acc + col.columnSize - col.blocks.length;
+      }
+      return acc;
+    }, 0);
+
+  const hasPlacementSpace = bufferSeries.some(([color, _amount, index]) => {
+    const largestFreeBufferSpace = placementSpaceForColor(color, index);
+    return largestFreeBufferSpace > 0;
+  });
+  if (!hasPlacementSpace) return true;
+
+  const canFit = bufferSeries.some(([color, amount, index]) => {
+    const largestFreeBufferSpace = placementSpaceForColor(color, index);
+    return amount <= largestFreeBufferSpace;
+  });
+
+  return !canFit;
+};
+
+const blockedByBuffer = (level: LevelState) => {
+  const placementSeries: [BlockColor, amount: number, index: number][] = [];
+  level.columns.forEach((col, index) => {
+    if (col.blocks.length === 0) return;
+    if (col.type !== "placement") return;
+    const countSame = selectFromColumn(level, index).length;
+    placementSeries.push([col.blocks[0].color, countSame, index]);
+  });
+
+  const bufferSpaceForColor = (blockColor: BlockColor, index: number) =>
+    level.columns.reduce((acc, col, i) => {
+      if (i === index) return acc;
+      if (
+        col.type === "buffer" &&
+        col.limitColor === undefined &&
+        col.blocks.length === 0
+      ) {
+        return acc + col.columnSize;
+      }
+      if (col.type === "buffer" && col.limitColor === "rainbow") {
+        return acc + col.columnSize - col.blocks.length;
+      }
+      if (
+        col.type === "buffer" &&
+        (col.limitColor === blockColor || col.blocks[0]?.color === blockColor)
+      ) {
+        return acc + col.columnSize - col.blocks.length;
+      }
+      if (
+        col.type === "placement" &&
+        (col.limitColor === blockColor ||
+          col.blocks[0]?.color === blockColor ||
+          (col.limitColor === undefined && col.blocks.length === 0))
+      ) {
+        return acc + col.columnSize - col.blocks.length;
+      }
+      return acc;
+    }, 0);
+
+  const hasBufferSpace = placementSeries.some(([color, _amount, index]) => {
+    const largestFreeBufferSpace = bufferSpaceForColor(color, index);
+    return largestFreeBufferSpace > 0;
+  });
+  if (!hasBufferSpace) return true;
+
+  const canFit = placementSeries.some(([color, amount, index]) => {
+    const largestFreeBufferSpace = bufferSpaceForColor(color, index);
+
+    return amount <= largestFreeBufferSpace;
+  });
+
+  return !canFit;
 };
 
 const countCompleted = (level: LevelState) =>
@@ -81,25 +159,36 @@ export const isStuck = (level: LevelState): boolean => {
   const originalHidden = countHidden(level);
   const originalCompleted = countCompleted(level);
 
+  const hasBuffers = level.columns.some((c) => c.type === "buffer");
+
+  const initialBlocked =
+    hasBuffers && blockedByBuffer(level) && blockedByPlacement(level);
+  if (initialBlocked) return true;
+
   return level.columns.every((_source, sourceIndex) => {
-    let didChange = false;
     let playLevel = level;
 
-    level.columns.forEach((_dest, destIndex) => {
+    const didChange = level.columns.some((_dest, destIndex) => {
       if (sourceIndex === destIndex) return false;
       playLevel = moveBlocks(playLevel, { from: sourceIndex, to: destIndex });
       const resultSig = createSignature(playLevel);
       const resultHidden = countHidden(playLevel);
       const resultCompleted = countCompleted(playLevel);
+
+      const resultBlocked =
+        hasBuffers &&
+        blockedByBuffer(playLevel) &&
+        blockedByPlacement(playLevel);
+
       if (
         resultHidden !== originalHidden ||
         resultCompleted !== originalCompleted ||
-        (resultSig.some((c, i) => c !== topSignature[i]) &&
-          !blockedByBuffer(playLevel)) ||
+        (resultSig.some((c, i) => c !== topSignature[i]) && !resultBlocked) ||
         hasWon(playLevel)
       ) {
-        didChange = true;
+        return true;
       }
+      return false;
     });
 
     return !didChange;

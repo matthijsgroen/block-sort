@@ -35,7 +35,10 @@ export const testDifficulties = (
         expect(preSeed).toBeDefined();
 
         const random = mulberry32(preSeed);
-        const result = await generatePlayableLevel(settings, random, preSeed);
+        const result = await generatePlayableLevel(settings, {
+          random,
+          seed: preSeed
+        });
         expect(result.moves.length).toBeGreaterThan(2);
         expect(result.generationInformation?.seed).toBe(preSeed);
 
