@@ -175,15 +175,10 @@ export const isStuck = (level: LevelState): boolean => {
       const resultHidden = countHidden(playLevel);
       const resultCompleted = countCompleted(playLevel);
 
-      const resultBlocked =
-        hasBuffers &&
-        blockedByBuffer(playLevel) &&
-        blockedByPlacement(playLevel);
-
       if (
         resultHidden !== originalHidden ||
         resultCompleted !== originalCompleted ||
-        (resultSig.some((c, i) => c !== topSignature[i]) && !resultBlocked) ||
+        resultSig.some((c, i) => c !== topSignature[i]) ||
         hasWon(playLevel)
       ) {
         return true;
