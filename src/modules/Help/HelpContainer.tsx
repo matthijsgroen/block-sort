@@ -5,10 +5,11 @@ import { DialogTitle } from "@/ui/Dialog/DialogTitle";
 
 import styles from "../Settings/TextStyling.module.css";
 
-export const HelpContainer: FC<PropsWithChildren<{ title: string }>> = ({
-  title,
-  children
-}) => (
+export const HelpContainer: FC<
+  PropsWithChildren<{
+    title: string;
+  }>
+> = ({ title, children }) => (
   <>
     <DialogTitle>{title}</DialogTitle>
     <div

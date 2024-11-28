@@ -376,6 +376,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version 1.6.1 - 2024-10-08
 
+### Changed
+
+- Set screen orientation to portrait (Only Android supports this) **Requires reinstall**
+
 ### Fixed
 
 - Reduced data in export, to succeed for most complex levels
@@ -564,7 +568,7 @@ The introduction of themes! Themes change block colors and symbols, music and ba
 
 ### Changed
 
-- App logo
+- App logo - **Requires reinstall**
 - Solver now has only one try per generated level, this speeds up level loading
 - Colors only fade if going from hidden to revealed
 

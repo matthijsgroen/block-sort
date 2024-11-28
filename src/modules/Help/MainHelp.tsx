@@ -1,10 +1,9 @@
 import { Dispatch } from "react";
 
-import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";
-
 import { ReactComponent as HelpText } from "@/../docs/help.md";
 
 import { HelpContainer } from "./HelpContainer";
+import { SectionButtons } from "./SectionButtons";
 
 export const MainHelp = <T extends string>({
   buttons,
@@ -15,15 +14,7 @@ export const MainHelp = <T extends string>({
 }) => (
   <HelpContainer title="Game Manual">
     <HelpText />
-    <div className="my-4 flex flex-col gap-4">
-      {buttons
-        .filter((b) => !b.disabled)
-        .map(({ label, section }) => (
-          <TransparentButton key={section} onClick={() => setSection(section)}>
-            {label}
-          </TransparentButton>
-        ))}
-    </div>
+    <SectionButtons buttons={buttons} setSection={setSection} />
     <p>
       <strong>Thank you for playing!</strong>
     </p>
