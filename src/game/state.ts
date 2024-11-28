@@ -95,8 +95,8 @@ const blockedByPlacement = (level: LevelState) => {
 const blockedByBuffer = (level: LevelState) => {
   const placementSeries: [BlockColor, amount: number, index: number][] = [];
   level.columns.forEach((col, index) => {
-    if (col.blocks.length === 0) return;
-    if (col.type !== "placement") return;
+    if (col.blocks.length === 0 || col.type !== "placement" || col.locked)
+      return;
     const countSame = selectFromColumn(level, index).length;
     placementSeries.push([col.blocks[0].color, countSame, index]);
   });
