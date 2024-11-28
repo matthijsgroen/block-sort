@@ -8,6 +8,8 @@ import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { getUnlockableLevelTypes } from "@/game/level-types";
 import { LevelType } from "@/game/level-types/types";
+import { getActiveTheme } from "@/game/themes";
+import { getToday } from "@/support/schedule";
 import { timesMap } from "@/support/timeMap";
 
 import { DIFFICULTY_LEVELS } from "../GameModi/constants";
@@ -44,8 +46,10 @@ export const ZenSelection: React.FC<Props> = ({
   }, []);
 
   const { showBeta } = use(BetaContext);
+
+  const activeTheme = getActiveTheme(getToday());
   // Synch with offline state
-  const levelTypes = getUnlockableLevelTypes(showBeta);
+  const levelTypes = getUnlockableLevelTypes(showBeta, activeTheme);
 
   const selectedDifficulty = DIFFICULTY_LEVELS[difficultyIndex];
   const selectedLevelType = levelTypes[levelTypeIndex % levelTypes.length];

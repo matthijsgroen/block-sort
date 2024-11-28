@@ -8,11 +8,13 @@ export const HelpSection: FC<
   PropsWithChildren<{ onBack: VoidFunction; title: string }>
 > = ({ onBack, title, children }) => (
   <HelpContainer title={title}>
-    <div className="mb-4 flex flex-col">
+    <div className="mb-2 flex flex-col pb-2">
       <TransparentButton onClick={onBack} icon="arrow_back">
         Back
       </TransparentButton>
     </div>
-    {children}
+    <div className="max-h-[60vh] flex-1 overflow-y-scroll overscroll-y-contain text-sm">
+      {children}
+    </div>
   </HelpContainer>
 );

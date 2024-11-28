@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- Special seasonal level types will also be available in Zen mode during that period
+
 ### Changed
 
 - Updated the Help dialog, with multiple pages about multiple subjects

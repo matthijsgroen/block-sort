@@ -2,13 +2,14 @@ import { getActiveTheme } from "@/game/themes";
 import { getToday } from "@/support/schedule";
 
 import { hard } from "./hard";
-import { normal } from "./normal";
 import { LevelType } from "./types";
 
 export const winter: LevelType<"winter"> = {
   type: "winter",
   name: "Winter",
   symbol: "️❄️",
+  unlocksAtLevel: 20,
+  activeDuringTheme: "winter",
   borderClassName: "border-2 border-slate-200",
   textClassName: "text-slate-300",
   buttonBackgroundClassName: "bg-slate-400",
@@ -26,6 +27,6 @@ export const winter: LevelType<"winter"> = {
     return hard.getSettings(levelNr);
   },
   getZenSettings: (levelNr, difficulty) => {
-    return normal.getZenSettings(levelNr, difficulty);
+    return hard.getZenSettings(levelNr, difficulty);
   }
 };
