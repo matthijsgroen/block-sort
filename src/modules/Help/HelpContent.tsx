@@ -47,7 +47,11 @@ const HelpContent: React.FC<Props> = () => {
           { label: "How to play", section: "how-to-play" },
           { label: "Level types", section: "level-types" },
           { label: "Zen mode", section: "zen-mode" },
-          { label: "Refresh installation", section: "refresh-installation" },
+          {
+            label: "Refresh installation",
+            section: "refresh-installation",
+            disabled: true
+          },
           { label: "Motivation", section: "motivation" },
           {
             label: "Halloween theme",
