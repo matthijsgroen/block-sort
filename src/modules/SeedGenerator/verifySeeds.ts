@@ -65,10 +65,14 @@ export const verifySeeds = async (
         foundIssues = true;
       }
     }
+    const normalizedSampleSize = Math.min(sampleSize, seeds.length);
 
-    const stepSize = seeds.length / sampleSize;
+    const stepSize = Math.min(
+      seeds.length / normalizedSampleSize,
+      seeds.length - 1
+    );
     const seedsToTest = timesMap(
-      sampleSize,
+      normalizedSampleSize,
       (i) => seeds[Math.floor(i * stepSize)]
     );
     for (const seed of seedsToTest) {
@@ -104,7 +108,6 @@ export const verifySeeds = async (
           random,
           seed: seed[0]
         }).then(optimizeMoves);
-        clearLine();
         if (level.generationInformation?.seed !== seed[0]) {
           if (!keysToPurge.includes(key)) {
             keysToPurge.push(key);
@@ -124,7 +127,17 @@ export const verifySeeds = async (
             foundIssues = true;
             break;
           }
+        } else if (level.moves.length !== seed[1]) {
+          // Update moves in seed file
+          updatedSeeds[key.hash] = updatedSeeds[key.hash].map((s) => {
+            if (s[0] === seed[0]) {
+              return [s[0], level.moves.length];
+            }
+            return s;
+          });
+          await updateSeeds(updatedSeeds);
         }
+        clearLine();
       } catch (ignoreError) {
         if (!keysToPurge.includes(key)) {
           keysToPurge.push(key);
