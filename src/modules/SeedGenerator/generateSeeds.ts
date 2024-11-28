@@ -1,6 +1,7 @@
 import c from "ansi-colors";
 
 import { SeedMap } from "@/data/levelSeeds";
+import { optimizeMoves } from "@/game/level-creation/optimizeMoves";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { LevelSettings, LevelState } from "@/game/types";
 import { mulberry32 } from "@/support/random";
@@ -20,7 +21,9 @@ const generateLevel = async (
   }
   const random = mulberry32(seed);
   try {
-    return await generatePlayableLevel(settings, { random, attempts: 30 });
+    return await generatePlayableLevel(settings, { random, attempts: 30 }).then(
+      optimizeMoves
+    );
   } catch (ignoreError) {
     return await generateLevel(settings, seed + 1000, depth + 1);
   }

@@ -1,6 +1,7 @@
 import c from "ansi-colors";
 
 import { levelSeeds } from "@/data/levelSeeds";
+import { optimizeMoves } from "@/game/level-creation/optimizeMoves";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { mulberry32 } from "@/support/random";
 import { timesMap } from "@/support/timeMap";
@@ -102,7 +103,7 @@ export const verifySeeds = async (
         const level = await generatePlayableLevel(settings, {
           random,
           seed: seed[0]
-        });
+        }).then(optimizeMoves);
         clearLine();
         if (level.generationInformation?.seed !== seed[0]) {
           if (!keysToPurge.includes(key)) {
@@ -176,7 +177,7 @@ export const verifySeeds = async (
           const level = await generatePlayableLevel(settings, {
             random,
             seed: seed[0]
-          });
+          }).then(optimizeMoves);
           if (level.generationInformation?.seed !== seed[0]) {
             updatedSeeds[key.hash] = updatedSeeds[key.hash].filter(
               (s) => s[0] !== seed[0]
@@ -202,7 +203,6 @@ export const verifySeeds = async (
       }
     }
 
-    // await updateSeeds(updatedSeeds);
     console.log("");
   }
 

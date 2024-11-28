@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import { levelSeeds } from "@/data/levelSeeds";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
+import { optimizeMoves } from "@/game/level-creation/optimizeMoves";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { isStuck } from "@/game/state";
 import { LevelState } from "@/game/types";
@@ -128,7 +129,7 @@ export const BlockAnimation: Story = {
     const level = generatePlayableLevel(levelSettings, {
       random,
       seed: preSeed
-    });
+    }).then(optimizeMoves);
     return (
       <div className="flex w-full flex-col">
         <Suspense

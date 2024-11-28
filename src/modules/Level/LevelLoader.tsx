@@ -5,6 +5,7 @@ import { Loading } from "@/ui/Loading/Loading";
 import { levelSeeds } from "@/data/levelSeeds";
 import { replayMoves } from "@/game/actions";
 import { colorHustle } from "@/game/level-creation/colorHustle";
+import { optimizeMoves } from "@/game/level-creation/optimizeMoves";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { LevelTypeString } from "@/game/level-types";
 import { hasWon } from "@/game/state";
@@ -57,7 +58,7 @@ const generateLevelContent = async (
   let level = await generatePlayableLevel(levelSettings, {
     random,
     seed: preSeed
-  });
+  }).then(optimizeMoves);
   if (preSeed !== undefined && level.generationInformation?.seed === preSeed) {
     level = colorHustle(level, random);
   }
