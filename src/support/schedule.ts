@@ -44,4 +44,4 @@ export const filterInRange = <TItem extends RangedItem>(
  * @returns the current date
  */
 export const getToday = (): Date =>
-  process.env.NODE_ENV === "production" ? new Date() : new Date();
+  process.env.NODE_ENV === "production" ? new Date() : new Date("2021-04-01");

@@ -9,6 +9,7 @@ import { InstallPrompt } from "./modules/InstallPrompt";
 import { BackgroundProvider } from "./modules/Layout/BackgroundContext";
 import { BetaProvider } from "./modules/Layout/BetaContext";
 import { ThemeProvider } from "./modules/Layout/ThemeContext";
+import { ScheduledActions } from "./modules/ScheduledActions";
 import { Settings } from "./modules/Settings";
 import { sound, Stream } from "./audio";
 import PWABadge from "./PWABadge";
@@ -79,6 +80,7 @@ export const App: React.FC = () => {
             />
           )}
           {manualOpen && <Help onClose={() => setManualOpen(false)} />}
+          <ScheduledActions />
           <PWABadge />
         </BackgroundProvider>
       </ThemeProvider>
