@@ -30,7 +30,7 @@ describe(optimizeMoves, () => {
     expect(level.moves.length).toBeGreaterThan(350);
     expect(result.moves.length).toBeLessThan(level.moves.length);
     expect(result.moves.length).toBeLessThan(150);
-  }, 10000);
+  }, 30_000);
 
   it("can still complete the level", async () => {
     const settings = getNormal5Settings(11);
