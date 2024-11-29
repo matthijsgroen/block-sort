@@ -35,7 +35,10 @@ export const getLevelTypeByUnlock = (
   levelNr: number
 ): LevelType<LevelTypeString> =>
   levelTypes.find(
-    (level) => level.unlocksAtLevel === levelNr + 1
+    (level) =>
+      level.unlocksAtLevel === levelNr + 1 &&
+      !level.inBetaTest &&
+      !level.activeDuringTheme
   ) as LevelType<LevelTypeString>;
 
 export const getUnlockableLevelTypes = (
