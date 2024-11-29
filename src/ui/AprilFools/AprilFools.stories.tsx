@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { fn } from "@storybook/test";
 
 import { AprilFools } from "./AprilFools";
 
@@ -15,8 +16,14 @@ const meta: Meta<typeof AprilFools> = {
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ["autodocs"],
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
-  argTypes: {},
-  args: {}
+  argTypes: {
+    onClose: {
+      control: { disable: true }
+    }
+  },
+  args: {
+    onClose: fn()
+  }
 };
 
 export default meta;
