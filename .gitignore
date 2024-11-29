@@ -37,3 +37,6 @@ reports/
 
 # GIMP project file for open graph image
 og-image.xcf 
+
+# Data exports
+*.csv

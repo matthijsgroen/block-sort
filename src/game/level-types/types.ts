@@ -12,6 +12,7 @@ export type LevelType<T extends string> = {
   name: string;
   unlocksAtLevel?: number;
   inBetaTest?: boolean;
+  activeDuringTheme?: BlockTheme;
   symbol?: string;
   /**
    * Must be a hex code

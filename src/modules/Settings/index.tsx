@@ -107,13 +107,15 @@ export const Settings: React.FC<Props> = ({
           </div>
           <div className="text-center">
             {hintMode === "eager" && (
-              <p className="text-sm italic">show hints early</p>
+              <p className="h-12 text-sm italic">show hints early</p>
             )}
             {hintMode === "standard" && (
-              <p className="text-sm italic">show hints after 15 attempts</p>
+              <p className="h-12 text-sm italic">
+                show hints after 15 attempts
+              </p>
             )}
             {hintMode === "off" && (
-              <p className="text-sm italic">
+              <p className="h-12 text-sm italic">
                 Never show any hints.
                 <br />
                 Last <strong>{streak ?? "0"}</strong>{" "}
@@ -172,6 +174,9 @@ export const Settings: React.FC<Props> = ({
           >
             Recent changes
           </TransparentButton>
+          <p className="-mt-1 mb-1 select-none px-2 text-xs italic">
+            Read about the latest changes to the game
+          </p>
           <TransparentButton
             href={"https://buymeacoffee.com/matthijsgroen"}
             icon="coffee"
@@ -182,8 +187,11 @@ export const Settings: React.FC<Props> = ({
             href={`mailto:matthijs.groen@gmail.com?subject=[BlockSort]-Feedback`}
             icon="mail"
           >
-            Feedback
+            Send feedback
           </TransparentButton>
+          <p className="-mt-1 mb-1 select-none px-2 text-xs italic">
+            Comments, suggestions, just telling me if you like the game, etc...
+          </p>
           <TransparentButton
             onClick={() => {
               setActiveTab("data");
@@ -192,6 +200,9 @@ export const Settings: React.FC<Props> = ({
           >
             Transfer game data
           </TransparentButton>
+          <p className="-mt-1 mb-1 select-none px-2 text-xs italic">
+            Transfer game data between devices or game instances
+          </p>
         </div>
       )}
       {activeTab === "changes" && (

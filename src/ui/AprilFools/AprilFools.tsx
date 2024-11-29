@@ -30,9 +30,7 @@ export const AprilFools: FC<Props> = ({ onClose }) => {
           <span className="inline-block origin-left scale-75">
             <Block color="gold" moved={false} shape="$" />
           </span>
-          <h2 className="inline-block text-lg font-bold">
-            Introducing Block bucks!
-          </h2>
+          <h2 className="inline-block text-lg font-bold">Block bucks!</h2>
           <span className="inline-block origin-right scale-75">
             <Block color="gold" moved={false} shape="$" />
           </span>

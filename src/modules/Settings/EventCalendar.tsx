@@ -1,4 +1,5 @@
-import { getActiveTheme, getToday, themeSchedule } from "@/game/themes";
+import { getActiveTheme, themeSchedule } from "@/game/themes";
+import { getToday } from "@/support/schedule";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   day: "numeric",

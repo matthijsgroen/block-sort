@@ -1,4 +1,5 @@
-import { getActiveTheme, getToday } from "@/game/themes/index";
+import { getActiveTheme } from "@/game/themes/index";
+import { getToday } from "@/support/schedule";
 
 import { getDifficultyLevel } from "../level-settings/levelSettings";
 import { LayoutMap, SettingsProducer } from "../types";
@@ -255,15 +256,18 @@ export const spring: LevelType<"spring"> = {
   type: "spring",
   name: "Spring",
   symbol: "️🌈",
+  activeDuringTheme: "spring",
+  unlocksAtLevel: 10,
   borderClassName: "border-2 border-yellow-200",
   textClassName: "text-blue-300",
   buttonBackgroundClassName: "bg-pink-400",
   backgroundClassName: "bg-pink-200/10",
-  inBetaTest: true,
   showIntro: true,
   introTextColor: "#ec4899",
   occurrence: (levelNr) =>
-    getActiveTheme(getToday()) === "spring" && (levelNr - 1) % 6 === 0,
+    getActiveTheme(getToday()) === "spring" &&
+    (levelNr - 1) % 8 === 0 &&
+    levelNr > 10,
   getSettings: (levelNr) => {
     if (levelNr < 200) {
       const easyDifficulty = getDifficultyLevel(levelNr);
@@ -273,7 +277,7 @@ export const spring: LevelType<"spring"> = {
     return getSpringSettings(difficulty);
   },
   getZenSettings: (_levelNr, difficulty) => {
-    if (difficulty > 5) {
+    if (difficulty < 3) {
       return getEasySpringSettings(difficulty);
     }
     return getSpringSettings(difficulty);

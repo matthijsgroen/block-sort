@@ -209,7 +209,7 @@ describe(isStuck, () => {
     expect(result).toBe(true);
   });
 
-  it("returns true if series would not fully fit in a free buffer", () => {
+  it("returns false if move would clear a buffer", () => {
     const level = createLevelState([
       createPlacementColumn(4, createBlocks("black", "white")),
       createPlacementColumn(4, createBlocks("white", "white", "white", "red")),
@@ -217,7 +217,108 @@ describe(isStuck, () => {
       createBufferColumn(2, undefined, createBlocks("black", "black"))
     ]);
     const result = isStuck(level);
+    expect(result).toBe(false);
+  });
+
+  it("returns true if move would not fit in a buffer", () => {
+    const level = createLevelState([
+      createPlacementColumn(
+        4,
+        createBlocks("black", "black", "black", "white")
+      ),
+      createPlacementColumn(4, createBlocks("white", "white", "white", "red")),
+      createPlacementColumn(4, createBlocks("red", "red", "red", "black")),
+      createBufferColumn(2, undefined)
+    ]);
+    const result = isStuck(level);
     expect(result).toBe(true);
+  });
+
+  it("returns true if move would not fit in a buffer (2)", () => {
+    const level = createLevelState([
+      createPlacementColumn(7, [
+        ...createBlockSeries(3, "white"),
+        ...createBlocks("purple", "yellow", "yellow", "white")
+      ]),
+      createPlacementColumn(7, [
+        ...createBlockSeries(6, "blue"),
+        ...createBlocks("purple")
+      ]),
+      createPlacementColumn(7, createBlockSeries(3, "aqua")),
+      createPlacementColumn(7, [
+        ...createBlockSeries(4, "black"),
+        ...createBlocks("darkgreen", "aqua", "aqua")
+      ]),
+      createPlacementColumn(7, createBlockSeries(5, "darkgreen")),
+      createPlacementColumn(7, [
+        ...createBlockSeries(6, "brown"),
+        ...createBlocks("white")
+      ]),
+      createPlacementColumn(7, [
+        ...createBlockSeries(4, "yellow"),
+        ...createBlocks("brown", "aqua")
+      ]),
+      createPlacementColumn(7, [
+        ...createBlockSeries(4, "darkblue"),
+        ...createBlocks("yellow", "black", "blue")
+      ]),
+      createPlacementColumn(7, [
+        ...createBlockSeries(3, "purple"),
+        ...createBlocks("darkgreen", "white", "purple")
+      ]),
+      createPlacementColumn(7, [
+        ...createBlockSeries(3, "darkblue"),
+        ...createBlocks("aqua", "black", "white", "purple")
+      ]),
+      createPlacementColumn(7, createBlockSeries(7, "red"), "red", true),
+
+      createBufferColumn(2, undefined, createBlocks("black")),
+      createBufferColumn(2, undefined)
+    ]);
+    const result = isStuck(level);
+    expect(result).toBe(true);
+  });
+
+  it("returns true if move would not fit in multiple buffer", () => {
+    const level = createLevelState([
+      createPlacementColumn(6, [
+        ...createBlockSeries(5, "black"),
+        ...createBlocks("white")
+      ]),
+      createPlacementColumn(6, [
+        ...createBlockSeries(5, "red"),
+        ...createBlocks("black")
+      ]),
+      createPlacementColumn(6, [
+        ...createBlockSeries(5, "white"),
+        ...createBlocks("red")
+      ]),
+      createBufferColumn(2, undefined),
+      createBufferColumn(2, undefined)
+    ]);
+    const result = isStuck(level);
+    expect(result).toBe(true);
+  });
+
+  it("returns false if move could free buffer", () => {
+    const level = createLevelState([
+      createPlacementColumn(6, [
+        ...createBlockSeries(5, "black"),
+        ...createBlocks("white")
+      ]),
+      createPlacementColumn(6, [
+        ...createBlockSeries(5, "red"),
+        ...createBlocks("black")
+      ]),
+      createPlacementColumn(6, [
+        ...createBlockSeries(3, "white"),
+        ...createBlocks("red")
+      ]),
+      createBufferColumn(2, undefined, createBlockSeries(2, "white")),
+      createBufferColumn(2, undefined)
+    ]);
+    const result = isStuck(level);
+    expect(result).toBe(false);
   });
 
   it("returns false if series can be combined in buffer", () => {

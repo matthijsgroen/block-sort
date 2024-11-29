@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.28.0 - 2024-11-29
+
+### Added
+
+- Special seasonal level types will also be available in Zen mode during that period
+- Ability to scale level content for smaller displays (Thanks MichaelGoulding for reporting!)
+
+### Changed
+
+- Updated the Help dialog, with multiple pages about multiple subjects
+
+### Fixed
+
+- Made the 'blocked!' detection a bit less eager, also fixed some cases where he couldn't detect if you were stuck.
+- Improved the moves of the solver, removing a lot of useless moves, making the automoves a lot more efficient.
+
 ## Version 1.27.0 - 2024-11-27
 
 ### Fixed
@@ -362,6 +378,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version 1.6.1 - 2024-10-08
 
+### Changed
+
+- Set screen orientation to portrait (Only Android supports this) **Requires reinstall**
+
 ### Fixed
 
 - Reduced data in export, to succeed for most complex levels
@@ -550,7 +570,7 @@ The introduction of themes! Themes change block colors and symbols, music and ba
 
 ### Changed
 
-- App logo
+- App logo - **Requires reinstall**
 - Solver now has only one try per generated level, this speeds up level loading
 - Colors only fade if going from hidden to revealed
 

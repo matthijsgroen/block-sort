@@ -73,7 +73,7 @@ export const Switch: React.FC<SwitchProps> = ({
       <div
         ref={selectionRef}
         className={clsx(
-          "absolute -left-1 -top-1 z-0 inline-block rounded-xl border border-black px-3 py-2",
+          "absolute -left-1 -top-1 z-0 inline-block cursor-grab rounded-xl border border-black px-3 py-2 active:cursor-grabbing",
           "shadow-md transition-transform",
           styles.woodBackground
         )}
@@ -92,7 +92,7 @@ export const Switch: React.FC<SwitchProps> = ({
           <label
             key={item.value}
             className={
-              "inline-block px-2 py-1 text-black first-of-type:pl-3 last-of-type:pr-3"
+              "inline-block cursor-pointer px-2 py-1 text-black first-of-type:pl-3 last-of-type:pr-3"
             }
           >
             <input

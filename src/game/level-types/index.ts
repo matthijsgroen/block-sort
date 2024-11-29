@@ -1,3 +1,4 @@
+import { BlockTheme } from "../themes";
 import { LevelSettings } from "../types";
 
 import { easy } from "./easy";
@@ -38,12 +39,17 @@ export const getLevelTypeByUnlock = (
   ) as LevelType<LevelTypeString>;
 
 export const getUnlockableLevelTypes = (
-  showBeta = false
+  showBeta = false,
+  activeTheme: BlockTheme = "default"
 ): Unlockable<LevelType<string>>[] =>
   (levelTypes as LevelType<string>[])
     .filter(
       (level): level is Unlockable<LevelType<string>> =>
-        level.unlocksAtLevel !== undefined || (!!level.inBetaTest && showBeta)
+        (level.unlocksAtLevel !== undefined &&
+          level.activeDuringTheme === undefined) ||
+        (!!level.inBetaTest && showBeta) ||
+        (level.activeDuringTheme !== undefined &&
+          level.activeDuringTheme === activeTheme)
     )
     .sort((a, b) => (a.unlocksAtLevel ?? 1000) - (b.unlocksAtLevel ?? 1000));
 
