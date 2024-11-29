@@ -8,21 +8,20 @@ import { timesMap } from "@/support/timeMap";
 
 import { clearLine, doubleProgressBar, progressBar } from "./cliElements";
 import { MINIMAL_LEVELS, VERIFICATION_STEPS } from "./constants";
-import { levelProducers, Seeder } from "./producers";
+import { levelProducers } from "./producers";
 import { updateSeeds } from "./updateSeeds";
 
 export const verifySeeds = async (
   all: boolean,
   sampleSize = VERIFICATION_STEPS,
-  purge = false,
-  type: string | undefined = undefined
+  types: string[] | undefined = undefined
 ) => {
   let foundIssues = false;
 
   const keys = Object.keys(levelSeeds);
 
   const existingKeys = levelProducers.filter(
-    (h) => keys.includes(h.hash) && (!type || h.name === type)
+    (h) => keys.includes(h.hash) && (!types || types.includes(h.name))
   );
   const missingKeys = levelProducers.filter((h) => !keys.includes(h.hash));
   if (missingKeys.length > 0) {
@@ -45,8 +44,6 @@ export const verifySeeds = async (
 
   const updatedSeeds = levelSeeds;
 
-  const keysToPurge: Seeder[] = [];
-
   for (const key of existingKeys) {
     const seeds = updatedSeeds[`${key.hash}`];
     if (!seeds) {
@@ -55,11 +52,13 @@ export const verifySeeds = async (
     if (seeds.length < MINIMAL_LEVELS) {
       console.log(
         c.red(
-          `Seed for "${key.name}", difficulty ${key.difficulty + 1} is incomplete. Only ${seeds.length} seeds of the ${MINIMAL_LEVELS} available.`
+          `Seed for "${key.name}", difficulty ${key.difficulty + 1} are incomplete. Only ${seeds.length}/${MINIMAL_LEVELS} available.`
         )
       );
       if (!all) {
-        console.log("Please run 'run' to generate extra seeds.\n");
+        console.log(
+          "Please use the 'run' command to regenerate the missing seeds.\n"
+        );
         process.exit(1);
       } else {
         foundIssues = true;
@@ -109,10 +108,6 @@ export const verifySeeds = async (
           seed: seed[0]
         }).then(optimizeMoves);
         if (level.generationInformation?.seed !== seed[0]) {
-          if (!keysToPurge.includes(key)) {
-            keysToPurge.push(key);
-          }
-
           clearLine();
           console.log(
             `Seeds for "${key.name}" difficulty ${key.difficulty + 1} did not stay the same.`
@@ -120,7 +115,7 @@ export const verifySeeds = async (
 
           if (!all) {
             console.log(
-              "Please use the '--purge' option to remove the invalid seeds.\n"
+              "Please use the 'purge' command to remove the invalid seeds."
             );
             process.exit(1);
           } else {
@@ -139,19 +134,14 @@ export const verifySeeds = async (
         }
         clearLine();
       } catch (ignoreError) {
-        if (!keysToPurge.includes(key)) {
-          keysToPurge.push(key);
-        }
-
         clearLine();
         console.log(
           `Unable to generate level using seed for "${key.name}" difficulty ${key.difficulty + 1}.`
         );
         if (!all) {
           console.log(
-            "Please use the '--purge' option to remove the invalid seeds.\n"
+            "Please use the 'purge' command to remove the invalid seeds."
           );
-
           process.exit(1);
         } else {
           foundIssues = true;
@@ -162,68 +152,9 @@ export const verifySeeds = async (
   }
   console.log("");
 
-  if (purge) {
-    const totalSeeds = keysToPurge.reduce((acc, key) => {
-      return acc + updatedSeeds[key.hash].length;
-    }, 0);
-    let seedsChecked = 0;
-    let removedSeeds = 0;
-
-    for (const key of keysToPurge) {
-      let currentCheck = 0;
-      const seeds = updatedSeeds[`${key.hash}`];
-      for (const seed of seeds) {
-        clearLine();
-        process.stdout.write(
-          `Removing invalid seeds (${removedSeeds}) for "${key.name}" difficulty ${key.difficulty + 1}... `
-        );
-        doubleProgressBar(
-          seedsChecked,
-          totalSeeds,
-          currentCheck,
-          seeds.length,
-          20
-        );
-        const random = mulberry32(seed[0]);
-        const settings = key.producer(key.difficulty + 1);
-        try {
-          const level = await generatePlayableLevel(settings, {
-            random,
-            seed: seed[0]
-          }).then(optimizeMoves);
-          if (level.generationInformation?.seed !== seed[0]) {
-            updatedSeeds[key.hash] = updatedSeeds[key.hash].filter(
-              (s) => s[0] !== seed[0]
-            );
-            if (level.generationInformation?.seed) {
-              updatedSeeds[key.hash].push([
-                level.generationInformation?.seed,
-                level.moves.length
-              ]);
-            }
-            removedSeeds++;
-          }
-        } catch (ignoreError) {
-          updatedSeeds[key.hash] = updatedSeeds[key.hash].filter(
-            (s) => s[0] !== seed[0]
-          );
-          removedSeeds++;
-        }
-        await updateSeeds(updatedSeeds);
-
-        currentCheck++;
-        seedsChecked++;
-      }
-    }
-
-    console.log("");
-  }
-
   if (foundIssues) {
-    console.log(
-      "Please use the '--purge' option to remove the invalid seeds.\n"
-    );
-    console.log("Please run 'run' to regenerate the removed seeds.\n");
+    console.log("Please use the 'purge' command to remove the invalid seeds.");
+    console.log("Please use the 'run' command to generate the missing seeds.");
     process.exit(1);
   } else {
     console.log("All ok!");
