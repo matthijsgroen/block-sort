@@ -7,12 +7,19 @@ import { clearLine, doubleProgressBar } from "./cliElements";
 import { levelProducers, Seeder } from "./producers";
 import { updateSeeds } from "./updateSeeds";
 
-export const purgeSeeds = async (types: string[] | undefined = undefined) => {
+export const purgeSeeds = async (
+  types: { name: string; levels: number[] }[] | undefined = undefined
+) => {
   const updatedSeeds = levelSeeds;
 
-  const keysToPurge: Seeder[] = levelProducers.filter(
-    (l) => types === undefined || types.includes(l.name)
-  );
+  const keysToPurge: Seeder[] = levelProducers.filter((l) => {
+    if (types === undefined) return true;
+    return types.some(
+      (t) =>
+        t.name === l.name &&
+        (t.levels.length === 0 || t.levels.includes(l.difficulty + 1))
+    );
+  });
 
   const totalSeeds = keysToPurge.reduce((acc, key) => {
     return acc + updatedSeeds[key.hash].length;

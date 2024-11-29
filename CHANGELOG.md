@@ -17,7 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Made the 'blocked!' detection a bit less eager.
+- Made the 'blocked!' detection a bit less eager, also fixed some cases where he couldn't detect if you were stuck.
+- Improved the moves of the solver, removing a lot of useless moves, making the automoves a lot more efficient.
 
 ## Version 1.27.0 - 2024-11-27
 

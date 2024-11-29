@@ -50,7 +50,7 @@ const produceExtraSeeds = async (
     progressBar(0, amount);
   }
   for (let i = 0; i < amount; i++) {
-    const seed = SEED + i + existing;
+    const seed = SEED + i + existing + Math.floor(Math.random() * 10_000); // introduce some randomness
     const level = await generateLevel(settings, seed);
     if (!copy[firstMissing.hash]) {
       copy[firstMissing.hash] = [];
@@ -128,20 +128,30 @@ export const updateLevelSeeds = async (
   obsoleteKeys.forEach((k) => {
     delete levelSeedsCopy[k];
   });
+  levelProducers.forEach((p) => {
+    const seeds = levelSeedsCopy[p.hash];
+    if (!seeds) {
+      levelSeedsCopy[p.hash] = [];
+    }
+    // remove duplicate seeds
+    levelSeedsCopy[p.hash] = levelSeedsCopy[p.hash].filter(
+      (s, i, a) => a.findIndex((t) => t[0] === s[0]) === i
+    );
+  });
 
   const existingKeys = levelProducers.filter((h) => keys.includes(h.hash));
   const missingKeys = levelProducers.filter((h) => !keys.includes(h.hash));
   const missingNow =
     missingKeys.length * MINIMAL_LEVELS +
     existingKeys.reduce(
-      (acc, k) => acc + MINIMAL_LEVELS - levelSeeds[k.hash].length,
+      (acc, k) => acc + MINIMAL_LEVELS - levelSeedsCopy[k.hash].length,
       0
     );
 
   const totalSeeds = seedsMissing ?? missingNow;
 
   const incompleteSeed = existingKeys.find(
-    (k) => levelSeeds[k.hash].length < MINIMAL_LEVELS
+    (k) => levelSeedsCopy[k.hash].length < MINIMAL_LEVELS
   );
 
   if (incompleteSeed) {

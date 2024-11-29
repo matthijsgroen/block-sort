@@ -11,7 +11,10 @@ import { updateLevelSeeds } from "../src/modules/SeedGenerator/generateSeeds";
 import { producers } from "../src/modules/SeedGenerator/producers";
 import { purgeSeeds } from "../src/modules/SeedGenerator/purgeSeeds";
 import { removeSeedsForKey } from "../src/modules/SeedGenerator/removeSeeds";
-import { showSeedStatistics } from "../src/modules/SeedGenerator/seedInformation";
+import {
+  exportSeedInformation,
+  showSeedStatistics
+} from "../src/modules/SeedGenerator/seedInformation";
 import { updateSeeds } from "../src/modules/SeedGenerator/updateSeeds";
 import { verifySeeds } from "../src/modules/SeedGenerator/verifySeeds";
 import { settingsHash } from "../src/support/hash";
@@ -25,20 +28,7 @@ program
   .version("1.1.0");
 
 program
-  .command("run")
-  .description("Generate new level seeds")
-  .option(
-    "-a, --all",
-    "updates all items that are broken, instead of batch of 50",
-    false
-  )
-  .action(async (options: { all?: boolean }) => {
-    console.log(c.bold("Updating level seeds..."));
-    await updateLevelSeeds(!!options.all, levelSeeds);
-  });
-
-program
-  .command("verify")
+  .command("verify", { isDefault: true })
   .description("Verify level seeds if they are still valid")
   .option(
     "-a, --all",
@@ -69,21 +59,72 @@ program
   );
 
 program
+  .command("run")
+  .description("Generate new level seeds")
+  .option(
+    "-a, --all",
+    "updates all items that are broken, instead of batch of 50",
+    false
+  )
+  .action(async (options: { all?: boolean }) => {
+    console.log(c.bold("Updating level seeds..."));
+    await updateLevelSeeds(!!options.all, levelSeeds);
+  });
+
+program
   .command("purge")
   .description("Purge invalid level seeds")
   .option(
     "-t, --type <levelTypes>",
     "comma separated list of level types",
-    (value) => value.split(",")
+    (value) =>
+      value.split(",").map((v) => {
+        const [name, ...levels] = v.trim().split(":");
+        return {
+          name,
+          levels: levels.map((l) => parseInt(l, 10))
+        };
+      })
   )
-  .action(async (options: { type?: string[] }) => {
+  .action(async (options: { type?: { name: string; levels: number[] }[] }) => {
+    if (options.type) {
+      const valid = options.type.every((t) => {
+        const producer = producers.find(
+          (p) => p.name.toLowerCase() === t.name.toLowerCase()
+        );
+        if (!producer) {
+          console.log(c.red(`Producer for ${t.name} not found`));
+          return false;
+        }
+        return t.levels.every((l) => {
+          if (isNaN(l) || l < 1 || l > 11) {
+            console.log(c.red(`Invalid difficulty: ${l} for ${t.name}`));
+            return false;
+          }
+          return true;
+        });
+      });
+      if (!valid) {
+        console.log(
+          `Available producers: ${producers.map((p) => p.name).join(", ")}`
+        );
+        process.exit(1);
+      }
+    }
+
     await purgeSeeds(options.type);
   });
 
 program
   .command("info")
+  .option("-e, --export <file>", "export the seed information to a file")
   .description("Show level seed statistics")
-  .action(() => {
+  .action((options: { export?: string }) => {
+    if (options.export) {
+      console.log(c.bold(`Exporting seed information to ${options.export}`));
+      exportSeedInformation(options.export);
+      return;
+    }
     console.log("Level template statistics:");
     showSeedStatistics();
   });
