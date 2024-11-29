@@ -74,17 +74,16 @@ describe(generatePlayableLevel, () => {
     expect(level.colors).toHaveLength(4);
   }, 10_000);
 
-  it("throws an error if it can't generate a playable level", () => {
+  it("throws an error if it can't generate a playable level", async () => {
     const random = mulberry32(TEST_SEED);
-    expect(
-      async () =>
-        await generatePlayableLevel(
-          {
-            amountColors: 1,
-            extraPlacementStacks: 0
-          },
-          { random }
-        )
+    await expect(() =>
+      generatePlayableLevel(
+        {
+          amountColors: 1,
+          extraPlacementStacks: 0
+        },
+        { random }
+      )
     ).rejects.toThrow("Can't generate playable level");
   });
 });
