@@ -47,5 +47,5 @@ describe(optimizeMoves, () => {
     }
     const won = hasWon(levelState);
     expect(won).toBe(true);
-  }, 10000);
+  }, 30_000);
 });

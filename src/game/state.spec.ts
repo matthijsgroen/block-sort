@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 
-import { debugLevel } from "./debugLevel";
 import {
   createBlock,
   createBlocks,
@@ -297,7 +296,6 @@ describe(isStuck, () => {
       createBufferColumn(2, undefined),
       createBufferColumn(2, undefined)
     ]);
-    debugLevel(level);
     const result = isStuck(level);
     expect(result).toBe(true);
   });
@@ -319,7 +317,6 @@ describe(isStuck, () => {
       createBufferColumn(2, undefined, createBlockSeries(2, "white")),
       createBufferColumn(2, undefined)
     ]);
-    debugLevel(level);
     const result = isStuck(level);
     expect(result).toBe(false);
   });
