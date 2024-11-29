@@ -76,6 +76,8 @@ export const LevelLayout: React.FC<Props> = ({
   onPickUp
 }) => {
   useScreenUpdate();
+  const containerHeightRef = useRef<HTMLDivElement>(null);
+  const contentHeightRef = useRef<HTMLDivElement>(null);
 
   // Create an array of refs
   const refsArray = useRef<HTMLDivElement[]>([]);
@@ -161,40 +163,73 @@ export const LevelLayout: React.FC<Props> = ({
     0
   );
   const cols = determineColumns(maxColumnSize, levelState.columns.length);
+
+  useEffect(() => {
+    const scaleContent = () => {
+      if (contentHeightRef.current && containerHeightRef.current) {
+        containerHeightRef.current.style.overflow = "hidden";
+
+        const scale =
+          containerHeightRef.current.clientHeight /
+          contentHeightRef.current.scrollHeight;
+
+        if (scale < 1) {
+          contentHeightRef.current.style.transform = `scale(${
+            containerHeightRef.current.clientHeight /
+            (contentHeightRef.current.scrollHeight + 20)
+          })`;
+        } else {
+          contentHeightRef.current.style.transform = "";
+        }
+        containerHeightRef.current.style.overflow = "visible";
+      }
+    };
+    scaleContent();
+    window.addEventListener("resize", scaleContent);
+    return () => {
+      window.removeEventListener("resize", scaleContent);
+    };
+  }, [contentHeightRef.current, containerHeightRef.current]);
+
   return (
-    <div className="flex w-full flex-1 touch-none flex-col flex-wrap items-center justify-center">
-      {tutorialContent}
-      <div className="w-full max-w-[600px]">
-        <div className={`grid grid-flow-dense ${cols}`}>
-          {levelState.columns.map((bar, i) => (
-            <MemoizedBlockColumn
-              column={bar}
-              key={i}
-              ref={(el) => addToRefsArray(el, i)}
-              theme={theme}
-              motionDuration={animateBlocks ? BLOCK_ANIMATION_TIME : 0}
-              onPointerDown={() => {
-                onColumnDown?.(i);
-              }}
-              onPointerUp={handlePointerUp}
-              started={started}
-              suggested={suggestionTarget === i}
-              amountSelected={
-                selection && i === selection[0] ? selection[1] : 0
-              }
-              hovering={hoverColumnIndex === i}
-              amountSuggested={
-                suggestionSelection && i === suggestionSelection[0]
-                  ? suggestionSelection[1]
-                  : 0
-              }
-              hideFormat={hideFormat}
-              onLock={onLock}
-              onDrop={onDrop}
-              onPickUp={handlePickup}
-              onPlacement={handlePlacement}
-            />
-          ))}
+    <div className="flex flex-1 justify-center" ref={containerHeightRef}>
+      <div
+        className="flex w-full flex-1 origin-top touch-none flex-col flex-wrap items-center justify-center"
+        ref={contentHeightRef}
+      >
+        {tutorialContent}
+        <div className="box-border w-full max-w-[600px] py-6">
+          <div className={`grid grid-flow-dense ${cols}`}>
+            {levelState.columns.map((bar, i) => (
+              <MemoizedBlockColumn
+                column={bar}
+                key={i}
+                ref={(el) => addToRefsArray(el, i)}
+                theme={theme}
+                motionDuration={animateBlocks ? BLOCK_ANIMATION_TIME : 0}
+                onPointerDown={() => {
+                  onColumnDown?.(i);
+                }}
+                onPointerUp={handlePointerUp}
+                started={started}
+                suggested={suggestionTarget === i}
+                amountSelected={
+                  selection && i === selection[0] ? selection[1] : 0
+                }
+                hovering={hoverColumnIndex === i}
+                amountSuggested={
+                  suggestionSelection && i === suggestionSelection[0]
+                    ? suggestionSelection[1]
+                    : 0
+                }
+                hideFormat={hideFormat}
+                onLock={onLock}
+                onDrop={onDrop}
+                onPickUp={handlePickup}
+                onPlacement={handlePlacement}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>

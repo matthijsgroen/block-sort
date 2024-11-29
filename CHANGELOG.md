@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Special seasonal level types will also be available in Zen mode during that period
+- Ability to scale level content for smaller displays (Thanks MichaelGoulding for reporting!)
 
 ### Changed
 
