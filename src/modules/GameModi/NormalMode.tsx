@@ -36,7 +36,7 @@ export const NormalMode: React.FC<Props> = ({
 }) => {
   const [levelNr, setLevelNr] = useGameStorage(
     "levelNr",
-    process.env.NODE_ENV === "production" ? 0 : 16
+    process.env.NODE_ENV === "production" ? 0 : 0
   );
   const [levelSeed, setLevelSeed] = useState(() =>
     generateNewSeed(BASE_SEED, levelNr)
