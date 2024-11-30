@@ -85,7 +85,8 @@ export const StartAnimation: FC<Props> = ({
       </div>
       <div
         className={clsx(
-          "absolute top-[47dvh] w-full animate-bg-shift text-center font-block-sort text-4xl tracking-widest",
+          "animate-bg-shift",
+          "absolute top-[47dvh] w-full text-center font-block-sort text-4xl tracking-widest",
           styles.levelTitle
         )}
       >
