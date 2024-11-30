@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      version_changed: ${{ steps.check_version.outputs }}
+      version_changed: ${{ steps.check_version.outputs.changed }}
 
     steps:
       - name: Checkout code
