@@ -21,7 +21,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check-version:
+  check-version-deploy:
     runs-on: ubuntu-latest
 
     outputs:
@@ -77,8 +77,8 @@ jobs:
           PREVIOUS_VERSION: ${{ steps.previous_version.outputs.version }}
 
   deploy:
-    needs: check-version
-    if: needs.check-version.outputs.version_changed == 'true'
+    needs: check-version-deploy
+    if: needs.check-version-deploy.outputs.version_changed == 'true'
 
     environment:
       name: github-pages
