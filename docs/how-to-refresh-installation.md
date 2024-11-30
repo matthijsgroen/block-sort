@@ -13,6 +13,8 @@ Some updates done updated this configuration file, like:
 - **0.5.0** - 2024-09-27 (updated App logo)
 - **1.6.1** - 2024-10-08 (locked to portrait for Android)
 - **1.21.0** - 2024-11-13 (show background behind status bar)
+- **1.21.0** - 2024-11-13 (show background behind status bar)
+- **1.29.0** - 2024-11-30 (display PWA fullscreen)
 
 If you installed the game **after 2024-11-23** there is no need for reinstallation.
 
