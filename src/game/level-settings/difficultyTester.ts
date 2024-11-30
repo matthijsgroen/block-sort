@@ -5,7 +5,6 @@ import { settingsHash } from "@/support/hash";
 import { mulberry32 } from "@/support/random";
 
 import { moveBlocks } from "../actions";
-import { optimizeMoves } from "../level-creation/optimizeMoves";
 import { generatePlayableLevel } from "../level-creation/tactics";
 import { hasWon } from "../state";
 import { LevelSettings } from "../types";
@@ -18,7 +17,7 @@ export const testDifficulties = (
   getSettings: (difficulty: number) => LevelSettings,
   difficulties = ALL_DIFFICULTIES
 ) => {
-  describe("playability", () => {
+  describe.concurrent("playability", () => {
     it.each(
       difficulties.map((difficulty) => ({
         difficulty,
@@ -39,7 +38,7 @@ export const testDifficulties = (
         const result = await generatePlayableLevel(settings, {
           random,
           seed: preSeed
-        }).then(optimizeMoves);
+        });
         expect(result.moves.length).toBeGreaterThan(2);
         expect(result.generationInformation?.seed).toBe(preSeed);
 
