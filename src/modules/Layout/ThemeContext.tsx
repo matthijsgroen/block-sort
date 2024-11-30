@@ -32,7 +32,7 @@ export const ThemeProvider: React.FC<
     (themesEnabled && THEMES ? getActiveTheme(getToday()) : "default");
   const song = getThemeSong(theme);
 
-  const [, forceRerender] = useReducer((x) => x + 1, 0);
+  const [, forceRerender] = useReducer((x) => (x + 1) % 6, 0);
   useEffect(() => {
     if (!themesEnabled || !THEMES) {
       return;

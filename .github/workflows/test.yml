@@ -6,6 +6,64 @@ name: Node.js CI
 on: [push, pull_request]
 
 jobs:
+  check-version:
+    runs-on: ubuntu-latest
+
+    outputs:
+      version_changed: ${{ steps.check_version.outputs.changed }}
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install jq (JSON parser)
+        run: sudo apt-get install -y jq
+
+      - name: Get current version
+        id: current_version
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+
+      - name: Fetch main branch
+        run: git fetch origin main
+
+      - name: Get main branch version
+        id: main_version
+        run: |
+          MAIN_PACKAGE=$(git show origin/main:package.json || echo "{}")
+          echo "version=$(echo $MAIN_PACKAGE | jq -r .version)" >> $GITHUB_OUTPUT
+
+      - name: Check version change
+        id: check_version
+        run: |
+          echo "comparing versions: $MAIN_VERSION to $CURRENT_VERSION"
+          if [ "$CURRENT_VERSION" != "$MAIN_VERSION" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          CURRENT_VERSION: ${{ steps.current_version.outputs.version }}
+          MAIN_VERSION: ${{ steps.main_version.outputs.version }}
+
+      - uses: mshick/add-pr-comment@v2
+        if: steps.check_version.outputs.changed == 'true'
+        with:
+          message: |
+            After merge, a **new version** of the game will be published
+
+            (version ${{ steps.current_version.outputs.version }}, vs. main branch, ${{ steps.main_version.outputs.version }})
+
+      - uses: mshick/add-pr-comment@v2
+        if: steps.check_version.outputs.changed == 'false'
+        with:
+          message: |
+            After merge, **no version** of the game will be published
+
+            (version is the same as the main branch, ${{ steps.main_version.outputs.version }})
+
   build:
     runs-on: ubuntu-latest
 

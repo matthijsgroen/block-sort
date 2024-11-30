@@ -21,8 +21,65 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Single deploy job since we're just deploying
+  check-version-deploy:
+    runs-on: ubuntu-latest
+
+    outputs:
+      version_changed: ${{ steps.check_version.outputs }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install jq (JSON parser)
+        run: sudo apt-get install -y jq
+
+      - name: Get current version
+        id: current_version
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+
+      - name: Find last merge commit
+        id: last_merge_commit
+        run: |
+          # Get the second-to-last merge commit hash
+          LAST_MERGE_COMMIT=$(git log --merges --format="%H" | sed -n 2p)
+          echo "merge_commit=$LAST_MERGE_COMMIT" >> $GITHUB_OUTPUT
+          if [ -z "$LAST_MERGE_COMMIT" ]; then
+            echo "No previous merge commit found."
+            exit 1
+          fi
+
+      - name: Get version from last merge commit
+        id: previous_version
+        run: |
+          if [ -z "$MERGE_COMMIT" ]; then
+            echo "No merge commits found."
+            echo "version=0.0.0" >> $GITHUB_OUTPUT
+          else
+            MERGE_PACKAGE=$(git show $MERGE_COMMIT:package.json || echo "{}")
+            echo "version=$(echo $MERGE_PACKAGE | jq -r .version)" >> $GITHUB_OUTPUT
+          fi
+        env:
+          MERGE_COMMIT: ${{ steps.last_merge_commit.outputs.merge_commit }}
+
+      - name: Check version change
+        id: check_version
+        run: |
+          if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+            echo "Version changed from $PREVIOUS_VERSION to $CURRENT_VERSION"
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "Version did not change"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          CURRENT_VERSION: ${{ steps.current_version.outputs.version }}
+          PREVIOUS_VERSION: ${{ steps.previous_version.outputs.version }}
+
   deploy:
+    needs: check-version-deploy
+    if: needs.check-version-deploy.outputs.version_changed == 'true'
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
