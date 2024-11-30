@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- More minor layouting tweaks
+- Make max with bit wider so that we keep gaps between columns
+- Fix missing level title in hint mode 'off' sometimes
+- Improved color gradient of start level animation for wide screens
 
 ## Version 1.28.2 - 2024-11-30
 
