@@ -49,8 +49,7 @@ const HelpContent: React.FC<Props> = () => {
           { label: "Zen mode", section: "zen-mode" },
           {
             label: "Refresh installation",
-            section: "refresh-installation",
-            disabled: true
+            section: "refresh-installation"
           },
           { label: "Motivation", section: "motivation" },
           {
