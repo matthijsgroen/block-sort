@@ -54,11 +54,15 @@ jobs:
           message: |
             After merge, a **new version** of the game will be published
 
+            (version ${{ steps.current_version.outputs.version }}, vs. main branch, ${{ steps.main_version.outputs.version }})
+
       - uses: mshick/add-pr-comment@v2
         if: steps.check_version.outputs.changed == 'false'
         with:
           message: |
             After merge, **no version** of the game will be published
+
+            (version is the same as the main branch, ${{ steps.main_version.outputs.version }})
 
   build:
     runs-on: ubuntu-latest
