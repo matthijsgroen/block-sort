@@ -55,6 +55,7 @@ jobs:
           else
             echo "Version did not change"
             echo "changed=false" >> $GITHUB_OUTPUT
+          fi
         env:
           CURRENT_VERSION: ${{ steps.current_version.outputs.version }}
           PREVIOUS_VERSION: ${{ steps.previous_version.outputs.version }}
