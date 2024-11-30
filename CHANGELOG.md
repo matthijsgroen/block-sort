@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+### Added
+
+- Added help about refreshing installation
+
 ### Changed
 
 - Reduced side spacing from buttons at bottom, to get some spacing on Samsung devices
@@ -19,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Changed to display mode 'fullscreen' for PWA (hopefully hide nav bar on Samsung phones)
+- Changed to display mode 'fullscreen' for PWA (hopefully hide nav bar on Samsung phones) **Requires reinstall**
 
 ## Version 1.28.3 - 2024-11-30
 
