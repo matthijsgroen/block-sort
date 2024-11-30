@@ -21,8 +21,48 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Single deploy job since we're just deploying
+  check-version:
+    runs-on: ubuntu-latest
+
+    outputs:
+      version_changed: ${{ steps.check_version.outputs }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install jq (JSON parser)
+        run: sudo apt-get install -y jq
+
+      - name: Get current version
+        id: current_version
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+
+      - name: Get previous version
+        id: previous_version
+        run: |
+          git fetch --depth=2 origin
+          PREV_COMMIT=$(git log -2 --format="%H" | tail -n 1)
+          PREV_PACKAGE=$(git show $PREV_COMMIT:package.json || echo "{}")
+          echo "version=$(echo $PREV_PACKAGE | jq -r .version)" >> $GITHUB_OUTPUT
+
+      - name: Check version change
+        id: check_version
+        run: |
+          if [ "$CURRENT_VERSION" != "$PREVIOUS_VERSION" ]; then
+            echo "Version changed from $PREVIOUS_VERSION to $CURRENT_VERSION"
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "Version did not change"
+            echo "changed=false" >> $GITHUB_OUTPUT
+        env:
+          CURRENT_VERSION: ${{ steps.current_version.outputs.version }}
+          PREVIOUS_VERSION: ${{ steps.previous_version.outputs.version }}
+
   deploy:
+    needs: check-version
+    if: needs.check-version.outputs.version_changed == 'true'
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
