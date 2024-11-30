@@ -38,13 +38,29 @@ jobs:
         id: current_version
         run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
 
-      - name: Get previous version
+      - name: Find last merge commit
+        id: last_merge_commit
+        run: |
+          # Get the second-to-last merge commit hash
+          LAST_MERGE_COMMIT=$(git log --merges --format="%H" | sed -n 2p)
+          echo "merge_commit=$LAST_MERGE_COMMIT" >> $GITHUB_OUTPUT
+          if [ -z "$LAST_MERGE_COMMIT" ]; then
+            echo "No previous merge commit found."
+            exit 1
+          fi
+
+      - name: Get version from last merge commit
         id: previous_version
         run: |
-          git fetch --depth=2 origin
-          PREV_COMMIT=$(git log -2 --format="%H" | tail -n 1)
-          PREV_PACKAGE=$(git show $PREV_COMMIT:package.json || echo "{}")
-          echo "version=$(echo $PREV_PACKAGE | jq -r .version)" >> $GITHUB_OUTPUT
+          if [ -z "$MERGE_COMMIT" ]; then
+            echo "No merge commits found."
+            echo "version=0.0.0" >> $GITHUB_OUTPUT
+          else
+            MERGE_PACKAGE=$(git show $MERGE_COMMIT:package.json || echo "{}")
+            echo "version=$(echo $MERGE_PACKAGE | jq -r .version)" >> $GITHUB_OUTPUT
+          fi
+        env:
+          MERGE_COMMIT: ${{ steps.last_merge_commit.outputs.merge_commit }}
 
       - name: Check version change
         id: check_version
