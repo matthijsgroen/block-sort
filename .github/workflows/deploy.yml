@@ -30,6 +30,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch the full commit history
 
       - name: Install jq (JSON parser)
         run: sudo apt-get install -y jq
