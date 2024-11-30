@@ -323,7 +323,7 @@ export const LevelTrack: React.FC<Props> = ({
           );
         })}
       </ol>
-      <div className="flex w-full flex-row justify-between px-5 pb-7 text-center">
+      <div className="flex w-full flex-row justify-between px-2 pb-7 text-center">
         <div className="w-22"></div>
         <PlayButton
           label={
