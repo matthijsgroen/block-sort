@@ -52,13 +52,13 @@ jobs:
         if: steps.check_version.outputs.changed == 'true'
         with:
           message: |
-            After merge, a new version of the game will be published
+            After merge, a **new version** of the game will be published
 
       - uses: mshick/add-pr-comment@v2
         if: steps.check_version.outputs.changed == 'false'
         with:
           message: |
-            After merge, no version of the game will be published
+            After merge, **no version** of the game will be published
 
   build:
     runs-on: ubuntu-latest
