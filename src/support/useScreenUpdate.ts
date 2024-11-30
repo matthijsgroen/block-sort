@@ -5,7 +5,7 @@ export const useScreenUpdate = () => {
   const [, setRerender] = useState(0);
   useEffect(() => {
     const listener = () => {
-      setRerender((r) => (r + 1) % 2);
+      setRerender((r) => (r + 1) % 4);
     };
     window.addEventListener("orientationchange", listener);
     window.addEventListener("resize", listener);

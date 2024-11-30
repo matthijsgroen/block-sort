@@ -51,7 +51,7 @@ const determineColumns = (
     return colSizes[gridColumnCount];
   }
   if (isLandscape) {
-    return colSizes[Math.min(amountColumns, 12)];
+    return `${colSizes[Math.min(amountColumns, 12)]}`;
   }
 
   return "grid-cols-6";
@@ -139,7 +139,10 @@ export const LevelLayout: React.FC<Props> = ({
   const { animate, pickup } = useBlockAnimation(levelState, selection, {
     disabled: !animateBlocks,
     transitionTime: BLOCK_ANIMATION_TIME,
-    theme
+    theme,
+    scale: parseFloat(
+      contentHeightRef.current?.style.getPropertyValue("--levelScale") ?? "1"
+    )
   });
 
   const handlePickup = useCallback(
@@ -168,18 +171,19 @@ export const LevelLayout: React.FC<Props> = ({
     const scaleContent = () => {
       if (contentHeightRef.current && containerHeightRef.current) {
         containerHeightRef.current.style.overflow = "hidden";
+        contentHeightRef.current.style.setProperty("--levelScale", "1");
 
         const scale =
           containerHeightRef.current.clientHeight /
           contentHeightRef.current.scrollHeight;
 
         if (scale < 1) {
-          contentHeightRef.current.style.transform = `scale(${
-            containerHeightRef.current.clientHeight /
-            (contentHeightRef.current.scrollHeight + 20)
-          })`;
+          contentHeightRef.current.style.setProperty(
+            "--levelScale",
+            `${containerHeightRef.current.clientHeight / (contentHeightRef.current.scrollHeight + 20)}`
+          );
         } else {
-          contentHeightRef.current.style.transform = "";
+          contentHeightRef.current.style.setProperty("--levelScale", "1");
         }
         containerHeightRef.current.style.overflow = "visible";
       }
@@ -194,12 +198,12 @@ export const LevelLayout: React.FC<Props> = ({
   return (
     <div className="flex flex-1 justify-center" ref={containerHeightRef}>
       <div
-        className="flex w-full flex-1 origin-top touch-none flex-col flex-wrap items-center justify-center"
+        className="flex w-full max-w-[600px] flex-1 touch-none flex-col flex-wrap items-center justify-center"
         ref={contentHeightRef}
       >
         {tutorialContent}
-        <div className="box-border w-full max-w-[600px] py-6">
-          <div className={`grid grid-flow-dense ${cols}`}>
+        <div className="box-border w-full origin-top scale-[--levelScale]">
+          <div className={`grid grid-flow-dense ${cols} gap-x-1 py-6`}>
             {levelState.columns.map((bar, i) => (
               <MemoizedBlockColumn
                 column={bar}

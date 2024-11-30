@@ -52,8 +52,14 @@ export const useBlockAnimation = (
   {
     disabled = false,
     transitionTime = 400,
-    theme = "default"
-  }: { disabled?: boolean; transitionTime?: number; theme?: BlockTheme } = {}
+    theme = "default",
+    scale = 1
+  }: {
+    disabled?: boolean;
+    transitionTime?: number;
+    theme?: BlockTheme;
+    scale?: number;
+  } = {}
 ) => {
   const selectionRef = useRef<DOMRect[]>([]);
   const transitionTop = useRef<number | undefined>(undefined);
@@ -141,6 +147,7 @@ export const useBlockAnimation = (
         blocksAdded,
         shape,
         color,
+        scale,
         transitionTime - 20
       );
     }, 10); // delay to allow the DOM to update first
@@ -160,6 +167,7 @@ const animateBlocksByTranslate = (
   blocksAdded: number,
   shape: string,
   color: string,
+  scale: number,
   transitionTime: number
 ) =>
   timesMap(blocksAdded, (i) => {
@@ -168,6 +176,7 @@ const animateBlocksByTranslate = (
 
     const div = createBlock(shape, color);
     div.style.setProperty("top", `${start.y}px`);
+    div.style.setProperty("scale", `${scale}`);
     div.style.setProperty("left", `${start.x}px`);
     div.classList.add("absolute");
     const frames = createFrames(
