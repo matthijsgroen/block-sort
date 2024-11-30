@@ -198,12 +198,12 @@ export const LevelLayout: React.FC<Props> = ({
   return (
     <div className="flex flex-1 justify-center" ref={containerHeightRef}>
       <div
-        className="flex w-full max-w-[600px] flex-1 touch-none flex-col flex-wrap items-center justify-center"
+        className="flex w-full max-w-[800px] flex-1 touch-none flex-col flex-wrap items-center justify-center"
         ref={contentHeightRef}
       >
         {tutorialContent}
         <div className="box-border w-full origin-top scale-[--levelScale]">
-          <div className={`grid grid-flow-dense ${cols} gap-x-1 py-6`}>
+          <div className={`grid grid-flow-dense ${cols} py-2`}>
             {levelState.columns.map((bar, i) => (
               <MemoizedBlockColumn
                 column={bar}
