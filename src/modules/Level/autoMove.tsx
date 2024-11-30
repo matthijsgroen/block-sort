@@ -48,8 +48,9 @@ export const getAutoMoveCount = (
       (lostCounter - system.minLoseCount) / system.loseIterationCount
     ) *
       system.increaseStep;
-  return Math.min(
-    autoMoves,
-    Math.floor(solverMoves * system.maxSolvePercentage)
+
+  return Math.max(
+    Math.min(autoMoves, Math.floor(solverMoves * system.maxSolvePercentage)),
+    0
   );
 };

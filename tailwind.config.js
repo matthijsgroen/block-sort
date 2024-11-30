@@ -151,10 +151,9 @@ export default {
           }
         },
         "bg-shift": {
-          "0%": { backgroundPosition: "0 100%" },
-          "70%": { backgroundPosition: "0 0" },
-          "90%": { backgroundPosition: "0 0", opacity: "1" },
-          "100%": { backgroundPosition: "0 100%", opacity: "0" }
+          "0%": { backgroundPosition: "calc(50% - 400px) 100%" },
+          "90%": { backgroundPosition: "calc(50% - 400px) 0%", opacity: "1" },
+          "100%": { backgroundPosition: "calc(50% - 400px) 100%", opacity: "0" }
         },
         "intro-bg": {
           "0%": { opacity: "0" },

@@ -334,7 +334,7 @@ export const Level: React.FC<Props> = ({
           }}
         />
         <div className="flex-1"></div>
-        {autoMoves > 0 && (
+        {autoMoves > 0 ? (
           <WoodButton
             onClick={() => {
               const moveIndex = autoMoveLimit - autoMoves;
@@ -363,8 +363,7 @@ export const Level: React.FC<Props> = ({
               </span>
             </>
           </WoodButton>
-        )}
-        {autoMoves === 0 && (
+        ) : (
           <div className="text-center font-block-sort tracking-widest text-orange-400">
             {title}
           </div>
