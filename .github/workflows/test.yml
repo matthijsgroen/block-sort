@@ -37,10 +37,10 @@ jobs:
         run: |
           if [ "$CURRENT_VERSION" != "$MAIN_VERSION" ]; then
             echo "Version changed from $MAIN_VERSION to $CURRENT_VERSION"
-            echo "::set-output name=changed::true"
+            echo "changed=true" >> $GITHUB_OUTPUT
           else
             echo "Version did not change"
-            echo "::set-output name=changed::false"
+            echo "changed=false" >> $GITHUB_OUTPUT
         env:
           CURRENT_VERSION: ${{ steps.current_version.outputs.version }}
           MAIN_VERSION: ${{ steps.main_version.outputs.version }}
