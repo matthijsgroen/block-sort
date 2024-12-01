@@ -176,7 +176,7 @@ export const ZenSelection: React.FC<Props> = ({
           </div>
         </div>
       </div>
-      <div className="flex w-full flex-row justify-between px-5 pb-7 text-center">
+      <div className="flex w-full flex-row justify-between px-2 pb-7 text-center">
         <div className={"block w-22"}>
           <button
             onClick={onZenModeEnd}
