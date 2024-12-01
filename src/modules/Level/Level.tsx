@@ -314,7 +314,6 @@ export const Level: React.FC<Props> = ({
               setLevelState(initialLevelState);
             }
             setUsedAutoMoves(0);
-            deleteRevealed();
             setPreviousLevelMoves(levelMoves);
             deleteMoves();
             setPlayState("busy");

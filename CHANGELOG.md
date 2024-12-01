@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [UNRELEASED]
+## Version 1.30.0 - 2024-12-01
 
 ### Added
 
@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Reduced side spacing from buttons at bottom, to get some spacing on Samsung devices
+- Made winter levels less frequent
+
+### Fixed
+
+- Revealed packages should stay revealed until manual restart
+- Level type is now remembered if new level types are introduced or removed
 
 ## Version 1.29.0 - 2024-11-30
 

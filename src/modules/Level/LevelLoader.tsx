@@ -15,7 +15,8 @@ import { generateNewSeed, mulberry32 } from "@/support/random";
 import {
   deleteGameValue,
   getGameValue,
-  setGameValue
+  setGameValue,
+  useGameStorage
 } from "@/support/useGameStorage";
 
 import { ErrorBoundary } from "./ErrorBoundary";
@@ -81,6 +82,10 @@ export const LevelLoader: React.FC<Props> = ({
 }) => {
   const [locked] = useState({ levelNr, levelSettings, seed, title });
 
+  const [storedLevelType, , deleteLevelType] = useGameStorage(
+    `${storagePrefix}levelType`,
+    null
+  );
   const level = useMemo(async () => {
     const level = await generateLevelContent(
       locked.seed,
@@ -88,6 +93,7 @@ export const LevelLoader: React.FC<Props> = ({
       locked.levelSettings,
       levelNr
     );
+
     // Verify level content
     const levelState = replayMoves(level, level.moves);
     const won = hasWon(levelState);
@@ -104,6 +110,9 @@ export const LevelLoader: React.FC<Props> = ({
         levelNr
       );
       return level;
+    }
+    if (!(await getGameValue(`${storagePrefix}levelType`))) {
+      await setGameValue(`${storagePrefix}levelType`, levelType);
     }
 
     return level;
@@ -137,9 +146,10 @@ export const LevelLoader: React.FC<Props> = ({
           useStreak={useStreak}
           showTutorial={showTutorial}
           levelSettings={levelSettings}
-          levelType={levelType}
+          levelType={storedLevelType ?? levelType}
           onComplete={(won) => {
             if (won) {
+              deleteLevelType();
               deleteGameValue(
                 `${storagePrefix}initialLevelState${locked.levelNr}`
               );
