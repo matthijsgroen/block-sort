@@ -13,6 +13,7 @@ import {
 } from "@/game/level-settings/levelSettings";
 import {
   getLevelType,
+  getLevelTypeByType,
   getLevelTypeByUnlock,
   levelTypeBorder,
   levelTypeTextColor
@@ -95,6 +96,10 @@ export const LevelTrack: React.FC<Props> = ({
     "displayLevelNr",
     officialLevelNr
   );
+  const [levelTypeString] = useGameStorage("levelType", null);
+  const levelType = levelTypeString
+    ? getLevelTypeByType(levelTypeString)
+    : getLevelType(officialLevelNr);
 
   // If levelNr is lower than the official one (keep in offline state)
   // Start a transition to the next level
@@ -268,7 +273,10 @@ export const LevelTrack: React.FC<Props> = ({
                         "text-green-600": i < officialLevelNr,
                         "font-bold": i === officialLevelNr
                       },
-                      i >= officialLevelNr ? levelTypeTextColor(i) : undefined,
+                      i > officialLevelNr ? levelTypeTextColor(i) : undefined,
+                      i === officialLevelNr
+                        ? levelType.textClassName
+                        : undefined,
                       styles.textShadow
                     )}
                   >
@@ -278,7 +286,9 @@ export const LevelTrack: React.FC<Props> = ({
                     className={clsx(
                       "inline-block size-block rounded-md border bg-black/30 text-center align-top",
                       { ["relative"]: i === levelNr },
-                      levelTypeBorder(i)
+                      i === officialLevelNr
+                        ? levelType.borderClassName
+                        : levelTypeBorder(i)
                     )}
                   >
                     {i < levelNr && (
@@ -333,7 +343,7 @@ export const LevelTrack: React.FC<Props> = ({
           }
           onClick={onLevelStart}
           highlight={officialLevelNr === 0}
-          type={getLevelType(officialLevelNr)}
+          type={levelType}
         />
         <div
           className={clsx("block w-22 transition-opacity", {

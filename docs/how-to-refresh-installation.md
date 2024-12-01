@@ -17,5 +17,6 @@ Some updates done updated this configuration file, like:
 - **1.29.0** - 2024-11-30 (display PWA fullscreen)
 
 If you installed the game **after 2024-11-30** there is no need for reinstallation.
+But even then, if none of the updates are interesting to you, feel free to not reinstall.
 
 In these sections I will guide you through the process of updating your installation, without loss of data.
