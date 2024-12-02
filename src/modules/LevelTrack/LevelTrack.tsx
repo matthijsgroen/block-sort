@@ -7,30 +7,21 @@ import { TopButton } from "@/ui/TopButton/TopButton";
 import { ZenButton } from "@/ui/ZenButton";
 
 import { sound } from "@/audio";
-import {
-  getDifficultyLevel,
-  LEVEL_SCALE
-} from "@/game/level-settings/levelSettings";
+import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
 import {
   getLevelType,
   getLevelTypeByType,
-  getLevelTypeByUnlock,
   levelTypeBorder,
   levelTypeTextColor
 } from "@/game/level-types";
 import { effectTimeout } from "@/support/effectTimeout";
-import { timesMap } from "@/support/timeMap";
 import { useGameStorage } from "@/support/useGameStorage";
 
 import { PlayButton } from "../../ui/PlayButton";
-import {
-  DIFFICULTIES,
-  DIFFICULTY_LEVELS,
-  ZEN_MODE_UNLOCK
-} from "../GameModi/constants";
 import { BackgroundContext } from "../Layout/BackgroundContext";
 import { BetaContext } from "../Layout/BetaContext";
 
+import { getLevelMessage } from "./levelMessage";
 import { LevelTrackMessageBar } from "./LevelTrackMessageBar";
 import { LevelTypeIcon } from "./LevelTypeIcon";
 
@@ -57,30 +48,6 @@ const translates = [
   "-translate-x-20",
   "-translate-x-10"
 ];
-
-const getLevelMessage = (levelNr: number): string | undefined => {
-  if (LEVEL_SCALE.includes(levelNr)) {
-    const difficulty = DIFFICULTIES[getDifficultyLevel(levelNr) - 1];
-    const message = `${timesMap(difficulty.stars, () => "⭐️").join("")} ${difficulty.name} ${timesMap(difficulty.stars, () => "⭐️").join("")}`;
-    return message;
-  }
-  if (ZEN_MODE_UNLOCK - 1 === levelNr) {
-    return "🌻 Zen mode unlocked";
-  }
-  const unlockedZenDifficulty = DIFFICULTY_LEVELS.find(
-    (d) => d.unlocksAtLevel - 1 === levelNr
-  );
-  if (unlockedZenDifficulty) {
-    return `🌻 Zen difficulty ${unlockedZenDifficulty.name} unlocked`;
-  }
-
-  const unlockedZenType = getLevelTypeByUnlock(levelNr);
-  if (unlockedZenType) {
-    return `🌻 Zen level type ${unlockedZenType.name} unlocked`;
-  }
-
-  return undefined;
-};
 
 export const LevelTrack: React.FC<Props> = ({
   levelNr: officialLevelNr,
