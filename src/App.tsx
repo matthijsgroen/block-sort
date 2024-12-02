@@ -8,9 +8,11 @@ import { Help } from "./modules/Help";
 import { InstallPrompt } from "./modules/InstallPrompt";
 import { BackgroundProvider } from "./modules/Layout/BackgroundContext";
 import { BetaProvider } from "./modules/Layout/BetaContext";
+import { ErrorBoundary } from "./modules/Layout/ErrorBoundary";
 import { ThemeProvider } from "./modules/Layout/ThemeContext";
 import { ScheduledActions } from "./modules/ScheduledActions";
 import { Settings } from "./modules/Settings";
+import { AppCrashScreen } from "./AppCrashScreen";
 import { sound, Stream } from "./audio";
 import PWABadge from "./PWABadge";
 
@@ -37,53 +39,58 @@ export const App: React.FC = () => {
   }, [soundEnabled]);
 
   return (
-    <BetaProvider>
-      <ThemeProvider themesEnabled={themesEnabled} musicEnabled={musicEnabled}>
-        <BackgroundProvider>
-          <NormalMode
-            active={!inZenMode}
-            showInstallButton={!isInstalled && canInstall}
-            onInstall={() => setInstallPromptOpen(true)}
-            onManual={() => setManualOpen(true)}
-            onOpenSettings={() => setSettingsOpen((settings) => !settings)}
-            onZenModeStart={() => setInZenMode(true)}
-          />
-          <ZenMode
-            active={inZenMode}
-            onOpenSettings={() => setSettingsOpen(true)}
-            onZenModeEnd={() => setInZenMode(false)}
-          />
-          {settingsOpen && (
-            <Settings
-              soundEnabled={soundEnabled}
-              musicEnabled={musicEnabled}
-              themesEnabled={themesEnabled}
-              onSoundChange={(effectsEnabled) => {
-                sound.setStreamEnabled(Stream.effects, effectsEnabled);
-                setSoundEnabled(effectsEnabled);
-              }}
-              onMusicChange={(musicEnabled) => {
-                sound.setStreamEnabled(Stream.music, musicEnabled);
-                setMusicEnabled(musicEnabled);
-              }}
-              onThemesChange={setThemesEnabled}
-              onClose={() => setSettingsOpen(false)}
+    <ErrorBoundary fallback={<AppCrashScreen />}>
+      <BetaProvider>
+        <ThemeProvider
+          themesEnabled={themesEnabled}
+          musicEnabled={musicEnabled}
+        >
+          <BackgroundProvider>
+            <NormalMode
+              active={!inZenMode}
+              showInstallButton={!isInstalled && canInstall}
+              onInstall={() => setInstallPromptOpen(true)}
+              onManual={() => setManualOpen(true)}
+              onOpenSettings={() => setSettingsOpen((settings) => !settings)}
+              onZenModeStart={() => setInZenMode(true)}
             />
-          )}
-          {installPromptOpen && (
-            <InstallPrompt
-              onClose={() => setInstallPromptOpen(false)}
-              onOpenManual={() => {
-                setInstallPromptOpen(false);
-                setManualOpen(true);
-              }}
+            <ZenMode
+              active={inZenMode}
+              onOpenSettings={() => setSettingsOpen(true)}
+              onZenModeEnd={() => setInZenMode(false)}
             />
-          )}
-          {manualOpen && <Help onClose={() => setManualOpen(false)} />}
-          <ScheduledActions />
-          <PWABadge />
-        </BackgroundProvider>
-      </ThemeProvider>
-    </BetaProvider>
+            {settingsOpen && (
+              <Settings
+                soundEnabled={soundEnabled}
+                musicEnabled={musicEnabled}
+                themesEnabled={themesEnabled}
+                onSoundChange={(effectsEnabled) => {
+                  sound.setStreamEnabled(Stream.effects, effectsEnabled);
+                  setSoundEnabled(effectsEnabled);
+                }}
+                onMusicChange={(musicEnabled) => {
+                  sound.setStreamEnabled(Stream.music, musicEnabled);
+                  setMusicEnabled(musicEnabled);
+                }}
+                onThemesChange={setThemesEnabled}
+                onClose={() => setSettingsOpen(false)}
+              />
+            )}
+            {installPromptOpen && (
+              <InstallPrompt
+                onClose={() => setInstallPromptOpen(false)}
+                onOpenManual={() => {
+                  setInstallPromptOpen(false);
+                  setManualOpen(true);
+                }}
+              />
+            )}
+            {manualOpen && <Help onClose={() => setManualOpen(false)} />}
+            <ScheduledActions />
+            <PWABadge />
+          </BackgroundProvider>
+        </ThemeProvider>
+      </BetaProvider>
+    </ErrorBoundary>
   );
 };
