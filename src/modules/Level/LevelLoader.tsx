@@ -19,7 +19,8 @@ import {
   useGameStorage
 } from "@/support/useGameStorage";
 
-import { ErrorBoundary } from "./ErrorBoundary";
+import { ErrorBoundary } from "../Layout/ErrorBoundary";
+
 import { ErrorScreen } from "./ErrorScreen";
 import { Level } from "./Level";
 
