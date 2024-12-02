@@ -33,5 +33,6 @@ export const DIFFICULTIES: Difficulty[] = [
   { name: "Expert", stars: 3 },
   { name: "Expert +", stars: 3 },
   { name: "Master", stars: 4 },
+  { name: "Master +", stars: 4 },
   { name: "Wizard", stars: 5 }
 ];
