@@ -186,7 +186,7 @@ const isBeatable = async (
             return [false, [], 0];
           }
         }
-        if (moves.length % 10 === 0) {
+        if (moves.length % 30 === 0) {
           await delay(2);
         }
       }
