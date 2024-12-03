@@ -5,7 +5,7 @@ export type RangedItem = {
   end: ScheduleDate;
 };
 
-export const inRange = (date: Date, begin: ScheduleDate, end: ScheduleDate) => {
+const inRange = (date: Date, begin: ScheduleDate, end: ScheduleDate) => {
   const day = date.getDate();
   const month = date.getMonth() + 1;
 
