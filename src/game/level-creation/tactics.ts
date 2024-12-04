@@ -25,8 +25,14 @@ export const generatePlayableLevel = async (
   {
     random = Math.random,
     seed = null,
-    attempts = 1
-  }: { random?: () => number; seed?: number | null; attempts?: number } = {}
+    attempts = 1,
+    afterAttempt
+  }: {
+    random?: () => number;
+    seed?: number | null;
+    attempts?: number;
+    afterAttempt?: () => Promise<void>;
+  } = {}
 ): Promise<LevelState> => {
   // Start logging level seeds for faster reproduction
   const startSeed = seed ?? Math.floor(random() * 1e9);
@@ -45,6 +51,9 @@ export const generatePlayableLevel = async (
       level,
       generationRandom
     );
+    if (afterAttempt) {
+      await afterAttempt();
+    }
     const generationCost = cost + attempt * MAX_GENERATE_COST;
     // Scrub name from moves
     const moves = solveMoves.map<Move>(({ from, to }) => ({ from, to }));
@@ -82,19 +91,30 @@ export const generatePlayableLevel = async (
   throw new Error("Can't generate playable level");
 };
 
+const removeDoubleMoves = (
+  move: WeightedMove,
+  index: number,
+  list: WeightedMove[]
+) =>
+  list.findIndex(
+    (m2) => m2.move.from === move.move.from && m2.move.to === move.move.to
+  ) === index;
+
 const generatePossibleMoves = (
   state: LevelState,
   random = Math.random
 ): WeightedMove[] =>
-  tactics.reduce<WeightedMove[]>(
-    (r, tactic) =>
-      r.concat(
-        tactic(state, random)
-          .sort((a, b) => a.weight - b.weight)
-          .slice(0, 3)
-      ),
-    []
-  );
+  tactics
+    .reduce<WeightedMove[]>(
+      (r, tactic) =>
+        r.concat(
+          tactic(state, random)
+            .sort((a, b) => a.weight - b.weight)
+            .slice(0, 3)
+        ),
+      []
+    )
+    .filter(removeDoubleMoves);
 
 const lookahead = (
   state: LevelState,
@@ -113,6 +133,7 @@ const lookahead = (
   }
 
   let bestScore = -Infinity;
+
   for (const move of moves) {
     const score = lookahead(nextState, move.move, depth - 1, random); // Recursive lookahead
     bestScore = Math.max(bestScore, score); // Track the best score
