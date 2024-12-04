@@ -5,7 +5,7 @@ import QRCode from "qrcode";
 
 import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";
 
-import info from "@/../package.json";
+import { version } from "@/../package.json";
 import { decryptData, encryptData } from "@/support/dataTransfer";
 
 import { DataFormat, getGameData, setGameData } from "./gameData";
@@ -49,10 +49,10 @@ const importImageData = async (
 
             const age = (new Date().getTime() - data.timestamp) / 60_000;
 
-            if (data.version !== info.version) {
+            if (data.version !== version) {
               return resolve({
                 success: false,
-                message: `Version mismatch: ${data.version} vs. ${info.version}`
+                message: `Version mismatch: ${data.version} vs. ${version}`
               });
             }
             if (age < 0 || data.time !== data.timestamp) {
@@ -134,7 +134,7 @@ const DataTransfer: React.FC = () => {
                 You can transfer your game data to another instance of the game
                 through an image. The export is valid for{" "}
                 <strong>{DATA_VALIDITY_TIME} minutes</strong>, and needs to be
-                imported into the same version ({info.version}) of the game.
+                imported into the same version ({version}) of the game.
               </p>
               <p className="text-sm">This is not meant to act as a backup.</p>
               <TransparentButton
