@@ -14,7 +14,7 @@ export const updateSeeds = async (updatedLevelSeeds: SeedMap) => {
     * This file is generated. Do not modify. Run "yarn generate-level-seeds" to update.
   */
   export type SeedMap = Record<string, [seed: number, moves: number][]>;
-  export const levelSeeds: SeedMap = ${JSON.stringify(sortedSeeds)};`;
+  export const levelSeeds: SeedMap = JSON.parse('${JSON.stringify(sortedSeeds)}');`;
   const formattedCode = await prettier.format(newCode, {
     parser: "typescript",
     trailingComma: "none"
