@@ -132,7 +132,7 @@ export const BlockColumn: React.FC<Props> = ({
 
   return (
     <div
-      className={`${rowSpans[column.columnSize + 1 + (column.paddingBottom ?? 0) + (column.paddingTop ?? 0)]} justify-self-center pb-2 ${colPadding[column.paddingTop ?? 0]}`}
+      className={`${rowSpans[column.columnSize + 1 + (column.paddingTop ?? 0)]} justify-self-center pb-2 ${colPadding[column.paddingTop ?? 0]}`}
     >
       <div
         ref={columnRef}

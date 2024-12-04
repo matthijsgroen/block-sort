@@ -1,7 +1,7 @@
 import { pick } from "@/support/random";
 
 import { getDifficultyLevel } from "../level-settings/levelSettings";
-import { SettingsProducer } from "../types";
+import { LayoutMap, SettingsProducer } from "../types";
 
 import { LevelType } from "./types";
 
@@ -27,17 +27,141 @@ export const getSpecial1Settings: SettingsProducer = (difficulty) => ({
   blockColorPick: "end"
 });
 
-export const getSpecial2Settings: SettingsProducer = (difficulty) => ({
-  amountColors: 5 + Math.min(Math.max(Math.round(difficulty * 1.1), 0), 11),
-  stackSize: 3,
-  extraPlacementStacks:
-    4 - Math.min(Math.max(Math.round(difficulty / 2), 0), 2),
-  extraPlacementLimits: Math.max(
-    4 - Math.min(Math.max(Math.round(difficulty / 2), 0), 3) - 1,
-    0
-  ),
-  blockColorPick: "end"
-});
+export const getSpecial2Settings: SettingsProducer = (difficulty) => {
+  const getLayoutMap = (difficulty: number): LayoutMap => {
+    if (difficulty === 1) {
+      return {
+        columns: [
+          { fromColumn: 1, paddingTop: 2 },
+          { fromColumn: 3, paddingTop: 2 }
+        ]
+      };
+    }
+    if (difficulty === 2 || difficulty === 3) {
+      return {
+        width: 5,
+        columns: [
+          { fromColumn: 0, paddingTop: 2 },
+          { fromColumn: 1, paddingTop: 1 },
+          { fromColumn: 2, paddingTop: 0 },
+          { fromColumn: 3, paddingTop: 1 },
+          { fromColumn: 4, paddingTop: 2 },
+
+          { fromColumn: 9, toColumn: 5, paddingTop: 5 },
+          { fromColumn: 8, toColumn: 6, paddingTop: 2 },
+          { fromColumn: 7, paddingTop: 2 },
+          { fromColumn: 5, toColumn: 8, paddingTop: 0 },
+          { fromColumn: 6, toColumn: 9, paddingTop: 0 }
+        ]
+      };
+    }
+    if (difficulty === 4) {
+      return {
+        width: 5,
+        columns: [
+          { fromColumn: 0, paddingTop: 2 },
+          { fromColumn: 1, paddingTop: 1 },
+          { fromColumn: 2, paddingTop: 0 },
+          { fromColumn: 3, paddingTop: 1 },
+          { fromColumn: 4, paddingTop: 2 },
+
+          { fromColumn: 9, toColumn: 5, paddingTop: 0 },
+          { fromColumn: 8, toColumn: 6, paddingTop: 2 },
+          { fromColumn: 7, paddingTop: 2 },
+          { fromColumn: 5, toColumn: 8, paddingTop: 0 },
+          { fromColumn: 6, toColumn: 9, paddingTop: 0 }
+        ]
+      };
+    }
+    if (difficulty === 5) {
+      return {
+        width: 5,
+        columns: [
+          { fromColumn: 1, paddingTop: 2 },
+          { fromColumn: 11, toColumn: 8 },
+          { fromColumn: 12, toColumn: 3, paddingTop: 2 }
+        ]
+      };
+    }
+    if (difficulty === 6) {
+      return {
+        width: 5,
+        columns: [
+          { fromColumn: 1, paddingTop: 1 },
+          { fromColumn: 2, toColumn: 13, paddingTop: 1 },
+          { fromColumn: 3, paddingTop: 1 },
+          { fromColumn: 5, paddingTop: 1 },
+          { fromColumn: 6, paddingTop: 1 },
+          { fromColumn: 10, paddingTop: 1 },
+          { fromColumn: 12, toColumn: 9 },
+          { fromColumn: 13, toColumn: 2, paddingTop: 3 }
+        ]
+      };
+    }
+    if (difficulty === 7) {
+      return {
+        width: 5,
+        columns: [
+          { fromColumn: 1, paddingTop: 1 },
+          { fromColumn: 2, toColumn: 14, paddingTop: 1 },
+          { fromColumn: 3, paddingTop: 1 },
+          { fromColumn: 5, paddingTop: 1 },
+          { fromColumn: 6, paddingTop: 1 },
+          { fromColumn: 10, paddingTop: 1 },
+          { fromColumn: 13, toColumn: 12 },
+          { fromColumn: 14, toColumn: 2, paddingTop: 1 }
+        ]
+      };
+    }
+    if (difficulty === 8) {
+      return {
+        width: 6,
+        columns: [
+          { fromColumn: 0, paddingTop: 2 },
+          { fromColumn: 5, paddingTop: 2 },
+          { fromColumn: 14, toColumn: 7 },
+          { fromColumn: 15, toColumn: 8 }
+        ]
+      };
+    }
+    if (difficulty === 9) {
+      return {
+        width: 6,
+        columns: [
+          { fromColumn: 0, paddingTop: 1 },
+          { fromColumn: 2, paddingTop: 1 },
+          { fromColumn: 4, paddingTop: 1 },
+          { fromColumn: 15, toColumn: 5, paddingTop: 3 },
+          { fromColumn: 16, toColumn: 11 }
+        ]
+      };
+    }
+    if (difficulty > 9) {
+      return {
+        width: 6,
+        columns: [
+          { fromColumn: 1, paddingTop: 1 },
+          { fromColumn: 3, paddingTop: 1 },
+          { fromColumn: 5, paddingTop: 1 }
+        ]
+      };
+    }
+    return { columns: [] };
+  };
+
+  return {
+    amountColors: 5 + Math.min(Math.max(Math.round(difficulty * 1.1), 0), 11),
+    stackSize: 3,
+    extraPlacementStacks:
+      4 - Math.min(Math.max(Math.round(difficulty / 2), 0), 2),
+    extraPlacementLimits: Math.max(
+      4 - Math.min(Math.max(Math.round(difficulty / 2), 0), 3) - 1,
+      0
+    ),
+    blockColorPick: "end",
+    layoutMap: getLayoutMap(difficulty)
+  };
+};
 
 export const getSpecial3Settings: SettingsProducer = (difficulty) => ({
   amountColors: 5,

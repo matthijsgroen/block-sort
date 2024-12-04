@@ -9,6 +9,7 @@ export type LevelState = {
    * Colors in play for this level
    */
   colors: BlockColor[];
+  width?: number;
   /**
    * Column in this level
    */
@@ -82,7 +83,6 @@ export type Column = {
    */
   blocks: Block[];
   paddingTop?: number;
-  paddingBottom?: number;
 };
 
 export type LevelSettings = {
@@ -109,10 +109,10 @@ export type LevelSettings = {
 export type SettingsProducer = (difficulty: number) => LevelSettings;
 
 export type LayoutMap = {
+  width?: number;
   columns: {
     fromColumn: number;
-    toColumn: number;
+    toColumn?: number;
     paddingTop?: number;
-    paddingBottom?: number;
   }[];
 };
