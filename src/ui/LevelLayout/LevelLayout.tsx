@@ -38,8 +38,12 @@ const determineColumns = (
 ): string => {
   const amountColumns = levelState.columns.length;
   const isLandscape = window.innerHeight < window.innerWidth;
-  if (levelState.width) {
+  const isLimitedHeight = window.innerHeight < 500;
+  if (levelState.width && !isLimitedHeight) {
     return colSizes[levelState.width];
+  }
+  if (levelState.width && isLimitedHeight && levelState.width < 6) {
+    return colSizes[levelState.width * 2];
   }
 
   if (maxColumnHeight <= 6 && amountColumns < 6) {
