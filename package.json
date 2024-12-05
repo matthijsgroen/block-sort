@@ -1,6 +1,6 @@
 {
   "name": "block-sorting",
-  "version": "1.31.1",
+  "version": "1.32.0",
   "description": "Mobile Block sorting game, as a Progressive Web App",
   "author": {
     "name": "Matthijs Groen",
@@ -18,7 +18,7 @@
     "test:performance": "bin/test-performance.ts",
     "check-types": "tsc --noEmit",
     "pwa-assets-generation": "pwa-assets-generation",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6007",
     "build-storybook": "storybook build",
     "generate-level-seeds": "bin/generate-level-seeds.ts run",
     "verify-level-seeds": "bin/generate-level-seeds.ts verify"
@@ -44,6 +44,9 @@
     "@storybook/react": "^8.4.6",
     "@storybook/react-vite": "^8.4.6",
     "@storybook/test": "^8.4.6",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.1",
     "@types/babel__core": "^7.20.5",
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^22.7.5",
@@ -68,8 +71,10 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-storybook": "^0.11.1",
     "eslint-plugin-unused-imports": "^4.1.4",
+    "global-jsdom": "^25.0.0",
     "globals": "^15.12.0",
     "immer": "^10.1.1",
+    "jsdom": "^25.0.1",
     "markdown-it": "^14.1.0",
     "postcss": "^8.4.49",
     "prettier": "^3.4.1",

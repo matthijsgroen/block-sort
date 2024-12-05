@@ -2,7 +2,6 @@ import { Suspense, useMemo, useState } from "react";
 
 import { Loading } from "@/ui/Loading/Loading";
 
-import { levelSeeds } from "@/data/levelSeeds";
 import { replayMoves } from "@/game/actions";
 import { colorHustle } from "@/game/level-creation/colorHustle";
 import { optimizeMoves } from "@/game/level-creation/optimizeMoves";
@@ -51,6 +50,7 @@ const generateLevelContent = async (
   delete hashVersion["playMoves"];
 
   const hash = settingsHash(levelSettings);
+  const levelSeeds = (await import("@/data/levelSeeds")).levelSeeds;
 
   const seeds = levelSeeds[hash] ?? [];
   const preSeed =

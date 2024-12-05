@@ -34,9 +34,17 @@ type Props = {
 
 const determineColumns = (
   maxColumnHeight: number,
-  amountColumns: number
+  levelState: LevelState
 ): string => {
+  const amountColumns = levelState.columns.length;
   const isLandscape = window.innerHeight < window.innerWidth;
+  const isLimitedHeight = window.innerHeight < 500;
+  if (levelState.width && !isLimitedHeight) {
+    return colSizes[levelState.width];
+  }
+  if (levelState.width && isLimitedHeight && levelState.width < 6) {
+    return colSizes[levelState.width * 2];
+  }
 
   if (maxColumnHeight <= 6 && amountColumns < 6) {
     const gridColumnCount = amountColumns;
@@ -161,11 +169,10 @@ export const LevelLayout: React.FC<Props> = ({
   );
 
   const maxColumnSize = levelState.columns.reduce(
-    (r, c) =>
-      Math.max(r, c.columnSize + (c.paddingBottom ?? 0) + (c.paddingTop ?? 0)),
+    (r, c) => Math.max(r, c.columnSize + (c.paddingTop ?? 0)),
     0
   );
-  const cols = determineColumns(maxColumnSize, levelState.columns.length);
+  const cols = determineColumns(maxColumnSize, levelState);
 
   useEffect(() => {
     const scaleContent = () => {

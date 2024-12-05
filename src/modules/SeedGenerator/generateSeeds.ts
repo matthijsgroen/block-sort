@@ -6,27 +6,56 @@ import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { LevelSettings, LevelState } from "@/game/types";
 import { mulberry32 } from "@/support/random";
 
-import { clearLine, doubleProgressBar, progressBar } from "./cliElements";
+import {
+  clearLine,
+  doubleProgressBar,
+  progressBar,
+  spinnerFrames
+} from "./cliElements";
 import { GENERATE_BATCH_SIZE, MINIMAL_LEVELS, SEED } from "./constants";
 import { levelProducers, Seeder } from "./producers";
 import { updateSeeds } from "./updateSeeds";
 
+const MAX_GENERATE_ATTEMPTS = 100;
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const generateLevel = async (
   settings: LevelSettings,
-  seed: number,
-  depth = 0
+  seed: number
 ): Promise<LevelState> => {
-  if (depth > 50) {
-    throw new Error("Too many retries (${depth * MAX_GENERATE_ATTEMPTS})");
+  let currentTries = 0;
+  let depth = 0;
+  let currentSeed = seed;
+  while (depth < 50) {
+    const random = mulberry32(currentSeed);
+    try {
+      process.stdout.write(
+        c.dim(
+          ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
+        )
+      );
+      return await generatePlayableLevel(settings, {
+        random,
+        attempts: MAX_GENERATE_ATTEMPTS,
+        afterAttempt: async () => {
+          process.stdout.moveCursor(-(5 + `${currentTries}`.length), 0);
+          currentTries++;
+          process.stdout.write(
+            c.dim(
+              ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
+            )
+          );
+          await delay(2);
+        }
+      }).then(optimizeMoves);
+    } catch (ignoreError) {
+      process.stdout.moveCursor(-(5 + `${currentTries}`.length), 0);
+      currentSeed += 1000;
+      depth++;
+    }
   }
-  const random = mulberry32(seed);
-  try {
-    return await generatePlayableLevel(settings, { random, attempts: 30 }).then(
-      optimizeMoves
-    );
-  } catch (ignoreError) {
-    return await generateLevel(settings, seed + 1000, depth + 1);
-  }
+  throw new Error(`Too many retries (${currentTries})`);
 };
 
 const produceExtraSeeds = async (
@@ -86,31 +115,39 @@ const produceSeeds = async (
   totalSeedsMissing: number,
   seedsProduced: number
 ) => {
-  let time = Date.now();
-  let count = 0;
-  await produceExtraSeeds(
-    seeder,
-    levelSeedsCopy,
-    amount,
-    async () => {
-      time = Date.now() - time;
-      count++;
-      if (time > 45_000) {
-        // longer than a minute
-        count = 0;
-        await updateSeeds(levelSeedsCopy);
-      }
-      if (time * count > 45_000) {
-        // longer than a minute
-        count = 0;
-        await updateSeeds(levelSeedsCopy);
-      }
-      time = Date.now();
-    },
-    infoLine,
-    totalSeedsMissing,
-    seedsProduced
-  );
+  try {
+    let time = Date.now();
+    let count = 0;
+    await produceExtraSeeds(
+      seeder,
+      levelSeedsCopy,
+      amount,
+      async () => {
+        time = Date.now() - time;
+        count++;
+        if (time > 45_000) {
+          // longer than a minute
+          count = 0;
+          await updateSeeds(levelSeedsCopy);
+        }
+        if (time * count > 45_000) {
+          // longer than a minute
+          count = 0;
+          await updateSeeds(levelSeedsCopy);
+        }
+        time = Date.now();
+      },
+      infoLine,
+      totalSeedsMissing,
+      seedsProduced
+    );
+  } catch (e) {
+    process.stdout.write("Error:\n");
+    if ("message" in (e as Error)) {
+      process.stdout.write(`${(e as Error).message}\n`);
+    }
+    process.exit(1);
+  }
 };
 
 export const updateLevelSeeds = async (
@@ -192,5 +229,7 @@ export const updateLevelSeeds = async (
   await updateSeeds(levelSeedsCopy);
   if (all) {
     await updateLevelSeeds(true, levelSeedsCopy, totalSeeds);
+  } else {
+    console.log("Batch complete");
   }
 };

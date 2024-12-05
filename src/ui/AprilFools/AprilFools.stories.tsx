@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
 
-import { AprilFools } from "./AprilFools";
+import AprilFools from "./AprilFools";
 
 import "../../icons.css";
 

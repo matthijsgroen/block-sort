@@ -104,6 +104,7 @@ export const generateRandomLevel = (
   const levelState = createLevelState(columns);
   return applyLayoutMap(levelState, layoutMap);
 };
+
 export const applyLayoutMap = (
   levelState: LevelState,
   layoutMap: LayoutMap | undefined
@@ -135,15 +136,16 @@ export const applyLayoutMap = (
     if (!column) {
       throw new Error("Column not found");
     }
-    reorderedColumns[offsetPos(c.toColumn)] = {
+    reorderedColumns[
+      c.toColumn !== undefined ? offsetPos(c.toColumn) : c.fromColumn
+    ] = {
       ...column,
-      paddingTop: c.paddingTop,
-      paddingBottom: c.paddingBottom
+      paddingTop: c.paddingTop
     };
   });
   const newColumns = reorderedColumns.map<Column>(
     (c): Column => c ?? (unaffectedColumns.shift() as Column)
   );
 
-  return { ...levelState, columns: newColumns };
+  return { ...levelState, columns: newColumns, width: layoutMap.width };
 };

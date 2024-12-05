@@ -1,4 +1,4 @@
-import info from "@/../package.json";
+import { version } from "@/../package.json";
 import { replayMoves } from "@/game/actions";
 import { LevelState, Move } from "@/game/types";
 import { getGameValue, setGameValue } from "@/support/useGameStorage";
@@ -145,6 +145,6 @@ export const getGameData = async (): Promise<DataFormat> => {
       d: zenDifficulty,
       t: zenLevelType
     },
-    version: info.version
+    version: version
   };
 };

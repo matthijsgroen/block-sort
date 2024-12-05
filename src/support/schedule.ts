@@ -5,7 +5,7 @@ export type RangedItem = {
   end: ScheduleDate;
 };
 
-export const inRange = (date: Date, begin: ScheduleDate, end: ScheduleDate) => {
+const inRange = (date: Date, begin: ScheduleDate, end: ScheduleDate) => {
   const day = date.getDate();
   const month = date.getMonth() + 1;
 
@@ -44,4 +44,4 @@ export const filterInRange = <TItem extends RangedItem>(
  * @returns the current date
  */
 export const getToday = (): Date =>
-  process.env.NODE_ENV === "production" ? new Date() : new Date("2021-12-01");
+  process.env.NODE_ENV === "production" ? new Date() : new Date();

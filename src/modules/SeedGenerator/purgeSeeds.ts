@@ -10,6 +10,7 @@ import { updateSeeds } from "./updateSeeds";
 export const purgeSeeds = async (
   types: { name: string; levels: number[] }[] | undefined = undefined
 ) => {
+  let totalRemovedSeeds = 0;
   const updatedSeeds = levelSeeds;
 
   const keysToPurge: Seeder[] = levelProducers.filter((l) => {
@@ -26,6 +27,9 @@ export const purgeSeeds = async (
   }, 0);
   let seedsChecked = 0;
   let removedSeeds = 0;
+  let replacedSeeds = 0;
+
+  let lastWrite = Date.now();
 
   for (const key of keysToPurge) {
     let currentCheck = 0;
@@ -59,22 +63,29 @@ export const purgeSeeds = async (
               level.moves.length
             ]);
           }
-          removedSeeds++;
+          replacedSeeds++;
         }
       } catch (ignoreError) {
         updatedSeeds[key.hash] = updatedSeeds[key.hash].filter(
           (s) => s[0] !== seed[0]
         );
         removedSeeds++;
+        totalRemovedSeeds++;
       }
-      await updateSeeds(updatedSeeds);
+      if (Date.now() - lastWrite > 60_000) {
+        await updateSeeds(updatedSeeds);
+        lastWrite = Date.now();
+      }
 
       currentCheck++;
       seedsChecked++;
     }
   }
+  await updateSeeds(updatedSeeds);
 
-  console.log("");
-  console.log("Please run 'run' to regenerate the removed seeds.\n");
+  clearLine();
+  console.log(
+    `Please run 'run' to regenerate the ${totalRemovedSeeds} removed seeds. ${replacedSeeds} were already replaced.`
+  );
   process.exit(0);
 };

@@ -1,12 +1,14 @@
-import { filterInRange, RangedItem } from "@/support/schedule";
+import { lazy } from "react";
 
-import { AprilFoolsAction } from "./AprilFools";
+import { filterInRange, RangedItem } from "@/support/schedule";
 
 export type ActionSchedule = RangedItem & {
   name: string;
   actionKey: (date: Date) => string;
   Render: React.FC<{ onComplete: VoidFunction }>;
 };
+
+const AprilFoolsAction = lazy(() => import("./AprilFools"));
 
 const actions: ActionSchedule[] = [
   {

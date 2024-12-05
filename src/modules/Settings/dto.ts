@@ -22,7 +22,12 @@ export type LevelStateDTO = {
      * Column type
      */
     t: number;
+    /**
+     * padding top
+     */
+    p?: number;
   }[];
+  w?: number;
   m: MoveDTO[];
 };
 
@@ -53,9 +58,11 @@ export const toLevelStateDTO = (state: LevelState): LevelStateDTO => {
       })),
       s: c.columnSize,
       l: toLimitColorDTO(c.limitColor),
-      t: c.type === "placement" ? 1 : 0
+      t: c.type === "placement" ? 1 : 0,
+      p: c.paddingTop
     })),
-    m: toMoveDTO(state.moves)
+    m: toMoveDTO(state.moves),
+    w: state.width
   };
 };
 
@@ -84,9 +91,11 @@ export const fromLevelStateDTO = (dto: LevelStateDTO): LevelState => {
       columnSize: c.s,
       limitColor: fromLimitColorDTO(c.l),
       type: c.t === 1 ? "placement" : "buffer",
-      locked: c.b.length === c.s && c.b.every((b) => b.c === c.b[0].c)
+      locked: c.b.length === c.s && c.b.every((b) => b.c === c.b[0].c),
+      paddingTop: c.p
     })),
-    moves: fromMoveDTO(dto.m)
+    moves: fromMoveDTO(dto.m),
+    width: dto.w
   };
 };
 

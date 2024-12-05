@@ -12,7 +12,7 @@ export const progressBar = (
   const filledLength = Math.round((barLength * current) / total);
   const bar = "█".repeat(filledLength) + "-".repeat(barLength - filledLength);
   process.stdout.write(
-    `[${bar}] ${current}/${total} (${percentage.toFixed(2)}%)\r`
+    `[${bar}] ${current}/${total} (${percentage.toFixed(2)}%)`
   );
 };
 
@@ -39,6 +39,8 @@ export const doubleProgressBar = (
   bar += "-".repeat(Math.max(barLength - barFilledLength, 0));
 
   process.stdout.write(
-    `[${bar}] ${currentStep}/${totalSteps} (${percentage.toFixed(2)}%) - ${current}/${total}\r`
+    `[${bar}] ${currentStep}/${totalSteps} (${percentage.toFixed(2)}%) - ${current}/${total}`
   );
 };
+
+export const spinnerFrames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];

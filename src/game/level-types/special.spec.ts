@@ -155,7 +155,8 @@ describe(special.getSettings, () => {
         stackSize: 3,
         extraPlacementStacks: 3,
         extraPlacementLimits: 2,
-        blockColorPick: "end"
+        blockColorPick: "end",
+        layoutMap: expect.any(Object)
       } satisfies LevelSettings);
 
       const hardResult = special.getSettings(LEVEL_SCALE.at(-1)!, random);
@@ -165,7 +166,8 @@ describe(special.getSettings, () => {
         stackSize: 3,
         extraPlacementStacks: 2,
         extraPlacementLimits: 0,
-        blockColorPick: "end"
+        blockColorPick: "end",
+        layoutMap: expect.any(Object)
       } satisfies LevelSettings);
     });
   });
@@ -180,7 +182,8 @@ describe(special.getSettings, () => {
         stackSize: 4,
         extraPlacementStacks: 2,
         extraPlacementLimits: 0,
-        blockColorPick: "end"
+        blockColorPick: "end",
+        layoutMap: expect.any(Object)
       } satisfies LevelSettings);
 
       const hardResult = special.getSettings(LEVEL_SCALE.at(-1)!, random);
@@ -190,7 +193,8 @@ describe(special.getSettings, () => {
         stackSize: 5,
         extraPlacementStacks: 2,
         extraPlacementLimits: 2,
-        blockColorPick: "end"
+        blockColorPick: "end",
+        layoutMap: expect.any(Object)
       } satisfies LevelSettings);
     });
   });
@@ -208,7 +212,8 @@ describe(special.getSettings, () => {
         buffers: 1,
         bufferSizes: 1,
         stacksPerColor: 2,
-        blockColorPick: "end"
+        blockColorPick: "end",
+        layoutMap: expect.any(Object)
       } satisfies LevelSettings);
 
       const hardResult = special.getSettings(LEVEL_SCALE.at(-1)!, random);
@@ -221,7 +226,8 @@ describe(special.getSettings, () => {
         buffers: 1,
         bufferSizes: 1,
         stacksPerColor: 2,
-        blockColorPick: "end"
+        blockColorPick: "end",
+        layoutMap: expect.any(Object)
       } satisfies LevelSettings);
     });
   });
@@ -260,7 +266,8 @@ describe(special.getSettings, () => {
           { amount: 1, size: 3, limit: 1 },
           { amount: 1, size: 2, limit: 1 }
         ],
-        blockColorPick: "end"
+        blockColorPick: "end",
+        layoutMap: expect.any(Object)
       } satisfies LevelSettings);
     });
   });

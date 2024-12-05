@@ -7,7 +7,7 @@ import { Switch } from "@/ui/Switch";
 import { Transition } from "@/ui/Transition/Transition";
 import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";
 
-import info from "@/../package.json";
+import { version } from "@/../package.json";
 import { THEMES } from "@/featureFlags";
 import { useGameStorage } from "@/support/useGameStorage";
 
@@ -52,7 +52,7 @@ export const Settings: React.FC<Props> = ({
         onClose?.();
       }}
     >
-      <DialogTitle>BlockSort, v{info.version}</DialogTitle>
+      <DialogTitle>BlockSort, v{version}</DialogTitle>
       {activeTab === "settings" && (
         <div className="flex flex-col gap-3 pb-4">
           <Checkbox
