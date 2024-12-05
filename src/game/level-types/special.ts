@@ -43,15 +43,14 @@ export const getSpecial2Settings: SettingsProducer = (difficulty) => {
         columns: [
           { fromColumn: 0, paddingTop: 2 },
           { fromColumn: 1, paddingTop: 1 },
-          { fromColumn: 2, paddingTop: 0 },
           { fromColumn: 3, paddingTop: 1 },
           { fromColumn: 4, paddingTop: 2 },
 
           { fromColumn: 9, toColumn: 5, paddingTop: 5 },
           { fromColumn: 8, toColumn: 6, paddingTop: 2 },
           { fromColumn: 7, paddingTop: 2 },
-          { fromColumn: 5, toColumn: 8, paddingTop: 0 },
-          { fromColumn: 6, toColumn: 9, paddingTop: 0 }
+          { fromColumn: 5, toColumn: 8 },
+          { fromColumn: 6, toColumn: 9 }
         ]
       };
     }
@@ -65,11 +64,11 @@ export const getSpecial2Settings: SettingsProducer = (difficulty) => {
           { fromColumn: 3, paddingTop: 1 },
           { fromColumn: 4, paddingTop: 2 },
 
-          { fromColumn: 9, toColumn: 5, paddingTop: 0 },
+          { fromColumn: 9, toColumn: 5 },
           { fromColumn: 8, toColumn: 6, paddingTop: 2 },
           { fromColumn: 7, paddingTop: 2 },
-          { fromColumn: 5, toColumn: 8, paddingTop: 0 },
-          { fromColumn: 6, toColumn: 9, paddingTop: 0 }
+          { fromColumn: 5, toColumn: 8 },
+          { fromColumn: 6, toColumn: 9 }
         ]
       };
     }
@@ -169,19 +168,80 @@ export const getSpecial3Settings: SettingsProducer = (difficulty) => ({
   extraPlacementStacks: 2,
   extraPlacementLimits:
     0 + Math.max(Math.min(Math.round(difficulty / 5), 2), 0),
-  blockColorPick: "end"
+  blockColorPick: "end",
+
+  layoutMap: {
+    width: 5,
+    columns: [
+      { fromColumn: 0, paddingTop: 3 },
+      { fromColumn: 2, paddingTop: 3 },
+      { fromColumn: 4, paddingTop: 3 }
+    ]
+  }
 });
 
-export const getSpecial4Settings: SettingsProducer = (difficulty) => ({
-  amountColors: 2 + Math.min(Math.max(Math.round(difficulty / 2), 0), 4),
-  stacksPerColor: 2,
-  stackSize: 3,
-  extraPlacementStacks: 4 - Math.max(Math.round(difficulty / 5), 0),
-  extraPlacementLimits: 2,
-  buffers: 1,
-  bufferSizes: 1,
-  blockColorPick: "end"
-});
+export const getSpecial4Settings: SettingsProducer = (difficulty) => {
+  const getLayoutMap = (difficulty: number): LayoutMap => {
+    if (difficulty === 1 || difficulty === 2) {
+      return {
+        width: 5,
+        columns: [
+          { fromColumn: 0, paddingTop: 1 },
+          { fromColumn: 1, paddingTop: 1 },
+          { fromColumn: 3, paddingTop: 1 },
+          { fromColumn: 4, paddingTop: 1 }
+        ]
+      };
+    }
+    if (difficulty === 5 || difficulty === 6) {
+      return {
+        width: 5,
+        columns: [
+          { fromColumn: 0, paddingTop: 2 },
+          { fromColumn: 4, paddingTop: 1 }
+        ]
+      };
+    }
+    if (difficulty === 7) {
+      return {
+        width: 5,
+        columns: [
+          { fromColumn: 1, paddingTop: 2 },
+          { fromColumn: 3, paddingTop: 2 },
+          { fromColumn: 5, paddingTop: 1 },
+          { fromColumn: 7, paddingTop: 1 },
+          { fromColumn: 11, paddingTop: 1 },
+          { fromColumn: 12, paddingTop: 1 }
+        ]
+      };
+    }
+    if (difficulty > 7) {
+      return {
+        width: 5,
+        columns: [
+          { fromColumn: 1, paddingTop: 1 },
+          { fromColumn: 3, paddingTop: 1 },
+          { fromColumn: 5, paddingTop: 1 },
+          { fromColumn: 7, paddingTop: 1 },
+          { fromColumn: 11, paddingTop: 1 },
+          { fromColumn: 14, paddingTop: 2 }
+        ]
+      };
+    }
+    return { columns: [] };
+  };
+  return {
+    amountColors: 2 + Math.min(Math.max(Math.round(difficulty / 2), 0), 4),
+    stacksPerColor: 2,
+    stackSize: 3,
+    extraPlacementStacks: 4 - Math.max(Math.round(difficulty / 5), 0),
+    extraPlacementLimits: 2,
+    buffers: 1,
+    bufferSizes: 1,
+    blockColorPick: "end",
+    layoutMap: getLayoutMap(difficulty)
+  };
+};
 
 export const getSpecial5Settings: SettingsProducer = (difficulty) => ({
   amountColors: difficulty < 3 ? 4 : 5,
@@ -195,7 +255,14 @@ export const getSpecial5Settings: SettingsProducer = (difficulty) => ({
     { amount: 1, size: difficulty > 4 && difficulty < 10 ? 4 : 3, limit: 1 },
     { amount: 1, size: difficulty > 4 && difficulty < 8 ? 3 : 2, limit: 1 }
   ],
-  blockColorPick: "end"
+  blockColorPick: "end",
+  layoutMap:
+    difficulty > 2
+      ? {
+          width: 5,
+          columns: []
+        }
+      : undefined
 });
 
 export const special: LevelType<"special"> = {

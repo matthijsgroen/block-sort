@@ -85,7 +85,7 @@ export const purgeSeeds = async (
 
   clearLine();
   console.log(
-    `Please run 'run' to regenerate the ${totalRemovedSeeds} removed seeds. ${replacedSeeds} were already replaced.\n`
+    `Please run 'run' to regenerate the ${totalRemovedSeeds} removed seeds. ${replacedSeeds} were already replaced.`
   );
   process.exit(0);
 };
