@@ -7,7 +7,7 @@ import { TransparentButton } from "../TransparentButton/TransparentButton";
 
 type Props = { onClose?: VoidFunction };
 
-export const AprilFools: FC<Props> = ({ onClose }) => {
+const AprilFools: FC<Props> = ({ onClose }) => {
   return (
     <Dialog wide onClose={onClose}>
       <DialogTitle>Block Pass for April</DialogTitle>
@@ -56,3 +56,5 @@ export const AprilFools: FC<Props> = ({ onClose }) => {
     </Dialog>
   );
 };
+
+export default AprilFools;
