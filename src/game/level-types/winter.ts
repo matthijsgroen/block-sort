@@ -22,7 +22,7 @@ export const winter: LevelType<"winter"> = {
   occurrence: (levelNr) =>
     getActiveTheme(getToday()) === "winter" &&
     levelNr > 20 &&
-    (levelNr - 1) % 8 === 0,
+    (levelNr - 1) % 6 === 0,
   getSettings: (levelNr) => {
     return hard.getSettings(levelNr);
   },
