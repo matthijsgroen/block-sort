@@ -266,7 +266,7 @@ export const spring: LevelType<"spring"> = {
   introTextColor: "#ec4899",
   occurrence: (levelNr) =>
     getActiveTheme(getToday()) === "spring" &&
-    (levelNr - 1) % 8 === 0 &&
+    (levelNr - 1) % 6 === 0 &&
     levelNr > 10,
   getSettings: (levelNr) => {
     if (levelNr < 200) {
