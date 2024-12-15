@@ -87,6 +87,7 @@ export const LevelLoader: React.FC<Props> = ({
     `${storagePrefix}levelType`,
     null
   );
+
   const level = useMemo(async () => {
     const level = await generateLevelContent(
       locked.seed,
@@ -147,7 +148,9 @@ export const LevelLoader: React.FC<Props> = ({
           useStreak={useStreak}
           showTutorial={showTutorial}
           levelSettings={levelSettings}
-          levelType={storedLevelType ?? levelType}
+          levelType={
+            storagePrefix === "" ? (storedLevelType ?? levelType) : levelType
+          }
           onComplete={(won) => {
             if (won) {
               deleteLevelType();
