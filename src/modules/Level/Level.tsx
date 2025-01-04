@@ -22,7 +22,6 @@ import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { mulberry32, pick } from "@/support/random";
 import { getToday } from "@/support/schedule";
 import { useGameStorage } from "@/support/useGameStorage";
-import { useWakeLock } from "@/support/useWakeLock";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
 
@@ -56,7 +55,6 @@ export const Level: React.FC<Props> = ({
   storagePrefix = ""
 }) => {
   const initialLevelState = use(level);
-  useWakeLock()
 
   const localRandom = mulberry32(levelNr * 386);
 

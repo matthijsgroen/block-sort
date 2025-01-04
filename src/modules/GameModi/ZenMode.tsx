@@ -13,6 +13,7 @@ import { LevelLoader } from "@/modules/Level/LevelLoader";
 import { generateNewSeed, mulberry32, pick } from "@/support/random";
 import { getThemeSong } from "@/support/themeMusic";
 import { deleteGameValue, useGameStorage } from "@/support/useGameStorage";
+import { useWakeLock } from "@/support/useWakeLock";
 
 import { ZenSelection } from "../ZenSelection/ZenSelection";
 
@@ -38,6 +39,7 @@ export const ZenMode: React.FC<Props> = ({
 
   const [inLevel, setInLevel] = useGameStorage("inLevel", false);
 
+  const { requestWakeLock, releaseWakeLock } = useWakeLock();
   const [difficultyIndex, setDifficultyIndex] = useGameStorage(
     "zenDifficulty",
     0
@@ -86,6 +88,7 @@ export const ZenMode: React.FC<Props> = ({
         {currentGame !== null && (
           <LevelLoader
             onComplete={(won) => {
+              releaseWakeLock();
               setInLevel(false);
               if (won) {
                 setZenLevelNr((nr) => nr + 1);
@@ -114,6 +117,7 @@ export const ZenMode: React.FC<Props> = ({
           setDifficultyIndex={setDifficultyIndex}
           setLevelTypeIndex={setLevelTypeIndex}
           onLevelStart={(levelType, difficultyIndex) => {
+            requestWakeLock();
             const difficultySettings = DIFFICULTY_LEVELS[difficultyIndex];
 
             if (

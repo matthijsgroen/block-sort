@@ -10,6 +10,7 @@ import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";
 import { version } from "@/../package.json";
 import { THEMES } from "@/featureFlags";
 import { useGameStorage } from "@/support/useGameStorage";
+import { useWakeLock } from "@/support/useWakeLock";
 
 import { Attribution } from "./Attribution";
 import { Changelog } from "./Changelog";
@@ -44,6 +45,7 @@ export const Settings: React.FC<Props> = ({
   const [showThemes, setShowThemes] = useState(false);
   const [hintMode, setHintMode] = useGameStorage("hintMode", "standard");
   const [streak] = useGameStorage<number | null>("streak", null);
+  const { releaseWakeLock, requestWakeLock } = useWakeLock();
 
   return (
     <Dialog
@@ -126,6 +128,7 @@ export const Settings: React.FC<Props> = ({
           <TransparentButton
             size="large"
             onClick={() => {
+              requestWakeLock();
               setActiveTab("sharing");
             }}
             icon="share"
@@ -158,7 +161,12 @@ export const Settings: React.FC<Props> = ({
         </div>
       )}
       {activeTab === "sharing" && (
-        <ShareGame onBack={() => setActiveTab("settings")} />
+        <ShareGame
+          onBack={() => {
+            setActiveTab("settings");
+            releaseWakeLock();
+          }}
+        />
       )}
       {activeTab === "advanced" && (
         <div className="flex flex-col gap-3 pb-4">
