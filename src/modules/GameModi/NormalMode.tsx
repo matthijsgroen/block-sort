@@ -12,6 +12,7 @@ import { LevelLoader } from "@/modules/Level/LevelLoader";
 import { LevelTrack } from "@/modules/LevelTrack/LevelTrack";
 import { generateNewSeed, mulberry32 } from "@/support/random";
 import { useGameStorage } from "@/support/useGameStorage";
+import { useWakeLock } from "@/support/useWakeLock";
 
 import { BetaContext } from "../Layout/BetaContext";
 
@@ -52,6 +53,8 @@ export const NormalMode: React.FC<Props> = ({
 
   const { showBeta } = use(BetaContext);
 
+  const { requestWakeLock, releaseWakeLock } = useWakeLock();
+
   return (
     <>
       <Transition
@@ -65,6 +68,7 @@ export const NormalMode: React.FC<Props> = ({
           hasZenMode={levelNr >= ZEN_MODE_UNLOCK - 1 && ZEN_MODE}
           showInstallButton={showInstallButton || showBeta}
           onLevelStart={() => {
+            requestWakeLock();
             setInLevel(true);
           }}
           onOpenSettings={onOpenSettings}
@@ -83,6 +87,7 @@ export const NormalMode: React.FC<Props> = ({
       >
         <LevelLoader
           onComplete={(won) => {
+            releaseWakeLock();
             setInLevel(false);
             if (won) {
               setLevelNr((nr) => nr + 1);

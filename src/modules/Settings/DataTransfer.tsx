@@ -107,6 +107,7 @@ const DataTransfer: React.FC = () => {
   const [importErrors, setImportErrors] = useState<string | null>(null);
   const [importSuccess, setImportSuccess] = useState<boolean>(false);
   const [fileInputKey, setFileInputKey] = useState(0);
+  const { requestWakeLock, releaseWakeLock } = useWakeLock();
 
   const encryptedData = useMemo(async () => {
     if (startDownload) {
@@ -114,6 +115,7 @@ const DataTransfer: React.FC = () => {
         return await getEncryptedData();
       } catch (ignoreError) {
         setImportErrors("Could not pack data");
+        releaseWakeLock();
         setStartDownload(false);
         return Promise.resolve("");
       }
@@ -141,6 +143,7 @@ const DataTransfer: React.FC = () => {
               <TransparentButton
                 onClick={() => {
                   setStartDownload(true);
+                  requestWakeLock();
                 }}
               >
                 Export game data
@@ -209,7 +212,6 @@ const ExportData: React.FC<{
   if (resolved.length === 0) {
     return null;
   }
-  useWakeLock()
 
   return (
     <div className="flex flex-col items-center">
