@@ -7,6 +7,7 @@ import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";
 
 import { version } from "@/../package.json";
 import { decryptData, encryptData } from "@/support/dataTransfer";
+import { useWakeLock } from "@/support/useWakeLock";
 
 import { DataFormat, getGameData, setGameData } from "./gameData";
 
@@ -208,6 +209,7 @@ const ExportData: React.FC<{
   if (resolved.length === 0) {
     return null;
   }
+  useWakeLock()
 
   return (
     <div className="flex flex-col items-center">
