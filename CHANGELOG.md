@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Keep screen awake during level and share and data transfer QR code screen
+- Keep screen awake during level and share and data transfer QR code screen (Thanks Miloslav Nenadál for the suggestion!)
 
 ## Version 1.33.1 - 2024-12-15
 
