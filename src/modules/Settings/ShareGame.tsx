@@ -3,12 +3,15 @@ import QRCode from "qrcode";
 
 import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";
 
+import { useWakeLock } from "@/support/useWakeLock";
+
 type Props = {
   onBack: VoidFunction;
 };
 
 const LazyQRCode: FC<{ url: Promise<string> }> = ({ url }) => {
   const dataUrl = use(url);
+  useWakeLock()
   return (
     <img
       className="h-48 w-48 rounded-3xl"
