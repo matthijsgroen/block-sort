@@ -1,7 +1,10 @@
 import { moveBlocks } from "../actions";
 import { Column, LevelState, Move } from "../types";
 
-import { canPlaceBlock, isColumnCorrectlySorted } from "./tactics/support";
+import {
+  canPlaceBlock,
+  isColumnCorrectlySorted
+} from "./solver-tactics/support";
 
 const columnCompletionScore = (state: LevelState): number =>
   state.columns.reduce((score, col) => {

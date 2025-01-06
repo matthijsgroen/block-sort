@@ -1,5 +1,6 @@
 import eslintConfigPrettier from "eslint-config-prettier";
 import * as importPlugin from "eslint-plugin-import";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import pluginReact from "eslint-plugin-react";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import unusedImports from "eslint-plugin-unused-imports";
@@ -12,7 +13,7 @@ export default [
   { languageOptions: { globals: { ...globals.browser, ...globals.commonjs } } },
   ...tseslint.configs.recommended,
   {
-    ...pluginReact.configs.flat.recommended,
+    ...pluginReact.configs.flat?.recommended,
     settings: {
       react: {
         version: "detect"
@@ -113,5 +114,6 @@ export default [
         }
       ]
     }
-  }
+  },
+  eslintPluginPrettierRecommended
 ];

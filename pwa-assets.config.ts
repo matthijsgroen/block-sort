@@ -1,12 +1,12 @@
 import {
   defineConfig,
-  minimal2023Preset as preset,
+  minimal2023Preset as preset
 } from "@vite-pwa/assets-generator/config";
 
 export default defineConfig({
   headLinkOptions: {
-    preset: "2023",
+    preset: "2023"
   },
   preset,
-  images: ["public/app-logo.png"],
+  images: ["public/app-logo.png"]
 });

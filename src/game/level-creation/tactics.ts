@@ -4,12 +4,13 @@ import { moveBlocks } from "../actions";
 import { allShuffled, hasWon, isStuck } from "../state";
 import { LevelSettings, LevelState, Move } from "../types";
 
-import { randomMove } from "./tactics/randomMove";
-import { stackColumn } from "./tactics/stackColumn";
-import { startColumn } from "./tactics/startColumn";
-import { Tactic, WeightedMove } from "./tactics/types";
+import { randomMove } from "./solver-tactics/randomMove";
+import { stackColumn } from "./solver-tactics/stackColumn";
+import { startColumn } from "./solver-tactics/startColumn";
+import { Tactic, WeightedMove } from "./solver-tactics/types";
 import { generateRandomLevel } from "./generateRandomLevel";
 import { scoreState, scoreStateWithMove } from "./scoreState";
+import { Solver } from "./types";
 
 const MAX_PLAY_ATTEMPTS = 1;
 const MAX_LEVEL_MOVES = 2_000; // The dumb moves get filtered out, so this is a safe upper limit
@@ -163,16 +164,11 @@ const evaluateBestMove = (
   return bestMove;
 };
 
-const isBeatable = async (
-  level: LevelState,
+const isBeatable: Solver = async (
+  level,
   random = Math.random,
-  displayState?: (
-    state: LevelState,
-    move: Move,
-    tactic: string,
-    moveIndex: number
-  ) => Promise<boolean>
-): Promise<[beatable: boolean, moves: Move[], cost: number]> => {
+  displayState
+) => {
   let attempt = 0;
 
   while (attempt < MAX_PLAY_ATTEMPTS) {
