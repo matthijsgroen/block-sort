@@ -3,7 +3,12 @@ import { filterInRange, RangedItem } from "@/support/schedule";
 
 import { BlockColor } from "../types";
 
-import { colorMap as colorMapDaily, shapeMap as shapeMapDaily } from "./daily";
+import {
+  colorMap as colorMapDaily,
+  generateColorMap,
+  generateShapeMap,
+  shapeMap as shapeMapDaily
+} from "./daily";
 import { colorMap, shapeMap } from "./default";
 import { colorMap as colorMapFall, shapeMap as shapeMapFall } from "./fall";
 import {
@@ -27,8 +32,25 @@ export type BlockTheme =
   | "summer"
   | "daily";
 
+type Occasion = {
+  date: Date;
+  name: string;
+  symbol: string;
+  mainColor: string;
+};
+
+const occasions: Occasion[] = [
+  {
+    name: "Valentine",
+    date: new Date("2022-02-14"),
+    symbol: "💖",
+    mainColor: "#A00000"
+  }
+];
+
 export const getShapeMapping = (
-  theme: BlockTheme
+  theme: BlockTheme,
+  date?: Date
 ): Record<BlockColor, string> => {
   const mapping: Record<BlockTheme, Record<BlockColor, string>> = {
     default: shapeMap,
@@ -38,11 +60,24 @@ export const getShapeMapping = (
     summer: shapeMapSummer,
     daily: shapeMapDaily
   };
+  if (theme === "daily" && date) {
+    const occasion = occasions.find((occasion) => {
+      return (
+        occasion.date.getMonth() === date.getMonth() &&
+        occasion.date.getDate() === date.getDate()
+      );
+    });
+
+    if (occasion) {
+      return generateShapeMap(occasion.symbol);
+    }
+  }
   return mapping[theme];
 };
 
 export const getColorMapping = (
-  theme: BlockTheme
+  theme: BlockTheme,
+  date?: Date
 ): Record<BlockColor, string> => {
   const mapping: Record<BlockTheme, Record<BlockColor, string>> = {
     default: colorMap,
@@ -52,6 +87,19 @@ export const getColorMapping = (
     summer: colorMapSummer,
     daily: colorMapDaily
   };
+  if (theme === "daily" && date) {
+    const occasion = occasions.find((occasion) => {
+      return (
+        occasion.date.getMonth() === date.getMonth() &&
+        occasion.date.getDate() === date.getDate()
+      );
+    });
+
+    if (occasion) {
+      return generateColorMap(occasion.mainColor);
+    }
+  }
+
   return mapping[theme];
 };
 

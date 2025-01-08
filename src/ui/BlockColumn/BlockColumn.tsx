@@ -14,6 +14,7 @@ import { Tray } from "@/ui/Tray/Tray";
 import { BlockTheme, getColorMapping, getShapeMapping } from "@/game/themes";
 import { Column } from "@/game/types";
 import { colPadding, rowSpans } from "@/support/grid";
+import { getToday } from "@/support/schedule";
 import { timesMap } from "@/support/timeMap";
 
 import styles from "./BlockColumn.module.css";
@@ -118,8 +119,8 @@ export const BlockColumn: React.FC<Props> = ({
     }
   }, [locked]);
 
-  const activeShapeMap = getShapeMapping(theme);
-  const activeColorMap = getColorMapping(theme);
+  const activeShapeMap = getShapeMapping(theme, getToday());
+  const activeColorMap = getColorMapping(theme, getToday());
   const handlePickup = useCallback(
     (rect: DOMRect) => {
       onPickUp?.({

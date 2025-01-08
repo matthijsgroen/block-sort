@@ -35,6 +35,12 @@ export const filterInRange = <TItem extends RangedItem>(
     return inRange(date, schedule.begin, schedule.end);
   });
 
+let currentDate = new Date();
+
+export const fakeDate = (date: Date) => {
+  currentDate = date;
+};
+
 /**
  * Get the current date.
  *
@@ -44,4 +50,4 @@ export const filterInRange = <TItem extends RangedItem>(
  * @returns the current date
  */
 export const getToday = (): Date =>
-  process.env.NODE_ENV === "production" ? new Date() : new Date();
+  process.env.NODE_ENV === "production" ? new Date() : currentDate;
