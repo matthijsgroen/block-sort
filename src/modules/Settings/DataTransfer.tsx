@@ -1,4 +1,4 @@
-import { Suspense, use, useMemo, useState } from "react";
+import { useState, useTransition } from "react";
 import clsx from "clsx";
 import jsQR from "jsqr-es6";
 import QRCode from "qrcode";
@@ -103,25 +103,26 @@ const importImageData = async (
   });
 
 const DataTransfer: React.FC = () => {
-  const [startDownload, setStartDownload] = useState(false);
   const [importErrors, setImportErrors] = useState<string | null>(null);
   const [importSuccess, setImportSuccess] = useState<boolean>(false);
   const [fileInputKey, setFileInputKey] = useState(0);
   const { requestWakeLock, releaseWakeLock } = useWakeLock();
 
-  const encryptedData = useMemo(async () => {
-    if (startDownload) {
+  const [isPending, startTransition] = useTransition();
+  const [encryptedData, setEncryptedDataPromise] = useState<string | null>(
+    null
+  );
+
+  const handleData = () =>
+    startTransition(async () => {
       try {
-        return await getEncryptedData();
+        const data = await getEncryptedData();
+        setEncryptedDataPromise(data);
       } catch (ignoreError) {
         setImportErrors("Could not pack data");
         releaseWakeLock();
-        setStartDownload(false);
-        return Promise.resolve("");
       }
-    }
-    return Promise.resolve("");
-  }, [startDownload]);
+    });
 
   const supportsEncryption =
     window.crypto !== undefined && window.TextEncoder && window.crypto.subtle;
@@ -131,7 +132,7 @@ const DataTransfer: React.FC = () => {
       <h2 className="text-lg font-bold">Transfer game data</h2>
       {supportsEncryption ? (
         <>
-          {!startDownload && (
+          {!isPending && encryptedData === null && (
             <>
               <p className="text-sm">
                 You can transfer your game data to another instance of the game
@@ -142,7 +143,7 @@ const DataTransfer: React.FC = () => {
               <p className="text-sm">This is not meant to act as a backup.</p>
               <TransparentButton
                 onClick={() => {
-                  setStartDownload(true);
+                  handleData();
                   requestWakeLock();
                 }}
               >
@@ -150,11 +151,8 @@ const DataTransfer: React.FC = () => {
               </TransparentButton>
             </>
           )}
-          {startDownload && (
-            <Suspense fallback={<div>Packing Data...</div>}>
-              <ExportData data={encryptedData} />
-            </Suspense>
-          )}
+          {isPending && <p>Packing data...</p>}
+          {encryptedData && <ExportData data={encryptedData} />}
 
           {importErrors && (
             <p className="text-sm font-bold text-red-600">{importErrors}</p>
@@ -205,17 +203,11 @@ const DataTransfer: React.FC = () => {
 };
 
 const ExportData: React.FC<{
-  data: Promise<string>;
+  data: string;
 }> = ({ data }) => {
-  const resolved = use(data);
-
-  if (resolved.length === 0) {
-    return null;
-  }
-
   return (
     <div className="flex flex-col items-center">
-      <img src={resolved} width={200} height={200}></img>
+      <img src={data} width={200} height={200}></img>
       <p className="pt-2 text-sm">
         This image contains all your game data. <strong>Long press</strong> to
         download it and upload it to your new game instance (on another device

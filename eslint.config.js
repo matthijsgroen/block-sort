@@ -2,12 +2,21 @@ import eslintConfigPrettier from "eslint-config-prettier";
 import * as importPlugin from "eslint-plugin-import";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 import pluginReact from "eslint-plugin-react";
+import reactCompiler from "eslint-plugin-react-compiler";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default [
+  {
+    plugins: {
+      "react-compiler": reactCompiler
+    },
+    rules: {
+      "react-compiler/react-compiler": "error"
+    }
+  },
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
   { ignores: [".yarn/*", "dist/*", ".pnp.*", "storybook-static/", "public/*"] },
   { languageOptions: { globals: { ...globals.browser, ...globals.commonjs } } },

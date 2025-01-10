@@ -77,6 +77,42 @@ const generateLevelContent = async (
   return level;
 };
 
+const createLevel = async (
+  seed: number,
+  levelNr: number,
+  levelSettings: LevelSettings,
+  storagePrefix: string,
+  levelType: LevelTypeString
+): Promise<LevelState> => {
+  const level = await generateLevelContent(
+    seed,
+    `${storagePrefix}initialLevelState${levelNr}`,
+    levelSettings,
+    levelNr
+  );
+
+  // Verify level content
+  const levelState = replayMoves(level, level.moves);
+  const won = hasWon(levelState);
+  if (!won) {
+    const newSeed = generateNewSeed(seed, 2);
+    // Level content is botched, retry
+    await deleteGameValue(`${storagePrefix}initialLevelState${levelNr}`);
+    const level = await generateLevelContent(
+      newSeed,
+      `${storagePrefix}initialLevelState${levelNr}`,
+      levelSettings,
+      levelNr
+    );
+    return level;
+  }
+  if (!(await getGameValue(`${storagePrefix}levelType`))) {
+    await setGameValue(`${storagePrefix}levelType`, levelType);
+  }
+
+  return level;
+};
+
 export const LevelLoader: React.FC<Props> = ({
   seed,
   onComplete,
@@ -94,38 +130,17 @@ export const LevelLoader: React.FC<Props> = ({
     `${storagePrefix}levelType`,
     null
   );
+  const levelSettingsString = JSON.stringify(levelSettings);
 
-  const level = useMemo(async () => {
-    const level = await generateLevelContent(
+  const level = useMemo(() => {
+    return createLevel(
       locked.seed,
-      `${storagePrefix}initialLevelState${locked.levelNr}`,
+      locked.levelNr,
       locked.levelSettings,
-      levelNr
+      storagePrefix,
+      levelType
     );
-
-    // Verify level content
-    const levelState = replayMoves(level, level.moves);
-    const won = hasWon(levelState);
-    if (!won) {
-      const newSeed = generateNewSeed(locked.seed, 2);
-      // Level content is botched, retry
-      await deleteGameValue(
-        `${storagePrefix}initialLevelState${locked.levelNr}`
-      );
-      const level = await generateLevelContent(
-        newSeed,
-        `${storagePrefix}initialLevelState${locked.levelNr}`,
-        locked.levelSettings,
-        levelNr
-      );
-      return level;
-    }
-    if (!(await getGameValue(`${storagePrefix}levelType`))) {
-      await setGameValue(`${storagePrefix}levelType`, levelType);
-    }
-
-    return level;
-  }, [locked.seed, JSON.stringify(locked.levelSettings)]);
+  }, [locked.seed, levelSettingsString]);
 
   return (
     <ErrorBoundary
