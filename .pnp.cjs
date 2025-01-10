@@ -59,6 +59,7 @@ const RAW_RUNTIME_STATE =
           ["@vitejs/plugin-react", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:4.3.4"],\
           ["ansi-colors", "npm:4.1.3"],\
           ["autoprefixer", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:10.4.20"],\
+          ["babel-plugin-react-compiler", "npm:19.0.0-beta-63e3235-20250105"],\
           ["bson", "npm:6.10.0"],\
           ["clsx", "npm:2.1.1"],\
           ["commander", "npm:12.1.0"],\
@@ -6795,6 +6796,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["babel-plugin-react-compiler", [\
+      ["npm:19.0.0-beta-63e3235-20250105", {\
+        "packageLocation": "../../../.yarn/berry/cache/babel-plugin-react-compiler-npm-19.0.0-beta-63e3235-20250105-50f0fd835a-10c0.zip/node_modules/babel-plugin-react-compiler/",\
+        "packageDependencies": [\
+          ["babel-plugin-react-compiler", "npm:19.0.0-beta-63e3235-20250105"],\
+          ["@babel/types", "npm:7.26.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["balanced-match", [\
       ["npm:1.0.2", {\
         "packageLocation": "../../../.yarn/berry/cache/balanced-match-npm-1.0.2-a53c126459-10c0.zip/node_modules/balanced-match/",\
@@ -6932,6 +6943,7 @@ const RAW_RUNTIME_STATE =
           ["@vitejs/plugin-react", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:4.3.4"],\
           ["ansi-colors", "npm:4.1.3"],\
           ["autoprefixer", "virtual:fa25ca65802cbddab1ea2772024d82ed7ca5ffd7d5227fc9b937686e4733ea9cced6425ead0b71ba24907457045504352817116d72c1a2d06f96241d28ee6949#npm:10.4.20"],\
+          ["babel-plugin-react-compiler", "npm:19.0.0-beta-63e3235-20250105"],\
           ["bson", "npm:6.10.0"],\
           ["clsx", "npm:2.1.1"],\
           ["commander", "npm:12.1.0"],\

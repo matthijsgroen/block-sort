@@ -1979,6 +1979,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/types@npm:^7.19.0, @babel/types@npm:^7.26.3":
+  version: 7.26.3
+  resolution: "@babel/types@npm:7.26.3"
+  dependencies:
+    "@babel/helper-string-parser": "npm:^7.25.9"
+    "@babel/helper-validator-identifier": "npm:^7.25.9"
+  checksum: 10c0/966c5242c5e55c8704bf7a7418e7be2703a0afa4d19a8480999d5a4ef13d095dd60686615fe5983cb7593b4b06ba3a7de8d6ca501c1d78bdd233a10d90be787b
+  languageName: node
+  linkType: hard
+
 "@babel/types@npm:^7.25.7":
   version: 7.25.7
   resolution: "@babel/types@npm:7.25.7"
@@ -1997,16 +2007,6 @@ __metadata:
     "@babel/helper-string-parser": "npm:^7.25.9"
     "@babel/helper-validator-identifier": "npm:^7.25.9"
   checksum: 10c0/b694f41ad1597127e16024d766c33a641508aad037abd08d0d1f73af753e1119fa03b4a107d04b5f92cc19c095a594660547ae9bead1db2299212d644b0a5cb8
-  languageName: node
-  linkType: hard
-
-"@babel/types@npm:^7.26.3":
-  version: 7.26.3
-  resolution: "@babel/types@npm:7.26.3"
-  dependencies:
-    "@babel/helper-string-parser": "npm:^7.25.9"
-    "@babel/helper-validator-identifier": "npm:^7.25.9"
-  checksum: 10c0/966c5242c5e55c8704bf7a7418e7be2703a0afa4d19a8480999d5a4ef13d095dd60686615fe5983cb7593b4b06ba3a7de8d6ca501c1d78bdd233a10d90be787b
   languageName: node
   linkType: hard
 
@@ -4489,6 +4489,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-plugin-react-compiler@npm:19.0.0-beta-63e3235-20250105":
+  version: 19.0.0-beta-63e3235-20250105
+  resolution: "babel-plugin-react-compiler@npm:19.0.0-beta-63e3235-20250105"
+  dependencies:
+    "@babel/types": "npm:^7.19.0"
+  checksum: 10c0/83a32adc51488b3ed8d5c0ff94ed00b4f3f0058ef8a1ab9008fb2ba80da9cbeb357ee2c05a3d42f6582de7f92d75319f1d9ef66791b4e02ba7ce969ffc668693
+  languageName: node
+  linkType: hard
+
 "balanced-match@npm:^1.0.0":
   version: 1.0.2
   resolution: "balanced-match@npm:1.0.2"
@@ -4604,6 +4613,7 @@ __metadata:
     "@vitejs/plugin-react": "npm:^4.3.4"
     ansi-colors: "npm:^4.1.3"
     autoprefixer: "npm:^10.4.20"
+    babel-plugin-react-compiler: "npm:19.0.0-beta-63e3235-20250105"
     bson: "npm:^6.10.0"
     clsx: "npm:^2.1.1"
     commander: "npm:^12.1.0"
