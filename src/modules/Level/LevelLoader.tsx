@@ -5,6 +5,7 @@ import { Loading } from "@/ui/Loading/Loading";
 import { replayMoves } from "@/game/actions";
 import { colorHustle } from "@/game/level-creation/colorHustle";
 import { optimizeMoves } from "@/game/level-creation/optimizeMoves";
+import { solvers } from "@/game/level-creation/solvers";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { LevelTypeString } from "@/game/level-types";
 import { hasWon } from "@/game/state";
@@ -57,10 +58,16 @@ const generateLevelContent = async (
     seeds.length > 0 ? seeds[levelNr % seeds.length]?.[0] : undefined;
   const random = mulberry32(preSeed ?? seed);
 
-  let level = await generatePlayableLevel(levelSettings, {
-    random,
-    seed: preSeed
-  }).then(optimizeMoves);
+  const solver = solvers[levelSettings.solver ?? "default"];
+
+  let level = await generatePlayableLevel(
+    levelSettings,
+    {
+      random,
+      seed: preSeed
+    },
+    solver
+  ).then(optimizeMoves);
   if (preSeed !== undefined && level.generationInformation?.seed === preSeed) {
     level = colorHustle(level, random);
   }

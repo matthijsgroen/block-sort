@@ -11,3 +11,8 @@ export const defaultSolver: Solver = configureSolver(
   scoreStateWithMove,
   2
 );
+
+
+export const solvers = {
+  default: defaultSolver
+} as const satisfies Record<string, Solver>;

@@ -2,6 +2,7 @@ import c from "ansi-colors";
 
 import { SeedMap } from "@/data/levelSeeds";
 import { optimizeMoves } from "@/game/level-creation/optimizeMoves";
+import { solvers } from "@/game/level-creation/solvers";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { LevelSettings, LevelState } from "@/game/types";
 import { mulberry32 } from "@/support/random";
@@ -35,20 +36,26 @@ const generateLevel = async (
           ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
         )
       );
-      return await generatePlayableLevel(settings, {
-        random,
-        attempts: MAX_GENERATE_ATTEMPTS,
-        afterAttempt: async () => {
-          process.stdout.moveCursor(-(5 + `${currentTries}`.length), 0);
-          currentTries++;
-          process.stdout.write(
-            c.dim(
-              ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
-            )
-          );
-          await delay(2);
-        }
-      }).then(optimizeMoves);
+      const solver = solvers[settings.solver ?? "default"];
+
+      return await generatePlayableLevel(
+        settings,
+        {
+          random,
+          attempts: MAX_GENERATE_ATTEMPTS,
+          afterAttempt: async () => {
+            process.stdout.moveCursor(-(5 + `${currentTries}`.length), 0);
+            currentTries++;
+            process.stdout.write(
+              c.dim(
+                ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
+              )
+            );
+            await delay(2);
+          }
+        },
+        solver
+      ).then(optimizeMoves);
     } catch (ignoreError) {
       process.stdout.moveCursor(-(5 + `${currentTries}`.length), 0);
       currentSeed += 1000;

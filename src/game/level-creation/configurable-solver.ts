@@ -8,6 +8,12 @@ import { Solver } from "./types";
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const MAX_LEVEL_MOVES = 2_000; // The dumb moves get filtered out, so this is a safe upper limit
 
+export const FAIL_STATE: [beaten: boolean, moves: Move[], cost: number] = [
+  false,
+  [],
+  0
+];
+
 export const configureSolver =
   (
     tactics: Tactic[],
@@ -51,7 +57,7 @@ export const configureSolver =
             moves.length
           );
           if (!keepSolving) {
-            return [false, [], 0];
+            return FAIL_STATE;
           }
         }
         if (moves.length % 30 === 0) {
@@ -63,7 +69,7 @@ export const configureSolver =
       }
     }
 
-    return [false, [], 0];
+    return FAIL_STATE;
   };
 
 const lookahead = (

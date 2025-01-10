@@ -4,8 +4,8 @@ import { moveBlocks } from "../actions";
 import { allShuffled, isStuck } from "../state";
 import { LevelSettings, LevelState, Move } from "../types";
 
-import { defaultSolver } from "./default-solver";
 import { generateRandomLevel } from "./generateRandomLevel";
+import { defaultSolver } from "./solvers";
 
 const MAX_GENERATE_COST = 2_000;
 
