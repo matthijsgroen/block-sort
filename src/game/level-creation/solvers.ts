@@ -12,7 +12,6 @@ export const defaultSolver: Solver = configureSolver(
   2
 );
 
-
 export const solvers = {
   default: defaultSolver
 } as const satisfies Record<string, Solver>;
