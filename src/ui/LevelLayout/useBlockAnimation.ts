@@ -53,12 +53,12 @@ export const useBlockAnimation = (
     disabled = false,
     transitionTime = 400,
     theme = "default",
-    scale = 1
+    getScale = () => 1
   }: {
     disabled?: boolean;
     transitionTime?: number;
     theme?: BlockTheme;
-    scale?: number;
+    getScale?: () => number;
   } = {}
 ) => {
   const selectionRef = useRef<DOMRect[]>([]);
@@ -147,7 +147,7 @@ export const useBlockAnimation = (
         blocksAdded,
         shape,
         color,
-        scale,
+        getScale(),
         transitionTime - 20
       );
     }, 10); // delay to allow the DOM to update first

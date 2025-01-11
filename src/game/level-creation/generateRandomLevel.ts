@@ -23,6 +23,7 @@ export const generateRandomLevel = (
     blockColorPick = "start",
     hideBlockTypes = "none",
     stacksPerColor = 1,
+    solver = "default",
     layoutMap
   }: LevelSettings,
   random: () => number
@@ -101,7 +102,7 @@ export const generateRandomLevel = (
       })
     );
 
-  const levelState = createLevelState(columns);
+  const levelState = createLevelState(columns, solver);
   return applyLayoutMap(levelState, layoutMap);
 };
 

@@ -1,10 +1,18 @@
+import { solvers } from "./level-creation/solvers";
 import { BlockColor, LimitColor } from "./blocks";
 export { type BlockColor } from "./blocks";
 
 /**
  * The current state of a level.
+ *
+ * Changes to this structure should be checked in
+ * the data transfer functions (in the 'gameData' file).
  */
 export type LevelState = {
+  /**
+   * @default "default"
+   */
+  solver?: keyof typeof solvers;
   /**
    * Colors in play for this level
    */
@@ -85,7 +93,14 @@ export type Column = {
   paddingTop?: number;
 };
 
+/**
+ * Structure of a level to generate.
+ *
+ * Changes to this structure should be checked in the hash function
+ * and the data transfer functions (in the 'gameData' file).
+ */
 export type LevelSettings = {
+  solver?: keyof typeof solvers;
   amountColors?: number;
   hideBlockTypes?: "none" | "all" | "checker";
   stackSize?: number;

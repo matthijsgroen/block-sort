@@ -7,6 +7,10 @@ import { VitePWA } from "vite-plugin-pwa";
 
 import info from "./package.json";
 
+const ReactCompilerConfig = {
+  /* ... */
+};
+
 const md = markdownIt();
 const defaultRender =
   md.renderer.rules.link_open ||
@@ -33,7 +37,11 @@ const htmlPlugin = () => {
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
+    react({
+      babel: {
+        plugins: [["babel-plugin-react-compiler", ReactCompilerConfig]]
+      }
+    }),
     markDown({ mode: [Mode.REACT], markdownIt: md }),
     htmlPlugin(),
     VitePWA({

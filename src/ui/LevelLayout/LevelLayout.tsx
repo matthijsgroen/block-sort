@@ -148,9 +148,10 @@ export const LevelLayout: React.FC<Props> = ({
     disabled: !animateBlocks,
     transitionTime: BLOCK_ANIMATION_TIME,
     theme,
-    scale: parseFloat(
-      contentHeightRef.current?.style.getPropertyValue("--levelScale") ?? "1"
-    )
+    getScale: () =>
+      parseFloat(
+        contentHeightRef.current?.style.getPropertyValue("--levelScale") ?? "1"
+      )
   });
 
   const handlePickup = useCallback(
@@ -200,7 +201,7 @@ export const LevelLayout: React.FC<Props> = ({
     return () => {
       window.removeEventListener("resize", scaleContent);
     };
-  }, [contentHeightRef.current, containerHeightRef.current]);
+  }, [contentHeightRef, containerHeightRef]);
 
   return (
     <div className="flex flex-1 justify-center" ref={containerHeightRef}>

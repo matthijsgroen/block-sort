@@ -1,7 +1,11 @@
+import { solvers } from "./level-creation/solvers";
 import { LimitColor } from "./blocks";
 import { Block, BlockColor, Column, LevelState } from "./types";
 
-export const createLevelState = (columns: Column[]): LevelState => {
+export const createLevelState = (
+  columns: Column[],
+  solver: keyof typeof solvers = "default"
+): LevelState => {
   const colors = columns.reduce<BlockColor[]>(
     (r, c) =>
       c.blocks.reduce<BlockColor[]>(
@@ -12,11 +16,15 @@ export const createLevelState = (columns: Column[]): LevelState => {
   );
   colors.sort();
 
-  return {
+  const state: LevelState = {
     colors,
     columns,
     moves: []
   };
+  if (solver !== "default") {
+    state.solver = solver;
+  }
+  return state;
 };
 
 export const createPlacementColumn = (

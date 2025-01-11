@@ -1,4 +1,5 @@
 import { BLOCK_COLORS, BlockColor, LimitColor } from "@/game/blocks";
+import { solvers } from "@/game/level-creation/solvers";
 import { Column, LevelState, Move } from "@/game/types";
 
 export type LevelStateDTO = {
@@ -29,6 +30,10 @@ export type LevelStateDTO = {
   }[];
   w?: number;
   m: MoveDTO[];
+  /**
+   * solver
+   */
+  s?: number;
 };
 
 export type MoveDTO = { f: number; t: number };
@@ -62,12 +67,25 @@ export const toLevelStateDTO = (state: LevelState): LevelStateDTO => {
       p: c.paddingTop
     })),
     m: toMoveDTO(state.moves),
-    w: state.width
+    w: state.width,
+    s: toSolverDTO(state.solver)
   };
 };
 
 export const toMoveDTO = (moves: Move[]): MoveDTO[] =>
   moves.map((m) => ({ f: m.from, t: m.to }));
+
+export const toSolverDTO = (
+  solver: keyof typeof solvers | undefined
+): number | undefined => {
+  if (solver === undefined) {
+    return undefined;
+  }
+  const solverMapping: Record<keyof typeof solvers, number | undefined> = {
+    default: undefined
+  };
+  return solverMapping[solver];
+};
 
 export const fromLevelStateDTO = (dto: LevelStateDTO): LevelState => {
   const colors = dto.c.reduce<BlockColor[]>(
@@ -95,7 +113,8 @@ export const fromLevelStateDTO = (dto: LevelStateDTO): LevelState => {
       paddingTop: c.p
     })),
     moves: fromMoveDTO(dto.m),
-    width: dto.w
+    width: dto.w,
+    solver: fromSolverDTO(dto.s)
   };
 };
 
@@ -122,4 +141,16 @@ export const fromHintModeDTO = (
     return "eager";
   }
   return "off";
+};
+
+export const fromSolverDTO = (
+  solver: number | undefined
+): keyof typeof solvers | undefined => {
+  if (solver === undefined) {
+    return undefined;
+  }
+  const solverMapping: Record<number, keyof typeof solvers | undefined> = {
+    0: undefined
+  };
+  return solverMapping[solver];
 };

@@ -5,6 +5,7 @@ import { Loading } from "@/ui/Loading/Loading";
 import { replayMoves } from "@/game/actions";
 import { colorHustle } from "@/game/level-creation/colorHustle";
 import { optimizeMoves } from "@/game/level-creation/optimizeMoves";
+import { solvers } from "@/game/level-creation/solvers";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { LevelTypeString } from "@/game/level-types";
 import { hasWon } from "@/game/state";
@@ -57,15 +58,57 @@ const generateLevelContent = async (
     seeds.length > 0 ? seeds[levelNr % seeds.length]?.[0] : undefined;
   const random = mulberry32(preSeed ?? seed);
 
-  let level = await generatePlayableLevel(levelSettings, {
-    random,
-    seed: preSeed
-  }).then(optimizeMoves);
+  const solver = solvers[levelSettings.solver ?? "default"];
+
+  let level = await generatePlayableLevel(
+    levelSettings,
+    {
+      random,
+      seed: preSeed
+    },
+    solver
+  ).then(optimizeMoves);
   if (preSeed !== undefined && level.generationInformation?.seed === preSeed) {
     level = colorHustle(level, random);
   }
 
   await setGameValue(storageKey, level);
+
+  return level;
+};
+
+const createLevel = async (
+  seed: number,
+  levelNr: number,
+  levelSettings: LevelSettings,
+  storagePrefix: string,
+  levelType: LevelTypeString
+): Promise<LevelState> => {
+  const level = await generateLevelContent(
+    seed,
+    `${storagePrefix}initialLevelState${levelNr}`,
+    levelSettings,
+    levelNr
+  );
+
+  // Verify level content
+  const levelState = replayMoves(level, level.moves);
+  const won = hasWon(levelState);
+  if (!won) {
+    const newSeed = generateNewSeed(seed, 2);
+    // Level content is botched, retry
+    await deleteGameValue(`${storagePrefix}initialLevelState${levelNr}`);
+    const level = await generateLevelContent(
+      newSeed,
+      `${storagePrefix}initialLevelState${levelNr}`,
+      levelSettings,
+      levelNr
+    );
+    return level;
+  }
+  if (!(await getGameValue(`${storagePrefix}levelType`))) {
+    await setGameValue(`${storagePrefix}levelType`, levelType);
+  }
 
   return level;
 };
@@ -87,38 +130,17 @@ export const LevelLoader: React.FC<Props> = ({
     `${storagePrefix}levelType`,
     null
   );
+  const levelSettingsString = JSON.stringify(levelSettings);
 
-  const level = useMemo(async () => {
-    const level = await generateLevelContent(
+  const level = useMemo(() => {
+    return createLevel(
       locked.seed,
-      `${storagePrefix}initialLevelState${locked.levelNr}`,
+      locked.levelNr,
       locked.levelSettings,
-      levelNr
+      storagePrefix,
+      levelType
     );
-
-    // Verify level content
-    const levelState = replayMoves(level, level.moves);
-    const won = hasWon(levelState);
-    if (!won) {
-      const newSeed = generateNewSeed(locked.seed, 2);
-      // Level content is botched, retry
-      await deleteGameValue(
-        `${storagePrefix}initialLevelState${locked.levelNr}`
-      );
-      const level = await generateLevelContent(
-        newSeed,
-        `${storagePrefix}initialLevelState${locked.levelNr}`,
-        locked.levelSettings,
-        levelNr
-      );
-      return level;
-    }
-    if (!(await getGameValue(`${storagePrefix}levelType`))) {
-      await setGameValue(`${storagePrefix}levelType`, levelType);
-    }
-
-    return level;
-  }, [locked.seed, JSON.stringify(locked.levelSettings)]);
+  }, [locked.seed, levelSettingsString]);
 
   return (
     <ErrorBoundary
