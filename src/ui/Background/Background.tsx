@@ -15,6 +15,13 @@ type Props = {
   musicEnabled?: boolean;
 };
 
+const symbols = {
+  ghost: "\\1F47B",
+  snow: "\\2744",
+  yellowCircle: "\\1F7E1",
+  bubbles: "\\1FAE7"
+};
+
 export const Background: React.FC<PropsWithChildren<Props>> = ({
   children,
   levelType = "normal",
@@ -175,7 +182,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
       )}
       {theme === "halloween" && (
         <CSSParticles
-          symbol="👻"
+          symbol={symbols.ghost}
           amount={10}
           direction="up"
           shift={200}
@@ -187,7 +194,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
       )}
       {theme === "winter" && (
         <CSSParticles
-          symbol="❄️"
+          symbol={symbols.snow}
           amount={30}
           shift={100}
           direction="down"
@@ -199,7 +206,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
       )}
       {theme === "spring" && (
         <CSSParticles
-          symbol="🟡"
+          symbol={symbols.yellowCircle}
           amount={10}
           shift={100}
           direction="down"
@@ -211,7 +218,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
       )}
       {theme === "summer" && (
         <CSSParticles
-          symbol="🫧"
+          symbol={symbols.bubbles}
           amount={10}
           direction="up"
           shift={400}
