@@ -35,15 +35,13 @@ export const TransparentButton: React.FC<Props> = ({
   if (href) {
     return (
       <a href={href} target={"_blank"} className={classNames} rel="noreferrer">
-        {iconElement}
-        {children}
+        {iconElement} {children}
       </a>
     );
   }
   return (
     <button onClick={onClick} className={classNames}>
-      {iconElement}
-      {children}
+      {iconElement} {children}
     </button>
   );
 };
