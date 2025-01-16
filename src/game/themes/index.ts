@@ -1,7 +1,7 @@
-import { levelModifiers } from "@/game/level-types/types";
-import { filterInRange, RangedItem } from "@/support/schedule";
+import type { LevelModifiers } from "@/game/level-types/types";
+import { filterInRange, type RangedItem } from "@/support/schedule";
 
-import { BlockColor } from "../types";
+import type { BlockColor } from "../types";
 
 import { colorMap as colorMapDaily, shapeMap as shapeMapDaily } from "./daily";
 import { colorMap, shapeMap } from "./default";
@@ -59,7 +59,7 @@ export type ThemeSchedule = RangedItem & {
   name: string;
   theme: BlockTheme;
   levelModifiers?: (RangedItem & {
-    modifiers: levelModifiers;
+    modifiers: LevelModifiers;
   })[];
 };
 
@@ -84,7 +84,7 @@ export const themeSchedule: ThemeSchedule[] = [
     theme: "winter",
     levelModifiers: [
       {
-        modifiers: { packageMode: true },
+        modifiers: { hideMode: "present", keepRevealed: true },
         begin: { month: 12, day: 14 },
         end: { month: 1, day: 1 }
       }

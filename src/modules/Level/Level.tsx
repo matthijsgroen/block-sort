@@ -9,6 +9,7 @@ import { WoodButton } from "@/ui/WoodButton/WoodButton";
 import { sound } from "@/audio";
 import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { getLevelTypeByType, LevelTypeString } from "@/game/level-types";
+import { LevelModifiers } from "@/game/level-types/types";
 import {
   getRevealedIndices,
   hasWon,
@@ -146,13 +147,15 @@ export const Level: React.FC<Props> = ({
 
   const levelModifiers = getActiveModifiers(getToday());
 
-  const ghostMode =
-    !!levelTypePlugin.levelModifiers?.ghostMode ||
-    levelModifiers.some((m) => m.modifiers.ghostMode);
+  const getLevelModifier = <TModifier extends keyof LevelModifiers>(
+    modifier: TModifier
+  ): LevelModifiers[TModifier] =>
+    levelTypePlugin.levelModifiers?.[modifier] ??
+    levelModifiers.find((m) => m.modifiers[modifier])?.modifiers[modifier];
 
-  const packageMode =
-    !!levelTypePlugin.levelModifiers?.packageMode ||
-    levelModifiers.some((m) => m.modifiers.packageMode);
+  const ghostMode = getLevelModifier("ghostMode");
+  const hideMode = getLevelModifier("hideMode");
+  const keepRevealed = getLevelModifier("keepRevealed");
 
   // Level modifier: Ghost mode
   const { ghostSelection, ghostTarget } = ghostModeModifier(
@@ -168,7 +171,7 @@ export const Level: React.FC<Props> = ({
     }
     setLevelState((levelState) => {
       const updatedLevelState = moveBlocks(levelState, { from, to });
-      if (packageMode) {
+      if (keepRevealed) {
         // Detect revealed item on 'from' column, mark as revealed in
         // column, index fashion to 'reveal' fog
 
@@ -308,7 +311,7 @@ export const Level: React.FC<Props> = ({
           message="Blocked!"
           shape="❌"
           afterShow={() => {
-            if (packageMode) {
+            if (keepRevealed) {
               setLevelState(revealBlocks(initialLevelState, revealed));
             } else {
               setLevelState(initialLevelState);
@@ -396,7 +399,7 @@ export const Level: React.FC<Props> = ({
         selection={activeSelectStart?.selection}
         suggestionSelection={ghostSelection}
         suggestionTarget={ghostTarget}
-        hideFormat={packageMode ? "present" : "glass"}
+        hideFormat={hideMode}
         onLock={handleLock}
         onDrop={handleDrop}
         onPickUp={handlePickUp}

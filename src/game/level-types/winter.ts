@@ -15,7 +15,9 @@ export const winter: LevelType<"winter"> = {
   buttonBackgroundClassName: "bg-slate-400",
   backgroundClassName: "bg-slate-200/10",
   levelModifiers: {
-    packageMode: true
+    theme: "winter",
+    hideMode: "present",
+    keepRevealed: true
   },
   showIntro: true,
   introTextColor: "#e2e8f0",
