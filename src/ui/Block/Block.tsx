@@ -121,7 +121,8 @@ export const Block: React.FC<Props> = ({
           "absolute bottom-0 h-height-block w-block rounded-md text-center",
           styles.shape,
           {
-            "[transition-duration:0ms]": isRevealed,
+            "[transition-duration:0ms]": isRevealed && hideFormat !== "ice",
+            "[transition-duration:3s]": hideFormat === "ice",
             [styles.blockGradient]: revealed && !isLocked,
             [styles.gradientLocked]: revealed && isLocked,
             [styles.glass]: !revealed && hideFormat === "glass",

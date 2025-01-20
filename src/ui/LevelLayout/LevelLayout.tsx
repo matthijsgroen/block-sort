@@ -11,6 +11,7 @@ import { LevelState } from "@/game/types";
 import { colSizes } from "@/support/grid";
 import { useScreenUpdate } from "@/support/useScreenUpdate";
 
+import { HideFormat } from "../Block/Block";
 import { MemoizedBlockColumn } from "../BlockColumn/BlockColumn";
 
 import { useBlockAnimation } from "./useBlockAnimation";
@@ -21,7 +22,7 @@ type Props = {
   selection?: [column: number, amount: number];
   suggestionSelection?: [column: number, amount: number];
   suggestionTarget?: number;
-  hideFormat?: "glass" | "present";
+  hideFormat?: HideFormat;
   theme?: BlockTheme;
   tutorialContent?: React.ReactNode;
   animateBlocks?: boolean;
