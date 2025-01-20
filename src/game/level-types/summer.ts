@@ -265,7 +265,8 @@ export const summer: LevelType<"summer"> = {
   showIntro: true,
   levelModifiers: {
     theme: "summer",
-    hideMode: "glass"
+    hideMode: "ice",
+    hideEvery: 1
   },
   introTextColor: "#ec4899",
   occurrence: (levelNr) =>

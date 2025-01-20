@@ -8,6 +8,7 @@ export type LevelModifiers = {
   ghostMode?: boolean;
   hideMode?: HideFormat;
   keepRevealed?: boolean;
+  hideEvery?: number;
 };
 
 export type LevelType<T extends string> = {
