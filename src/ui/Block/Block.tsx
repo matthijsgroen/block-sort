@@ -6,7 +6,7 @@ import { useDelayedToggle } from "@/support/useDelayedToggle";
 
 import styles from "./Block.module.css";
 
-export type HideFormat = "glass" | "present";
+export type HideFormat = "glass" | "present" | "ice";
 
 export type Props = {
   moved: boolean;
@@ -29,7 +29,14 @@ export type Props = {
 };
 
 const GLASS_COLOR = "#64748b";
+const ICE_COLOR = "#CFF2FF";
 const PRESENT_COLOR = "#6b0";
+
+const hideFormatToColor = {
+  glass: GLASS_COLOR,
+  ice: ICE_COLOR,
+  present: PRESENT_COLOR
+};
 
 export const Block: React.FC<Props> = ({
   revealed = true,
@@ -82,8 +89,8 @@ export const Block: React.FC<Props> = ({
     }
   }, [selected]);
 
-  const hiddenColor = hideFormat === "glass" ? GLASS_COLOR : PRESENT_COLOR;
-  const showTopShape = revealed || hideFormat === "glass";
+  const hiddenColor = hideFormatToColor[hideFormat];
+  const showTopShape = revealed || hideFormat !== "present";
 
   return (
     <div
@@ -119,6 +126,7 @@ export const Block: React.FC<Props> = ({
             [styles.gradientLocked]: revealed && isLocked,
             [styles.glass]: !revealed && hideFormat === "glass",
             [styles.present]: !revealed && hideFormat === "present",
+            [styles.ice]: !revealed && hideFormat === "ice",
             "blur-[2px]": blur,
             [styles.selectedOutline]: selected,
             [styles.suggestedOutline]: suggested

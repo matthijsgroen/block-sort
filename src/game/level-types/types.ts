@@ -1,10 +1,12 @@
+import { HideFormat } from "@/ui/Block/Block";
+
 import { BlockTheme } from "../themes";
 import { LevelSettings } from "../types";
 
 export type LevelModifiers = {
   theme?: BlockTheme;
   ghostMode?: boolean;
-  hideMode?: "glass" | "present";
+  hideMode?: HideFormat;
   keepRevealed?: boolean;
 };
 
