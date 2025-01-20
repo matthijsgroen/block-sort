@@ -19,7 +19,7 @@ export const summer: LevelType<"summer"> = {
   showIntro: true,
   inBetaTest: true,
   levelModifiers: {
-    theme: "summer",
+    // theme: "summer",
     hideMode: "ice",
     hideEvery: 2
   },
