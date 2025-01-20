@@ -177,6 +177,11 @@ export const LevelTrack: React.FC<Props> = ({
                 </li>
               )}
               {levelNr < officialLevelNr && i === levelNr && (
+                /**
+                 * Smiley jumping from previous level to current level.
+                 * Since it needs the exact start position of the previous level,
+                 * some layout is invisibly duplicated to match the proper position.
+                 */
                 <li
                   className={clsx(
                     "relative -top-7 z-10 flex h-0 w-full flex-shrink-0 items-center justify-center align-middle",
@@ -218,6 +223,9 @@ export const LevelTrack: React.FC<Props> = ({
                   </div>
                 </li>
               )}
+              {/**
+               * Actual level block with number and icon.
+               */}
               <li
                 style={{ "--levelNr": `'${LEVEL_SCALE.indexOf(i) + 1}'` }}
                 className={clsx(
@@ -271,7 +279,8 @@ export const LevelTrack: React.FC<Props> = ({
                     {i == levelNr && (
                       <span
                         className={clsx("inline-block", {
-                          ["hidden"]: levelNr < officialLevelNr
+                          ["hidden"]: levelNr < officialLevelNr // Temporary hide for jumping smiley animation
+                          // If we reverse the animation the above code could be removed...
                         })}
                       >
                         <Smiley />
