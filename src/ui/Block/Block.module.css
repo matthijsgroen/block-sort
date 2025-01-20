@@ -107,6 +107,38 @@
   );
 }
 
+.ice {
+  background-color: var(--hidden-color);
+  background-image: linear-gradient(
+      rgba(0, 0, 0, 40%) 0%,
+      rgba(0, 0, 0, 15%) 5%,
+      rgba(0, 0, 0, 15%) 25%,
+      rgba(0, 0, 0, 15%) 30%,
+      rgba(0, 0, 0, 0%) 35%,
+      rgba(0, 0, 0, 30%) 35%,
+      rgba(0, 0, 0, 28%) 60%,
+      rgba(0, 0, 0, 24%) 65%,
+      rgba(0, 0, 0, 14%) 80%,
+      rgba(0, 0, 0, 12%) 85%,
+      rgba(0, 0, 0, 4%) 95%,
+      rgba(0, 0, 0, 20%) 100%
+    ),
+    url("../../assets/wood-texture.png"),
+    linear-gradient(
+      #cff2ff 0%,
+      #c6dcf5 20%,
+      #00b5e2 50%,
+      #00b5e2 80%,
+      #cff2ff 100%
+    );
+  background-size:
+    100% 100%,
+    800% 800%,
+    100% 100%;
+  box-shadow: inset 0px 0px 8px 2px #cff2ff,
+    0px 0px 4px 0px #cff2ff;
+}
+
 @property --cube-color {
   syntax: "<color>";
   initial-value: 0;

@@ -17,7 +17,7 @@ const meta = {
   argTypes: {
     color: { control: "color" },
     hideFormat: {
-      options: ["glass", "present"],
+      options: ["glass", "present", "ice"],
       control: { type: "radio" }
     }
   },

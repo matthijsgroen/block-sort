@@ -1,10 +1,14 @@
+import { HideFormat } from "@/ui/Block/Block";
+
 import { BlockTheme } from "../themes";
 import { LevelSettings } from "../types";
 
-export type levelModifiers = {
+export type LevelModifiers = {
   theme?: BlockTheme;
   ghostMode?: boolean;
-  packageMode?: boolean;
+  hideMode?: HideFormat;
+  keepRevealed?: boolean;
+  hideEvery?: number;
 };
 
 export type LevelType<T extends string> = {
@@ -22,7 +26,7 @@ export type LevelType<T extends string> = {
   buttonBackgroundClassName: string;
   textClassName: string;
   backgroundClassName?: string;
-  levelModifiers?: levelModifiers;
+  levelModifiers?: LevelModifiers;
   showIntro?: boolean;
   /**
    * Must be a hex code

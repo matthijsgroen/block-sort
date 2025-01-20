@@ -5,8 +5,6 @@ import { encodeForContent } from "@/support/emojiEncoding";
 
 import styles from "./Block.module.css";
 
-export type HideFormat = "glass" | "present";
-
 export type Props = {
   style?: CSSProperties;
   className?: string;

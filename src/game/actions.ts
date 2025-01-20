@@ -1,7 +1,9 @@
 import { produce } from "immer";
 
+import { findLastIndex } from "@/support/findLastIndex";
+
 import { canPlaceAmount } from "./state";
-import { Block, BlockColor, LevelState, Move } from "./types";
+import { Block, BlockColor, Column, LevelState, Move } from "./types";
 
 export const selectFromColumn = (
   level: LevelState,
@@ -66,6 +68,31 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
       });
       endCol.locked = true;
     }
+  })(level);
+
+const columnHasHidableBlocks = (c: Column): boolean =>
+  c.locked !== true &&
+  c.blocks.some((b, i, l) => b.revealed !== false && i < l.length - 1);
+
+const hideIndex = (c: Column): number =>
+  findLastIndex(c.blocks, (b) => b.revealed !== false);
+
+export const hideBlock = (level: LevelState): LevelState =>
+  produce<LevelState>((draft) => {
+    const canHide = draft.columns.some(columnHasHidableBlocks);
+    if (!canHide) {
+      return draft;
+    }
+
+    const potentialColumns = draft.columns
+      .filter(columnHasHidableBlocks)
+      .sort((a, b) => {
+        return hideIndex(b) - hideIndex(a);
+      });
+    const hideColumn = potentialColumns[0];
+    const blockIndex = hideIndex(hideColumn);
+
+    hideColumn.blocks[blockIndex].revealed = false;
   })(level);
 
 export const replayMoves = (

@@ -7,8 +7,9 @@ import { TopButton } from "@/ui/TopButton/TopButton";
 import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { sound } from "@/audio";
-import { moveBlocks, selectFromColumn } from "@/game/actions";
+import { hideBlock, moveBlocks, selectFromColumn } from "@/game/actions";
 import { getLevelTypeByType, LevelTypeString } from "@/game/level-types";
+import { LevelModifiers } from "@/game/level-types/types";
 import {
   getRevealedIndices,
   hasWon,
@@ -146,13 +147,16 @@ export const Level: React.FC<Props> = ({
 
   const levelModifiers = getActiveModifiers(getToday());
 
-  const ghostMode =
-    !!levelTypePlugin.levelModifiers?.ghostMode ||
-    levelModifiers.some((m) => m.modifiers.ghostMode);
+  const getLevelModifier = <TModifier extends keyof LevelModifiers>(
+    modifier: TModifier
+  ): LevelModifiers[TModifier] =>
+    levelTypePlugin.levelModifiers?.[modifier] ??
+    levelModifiers.find((m) => m.modifiers[modifier])?.modifiers[modifier];
 
-  const packageMode =
-    !!levelTypePlugin.levelModifiers?.packageMode ||
-    levelModifiers.some((m) => m.modifiers.packageMode);
+  const ghostMode = !!getLevelModifier("ghostMode");
+  const hideFormat = getLevelModifier("hideMode");
+  const keepRevealed = getLevelModifier("keepRevealed");
+  const hideEvery = getLevelModifier("hideEvery");
 
   // Level modifier: Ghost mode
   const { ghostSelection, ghostTarget } = ghostModeModifier(
@@ -162,31 +166,43 @@ export const Level: React.FC<Props> = ({
     { enabled: ghostMode }
   );
 
-  const move = useCallback((from: number, to: number) => {
-    if (hintMode !== "off" && hintMode !== null && useStreak) {
-      setStreak(0);
-    }
-    setLevelState((levelState) => {
-      const updatedLevelState = moveBlocks(levelState, { from, to });
-      if (packageMode) {
-        // Detect revealed item on 'from' column, mark as revealed in
-        // column, index fashion to 'reveal' fog
-
-        const revealedBlocks = getRevealedIndices(
-          levelState,
-          updatedLevelState,
-          from
-        ).map((i) => ({ col: from, row: i }));
-        setRevealed((revealed) => revealed.concat(revealedBlocks));
+  const move = useCallback(
+    (from: number, to: number) => {
+      if (hintMode !== "off" && hintMode !== null && useStreak) {
+        setStreak(0);
       }
-      const hasMoved = updatedLevelState !== levelState;
-      if (hasMoved) {
-        setLevelMoves((moves) => moves.concat({ from, to }));
-      }
+      setLevelState((levelState) => {
+        let updatedLevelState = moveBlocks(levelState, { from, to });
+        if (keepRevealed) {
+          // Detect revealed item on 'from' column, mark as revealed in
+          // column, index fashion to 'reveal' fog
 
-      return updatedLevelState;
-    });
-  }, []);
+          const revealedBlocks = getRevealedIndices(
+            levelState,
+            updatedLevelState,
+            from
+          ).map((i) => ({ col: from, row: i }));
+          setRevealed((revealed) => revealed.concat(revealedBlocks));
+        }
+        const hasMoved = updatedLevelState !== levelState;
+        if (hasMoved) {
+          setLevelMoves((moves) => moves.concat({ from, to }));
+        }
+        if (
+          hasMoved &&
+          hideEvery &&
+          hideEvery > 0 &&
+          levelMoves.length % hideEvery === 0
+        ) {
+          // hide another block
+          updatedLevelState = hideBlock(updatedLevelState);
+        }
+
+        return updatedLevelState;
+      });
+    },
+    [levelMoves.length]
+  );
 
   const onColumnDown = useCallback(
     (columnIndex: number) => {
@@ -308,7 +324,7 @@ export const Level: React.FC<Props> = ({
           message="Blocked!"
           shape="❌"
           afterShow={() => {
-            if (packageMode) {
+            if (keepRevealed) {
               setLevelState(revealBlocks(initialLevelState, revealed));
             } else {
               setLevelState(initialLevelState);
@@ -396,7 +412,7 @@ export const Level: React.FC<Props> = ({
         selection={activeSelectStart?.selection}
         suggestionSelection={ghostSelection}
         suggestionTarget={ghostTarget}
-        hideFormat={packageMode ? "present" : "glass"}
+        hideFormat={hideFormat}
         onLock={handleLock}
         onDrop={handleDrop}
         onPickUp={handlePickUp}

@@ -7,6 +7,7 @@ import { normal } from "./normal";
 import { scrambled } from "./scrambled";
 import { special } from "./special";
 import { spring } from "./spring";
+import { summer } from "./summer";
 import { LevelType, Unlockable } from "./types";
 import { winter } from "./winter";
 
@@ -18,6 +19,7 @@ const levelTypes = [
   scrambled,
   winter,
   spring,
+  summer,
   normal
 ] as const satisfies LevelType<string>[];
 

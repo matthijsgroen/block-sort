@@ -8,7 +8,7 @@ import {
 } from "react";
 import clsx from "clsx";
 
-import { Block } from "@/ui/Block/Block";
+import { Block, HideFormat } from "@/ui/Block/Block";
 import { Tray } from "@/ui/Tray/Tray";
 
 import { BlockTheme, getColorMapping, getShapeMapping } from "@/game/themes";
@@ -27,7 +27,7 @@ type Props = {
   started?: boolean;
   hovering?: boolean;
   theme?: BlockTheme;
-  hideFormat?: "glass" | "present";
+  hideFormat?: HideFormat;
   motionDuration?: number;
   onPointerDown?: Dispatch<React.PointerEvent<HTMLDivElement>>;
   onPointerUp?: Dispatch<React.PointerEvent<HTMLDivElement>>;

@@ -55,7 +55,7 @@ const meta: Meta<BlockColumnPropsAndCustomArgs> = {
       control: { type: "radio" }
     },
     hideFormat: {
-      options: ["glass", "present"],
+      options: ["glass", "present", "ice"],
       control: { type: "radio" }
     },
     columnSize: {

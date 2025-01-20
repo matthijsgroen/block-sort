@@ -144,7 +144,7 @@ export const Settings: React.FC<Props> = ({
             >
               Matthijs Groen
             </a>
-            , 2024
+            , 2024-2025
           </p>
           <div className="flex flex-row justify-between">
             <TransparentButton onClick={() => setActiveTab("advanced")}>
