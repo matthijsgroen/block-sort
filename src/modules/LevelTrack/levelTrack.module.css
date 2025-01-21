@@ -43,39 +43,38 @@
   position: absolute;
   top: 0px;
   left: 0px;
-  translate: 0 0;
+  translate: var(--direction, 0rem) var(--jump-distance, 3.5rem);
   scale: 1 1;
   animation:
     hop 1s ease-out 1s 1 forwards,
     flip 1s ease-in-out 1s 1 forwards;
   z-index: 1;
-  @apply w-block;
+  width: 2.4rem;
 }
 
 @keyframes hop {
   0% {
-    translate: 0 0;
+    translate: var(--direction, 0rem) var(--jump-distance, 3.5rem);
     scale: 1 1;
   }
   10% {
-    translate: 0 0;
+    translate: var(--direction, 0rem) var(--jump-distance, 3.5rem);
     scale: 1 0.8;
   }
   50% {
-    translate: calc(var(--direction, 0rem) * 0.5)
-      calc(var(--distance, -3.5rem) - 2.5rem);
+    translate: calc(var(--direction, 0rem) * 0.5) -2.5rem;
     scale: 1 1.2;
   }
   80% {
-    translate: var(--direction, 0rem) var(--distance, -3.5rem);
+    translate: 0 0;
     scale: 1 0.8;
   }
   90% {
-    translate: var(--direction, 0rem) calc(var(--distance, -3.5rem) - 0.2rem);
+    translate: 0 -0.2rem;
     scale: 1 0.9;
   }
   100% {
-    translate: var(--direction, 0rem) var(--distance, -3.5rem);
+    translate: 0 0;
     scale: 1 1;
   }
 }

@@ -153,7 +153,8 @@ export const LevelTrack: React.FC<Props> = ({
       <ol
         className="flex w-full flex-1 flex-col-reverse overflow-y-hidden"
         style={{
-          "--distance": hasMessage ? "-4.5rem" : "-3.5rem"
+          "--distance": hasMessage ? "-4.5rem" : "-3.5rem",
+          "--jump-distance": hasMessage ? "4.5rem" : "3.5rem"
         }}
       >
         {levelNrs.map((i) => {
@@ -176,56 +177,6 @@ export const LevelTrack: React.FC<Props> = ({
                   <LevelTrackMessageBar levelNr={i} message={levelMessage} />
                 </li>
               )}
-              {levelNr < officialLevelNr && i === levelNr && (
-                /**
-                 * Smiley jumping from previous level to current level.
-                 * Since it needs the exact start position of the previous level,
-                 * some layout is invisibly duplicated to match the proper position.
-                 */
-                <li
-                  className={clsx(
-                    "relative -top-7 z-10 flex h-0 w-full flex-shrink-0 items-center justify-center align-middle",
-                    {
-                      [styles.shiftDown]:
-                        levelNr < officialLevelNr && levelNr >= 2
-                    }
-                  )}
-                >
-                  <div
-                    className={clsx(
-                      translates[offset],
-                      "mx-auto whitespace-nowrap align-middle leading-10"
-                    )}
-                  >
-                    <span className={clsx("text-transparent")}>
-                      {i + 1}&nbsp;
-                    </span>
-                    <span
-                      className={clsx(
-                        "border-1 inline-block size-block rounded-md border-transparent text-center align-top",
-                        {
-                          ["relative"]: i === levelNr
-                        }
-                      )}
-                    >
-                      <span
-                        className={clsx("inline-block", {
-                          [styles.hop]: levelNr < officialLevelNr
-                        })}
-                        style={{
-                          "--direction": jumpRight ? "2.6rem" : "-2.4rem",
-                          "--rotateDirection": jumpRight ? "40deg" : "-40deg"
-                        }}
-                      >
-                        <Smiley />
-                      </span>
-                    </span>
-                  </div>
-                </li>
-              )}
-              {/**
-               * Actual level block with number and icon.
-               */}
               <li
                 style={{ "--levelNr": `'${LEVEL_SCALE.indexOf(i) + 1}'` }}
                 className={clsx(
@@ -260,7 +211,7 @@ export const LevelTrack: React.FC<Props> = ({
                   <span
                     className={clsx(
                       "inline-block size-block rounded-md border bg-black/30 text-center align-top",
-                      { ["relative"]: i === levelNr },
+                      { ["relative"]: i === officialLevelNr },
                       i === officialLevelNr
                         ? levelType.borderClassName
                         : levelTypeBorder(i)
@@ -276,12 +227,15 @@ export const LevelTrack: React.FC<Props> = ({
                         ✔
                       </span>
                     )}
-                    {i == levelNr && (
+                    {i == officialLevelNr && (
                       <span
                         className={clsx("inline-block", {
-                          ["hidden"]: levelNr < officialLevelNr // Temporary hide for jumping smiley animation
-                          // If we reverse the animation the above code could be removed...
+                          [styles.hop]: levelNr < officialLevelNr
                         })}
+                        style={{
+                          "--direction": jumpRight ? "-2.6rem" : "2.4rem",
+                          "--rotateDirection": jumpRight ? "40deg" : "-40deg"
+                        }}
                       >
                         <Smiley />
                       </span>
