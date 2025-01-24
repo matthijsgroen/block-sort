@@ -1,7 +1,3 @@
-.doneGlow {
-  text-shadow: 0 0 2px lightgreen;
-}
-
 .levelUp {
   position: relative;
   background: linear-gradient(
@@ -41,15 +37,14 @@
 
 .hop {
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   translate: var(--direction, 0rem) var(--jump-distance, 3.5rem);
   scale: 1 1;
   animation:
     hop 1s ease-out 1s 1 forwards,
     flip 1s ease-in-out 1s 1 forwards;
   z-index: 1;
-  width: 2.4rem;
 }
 
 @keyframes hop {

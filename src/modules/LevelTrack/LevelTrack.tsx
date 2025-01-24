@@ -8,12 +8,8 @@ import { ZenButton } from "@/ui/ZenButton";
 
 import { sound } from "@/audio";
 import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
-import {
-  getLevelType,
-  getLevelTypeByType,
-  levelTypeBorder,
-  levelTypeTextColor
-} from "@/game/level-types";
+import { getLevelType, getLevelTypeByType } from "@/game/level-types";
+import { LevelNode } from "@/modules/LevelTrack/LevelNode";
 import { effectTimeout } from "@/support/effectTimeout";
 import { useGameStorage } from "@/support/useGameStorage";
 
@@ -21,6 +17,7 @@ import { PlayButton } from "../../ui/PlayButton";
 import { BackgroundContext } from "../Layout/BackgroundContext";
 import { BetaContext } from "../Layout/BetaContext";
 
+import { LevelDoneIcon } from "./LevelDoneIcon";
 import { getLevelMessage } from "./levelMessage";
 import { LevelTrackMessageBar } from "./LevelTrackMessageBar";
 import { LevelTypeIcon } from "./LevelTypeIcon";
@@ -187,77 +184,38 @@ export const LevelTrack: React.FC<Props> = ({
                   }
                 )}
               >
-                <div
-                  className={clsx(
-                    translates[offset],
-                    "mx-auto whitespace-nowrap align-middle leading-10"
-                  )}
+                <LevelNode
+                  levelNr={i}
+                  className={translates[offset]}
+                  completed={i < officialLevelNr}
+                  isCurrent={i === officialLevelNr}
                 >
-                  <span
-                    className={clsx(
-                      {
-                        "text-green-600": i < officialLevelNr,
-                        "font-bold": i === officialLevelNr
-                      },
-                      i > officialLevelNr ? levelTypeTextColor(i) : undefined,
-                      i === officialLevelNr
-                        ? levelType.textClassName
-                        : undefined,
-                      styles.textShadow
-                    )}
-                  >
-                    {i + 1}&nbsp;
-                  </span>
-                  <span
-                    className={clsx(
-                      "inline-block size-block rounded-md border bg-black/30 text-center align-top",
-                      { ["relative"]: i === officialLevelNr },
-                      i === officialLevelNr
-                        ? levelType.borderClassName
-                        : levelTypeBorder(i)
-                    )}
-                  >
-                    {i < levelNr && (
-                      <span
-                        className={clsx(
-                          "bg-green-500 bg-clip-text text-transparent",
-                          styles.doneGlow
-                        )}
-                      >
-                        ✔
-                      </span>
-                    )}
-                    {i == officialLevelNr && (
-                      <span
-                        className={clsx("inline-block", {
-                          [styles.hop]: levelNr < officialLevelNr
-                        })}
-                        style={{
-                          "--direction": jumpRight ? "-2.6rem" : "2.4rem",
-                          "--rotateDirection": jumpRight ? "40deg" : "-40deg"
-                        }}
-                      >
-                        <Smiley />
-                      </span>
-                    )}
-                    {i == levelNr && levelNr < officialLevelNr && (
-                      <span
-                        className={clsx(
-                          "animate-fadeIn bg-green-500 bg-clip-text text-transparent opacity-0 [animation-delay:1s] [animation-duration:2s]",
-                          styles.doneGlow
-                        )}
-                      >
-                        ✔
-                      </span>
-                    )}
-                    {i > levelNr && (
-                      <LevelTypeIcon
-                        levelNr={i}
-                        fadeOut={i === officialLevelNr}
-                      />
-                    )}
-                  </span>
-                </div>
+                  {i == officialLevelNr && (
+                    <span
+                      className={clsx("inline-block w-10", {
+                        [styles.hop]: levelNr < officialLevelNr
+                      })}
+                      style={{
+                        "--direction": jumpRight ? "-2.6rem" : "2.4rem",
+                        "--rotateDirection": jumpRight ? "40deg" : "-40deg"
+                      }}
+                    >
+                      <Smiley />
+                    </span>
+                  )}
+                  {(i < levelNr ||
+                    (levelNr < officialLevelNr && i === levelNr)) && (
+                    <LevelDoneIcon
+                      fadeIn={i === levelNr && levelNr < officialLevelNr}
+                    />
+                  )}
+                  {i > levelNr && (
+                    <LevelTypeIcon
+                      levelNr={i}
+                      fadeOut={i === officialLevelNr}
+                    />
+                  )}
+                </LevelNode>
               </li>
             </Fragment>
           );
