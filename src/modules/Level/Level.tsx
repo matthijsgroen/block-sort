@@ -59,8 +59,12 @@ export const Level: React.FC<Props> = ({
 
   const localRandom = mulberry32(levelNr * 386);
 
-  const [levelState, setLevelState, deleteLevelState] =
+  const [storedLevelState, setLevelState, deleteLevelState] =
     useGameStorage<LevelState>(storageKey, initialLevelState);
+  const [frozenLevelState, setFrozenLevelState] = useState<LevelState | null>(
+    null
+  );
+  const levelState = frozenLevelState ?? storedLevelState;
 
   const [lostCounter, setLostCounter] = useGameStorage(
     `${storagePrefix}lostCounter`,
@@ -133,6 +137,7 @@ export const Level: React.FC<Props> = ({
     if (hasWon(levelState)) {
       setPlayState("won");
       setLostCounter(0);
+      setFrozenLevelState(levelState);
     } else if (isStuck(levelState)) {
       setPlayState("lost");
       setLostCounter((a) => a + 1);
@@ -305,12 +310,12 @@ export const Level: React.FC<Props> = ({
             if (hintMode === "off" && useStreak) {
               setStreak((s) => (s ? s + 1 : 1));
             }
-            onComplete(playState === "won");
             deleteMoves();
             deletePreviousMoves();
             deleteRevealed();
             clearThemeOverride();
             deleteLevelState(false);
+            onComplete(playState === "won");
           }}
           onShow={() => {
             sound.play("win");

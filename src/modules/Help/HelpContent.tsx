@@ -9,6 +9,7 @@ import { ReactComponent as RefreshInstallationIOS } from "@/../docs/how-to-refre
 import { ReactComponent as LevelTypes } from "@/../docs/level-types.md";
 import { ReactComponent as Motivation } from "@/../docs/making-of.md";
 import { ReactComponent as Spring } from "@/../docs/spring.md";
+import { ReactComponent as Summer } from "@/../docs/summer.md";
 import { ReactComponent as ZenMode } from "@/../docs/zen-mode.md";
 import { getActiveTheme } from "@/game/themes";
 import { getToday } from "@/support/schedule";
@@ -66,6 +67,11 @@ const HelpContent: React.FC<Props> = () => {
             label: "Spring theme",
             section: "spring",
             disabled: activeTheme !== "spring"
+          },
+          {
+            label: "Summer theme",
+            section: "summer",
+            disabled: activeTheme !== "summer"
           }
         ]}
       />
@@ -160,6 +166,13 @@ const HelpContent: React.FC<Props> = () => {
         title="Easter / Spring theme"
       >
         <Spring />
+      </HelpSection>
+    );
+  }
+  if (section === "summer") {
+    return (
+      <HelpSection onBack={() => setSection(null)} title="Summer theme">
+        <Summer />
       </HelpSection>
     );
   }
