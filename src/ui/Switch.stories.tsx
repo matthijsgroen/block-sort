@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { Switch } from "./Switch";
@@ -18,6 +19,7 @@ const meta: Meta<typeof Switch> = {
       table: { disable: true }
     },
     selected: {
+      control: { type: "select" },
       options: ["easy", "medium", "hard"]
     }
   },
@@ -37,5 +39,9 @@ export const Default: Story = {
       { name: "Hard", value: "hard" }
     ],
     selected: "easy"
+  },
+  render: (args) => {
+    const [value, setValue] = useState(args.selected);
+    return <Switch {...args} selected={value} onSelectionChange={setValue} />;
   }
 };

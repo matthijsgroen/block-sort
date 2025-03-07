@@ -8,12 +8,8 @@ import { ZenButton } from "@/ui/ZenButton";
 
 import { sound } from "@/audio";
 import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
-import {
-  getLevelType,
-  getLevelTypeByType,
-  levelTypeBorder,
-  levelTypeTextColor
-} from "@/game/level-types";
+import { getLevelType, getLevelTypeByType } from "@/game/level-types";
+import { LevelNode } from "@/modules/LevelTrack/LevelNode";
 import { effectTimeout } from "@/support/effectTimeout";
 import { useGameStorage } from "@/support/useGameStorage";
 
@@ -21,6 +17,7 @@ import { PlayButton } from "../../ui/PlayButton";
 import { BackgroundContext } from "../Layout/BackgroundContext";
 import { BetaContext } from "../Layout/BetaContext";
 
+import { LevelDoneIcon } from "./LevelDoneIcon";
 import { getLevelMessage } from "./levelMessage";
 import { LevelTrackMessageBar } from "./LevelTrackMessageBar";
 import { LevelTypeIcon } from "./LevelTypeIcon";
@@ -153,7 +150,8 @@ export const LevelTrack: React.FC<Props> = ({
       <ol
         className="flex w-full flex-1 flex-col-reverse overflow-y-hidden"
         style={{
-          "--distance": hasMessage ? "-4.5rem" : "-3.5rem"
+          "--distance": hasMessage ? "-4.5rem" : "-3.5rem",
+          "--jump-distance": hasMessage ? "4.5rem" : "3.5rem"
         }}
       >
         {levelNrs.map((i) => {
@@ -176,56 +174,6 @@ export const LevelTrack: React.FC<Props> = ({
                   <LevelTrackMessageBar levelNr={i} message={levelMessage} />
                 </li>
               )}
-              {levelNr < officialLevelNr && i === levelNr && (
-                /**
-                 * Smiley jumping from previous level to current level.
-                 * Since it needs the exact start position of the previous level,
-                 * some layout is invisibly duplicated to match the proper position.
-                 */
-                <li
-                  className={clsx(
-                    "relative -top-7 z-10 flex h-0 w-full flex-shrink-0 items-center justify-center align-middle",
-                    {
-                      [styles.shiftDown]:
-                        levelNr < officialLevelNr && levelNr >= 2
-                    }
-                  )}
-                >
-                  <div
-                    className={clsx(
-                      translates[offset],
-                      "mx-auto whitespace-nowrap align-middle leading-10"
-                    )}
-                  >
-                    <span className={clsx("text-transparent")}>
-                      {i + 1}&nbsp;
-                    </span>
-                    <span
-                      className={clsx(
-                        "border-1 inline-block size-block rounded-md border-transparent text-center align-top",
-                        {
-                          ["relative"]: i === levelNr
-                        }
-                      )}
-                    >
-                      <span
-                        className={clsx("inline-block", {
-                          [styles.hop]: levelNr < officialLevelNr
-                        })}
-                        style={{
-                          "--direction": jumpRight ? "2.6rem" : "-2.4rem",
-                          "--rotateDirection": jumpRight ? "40deg" : "-40deg"
-                        }}
-                      >
-                        <Smiley />
-                      </span>
-                    </span>
-                  </div>
-                </li>
-              )}
-              {/**
-               * Actual level block with number and icon.
-               */}
               <li
                 style={{ "--levelNr": `'${LEVEL_SCALE.indexOf(i) + 1}'` }}
                 className={clsx(
@@ -236,74 +184,38 @@ export const LevelTrack: React.FC<Props> = ({
                   }
                 )}
               >
-                <div
-                  className={clsx(
-                    translates[offset],
-                    "mx-auto whitespace-nowrap align-middle leading-10"
-                  )}
+                <LevelNode
+                  levelNr={i}
+                  className={translates[offset]}
+                  completed={i < officialLevelNr}
+                  isCurrent={i === officialLevelNr}
                 >
-                  <span
-                    className={clsx(
-                      {
-                        "text-green-600": i < officialLevelNr,
-                        "font-bold": i === officialLevelNr
-                      },
-                      i > officialLevelNr ? levelTypeTextColor(i) : undefined,
-                      i === officialLevelNr
-                        ? levelType.textClassName
-                        : undefined,
-                      styles.textShadow
-                    )}
-                  >
-                    {i + 1}&nbsp;
-                  </span>
-                  <span
-                    className={clsx(
-                      "inline-block size-block rounded-md border bg-black/30 text-center align-top",
-                      { ["relative"]: i === levelNr },
-                      i === officialLevelNr
-                        ? levelType.borderClassName
-                        : levelTypeBorder(i)
-                    )}
-                  >
-                    {i < levelNr && (
-                      <span
-                        className={clsx(
-                          "bg-green-500 bg-clip-text text-transparent",
-                          styles.doneGlow
-                        )}
-                      >
-                        ✔
-                      </span>
-                    )}
-                    {i == levelNr && (
-                      <span
-                        className={clsx("inline-block", {
-                          ["hidden"]: levelNr < officialLevelNr // Temporary hide for jumping smiley animation
-                          // If we reverse the animation the above code could be removed...
-                        })}
-                      >
-                        <Smiley />
-                      </span>
-                    )}
-                    {i == levelNr && levelNr < officialLevelNr && (
-                      <span
-                        className={clsx(
-                          "animate-fadeIn bg-green-500 bg-clip-text text-transparent opacity-0 [animation-delay:1s] [animation-duration:2s]",
-                          styles.doneGlow
-                        )}
-                      >
-                        ✔
-                      </span>
-                    )}
-                    {i > levelNr && (
-                      <LevelTypeIcon
-                        levelNr={i}
-                        fadeOut={i === officialLevelNr}
-                      />
-                    )}
-                  </span>
-                </div>
+                  {i == officialLevelNr && (
+                    <span
+                      className={clsx("inline-block w-10", {
+                        [styles.hop]: levelNr < officialLevelNr
+                      })}
+                      style={{
+                        "--direction": jumpRight ? "-2.6rem" : "2.4rem",
+                        "--rotateDirection": jumpRight ? "40deg" : "-40deg"
+                      }}
+                    >
+                      <Smiley />
+                    </span>
+                  )}
+                  {(i < levelNr ||
+                    (levelNr < officialLevelNr && i === levelNr)) && (
+                    <LevelDoneIcon
+                      fadeIn={i === levelNr && levelNr < officialLevelNr}
+                    />
+                  )}
+                  {i > levelNr && (
+                    <LevelTypeIcon
+                      levelNr={i}
+                      fadeOut={i === officialLevelNr}
+                    />
+                  )}
+                </LevelNode>
               </li>
             </Fragment>
           );
