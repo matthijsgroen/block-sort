@@ -72,7 +72,7 @@ export type Column = {
    *
    * Buffer columns never get locked, and are meant for temporary storage.
    */
-  type: "placement" | "buffer";
+  type: "placement" | "buffer" | "inventory";
   /**
    * Wether the column is locked
    */

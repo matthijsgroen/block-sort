@@ -145,16 +145,18 @@ export const BlockColumn: React.FC<Props> = ({
         })}
       >
         {suggested && (
-          <div className="pointer-events-none absolute w-block translate-y-1 animate-pulse bg-green-200 bg-clip-text text-center text-2xl text-transparent opacity-30">
+          <div className="pointer-events-none absolute w-block translate-y-1 animate-suggested bg-green-200 bg-clip-text text-center text-2xl text-transparent opacity-30">
             👇
           </div>
         )}
         <div
           ref={ref}
           className={clsx(
-            "box-content flex w-block cursor-pointer touch-none flex-col-reverse",
+            "box-content flex w-block cursor-pointer touch-none flex-col-reverse relative",
             {
               [styles.buffer]: column.type === "buffer",
+              [styles.inventory]: column.type === "inventory",
+              [styles.open]: column.type === "inventory" && (amountSelected > 0 || columnProp.blocks.length !== column.blocks.length),
               "rounded-md border border-t-0 border-black/60 bg-black/20 shadow-inner":
                 column.type === "placement"
             }

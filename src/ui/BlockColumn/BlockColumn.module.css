@@ -1,5 +1,5 @@
 .empty {
-  @apply h-block w-block;
+  @apply size-block;
 }
 .empty::after {
   content: " ";
@@ -11,7 +11,7 @@
     #0003 97%,
     #0000 97%
   );
-  @apply h-block w-block bg-clip-content px-2;
+  @apply size-block bg-clip-content px-2;
 }
 
 .shade {
@@ -58,4 +58,36 @@
       border-box;
   border-width: 2px 4px 4px 4px;
   border-radius: 2px 2px 6px 6px;
+}
+
+.inventory {
+  box-shadow: 8px 4px 4px #0007;
+  border-color: transparent;
+  background:
+    linear-gradient(to right, #0006 0%, #0000 60%, #0000 100%) content-box,
+    linear-gradient(to bottom, #6e3811, #6e3811) padding-box,
+    linear-gradient(to bottom, #c56a5e 1.25rem, #825045 1.5rem, #825045)
+      border-box;
+  border-width: 2px 4px 4px 4px;
+  border-radius: 2px 2px 6px 6px;
+}
+.inventory::before {
+  content: " ";
+  position: absolute;
+  top: -0.5rem;
+  left: 0;
+  z-index: 1;
+  display: block;
+  background: linear-gradient(#cc5848 0%, #d1796e 10%,  #825045 80%);
+  height: 2rem;
+  @apply  w-block;
+  transform-origin: 0 0.5rem;
+  transform: rotateX(0deg);
+  transition: transform 0.2s;
+}
+
+.open::before {
+  z-index: -1;
+  transform: rotateX(180deg);
+  background: linear-gradient(#c56a5e 15%, #825045 50%,  #c56a5e 100%);
 }

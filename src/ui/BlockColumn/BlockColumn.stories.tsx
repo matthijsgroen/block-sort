@@ -51,7 +51,7 @@ const meta: Meta<BlockColumnPropsAndCustomArgs> = {
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
     type: {
-      options: ["placement", "buffer"],
+      options: ["placement", "buffer", "inventory"],
       control: { type: "radio" }
     },
     hideFormat: {
