@@ -100,21 +100,85 @@ export type Column = {
  * and the data transfer functions (in the 'gameData' file).
  */
 export type LevelSettings = {
+  /**
+   * Solver algorithm to use for this level
+   */
   solver?: keyof typeof solvers;
+  /**
+   * Amount of colors in play
+   */
   amountColors?: number;
+  /**
+   * Hide block types:
+   *
+   * - "none": no blocks are hidden
+   * - "all": all blocks, except the top ones are hidden
+   * - "checker": blocks are hidden in a checker pattern
+   *
+   */
   hideBlockTypes?: "none" | "all" | "checker";
+  /**
+   * Hight of the columns in this level
+   */
   stackSize?: number;
+  /**
+   * How many colors can be filled with the same color.
+   *
+   * @default 1
+   */
   stacksPerColor?: number;
+  /**
+   * Extra columns to place blocks in
+   */
   extraPlacementStacks?: number;
+  /**
+   * How many of the extra placement stacks should have a limit on block type
+   */
   extraPlacementLimits?: number;
+  /**
+   * Amount of buffer columns in this levels
+   *
+   * @deprecated use extraBuffers instead for more precise configuration
+   */
   buffers?: number;
+  /**
+   * Hight of the buffer columns
+   *
+   * @deprecated use extraBuffers instead for more precise configuration
+   */
   bufferSizes?: number;
-  blockColorPick?: "start" | "end";
+  /**
+   * How many of the buffer stacks should have a limit on block type
+   *
+   * @deprecated use extraBuffers instead for more precise configuration
+   */
   bufferPlacementLimits?: number;
+  /**
+   * Should the column colors used in this level be picked from the front or the back of the color list
+   *
+   * @default "start"
+   */
+  blockColorPick?: "start" | "end";
+
+  /**
+   * Configuration of extra buffer columns.
+   */
   extraBuffers?: {
+    /**
+     * Amount of blocks it can contain
+     */
     size: number;
+    /**
+     * Amount of colors of this configuration
+     */
     amount: number;
+    /**
+     * Amount of columns that will be limited in block-type
+     */
     limit: number;
+    /**
+     * Can blocks of different kinds be freely stacked
+     */
     unlimited?: boolean;
   }[];
   playMoves?: [minCount: number, maxPercent: number];
