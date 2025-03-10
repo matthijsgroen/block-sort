@@ -9,7 +9,7 @@ type ColumnData = {
   seriesLength: number;
   spaceAvailable: number;
   bottomStacked: boolean;
-  columnType: "placement" | "buffer";
+  columnType: "placement" | "buffer" | "inventory";
 };
 
 export const stackColumn: Tactic = (level, _random = Math.random) => {

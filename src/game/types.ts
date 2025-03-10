@@ -179,9 +179,21 @@ export type LevelSettings = {
     /**
      * Can blocks of different kinds be freely stacked
      */
-    unlimited?: boolean;
+    bufferType?: "normal" | "unlimited" | "inventory";
   }[];
   playMoves?: [minCount: number, maxPercent: number];
+  /**
+   * Amount of variation in locks and keys
+   *
+   * @default 0
+   */
+  amountLockTypes?: number;
+  /**
+   * Amount of locks / keys in the level
+   *
+   * @default 0
+   */
+  amountLocks?: number;
   layoutMap?: LayoutMap;
 };
 

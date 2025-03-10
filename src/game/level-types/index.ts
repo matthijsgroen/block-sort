@@ -1,6 +1,7 @@
 import { BlockTheme } from "../themes";
 import { LevelSettings } from "../types";
 
+import { dungeon } from "./dungeon";
 import { easy } from "./easy";
 import { hard } from "./hard";
 import { normal } from "./normal";
@@ -13,6 +14,7 @@ import { winter } from "./winter";
 
 const levelTypes = [
   // ghost, // -- not yet ready for release
+  dungeon,
   special,
   hard,
   easy,

@@ -8,7 +8,11 @@ export const startColumn: Tactic = (level, random = Math.random) => {
   if (canStack.length > 0) return canStack;
 
   const emptyColumns = level.columns.reduce<
-    { index: number; type: "buffer" | "placement"; limitColor?: LimitColor }[]
+    {
+      index: number;
+      type: "buffer" | "placement" | "inventory";
+      limitColor?: LimitColor;
+    }[]
   >(
     (r, c, i) =>
       c.blocks.length === 0

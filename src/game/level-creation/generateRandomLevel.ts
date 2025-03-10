@@ -47,7 +47,7 @@ export const generateRandomLevel = (
         amount: buffers,
         size: bufferSizes,
         limit: bufferPlacementLimits,
-        unlimited: false
+        bufferType: "normal"
       }
     ] as Exclude<LevelSettings["extraBuffers"], undefined>
   ).concat(extraBuffers);
@@ -86,17 +86,19 @@ export const generateRandomLevel = (
       )
     )
     .concat(
-      bufferList.flatMap(({ amount, size, limit, unlimited = false }) => {
+      bufferList.flatMap(({ amount, size, limit, bufferType = "normal" }) => {
         stackLimit -= limit;
 
         return timesMap(amount, (i) =>
           createBufferColumn(
             size,
-            unlimited
+            bufferType === "unlimited"
               ? "rainbow"
               : i < limit
                 ? blockColors[stackLimit + i]
-                : undefined
+                : undefined,
+            [],
+            bufferType === "inventory" ? "inventory" : "buffer"
           )
         );
       })

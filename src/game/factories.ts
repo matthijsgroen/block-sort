@@ -43,9 +43,10 @@ export const createPlacementColumn = (
 export const createBufferColumn = (
   size: number,
   limitColor?: LimitColor,
-  blocks: Block[] = []
+  blocks: Block[] = [],
+  type: Exclude<Column["type"], "placement"> = "buffer"
 ): Column => ({
-  type: "buffer",
+  type,
   locked: false,
   columnSize: size,
   blocks,
