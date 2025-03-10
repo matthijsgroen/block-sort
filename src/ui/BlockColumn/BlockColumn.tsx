@@ -152,11 +152,14 @@ export const BlockColumn: React.FC<Props> = ({
         <div
           ref={ref}
           className={clsx(
-            "box-content flex w-block cursor-pointer touch-none flex-col-reverse relative",
+            "relative box-content flex w-block cursor-pointer touch-none flex-col-reverse",
             {
               [styles.buffer]: column.type === "buffer",
               [styles.inventory]: column.type === "inventory",
-              [styles.open]: column.type === "inventory" && (amountSelected > 0 || columnProp.blocks.length !== column.blocks.length),
+              [styles.open]:
+                column.type === "inventory" &&
+                (amountSelected > 0 ||
+                  columnProp.blocks.length !== column.blocks.length),
               "rounded-md border border-t-0 border-black/60 bg-black/20 shadow-inner":
                 column.type === "placement"
             }
