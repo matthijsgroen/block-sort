@@ -14,7 +14,7 @@ import {
   createPlacementColumn
 } from "./factories";
 import { hasWon } from "./state";
-import { LevelState } from "./types";
+import type { LevelState } from "./types";
 
 const TEST_SEED = 123456789;
 
@@ -112,7 +112,7 @@ describe(moveBlocks, () => {
 
     const result = moveBlocks(level, { from: 0, to: 3 });
     const expected: LevelState = {
-      colors: ["black", "green", "white"],
+      blockTypes: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, createBlocks("black", "green")),
         createPlacementColumn(
@@ -195,7 +195,7 @@ describe(moveBlocks, () => {
 
     const result = moveBlocks(level, { from: 0, to: 3 });
     const expected: LevelState = {
-      colors: ["black", "green", "white"],
+      blockTypes: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, createBlocks("black", "green")),
         createPlacementColumn(
@@ -234,7 +234,7 @@ describe(moveBlocks, () => {
 
     const result = moveBlocks(level, { from: 0, to: 3 });
     const expected: LevelState = {
-      colors: ["black", "green", "white"],
+      blockTypes: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, createHiddenBlocks("white", "black", "green")),
         createPlacementColumn(
@@ -270,7 +270,7 @@ describe(moveBlocks, () => {
 
     const result = moveBlocks(level, { from: 2, to: 2 });
     const expected: LevelState = {
-      colors: ["black", "green", "white"],
+      blockTypes: ["black", "green", "white"],
       columns: [
         createPlacementColumn(
           4,
@@ -309,7 +309,7 @@ describe(moveBlocks, () => {
     const result = moveBlocks(level, { from: 0, to: 3 });
 
     const expected: LevelState = {
-      colors: ["black", "green", "white"],
+      blockTypes: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, [
           createBlock("black"),

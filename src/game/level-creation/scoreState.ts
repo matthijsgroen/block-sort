@@ -1,5 +1,5 @@
 import { moveBlocks } from "../actions";
-import { Column, LevelState, Move } from "../types";
+import type { Column, LevelState, Move } from "../types";
 
 import {
   canPlaceBlock,
@@ -10,9 +10,9 @@ const columnCompletionScore = (state: LevelState): number =>
   state.columns.reduce((score, col) => {
     if (col.blocks.length === 0) return score; // Empty column, neutral
     const max = col.type === "placement" ? 10 : 5;
-    const firstColor = col.blocks[0].color;
+    const firstColor = col.blocks[0].blockType;
     const sameColorBlocks = col.blocks.filter(
-      (b) => b.color === firstColor
+      (b) => b.blockType === firstColor
     ).length;
     const completion = sameColorBlocks / col.blocks.length;
     return (
@@ -32,7 +32,7 @@ const bufferPenalty = (state: LevelState): number => {
 const blockingPenalty = (state: LevelState): number =>
   state.columns.reduce((penalty, col) => {
     for (let i = 1; i < col.blocks.length; i++) {
-      if (col.blocks[i].color !== col.blocks[i - 1].color) {
+      if (col.blocks[i].blockType !== col.blocks[i - 1].blockType) {
         penalty -= 5; // Penalty for each block that is blocked by a different color
       }
     }
@@ -58,7 +58,7 @@ const futureMovePotential = (state: LevelState): number => {
 
 const lockedColumnReward = (state: LevelState): number => {
   return state.columns.reduce((score, col) => {
-    if (col.locked && col.blocks.every((b) => b.color === col.limitColor)) {
+    if (col.locked && col.blocks.every((b) => b.blockType === col.limitColor)) {
       return score + 15; // Bonus for fully locked and sorted columns
     }
     return score;
@@ -106,7 +106,7 @@ const isPartialMove = (state: LevelState, move: Move): boolean => {
     fromColumn.blocks.some(
       (block, index) =>
         index < fromColumn.blocks.length - 1 &&
-        block.color !== fromColumn.blocks[0].color
+        block.blockType !== fromColumn.blocks[0].blockType
     )
   );
 };

@@ -2,7 +2,7 @@ import { mulberry32 } from "@/support/random";
 
 import { moveBlocks } from "../actions";
 import { allShuffled, isStuck } from "../state";
-import { LevelSettings, LevelState, Move } from "../types";
+import type { LevelSettings, LevelState, Move } from "../types";
 
 import { generateRandomLevel } from "./generateRandomLevel";
 import { defaultSolver } from "./solvers";

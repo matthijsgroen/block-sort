@@ -3,11 +3,8 @@ import { use, useEffect, useState } from "react";
 import { Transition } from "@/ui/Transition/Transition";
 
 import { ZEN_MODE } from "@/featureFlags";
-import {
-  getLevelSettings,
-  getLevelType,
-  LevelTypeString
-} from "@/game/level-types/index";
+import type { LevelTypeString } from "@/game/level-types/index";
+import { getLevelSettings, getLevelType } from "@/game/level-types/index";
 import { LevelLoader } from "@/modules/Level/LevelLoader";
 import { LevelTrack } from "@/modules/LevelTrack/LevelTrack";
 import { generateNewSeed, mulberry32 } from "@/support/random";

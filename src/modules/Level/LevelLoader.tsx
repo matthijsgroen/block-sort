@@ -7,9 +7,9 @@ import { colorHustle } from "@/game/level-creation/colorHustle";
 import { optimizeMoves } from "@/game/level-creation/optimizeMoves";
 import { solvers } from "@/game/level-creation/solvers";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
-import { LevelTypeString } from "@/game/level-types";
+import type { LevelTypeString } from "@/game/level-types";
 import { hasWon } from "@/game/state";
-import { LevelSettings, LevelState } from "@/game/types";
+import type { LevelSettings, LevelState } from "@/game/types";
 import { settingsHash } from "@/support/hash";
 import { generateNewSeed, mulberry32 } from "@/support/random";
 import {

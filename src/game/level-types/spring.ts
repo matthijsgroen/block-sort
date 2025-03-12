@@ -2,9 +2,9 @@ import { getActiveTheme } from "@/game/themes/index";
 import { getToday } from "@/support/schedule";
 
 import { getDifficultyLevel } from "../level-settings/levelSettings";
-import { LayoutMap, SettingsProducer } from "../types";
+import type { LayoutMap, SettingsProducer } from "../types";
 
-import { LevelType } from "./types";
+import type { LevelType } from "./types";
 
 export const getSpringSettings: SettingsProducer = (difficulty) => {
   const extraBufferSize = (difficulty: number) => {

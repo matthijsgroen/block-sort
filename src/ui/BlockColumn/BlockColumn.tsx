@@ -1,18 +1,14 @@
-import {
-  Dispatch,
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-  useState
-} from "react";
+import type { Dispatch } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 
-import { Block, HideFormat } from "@/ui/Block/Block";
+import type { HideFormat } from "@/ui/Block/Block";
+import { Block } from "@/ui/Block/Block";
 import { Tray } from "@/ui/Tray/Tray";
 
-import { BlockTheme, getColorMapping, getShapeMapping } from "@/game/themes";
-import { Column } from "@/game/types";
+import type { BlockTheme } from "@/game/themes";
+import { getColorMapping, getShapeMapping } from "@/game/themes";
+import type { Column } from "@/game/types";
 import { colPadding, rowSpans } from "@/support/grid";
 import { timesMap } from "@/support/timeMap";
 
@@ -181,9 +177,11 @@ export const BlockColumn: React.FC<Props> = ({
                 moved={started}
                 shadow={column.type === "placement" || isSelected}
                 revealed={block.revealed}
-                color={activeColorMap[block.color]}
+                color={activeColorMap[block.blockType]}
                 hideFormat={hideFormat}
-                shape={block.revealed ? activeShapeMap[block.color] : undefined}
+                shape={
+                  block.revealed ? activeShapeMap[block.blockType] : undefined
+                }
                 selected={isSelected}
                 suggested={isSuggested}
                 onDrop={onDrop}

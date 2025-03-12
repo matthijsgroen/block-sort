@@ -1,5 +1,5 @@
-import { BlockTheme } from "../themes";
-import { LevelSettings } from "../types";
+import type { BlockTheme } from "../themes";
+import type { LevelSettings } from "../types";
 
 import { dungeon } from "./dungeon";
 import { easy } from "./easy";
@@ -9,7 +9,7 @@ import { scrambled } from "./scrambled";
 import { special } from "./special";
 import { spring } from "./spring";
 import { summer } from "./summer";
-import { LevelType, Unlockable } from "./types";
+import type { LevelType, Unlockable } from "./types";
 import { winter } from "./winter";
 
 const levelTypes = [

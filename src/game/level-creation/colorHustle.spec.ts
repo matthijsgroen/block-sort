@@ -7,7 +7,7 @@ import {
   createLevelState,
   createPlacementColumn
 } from "../factories";
-import { LevelState } from "../types";
+import type { LevelState } from "../types";
 
 import { colorHustle } from "./colorHustle";
 

@@ -2,7 +2,7 @@ import { pick } from "@/support/random";
 import { timesMap } from "@/support/timeMap";
 
 import { canPlaceBlock, isColumnCorrectlySorted } from "./support";
-import { Tactic } from "./types";
+import type { Tactic } from "./types";
 
 export const randomMove: Tactic = (level, random = Math.random) => {
   const sourceOptions = level.columns.reduce<

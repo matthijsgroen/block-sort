@@ -1,10 +1,10 @@
 import c from "ansi-colors";
 
-import { SeedMap } from "@/data/levelSeeds";
+import type { SeedMap } from "@/data/levelSeeds";
 import { optimizeMoves } from "@/game/level-creation/optimizeMoves";
 import { solvers } from "@/game/level-creation/solvers";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
-import { LevelSettings, LevelState } from "@/game/types";
+import type { LevelSettings, LevelState } from "@/game/types";
 import { mulberry32 } from "@/support/random";
 
 import {
@@ -14,7 +14,8 @@ import {
   spinnerFrames
 } from "./cliElements";
 import { GENERATE_BATCH_SIZE, MINIMAL_LEVELS, SEED } from "./constants";
-import { levelProducers, Seeder } from "./producers";
+import type { Seeder } from "./producers";
+import { levelProducers } from "./producers";
 import { updateSeeds } from "./updateSeeds";
 
 const MAX_GENERATE_ATTEMPTS = 100;

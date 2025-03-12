@@ -3,11 +3,9 @@ import { use } from "react";
 import { Transition } from "@/ui/Transition/Transition";
 
 import { sound } from "@/audio";
-import {
-  getUnlockableLevelTypes,
-  LevelTypeString
-} from "@/game/level-types/index";
-import { LevelSettings } from "@/game/types";
+import type { LevelTypeString } from "@/game/level-types/index";
+import { getUnlockableLevelTypes } from "@/game/level-types/index";
+import type { LevelSettings } from "@/game/types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { LevelLoader } from "@/modules/Level/LevelLoader";
 import { generateNewSeed, mulberry32, pick } from "@/support/random";

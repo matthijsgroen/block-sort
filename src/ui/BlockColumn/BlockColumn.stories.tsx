@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
 
 import { createBlock } from "@/game/factories";
-import { Block, Column } from "@/game/types";
+import type { Block, Column } from "@/game/types";
 
 import { BlockColumn } from "./BlockColumn";
 

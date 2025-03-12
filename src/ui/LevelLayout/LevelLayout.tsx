@@ -1,17 +1,12 @@
-import React, {
-  Dispatch,
-  useCallback,
-  useEffect,
-  useRef,
-  useState
-} from "react";
+import type { Dispatch } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { BlockTheme } from "@/game/themes";
-import { LevelState } from "@/game/types";
+import type { BlockTheme } from "@/game/themes";
+import type { LevelState } from "@/game/types";
 import { colSizes } from "@/support/grid";
 import { useScreenUpdate } from "@/support/useScreenUpdate";
 
-import { HideFormat } from "../Block/Block";
+import type { HideFormat } from "../Block/Block";
 import { MemoizedBlockColumn } from "../BlockColumn/BlockColumn";
 
 import { useBlockAnimation } from "./useBlockAnimation";

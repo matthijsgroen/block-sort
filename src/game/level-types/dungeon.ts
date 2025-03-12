@@ -1,7 +1,7 @@
 import { getDifficultyLevel } from "../level-settings/levelSettings";
-import { SettingsProducer } from "../types";
+import type { SettingsProducer } from "../types";
 
-import { LevelType } from "./types";
+import type { LevelType } from "./types";
 
 export const getDungeonSettings: SettingsProducer = (difficulty) => ({
   amountColors: Math.min(2 + difficulty, 10),

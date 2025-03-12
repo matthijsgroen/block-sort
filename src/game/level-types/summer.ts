@@ -4,7 +4,7 @@ import { getToday } from "@/support/schedule";
 import { getDifficultyLevel } from "../level-settings/levelSettings";
 
 import { getScrambledSettings } from "./scrambled";
-import { LevelType } from "./types";
+import type { LevelType } from "./types";
 
 export const summer: LevelType<"summer"> = {
   type: "summer",

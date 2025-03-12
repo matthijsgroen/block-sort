@@ -10,7 +10,8 @@ import summer from "@/assets/summer.aac";
 import win from "@/assets/win.mp3";
 import winter from "@/assets/winter.aac";
 
-import { audioSystem, createItem, StreamItem } from "./services/audio";
+import type { StreamItem } from "./services/audio";
+import { audioSystem, createItem } from "./services/audio";
 
 export enum Stream {
   effects = "effects",

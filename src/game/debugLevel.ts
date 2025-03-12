@@ -1,5 +1,5 @@
 import { shapeMap } from "./themes/default";
-import { BlockColor, LevelState } from "./types";
+import type { BlockColor, LevelState } from "./types";
 
 const shape = (color: BlockColor) => {
   const char = shapeMap[color];
@@ -43,7 +43,7 @@ export const debugLevel = (level: LevelState) => {
           if (block.revealed === false) {
             lineStr += `│﹖│ `;
           } else {
-            lineStr += `│${shape(block.color)}│ `;
+            lineStr += `│${shape(block.blockType)}│ `;
           }
         }
       }

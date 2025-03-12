@@ -1,9 +1,9 @@
 import { pick } from "@/support/random";
 
 import { getDifficultyLevel } from "../level-settings/levelSettings";
-import { LayoutMap, SettingsProducer } from "../types";
+import type { LayoutMap, SettingsProducer } from "../types";
 
-import { LevelType } from "./types";
+import type { LevelType } from "./types";
 
 export const getSpecial1Settings: SettingsProducer = (difficulty) => ({
   amountColors: difficulty < 4 ? 3 : 4,

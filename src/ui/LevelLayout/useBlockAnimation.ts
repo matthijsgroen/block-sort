@@ -2,9 +2,11 @@ import { useCallback, useEffect, useRef } from "react";
 
 import styles from "@/ui/Block/Block.module.css";
 
-import { BlockTheme, getColorMapping, getShapeMapping } from "@/game/themes";
-import { BlockColor, LevelState } from "@/game/types";
-import { createFrames, Rect, shiftRect } from "@/support/createFrames";
+import type { BlockTheme } from "@/game/themes";
+import { getColorMapping, getShapeMapping } from "@/game/themes";
+import type { BlockColor, LevelState } from "@/game/types";
+import type { Rect } from "@/support/createFrames";
+import { createFrames, shiftRect } from "@/support/createFrames";
 import { effectTimeout } from "@/support/effectTimeout";
 import { encodeForContent } from "@/support/emojiEncoding";
 import { timesMap } from "@/support/timeMap";
@@ -127,7 +129,7 @@ export const useBlockAnimation = (
         levelState.columns[addedColumn].blocks.length -
         prevLevel.columns[addedColumn].blocks.length;
 
-      const blockColor = levelState.columns[addedColumn].blocks[0].color;
+      const blockColor = levelState.columns[addedColumn].blocks[0].blockType;
       const source = shiftRect(
         animationData.sourceBlocks[
           animationData.sourceBlocks.length - blocksAdded

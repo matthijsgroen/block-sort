@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction, use, useEffect } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { use, useEffect } from "react";
 import clsx from "clsx";
 
 import { GameTitle } from "@/ui/GameTitle/GameTitle";
@@ -7,7 +8,7 @@ import { TopButton } from "@/ui/TopButton/TopButton";
 import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { getUnlockableLevelTypes } from "@/game/level-types";
-import { LevelType } from "@/game/level-types/types";
+import type { LevelType } from "@/game/level-types/types";
 import { getActiveTheme } from "@/game/themes";
 import { getToday } from "@/support/schedule";
 import { timesMap } from "@/support/timeMap";

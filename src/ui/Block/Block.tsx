@@ -1,4 +1,5 @@
-import { Dispatch, useEffect, useRef } from "react";
+import type { Dispatch } from "react";
+import { useEffect, useRef } from "react";
 import clsx from "clsx";
 
 import { encodeForContent } from "@/support/emojiEncoding";

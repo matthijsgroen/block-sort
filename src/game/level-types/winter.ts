@@ -2,7 +2,7 @@ import { getActiveTheme } from "@/game/themes";
 import { getToday } from "@/support/schedule";
 
 import { hard } from "./hard";
-import { LevelType } from "./types";
+import type { LevelType } from "./types";
 
 export const winter: LevelType<"winter"> = {
   type: "winter",

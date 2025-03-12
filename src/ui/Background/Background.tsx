@@ -1,8 +1,9 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 import clsx from "clsx";
 
-import { getLevelTypeByType, LevelTypeString } from "@/game/level-types";
-import { BlockTheme } from "@/game/themes";
+import type { LevelTypeString } from "@/game/level-types";
+import { getLevelTypeByType } from "@/game/level-types";
+import type { BlockTheme } from "@/game/themes";
 
 import { CSSParticles } from "./CSSParticles";
 

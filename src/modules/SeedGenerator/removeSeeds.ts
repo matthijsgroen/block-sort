@@ -1,4 +1,4 @@
-import { SeedMap } from "@/data/levelSeeds";
+import type { SeedMap } from "@/data/levelSeeds";
 
 export const removeSeedsForKey = (key: string, seeds: SeedMap): SeedMap => {
   const keys = Object.keys(seeds);

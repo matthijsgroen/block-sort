@@ -1,14 +1,16 @@
 import { shuffle } from "@/support/random";
 import { timesMap } from "@/support/timeMap";
 
-import { BLOCK_COLORS, BlockColor } from "../blocks";
+import { BLOCK_COLORS, type BlockType } from "../blocks";
 import {
   createBlock,
   createBufferColumn,
   createLevelState,
   createPlacementColumn
 } from "../factories";
-import { Column, LayoutMap, LevelSettings, LevelState } from "../types";
+import type { Column, LayoutMap, LevelSettings, LevelState } from "../types";
+
+import { type LockNKeyBlocks, lockNKeyPairs } from "./lock-n-key";
 
 export const generateRandomLevel = (
   {
@@ -24,6 +26,8 @@ export const generateRandomLevel = (
     hideBlockTypes = "none",
     stacksPerColor = 1,
     solver = "default",
+    amountLockTypes = 0,
+    amountLocks = 0,
     layoutMap
   }: LevelSettings,
   random: () => number
@@ -54,13 +58,24 @@ export const generateRandomLevel = (
 
   const blockColors = availableColors.slice(0, amountColors);
   let stackLimit = blockColors.length - extraPlacementLimits;
+  // 1. select lock type
+  const lockKeyPairs = lockNKeyPairs.slice();
+  shuffle(lockKeyPairs, random);
+  const lockTypes = lockKeyPairs.slice(0, amountLockTypes);
 
   const amountBars = amountColors * stacksPerColor;
-  const blocks: BlockColor[] = [];
+  const blocks: BlockType[] = [];
   for (const color of blockColors) {
     blocks.push(...new Array(stackSize * stacksPerColor).fill(color));
   }
+  const lockKeyBlocks = new Array(amountLocks).fill(0).flatMap((_v, i) => {
+    const lockType = lockTypes[i % lockTypes.length];
+    return [`${lockType}-lock`, `${lockType}-key`];
+  }) as LockNKeyBlocks[];
+  blocks.splice(0, lockKeyBlocks.length, ...lockKeyBlocks);
+
   shuffle(blocks, random);
+
   const columns = timesMap<Column>(amountBars, (ci) =>
     createPlacementColumn(
       stackSize,

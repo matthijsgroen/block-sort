@@ -1,14 +1,9 @@
-import {
-  createContext,
-  Dispatch,
-  PropsWithChildren,
-  use,
-  useState
-} from "react";
+import type { Dispatch, PropsWithChildren } from "react";
+import { createContext, use, useState } from "react";
 
 import { Background } from "@/ui/Background/Background";
 
-import { LevelTypeString } from "@/game/level-types";
+import type { LevelTypeString } from "@/game/level-types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { useGameStorage } from "@/support/useGameStorage";
 

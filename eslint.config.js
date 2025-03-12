@@ -52,7 +52,8 @@ export default [
           css: "always"
         }
       ],
-      "import/no-useless-path-segments": ["error", { noUselessIndex: true }]
+      "import/no-useless-path-segments": ["error", { noUselessIndex: true }],
+      "@typescript-eslint/consistent-type-imports": "error"
     }
   },
   eslintConfigPrettier,

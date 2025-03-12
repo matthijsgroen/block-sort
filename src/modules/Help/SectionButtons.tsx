@@ -1,4 +1,4 @@
-import { Dispatch } from "react";
+import type { Dispatch } from "react";
 
 import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";
 

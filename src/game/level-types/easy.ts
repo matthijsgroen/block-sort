@@ -4,12 +4,12 @@ import {
   getDifficultyLevel,
   LEVEL_SCALE
 } from "../level-settings/levelSettings";
-import { LevelSettings } from "../types";
+import type { LevelSettings } from "../types";
 
 import { hard } from "./hard";
 import { normal } from "./normal";
 import { special } from "./special";
-import { LevelType } from "./types";
+import type { LevelType } from "./types";
 
 export const easy: LevelType<"easy"> = {
   type: "easy",

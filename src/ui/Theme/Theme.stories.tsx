@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { generateRandomLevel } from "@/game/level-creation/generateRandomLevel";
 import { getDailySettings } from "@/game/level-types/daily";
 import { getSpecial2Settings } from "@/game/level-types/special";
-import { BlockTheme } from "@/game/themes";
+import type { BlockTheme } from "@/game/themes";
 import { mulberry32 } from "@/support/random";
 
 import { LevelLayout as LevelLayoutComponent } from "../LevelLayout/LevelLayout";

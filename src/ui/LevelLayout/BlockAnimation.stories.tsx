@@ -6,7 +6,7 @@ import { moveBlocks, selectFromColumn } from "@/game/actions";
 import { optimizeMoves } from "@/game/level-creation/optimizeMoves";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { isStuck } from "@/game/state";
-import { LevelState } from "@/game/types";
+import type { LevelState } from "@/game/types";
 import { producers } from "@/modules/SeedGenerator/producers";
 import { settingsHash } from "@/support/hash";
 import { mulberry32 } from "@/support/random";

@@ -1,7 +1,7 @@
 import { produce } from "immer";
 
 import { moveBlocks, selectFromColumn } from "./actions";
-import { Block, BlockColor, LevelState } from "./types";
+import type { Block, BlockColor, LevelState } from "./types";
 
 export const canPlaceAmount = (
   level: LevelState,
@@ -15,11 +15,11 @@ export const canPlaceAmount = (
     return Math.min(spaceLeft, blocks.length);
   }
 
-  const setColor = blocks[0].color;
+  const setColor = blocks[0].blockType;
   if (column.limitColor && column.limitColor !== setColor) {
     return 0;
   }
-  if (column.blocks[0] && column.blocks[0].color !== setColor) {
+  if (column.blocks[0] && column.blocks[0].blockType !== setColor) {
     return 0;
   }
   return Math.min(spaceLeft, blocks.length);
@@ -30,14 +30,14 @@ export const hasWon = (level: LevelState): boolean =>
     (col) =>
       (col.type === "placement" &&
         col.columnSize === col.blocks.length &&
-        col.blocks.every((b) => b.color === col.blocks[0].color)) ||
+        col.blocks.every((b) => b.blockType === col.blocks[0].blockType)) ||
       col.blocks.length === 0
   );
 
 const createSignature = (level: LevelState) =>
   level.columns.map((c) => {
     const block = c.blocks[0];
-    return block ? block.color : c.limitColor;
+    return block ? block.blockType : c.limitColor;
   });
 
 const countHidden = (level: LevelState) =>
@@ -52,7 +52,7 @@ const blockedByPlacement = (level: LevelState) => {
     if (col.blocks.length === 0) return;
     if (col.type !== "buffer") return;
     const countSame = selectFromColumn(level, index).length;
-    bufferSeries.push([col.blocks[0].color, countSame, index]);
+    bufferSeries.push([col.blocks[0].blockType, countSame, index]);
   });
 
   const placementSpaceForColor = (blockColor: BlockColor, index: number) =>
@@ -61,7 +61,7 @@ const blockedByPlacement = (level: LevelState) => {
       if (
         col.type === "placement" &&
         (col.limitColor === blockColor ||
-          col.blocks[0]?.color === blockColor ||
+          col.blocks[0]?.blockType === blockColor ||
           (col.limitColor === undefined && col.blocks.length === 0))
       ) {
         return acc + col.columnSize - col.blocks.length;
@@ -71,7 +71,8 @@ const blockedByPlacement = (level: LevelState) => {
       }
       if (
         col.type === "buffer" &&
-        (col.limitColor === blockColor || col.blocks[0]?.color === blockColor)
+        (col.limitColor === blockColor ||
+          col.blocks[0]?.blockType === blockColor)
       ) {
         return acc + col.columnSize - col.blocks.length;
       }
@@ -98,7 +99,7 @@ const blockedByBuffer = (level: LevelState) => {
     if (col.blocks.length === 0 || col.type !== "placement" || col.locked)
       return;
     const countSame = selectFromColumn(level, index).length;
-    placementSeries.push([col.blocks[0].color, countSame, index]);
+    placementSeries.push([col.blocks[0].blockType, countSame, index]);
   });
 
   const bufferSpaceForColor = (blockColor: BlockColor, index: number) =>
@@ -116,14 +117,15 @@ const blockedByBuffer = (level: LevelState) => {
       }
       if (
         col.type === "buffer" &&
-        (col.limitColor === blockColor || col.blocks[0]?.color === blockColor)
+        (col.limitColor === blockColor ||
+          col.blocks[0]?.blockType === blockColor)
       ) {
         return acc + col.columnSize - col.blocks.length;
       }
       if (
         col.type === "placement" &&
         (col.limitColor === blockColor ||
-          col.blocks[0]?.color === blockColor ||
+          col.blocks[0]?.blockType === blockColor ||
           (col.limitColor === undefined && col.blocks.length === 0))
       ) {
         return acc + col.columnSize - col.blocks.length;
@@ -151,7 +153,7 @@ const countCompleted = (level: LevelState) =>
     (col) =>
       col.type === "placement" &&
       col.columnSize === col.blocks.length &&
-      col.blocks.every((b) => b.color === col.blocks[0].color)
+      col.blocks.every((b) => b.blockType === col.blocks[0].blockType)
   ).length;
 
 export const isStuck = (level: LevelState): boolean => {
@@ -194,7 +196,7 @@ export const allShuffled = (level: LevelState): boolean =>
   level.columns.every(
     (c) =>
       c.blocks.length < c.columnSize ||
-      c.blocks.map((b) => b.color).filter((b, i, l) => l.indexOf(b) === i)
+      c.blocks.map((b) => b.blockType).filter((b, i, l) => l.indexOf(b) === i)
         .length > 1
   );
 

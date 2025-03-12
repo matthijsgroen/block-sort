@@ -3,7 +3,7 @@ import { stackColumn } from "./solver-tactics/stackColumn";
 import { startColumn } from "./solver-tactics/startColumn";
 import { configureSolver } from "./configurable-solver";
 import { scoreState, scoreStateWithMove } from "./scoreState";
-import { Solver } from "./types";
+import type { Solver } from "./types";
 
 export const defaultSolver: Solver = configureSolver(
   [randomMove, startColumn, stackColumn],

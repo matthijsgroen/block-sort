@@ -1,4 +1,5 @@
-import { Children, PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
+import { Children } from "react";
 import clsx from "clsx";
 
 type Props = PropsWithChildren<{

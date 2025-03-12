@@ -1,6 +1,7 @@
-import { BLOCK_COLORS, BlockColor, LimitColor } from "@/game/blocks";
-import { solvers } from "@/game/level-creation/solvers";
-import { Column, LevelState, Move } from "@/game/types";
+import type { BlockColor, LimitColor } from "@/game/blocks";
+import { BLOCK_COLORS } from "@/game/blocks";
+import type { solvers } from "@/game/level-creation/solvers";
+import type { Column, LevelState, Move } from "@/game/types";
 
 export type LevelStateDTO = {
   /**
@@ -58,7 +59,7 @@ export const toLevelStateDTO = (state: LevelState): LevelStateDTO => {
   return {
     c: state.columns.map((c) => ({
       b: c.blocks.map((b) => ({
-        c: BLOCK_COLORS.indexOf(b.color),
+        c: BLOCK_COLORS.indexOf(b.blockType),
         r: !!b.revealed
       })),
       s: c.columnSize,
@@ -100,7 +101,7 @@ export const fromLevelStateDTO = (dto: LevelStateDTO): LevelState => {
   colors.sort();
 
   return {
-    colors,
+    blockTypes: colors,
     columns: dto.c.map<Column>((c) => ({
       blocks: c.b.map((b) => ({
         color: BLOCK_COLORS[b.c],

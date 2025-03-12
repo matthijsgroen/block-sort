@@ -1,6 +1,5 @@
-import { solvers } from "./level-creation/solvers";
-import { BlockColor, LimitColor } from "./blocks";
-export { type BlockColor } from "./blocks";
+import type { solvers } from "./level-creation/solvers";
+import type { BlockType, LimitColor } from "./blocks";
 
 /**
  * The current state of a level.
@@ -16,7 +15,7 @@ export type LevelState = {
   /**
    * Colors in play for this level
    */
-  colors: BlockColor[];
+  blockTypes: BlockType[];
   width?: number;
   /**
    * Column in this level
@@ -52,9 +51,9 @@ export type Move = {
 
 export type Block = {
   /**
-   * Color of the block
+   * Type of the block (color / lock / key)
    */
-  color: BlockColor;
+  blockType: BlockType;
   /**
    * Wether the block color is revealed to the player
    * @default true

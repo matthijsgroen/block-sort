@@ -1,14 +1,13 @@
 import { version } from "@/../package.json";
 import { replayMoves } from "@/game/actions";
-import { LevelState, Move } from "@/game/types";
+import type { LevelState, Move } from "@/game/types";
 import { getGameValue, setGameValue } from "@/support/useGameStorage";
 
+import type { LevelStateDTO, MoveDTO } from "./dto";
 import {
   fromHintModeDTO,
   fromLevelStateDTO,
   fromMoveDTO,
-  LevelStateDTO,
-  MoveDTO,
   toHintModeDTO,
   toLevelStateDTO,
   toMoveDTO

@@ -1,7 +1,7 @@
 import { writeFile } from "node:fs/promises";
 import * as prettier from "prettier";
 
-import { SeedMap } from "@/data/levelSeeds";
+import type { SeedMap } from "@/data/levelSeeds";
 
 export const updateSeeds = async (updatedLevelSeeds: SeedMap) => {
   const sortedSeeds = Object.fromEntries(

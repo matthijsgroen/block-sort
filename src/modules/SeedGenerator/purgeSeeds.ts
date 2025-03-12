@@ -4,7 +4,8 @@ import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { mulberry32 } from "@/support/random";
 
 import { clearLine, doubleProgressBar } from "./cliElements";
-import { levelProducers, Seeder } from "./producers";
+import type { Seeder } from "./producers";
+import { levelProducers } from "./producers";
 import { updateSeeds } from "./updateSeeds";
 
 export const purgeSeeds = async (

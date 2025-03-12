@@ -1,7 +1,7 @@
-import { HideFormat } from "@/ui/Block/Block";
+import type { HideFormat } from "@/ui/Block/Block";
 
-import { BlockTheme } from "../themes";
-import { LevelSettings } from "../types";
+import type { BlockTheme } from "../themes";
+import type { LevelSettings } from "../types";
 
 export type LevelModifiers = {
   theme?: BlockTheme;

@@ -19,7 +19,7 @@ import {
   getEasySpringSettings,
   getSpringSettings
 } from "@/game/level-types/spring";
-import { SettingsProducer } from "@/game/types";
+import type { SettingsProducer } from "@/game/types";
 import { settingsHash } from "@/support/hash";
 
 export type Producer = {

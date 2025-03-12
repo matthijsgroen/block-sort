@@ -1,4 +1,5 @@
-import { Dispatch, lazy, Suspense, useState } from "react";
+import type { Dispatch } from "react";
+import { lazy, Suspense, useState } from "react";
 
 import { Checkbox } from "@/ui/Checkbox";
 import { Dialog } from "@/ui/Dialog/Dialog";

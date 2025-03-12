@@ -1,4 +1,5 @@
-import { PropsWithChildren, useEffect, useRef } from "react";
+import type { PropsWithChildren } from "react";
+import { useEffect, useRef } from "react";
 import clsx from "clsx";
 
 import { TopButton } from "../TopButton/TopButton";

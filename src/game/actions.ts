@@ -3,7 +3,7 @@ import { produce } from "immer";
 import { findLastIndex } from "@/support/findLastIndex";
 
 import { canPlaceAmount } from "./state";
-import { Block, BlockColor, Column, LevelState, Move } from "./types";
+import type { Block, BlockColor, Column, LevelState, Move } from "./types";
 
 export const selectFromColumn = (
   level: LevelState,
@@ -19,12 +19,12 @@ export const selectFromColumn = (
 
   let topBlock = level.columns[columnIndex].blocks[index];
   while (
-    (topBlock?.color === color || color === null) &&
+    (topBlock?.blockType === color || color === null) &&
     topBlock?.revealed !== false &&
     topBlock !== undefined
   ) {
     result.push(topBlock);
-    color = topBlock.color;
+    color = topBlock.blockType;
     index++;
     topBlock = level.columns[columnIndex].blocks[index];
   }
@@ -48,7 +48,7 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
 
       let index = 1;
       let nextBlockOrigin = draft.columns[move.from].blocks[index];
-      while (nextBlockOrigin?.color === topBlockOrigin.color) {
+      while (nextBlockOrigin?.blockType === topBlockOrigin.blockType) {
         nextBlockOrigin.revealed = true;
         index++;
         nextBlockOrigin = draft.columns[move.from].blocks[index];
@@ -56,12 +56,12 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
     }
     const endCol = draft.columns[move.to];
     endCol.blocks.unshift(...moving);
-    const moveColor = moving[0].color;
+    const moveColor = moving[0].blockType;
 
     if (
       endCol.type === "placement" &&
       endCol.blocks.length === endCol.columnSize &&
-      endCol.blocks.every((b) => b.color === moveColor)
+      endCol.blocks.every((b) => b.blockType === moveColor)
     ) {
       endCol.blocks.forEach((b) => {
         b.revealed = true;

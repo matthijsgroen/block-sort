@@ -7,7 +7,7 @@ import { mulberry32 } from "@/support/random";
 import { moveBlocks } from "../actions";
 import { generatePlayableLevel } from "../level-creation/tactics";
 import { hasWon } from "../state";
-import { LevelSettings } from "../types";
+import type { LevelSettings } from "../types";
 
 import { LEVEL_SCALE } from "./levelSettings";
 
