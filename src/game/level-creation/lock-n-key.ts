@@ -10,7 +10,7 @@ const ghost: LockOrKey<"ghost", "lock"> = {
   name: "ghost-lock",
   pairName: "ghost",
   symbol: "👻",
-  color: "#999999",
+  color: "#333333",
   role: "lock"
 };
 
@@ -18,7 +18,7 @@ const flashlight: LockOrKey<"ghost", "key"> = {
   name: "ghost-key",
   pairName: "ghost",
   symbol: "🔦",
-  color: "#999999",
+  color: "#333333",
   role: "key"
 };
 

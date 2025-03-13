@@ -7,32 +7,47 @@
   font-size: small;
   transition: background-color 1s;
 }
-.shape::before {
-  display: block;
+
+.shapeOutline::before {
   text-shadow:
     0px 0px 0px #000,
     1px -1px 0px #eee;
-  content: var(--cube-top-shape);
-  transform: scaleY(0.6);
-  background-color: #000;
+  background-color: #000; 
   background-clip: text;
   color: transparent;
   opacity: calc(var(--cube-shape-opacity, 50%) * 0.6);
+}
+
+.shape::before {
+  display: block;
+  content: var(--cube-top-shape);
+  transform: scaleY(0.6);
 
   @apply h-top-block w-block;
 }
 
 .shape::after {
+  display: block;
+  content: var(--cube-shape);
+  @apply h-block pt-3;
+}
+
+.shapeOutline::after {
   text-shadow:
     0px 0px 0px color-mix(in srgb, var(--shape-color) 70%, #fff 30%),
     0px 0px 4px #000,
     1px 1px 2px #000;
   opacity: var(--cube-shape-opacity, 50%);
   color: transparent;
-  display: block;
-  content: var(--cube-shape);
-  @apply h-block pt-3;
 }
+
+.lockNKey::before {
+  scale: 130%;
+}
+.lockNKey::after {
+  scale: 150%;
+}
+
 
 .selected {
   transform: translateY(-2rem);

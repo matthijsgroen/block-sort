@@ -1,11 +1,11 @@
 import { selectFromColumn } from "@/game/actions";
-import type { BlockColor } from "@/game/blocks";
+import type { BlockType } from "@/game/blocks";
 
 import type { Tactic, WeightedMove } from "./types";
 
 type ColumnData = {
   index: number;
-  color: BlockColor;
+  color: BlockType;
   seriesLength: number;
   spaceAvailable: number;
   bottomStacked: boolean;
