@@ -4,11 +4,9 @@ import type { SettingsProducer } from "../types";
 import type { LevelType } from "./types";
 
 export const getDungeonSettings: SettingsProducer = (difficulty) => ({
-  solver: "dungeon",
   amountColors: Math.min(2 + difficulty, 10),
   stackSize: Math.min(Math.max(Math.floor(3 + (difficulty - 1) / 2), 4), 7),
   extraPlacementStacks: 1,
-  extraPlacementLimits: 1,
   extraBuffers: [
     {
       size: 1,

@@ -34,7 +34,7 @@ export const generatePlayableLevel = async (
 
     attempt++;
     const level = generateRandomLevel(settings, generationRandom);
-    if (isStuck(level) || !allShuffled(level) || isLockSolvable(level)) {
+    if (isStuck(level) || !allShuffled(level) || !isLockSolvable(level)) {
       continue;
     }
     const [beatable, solveMoves, cost] = await solver(level, generationRandom);

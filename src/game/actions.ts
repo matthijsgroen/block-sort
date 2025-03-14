@@ -81,6 +81,22 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
       });
       endCol.locked = true;
     }
+    if (
+      endCol.type === "placement" &&
+      endCol.blocks.length < endCol.columnSize &&
+      endCol.blocks.every((b) => b.blockType === moveColor) &&
+      draft.columns.every(
+        (c) => c === endCol || c.blocks.every((b) => b.blockType !== moveColor)
+      )
+    ) {
+      while (endCol.blocks.length < endCol.columnSize) {
+        endCol.blocks.push({ blockType: moveColor, revealed: true });
+      }
+      endCol.blocks.forEach((b) => {
+        b.revealed = true;
+      });
+      endCol.locked = true;
+    }
   })(level);
 
 const columnHasHidableBlocks = (c: Column): boolean =>

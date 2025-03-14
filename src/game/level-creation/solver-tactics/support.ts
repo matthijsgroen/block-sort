@@ -1,3 +1,4 @@
+import { isKey, matchingLockFor } from "@/game/state";
 import type { Block, Column } from "@/game/types";
 
 export const hasSpace = (column: Column): boolean =>
@@ -12,6 +13,13 @@ export const canPlaceBlock = (column: Column, block: Block): boolean => {
     return true;
   }
   if (destBlock?.blockType === block.blockType) {
+    return true;
+  }
+  if (
+    isKey(block) &&
+    destBlock &&
+    matchingLockFor(block) === destBlock.blockType
+  ) {
     return true;
   }
   if (

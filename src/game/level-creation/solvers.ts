@@ -12,14 +12,6 @@ export const defaultSolver: Solver = configureSolver(
   2
 );
 
-export const dungeonSolver: Solver = configureSolver(
-  [randomMove, startColumn, stackColumn],
-  scoreState,
-  scoreStateWithMove,
-  2
-);
-
 export const solvers = {
-  default: defaultSolver,
-  dungeon: dungeonSolver
+  default: defaultSolver
 } as const satisfies Record<string, Solver>;
