@@ -5,7 +5,9 @@ import { Command } from "commander";
 
 import { levelSeeds } from "../src/data/levelSeeds";
 import { debugLevel } from "../src/game/debugLevel";
+import { solvers } from "../src/game/level-creation/solvers";
 import { slowSolve } from "../src/game/level-creation/tactics";
+import type { LevelSettings } from "../src/game/types";
 import { SEED } from "../src/modules/SeedGenerator/constants";
 import { updateLevelSeeds } from "../src/modules/SeedGenerator/generateSeeds";
 import { producers } from "../src/modules/SeedGenerator/producers";
@@ -187,7 +189,7 @@ program
       console.log(c.red("Difficulty must be a number between 1 and 11"));
       process.exit(1);
     }
-    const settings = producer.producer(difficulty);
+    const settings: LevelSettings = producer.producer(Number(difficulty));
 
     const clearScreen = () => {
       console.clear();
@@ -197,6 +199,7 @@ program
     const wait = (ms: number) =>
       new Promise((resolve) => setTimeout(resolve, ms));
 
+    const solver = solvers[settings.solver ?? "default"];
     const random = mulberry32(SEED);
     await slowSolve(
       settings,
@@ -217,7 +220,9 @@ program
 
         return true;
       },
-      random
+      random,
+      null,
+      solver
     );
     console.log("ended");
   });
