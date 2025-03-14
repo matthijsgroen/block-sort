@@ -9,7 +9,13 @@ import {
   createLevelState,
   createPlacementColumn
 } from "./factories";
-import { allShuffled, canPlaceAmount, hasWon, isStuck } from "./state";
+import {
+  allShuffled,
+  canPlaceAmount,
+  hasWon,
+  isLockSolvable,
+  isStuck
+} from "./state";
 
 describe(canPlaceAmount, () => {
   it("returns the amount that fits", () => {
@@ -547,5 +553,36 @@ describe(allShuffled, () => {
     ]);
     const result = isStuck(level);
     expect(result).toBe(true);
+  });
+});
+
+describe(isLockSolvable, () => {
+  it("returns true if bottom blocks are not locks", () => {
+    const level = createLevelState([
+      createPlacementColumn(4, createBlocks("white")),
+      createPlacementColumn(
+        4,
+        createBlocks("black", "green", "green", "brown")
+      ),
+      createBufferColumn(3, "green", createBlocks("green", "green")),
+      createBufferColumn(2, "red", createBlocks("red", "red"))
+    ]);
+    const result = isLockSolvable(level);
+    expect(result).toBe(true);
+  });
+
+  it("returns false if one of the columns has a lock as bottom block", () => {
+    const level = createLevelState([
+      createPlacementColumn(4, createBlocks("white")),
+      createPlacementColumn(
+        4,
+        createBlocks("black", "green", "green", "vampire-lock")
+      ),
+      createBufferColumn(3, "green", createBlocks("green", "green")),
+      createBufferColumn(2, "red", createBlocks("red", "red")),
+      createPlacementColumn(4, createBlocks("black", "green", "ghost-lock"))
+    ]);
+    const result = isLockSolvable(level);
+    expect(result).toBe(false);
   });
 });

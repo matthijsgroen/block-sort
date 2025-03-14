@@ -207,6 +207,9 @@ export const isStuck = (level: LevelState): boolean => {
   });
 };
 
+export const isLockSolvable = (level: LevelState): boolean =>
+  level.columns.every((col) => !col.blocks.at(-1)?.blockType.endsWith("-lock"));
+
 export const allShuffled = (level: LevelState): boolean =>
   level.columns.every(
     (c) =>
