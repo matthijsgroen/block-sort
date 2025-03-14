@@ -2,9 +2,10 @@ import { useCallback, useEffect, useRef } from "react";
 
 import styles from "@/ui/Block/Block.module.css";
 
+import type { BlockType } from "@/game/blocks";
 import type { BlockTheme } from "@/game/themes";
 import { getColorMapping, getShapeMapping } from "@/game/themes";
-import type { BlockColor, LevelState } from "@/game/types";
+import type { LevelState } from "@/game/types";
 import type { Rect } from "@/support/createFrames";
 import { createFrames, shiftRect } from "@/support/createFrames";
 import { effectTimeout } from "@/support/effectTimeout";
@@ -17,7 +18,7 @@ export type AnimationPath = {
   offset: number;
   count: number;
   path: string;
-  color: BlockColor;
+  blockType: BlockType;
 };
 
 const createBlock = (shape: string, color: string): HTMLDivElement => {

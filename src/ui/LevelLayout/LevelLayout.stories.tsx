@@ -2,16 +2,12 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import { generateRandomLevel } from "@/game/level-creation/generateRandomLevel";
 import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
-import { getDungeonSettings } from "@/game/level-types/dungeon";
 import { producers } from "@/modules/SeedGenerator/producers";
 import { mulberry32 } from "@/support/random";
 
 import { LevelLayout as LevelLayoutComponent } from "./LevelLayout";
 
-const displayProducers = producers.concat({
-  name: "Dungeon",
-  producer: getDungeonSettings
-});
+const displayProducers = producers;
 
 type CustomArgs = {
   levelType: string;

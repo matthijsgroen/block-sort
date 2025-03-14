@@ -434,6 +434,20 @@ describe(moveBlocks, () => {
       expect(result).toEqual(expected);
     });
 
+    it("will refuse non-keys into an inventory buffer", () => {
+      const level = createLevelState([
+        createPlacementColumn(
+          4,
+          createBlocks("white", "white", "black", "white")
+        ),
+        createPlacementColumn(4, [], "black"),
+        createBufferColumn(4, undefined, [], "inventory")
+      ]);
+
+      const result = moveBlocks(level, { from: 0, to: 2 });
+      expect(result).toEqual(level);
+    });
+
     it("will move a key on a matching lock", () => {
       const level = createLevelState([
         createPlacementColumn(

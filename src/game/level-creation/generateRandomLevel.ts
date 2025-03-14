@@ -10,7 +10,8 @@ import {
 } from "../factories";
 import type { Column, LayoutMap, LevelSettings, LevelState } from "../types";
 
-import { type LockNKeyBlocks, lockNKeyPairs } from "./lock-n-key";
+import type { Key, Lock } from "./lock-n-key";
+import { lockNKeyPairs } from "./lock-n-key";
 
 export const generateRandomLevel = (
   {
@@ -60,7 +61,7 @@ export const generateRandomLevel = (
   let stackLimit = blockColors.length - extraPlacementLimits;
   // 1. select lock type
 
-  const lockKeyBlocks: LockNKeyBlocks[] = [];
+  const lockKeyBlocks: (Lock | Key)[] = [];
   if (amountLockTypes > 0) {
     const lockKeyPairs = lockNKeyPairs.slice();
     shuffle(lockKeyPairs, random);
@@ -69,7 +70,7 @@ export const generateRandomLevel = (
     const lockAndKeys = new Array(amountLocks).fill(0).flatMap((_v, i) => {
       const lockType = lockTypes[i % lockTypes.length];
       return [`${lockType}-lock`, `${lockType}-key`];
-    }) as LockNKeyBlocks[];
+    }) as (Lock | Key)[];
 
     lockKeyBlocks.push(...lockAndKeys);
   }

@@ -1,4 +1,4 @@
-import type { BlockColor } from "../types";
+import type { BlockColor } from "../blocks";
 
 export const shapeMap: Record<BlockColor, string> = {
   white: "1",

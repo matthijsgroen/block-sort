@@ -1,7 +1,9 @@
 import { produce } from "immer";
 
+import type { Key, Lock } from "./level-creation/lock-n-key";
+import { keys, locks } from "./level-creation/lock-n-key";
 import { moveBlocks, selectFromColumn } from "./actions";
-import type { BlockType } from "./blocks";
+import type { BlockColor, BlockType } from "./blocks";
 import type { Block, LevelState } from "./types";
 
 export const canPlaceAmount = (
@@ -22,6 +24,9 @@ export const canPlaceAmount = (
       return column.blocks[0]?.blockType === lock ? 1 : 0;
     }
 
+    return 0;
+  }
+  if (column.type === "inventory") {
     return 0;
   }
 
@@ -208,6 +213,14 @@ export const isStuck = (level: LevelState): boolean => {
 
 export const isLock = (block?: Block) => !!block?.blockType.endsWith("-lock");
 export const isKey = (block?: Block) => !!block?.blockType.endsWith("-key");
+
+export const isLockType = (blockType: BlockType): blockType is Lock =>
+  locks.find((lk) => lk.name === blockType) !== undefined;
+export const isKeyType = (blockType: BlockType): blockType is Key =>
+  keys.find((lk) => lk.name === blockType) !== undefined;
+export const isColorType = (blockType: BlockType): blockType is BlockColor =>
+  !isKeyType(blockType) && !isLockType(blockType);
+
 export const matchingLockFor = (block: Block) =>
   isKey(block) && block.blockType.split("-")[0] + "-lock";
 

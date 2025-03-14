@@ -2,8 +2,7 @@ import type { LevelModifiers } from "@/game/level-types/types";
 import { filterInRange, type RangedItem } from "@/support/schedule";
 
 import type { BlockColor, BlockType } from "../blocks";
-import type { LockNKeyBlocks } from "../level-creation/lock-n-key";
-import { lockNKey } from "../level-creation/lock-n-key";
+import { type Key, keys, type Lock, locks } from "../level-creation/lock-n-key";
 
 import { colorMap as colorMapDaily, shapeMap as shapeMapDaily } from "./daily";
 import { colorMap, shapeMap } from "./default";
@@ -32,9 +31,12 @@ export type BlockTheme =
 export const getShapeMapping = (
   theme: BlockTheme
 ): Record<BlockType, string> => {
-  const lockNKeyMapping: Record<LockNKeyBlocks, string> = lockNKey.reduce(
+  const lockNKeyMapping: Record<Lock | Key, string> = [
+    ...locks,
+    ...keys
+  ].reduce(
     (r, { name, symbol }) => ({ ...r, [name]: symbol }),
-    {} as Record<LockNKeyBlocks, string>
+    {} as Record<Lock | Key, string>
   );
 
   const mapping: Record<BlockTheme, Record<BlockColor, string>> = {
@@ -51,9 +53,12 @@ export const getShapeMapping = (
 export const getColorMapping = (
   theme: BlockTheme
 ): Record<BlockType, string> => {
-  const lockNKeyMapping: Record<LockNKeyBlocks, string> = lockNKey.reduce(
+  const lockNKeyMapping: Record<Lock | Key, string> = [
+    ...locks,
+    ...keys
+  ].reduce(
     (r, { name, color }) => ({ ...r, [name]: color }),
-    {} as Record<LockNKeyBlocks, string>
+    {} as Record<Lock | Key, string>
   );
 
   const mapping: Record<BlockTheme, Record<BlockColor, string>> = {

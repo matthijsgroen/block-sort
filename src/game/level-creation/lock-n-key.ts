@@ -38,11 +38,14 @@ const garlic: LockOrKey<"vampire", "key"> = {
   role: "key"
 };
 
-export const lockNKey = [ghost, flashlight, vampire, garlic] as const;
-export const lockNKeyPairs = lockNKey.reduce<string[]>(
+export const locks = [ghost, vampire] as const;
+export const keys = [flashlight, garlic] as const;
+
+export const lockNKeyPairs = [...locks, ...keys].reduce<string[]>(
   (result, { pairName }) =>
     result.includes(pairName) ? result : result.concat(pairName),
   []
 );
 
-export type LockNKeyBlocks = (typeof lockNKey)[number]["name"];
+export type Lock = (typeof locks)[number]["name"];
+export type Key = (typeof keys)[number]["name"];
