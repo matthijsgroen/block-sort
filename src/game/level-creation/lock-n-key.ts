@@ -25,7 +25,7 @@ const flashlight: LockOrKey<"ghost", "key"> = {
 const vampire: LockOrKey<"vampire", "lock"> = {
   name: "vampire-lock",
   pairName: "vampire",
-  symbol: "🧛🏻‍♂️",
+  symbol: "🧛",
   color: "#666699",
   role: "lock"
 };
