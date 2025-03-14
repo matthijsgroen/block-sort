@@ -97,7 +97,7 @@ export const slowSolve = async (
 
   let level = generateRandomLevel(settings, generationRandom);
 
-  while (isStuck(level) || !allShuffled(level)) {
+  while (isStuck(level) || !allShuffled(level) || !isLockSolvable(level)) {
     level = generateRandomLevel(settings, generationRandom);
   }
 
