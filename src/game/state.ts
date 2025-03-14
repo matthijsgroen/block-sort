@@ -12,14 +12,13 @@ export const canPlaceAmount = (
   const column = level.columns[columnIndex];
   const spaceLeft = column.columnSize - column.blocks.length;
 
-  const isKey = blocks[0]?.blockType.endsWith("-key");
-  if (isKey) {
+  if (isKey(blocks[0])) {
     if (column.type === "inventory") {
       return Math.min(spaceLeft, blocks.length);
     }
 
     if (column.blocks[0]) {
-      const lock = blocks[0].blockType.split("-")[0] + "-lock";
+      const lock = matchingLockFor(blocks[0]);
       return column.blocks[0]?.blockType === lock ? 1 : 0;
     }
 
@@ -207,8 +206,23 @@ export const isStuck = (level: LevelState): boolean => {
   });
 };
 
+export const isLock = (block?: Block) => !!block?.blockType.endsWith("-lock");
+export const isKey = (block?: Block) => !!block?.blockType.endsWith("-key");
+export const matchingLockFor = (block: Block) =>
+  isKey(block) && block.blockType.split("-")[0] + "-lock";
+
 export const isLockSolvable = (level: LevelState): boolean =>
-  level.columns.every((col) => !col.blocks.at(-1)?.blockType.endsWith("-lock"));
+  level.columns.every(
+    (col) =>
+      !isLock(col.blocks.at(-1)) &&
+      col.blocks.every((b, i) => {
+        if (isKey(b)) {
+          const lock = col.blocks[i + 1];
+          return !lock || lock.blockType !== matchingLockFor(b);
+        }
+        return true;
+      })
+  );
 
 export const allShuffled = (level: LevelState): boolean =>
   level.columns.every(

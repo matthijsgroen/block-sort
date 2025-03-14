@@ -6,6 +6,7 @@ import type { HideFormat } from "@/ui/Block/Block";
 import { Block } from "@/ui/Block/Block";
 import { Tray } from "@/ui/Tray/Tray";
 
+import { isKey, isLock } from "@/game/state";
 import type { BlockTheme } from "@/game/themes";
 import { getColorMapping, getShapeMapping } from "@/game/themes";
 import type { Column } from "@/game/types";
@@ -182,10 +183,7 @@ export const BlockColumn: React.FC<Props> = ({
                 shape={
                   block.revealed ? activeShapeMap[block.blockType] : undefined
                 }
-                shapeColored={
-                  block.blockType.endsWith("-key") ||
-                  block.blockType.endsWith("-lock")
-                }
+                shapeColored={isKey(block) || isLock(block)}
                 selected={isSelected}
                 suggested={isSuggested}
                 onDrop={onDrop}

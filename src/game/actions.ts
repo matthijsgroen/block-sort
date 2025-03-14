@@ -3,7 +3,7 @@ import { produce } from "immer";
 import { findLastIndex } from "@/support/findLastIndex";
 
 import type { BlockType } from "./blocks";
-import { canPlaceAmount } from "./state";
+import { canPlaceAmount, isKey, isLock, matchingLockFor } from "./state";
 import type { Block, Column, LevelState, Move } from "./types";
 
 export const selectFromColumn = (
@@ -20,7 +20,7 @@ export const selectFromColumn = (
 
   let topBlock = level.columns[columnIndex].blocks[index];
 
-  if (topBlock?.blockType.endsWith("-lock")) {
+  if (isLock(topBlock)) {
     return result;
   }
   while (
@@ -47,8 +47,8 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
     const moving = draft.columns[move.from].blocks.splice(0, amountToMove);
     if (moving.length === 0 || amountToMove === 0) return;
 
-    if (moving.length === 1 && blocks[0].blockType.endsWith("-key")) {
-      const lock = blocks[0].blockType.split("-")[0] + "-lock";
+    if (moving.length === 1 && isKey(blocks[0])) {
+      const lock = matchingLockFor(blocks[0]);
       if (draft.columns[move.to].blocks[0]?.blockType === lock) {
         draft.columns[move.to].blocks.shift();
         return;

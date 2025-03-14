@@ -585,4 +585,32 @@ describe(isLockSolvable, () => {
     const result = isLockSolvable(level);
     expect(result).toBe(false);
   });
+
+  it("returns true if keys are not directly above locks", () => {
+    const level = createLevelState([
+      createPlacementColumn(4, createBlocks("white")),
+      createPlacementColumn(
+        4,
+        createBlocks("ghost-key", "green", "ghost-lock", "brown")
+      ),
+      createBufferColumn(3, "green", createBlocks("green", "green")),
+      createBufferColumn(2, "red", createBlocks("red", "red"))
+    ]);
+    const result = isLockSolvable(level);
+    expect(result).toBe(true);
+  });
+
+  it("returns false if keys are directly above locks", () => {
+    const level = createLevelState([
+      createPlacementColumn(4, createBlocks("white")),
+      createPlacementColumn(
+        4,
+        createBlocks("ghost-key", "ghost-lock", "brown")
+      ),
+      createBufferColumn(3, "green", createBlocks("green", "green")),
+      createBufferColumn(2, "red", createBlocks("red", "red"))
+    ]);
+    const result = isLockSolvable(level);
+    expect(result).toBe(false);
+  });
 });
