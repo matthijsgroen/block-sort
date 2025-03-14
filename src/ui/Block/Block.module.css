@@ -48,7 +48,6 @@
   scale: 150%;
 }
 
-
 .selected {
   transform: translateY(-2rem);
   @apply animate-wobble ease-in-out;

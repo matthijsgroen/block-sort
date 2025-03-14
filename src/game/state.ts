@@ -1,7 +1,8 @@
 import { produce } from "immer";
 
 import { moveBlocks, selectFromColumn } from "./actions";
-import type { Block, BlockColor, LevelState } from "./types";
+import type { BlockType } from "./blocks";
+import type { Block, LevelState } from "./types";
 
 export const canPlaceAmount = (
   level: LevelState,
@@ -10,6 +11,20 @@ export const canPlaceAmount = (
 ): number => {
   const column = level.columns[columnIndex];
   const spaceLeft = column.columnSize - column.blocks.length;
+
+  const isKey = blocks[0]?.blockType.endsWith("-key");
+  if (isKey) {
+    if (column.type === "inventory") {
+      return Math.min(spaceLeft, blocks.length);
+    }
+
+    if (column.blocks[0]) {
+      const lock = blocks[0].blockType.split("-")[0] + "-lock";
+      return column.blocks[0]?.blockType === lock ? 1 : 0;
+    }
+
+    return 0;
+  }
 
   if (column.type === "buffer" && column.limitColor === "rainbow") {
     return Math.min(spaceLeft, blocks.length);
@@ -47,7 +62,7 @@ const countHidden = (level: LevelState) =>
   );
 
 const blockedByPlacement = (level: LevelState) => {
-  const bufferSeries: [BlockColor, amount: number, index: number][] = [];
+  const bufferSeries: [BlockType, amount: number, index: number][] = [];
   level.columns.forEach((col, index) => {
     if (col.blocks.length === 0) return;
     if (col.type !== "buffer") return;
@@ -55,7 +70,7 @@ const blockedByPlacement = (level: LevelState) => {
     bufferSeries.push([col.blocks[0].blockType, countSame, index]);
   });
 
-  const placementSpaceForColor = (blockColor: BlockColor, index: number) =>
+  const placementSpaceForColor = (blockColor: BlockType, index: number) =>
     level.columns.reduce((acc, col, i) => {
       if (i === index) return acc;
       if (
@@ -94,7 +109,7 @@ const blockedByPlacement = (level: LevelState) => {
 };
 
 const blockedByBuffer = (level: LevelState) => {
-  const placementSeries: [BlockColor, amount: number, index: number][] = [];
+  const placementSeries: [BlockType, amount: number, index: number][] = [];
   level.columns.forEach((col, index) => {
     if (col.blocks.length === 0 || col.type !== "placement" || col.locked)
       return;
@@ -102,7 +117,7 @@ const blockedByBuffer = (level: LevelState) => {
     placementSeries.push([col.blocks[0].blockType, countSame, index]);
   });
 
-  const bufferSpaceForColor = (blockColor: BlockColor, index: number) =>
+  const bufferSpaceForColor = (blockColor: BlockType, index: number) =>
     level.columns.reduce((acc, col, i) => {
       if (i === index) return acc;
       if (

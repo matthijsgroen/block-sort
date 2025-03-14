@@ -2,8 +2,9 @@ import { produce } from "immer";
 
 import { findLastIndex } from "@/support/findLastIndex";
 
+import type { BlockType } from "./blocks";
 import { canPlaceAmount } from "./state";
-import type { Block, BlockColor, Column, LevelState, Move } from "./types";
+import type { Block, Column, LevelState, Move } from "./types";
 
 export const selectFromColumn = (
   level: LevelState,
@@ -14,10 +15,14 @@ export const selectFromColumn = (
     return result;
   }
 
-  let color: BlockColor | null = null;
+  let color: BlockType | null = null;
   let index = 0;
 
   let topBlock = level.columns[columnIndex].blocks[index];
+
+  if (topBlock?.blockType.endsWith("-lock")) {
+    return result;
+  }
   while (
     (topBlock?.blockType === color || color === null) &&
     topBlock?.revealed !== false &&
@@ -41,6 +46,14 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
     const amountToMove = canPlaceAmount(draft, move.to, blocks);
     const moving = draft.columns[move.from].blocks.splice(0, amountToMove);
     if (moving.length === 0 || amountToMove === 0) return;
+
+    if (moving.length === 1 && blocks[0].blockType.endsWith("-key")) {
+      const lock = blocks[0].blockType.split("-")[0] + "-lock";
+      if (draft.columns[move.to].blocks[0]?.blockType === lock) {
+        draft.columns[move.to].blocks.shift();
+        return;
+      }
+    }
 
     const topBlockOrigin = draft.columns[move.from].blocks[0];
     if (topBlockOrigin?.revealed === false) {

@@ -2,10 +2,16 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import { generateRandomLevel } from "@/game/level-creation/generateRandomLevel";
 import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
+import { getDungeonSettings } from "@/game/level-types/dungeon";
 import { producers } from "@/modules/SeedGenerator/producers";
 import { mulberry32 } from "@/support/random";
 
 import { LevelLayout as LevelLayoutComponent } from "./LevelLayout";
+
+const displayProducers = producers.concat({
+  name: "Dungeon",
+  producer: getDungeonSettings
+});
 
 type CustomArgs = {
   levelType: string;
@@ -24,7 +30,7 @@ const meta: Meta<CustomArgs> = {
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
     levelType: {
-      options: producers.map((p) => p.name),
+      options: displayProducers.map((p) => p.name),
       control: { type: "select" }
     },
     difficulty: {
@@ -54,7 +60,8 @@ export const LevelLayout: Story = {
   args: {},
   render: (args) => {
     const seeder =
-      producers.find((p) => p.name === args.levelType) ?? producers[0];
+      displayProducers.find((p) => p.name === args.levelType) ??
+      displayProducers[0];
     const settings = seeder.producer(
       Math.min(Math.max(args.difficulty, 1), 12)
     );

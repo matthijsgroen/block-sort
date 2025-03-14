@@ -59,19 +59,26 @@ export const generateRandomLevel = (
   const blockColors = availableColors.slice(0, amountColors);
   let stackLimit = blockColors.length - extraPlacementLimits;
   // 1. select lock type
-  const lockKeyPairs = lockNKeyPairs.slice();
-  shuffle(lockKeyPairs, random);
-  const lockTypes = lockKeyPairs.slice(0, amountLockTypes);
+
+  const lockKeyBlocks: LockNKeyBlocks[] = [];
+  if (amountLockTypes > 0) {
+    const lockKeyPairs = lockNKeyPairs.slice();
+    shuffle(lockKeyPairs, random);
+    const lockTypes = lockKeyPairs.slice(0, amountLockTypes);
+
+    const lockAndKeys = new Array(amountLocks).fill(0).flatMap((_v, i) => {
+      const lockType = lockTypes[i % lockTypes.length];
+      return [`${lockType}-lock`, `${lockType}-key`];
+    }) as LockNKeyBlocks[];
+
+    lockKeyBlocks.push(...lockAndKeys);
+  }
 
   const amountBars = amountColors * stacksPerColor;
   const blocks: BlockType[] = [];
   for (const color of blockColors) {
     blocks.push(...new Array(stackSize * stacksPerColor).fill(color));
   }
-  const lockKeyBlocks = new Array(amountLocks).fill(0).flatMap((_v, i) => {
-    const lockType = lockTypes[i % lockTypes.length];
-    return [`${lockType}-lock`, `${lockType}-key`];
-  }) as LockNKeyBlocks[];
   blocks.splice(0, lockKeyBlocks.length, ...lockKeyBlocks);
 
   shuffle(blocks, random);
