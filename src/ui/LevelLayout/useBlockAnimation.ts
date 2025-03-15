@@ -131,9 +131,16 @@ export const useBlockAnimation = (
         prevLevel.columns[addedColumn].blocks.length;
 
       const blockColor = levelState.columns[addedColumn].blocks[0].blockType;
+
+      const blocksDelta =
+        levelState.columns.reduce((r, c) => r + c.blocks.length, 0) -
+        prevLevel.columns.reduce((r, c) => r + c.blocks.length, 0);
+
+      const blocksMoving = blocksAdded - Math.max(blocksDelta, 0);
+
       const source = shiftRect(
         animationData.sourceBlocks[
-          animationData.sourceBlocks.length - blocksAdded
+          animationData.sourceBlocks.length - blocksMoving
         ],
         0,
         20
@@ -147,7 +154,7 @@ export const useBlockAnimation = (
         source,
         target,
         animationData,
-        blocksAdded,
+        blocksMoving,
         shape,
         color,
         getScale(),
