@@ -61,6 +61,25 @@ export type Block = {
   revealed?: boolean;
 };
 
+export type BufferSettings = {
+  /**
+   * Amount of blocks it can contain
+   */
+  size: number;
+  /**
+   * Amount of colors of this configuration
+   */
+  amount: number;
+  /**
+   * Amount of columns that will be limited in block-type
+   */
+  limit: number;
+  /**
+   * Can blocks of different kinds be freely stacked
+   */
+  bufferType?: "normal" | "unlimited" | "inventory";
+};
+
 /**
  * Column in the level
  */
@@ -162,24 +181,7 @@ export type LevelSettings = {
   /**
    * Configuration of extra buffer columns.
    */
-  extraBuffers?: {
-    /**
-     * Amount of blocks it can contain
-     */
-    size: number;
-    /**
-     * Amount of colors of this configuration
-     */
-    amount: number;
-    /**
-     * Amount of columns that will be limited in block-type
-     */
-    limit: number;
-    /**
-     * Can blocks of different kinds be freely stacked
-     */
-    bufferType?: "normal" | "unlimited" | "inventory";
-  }[];
+  extraBuffers?: BufferSettings[];
   playMoves?: [minCount: number, maxPercent: number];
   /**
    * Amount of variation in locks and keys
