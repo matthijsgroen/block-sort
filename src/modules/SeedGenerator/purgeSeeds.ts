@@ -23,9 +23,10 @@ export const purgeSeeds = async (
     );
   });
 
-  const totalSeeds = keysToPurge.reduce((acc, key) => {
-    return acc + updatedSeeds[key.hash].length;
-  }, 0);
+  const totalSeeds = keysToPurge.reduce(
+    (acc, key) => acc + (updatedSeeds[key.hash]?.length ?? 0),
+    0
+  );
   let seedsChecked = 0;
   let removedSeeds = 0;
   let replacedSeeds = 0;
@@ -34,7 +35,7 @@ export const purgeSeeds = async (
 
   for (const key of keysToPurge) {
     let currentCheck = 0;
-    const seeds = updatedSeeds[`${key.hash}`];
+    const seeds = updatedSeeds[`${key.hash}`] ?? [];
     for (const seed of seeds) {
       clearLine();
       process.stdout.write(
