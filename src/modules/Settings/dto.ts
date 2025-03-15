@@ -1,6 +1,8 @@
-import type { BlockColor, LimitColor } from "@/game/blocks";
+import type { BlockColor, BlockType, LimitColor } from "@/game/blocks";
 import { BLOCK_COLORS } from "@/game/blocks";
+import { keys, locks } from "@/game/level-creation/lock-n-key";
 import type { solvers } from "@/game/level-creation/solvers";
+import { isColorType, isKeyType, isLockType } from "@/game/state";
 import type { Column, LevelState, Move } from "@/game/types";
 
 export type LevelStateDTO = {
@@ -55,16 +57,47 @@ const fromLimitColorDTO = (
       : BLOCK_COLORS[colorId]
     : undefined;
 
+const blockTypeToNumber = (type: BlockType): number => {
+  if (isColorType(type)) {
+    return BLOCK_COLORS.indexOf(type);
+  }
+  if (isLockType(type)) {
+    return 50 + locks.findIndex((l) => l.name === type);
+  }
+  if (isKeyType(type)) {
+    return 100 + keys.findIndex((l) => l.name === type);
+  }
+  return 200;
+};
+
+const numberToBlockType = (number: number): BlockType => {
+  if (number < 50) {
+    return BLOCK_COLORS[number];
+  }
+  if (number < 100) {
+    return locks[number - 50].name;
+  }
+  // if (number < 150) {
+  return keys[number - 100].name;
+  // }
+};
+
 export const toLevelStateDTO = (state: LevelState): LevelStateDTO => {
   return {
     c: state.columns.map((c) => ({
       b: c.blocks.map((b) => ({
-        c: BLOCK_COLORS.indexOf(b.blockType),
+        c: blockTypeToNumber(b.blockType),
         r: !!b.revealed
       })),
       s: c.columnSize,
       l: toLimitColorDTO(c.limitColor),
-      t: c.type === "placement" ? 1 : 0,
+      t: (
+        {
+          buffer: 0,
+          placement: 1,
+          inventory: 2
+        } satisfies Record<Column["type"], number>
+      )[c.type],
       p: c.paddingTop
     })),
     m: toMoveDTO(state.moves),
@@ -104,12 +137,14 @@ export const fromLevelStateDTO = (dto: LevelStateDTO): LevelState => {
     blockTypes: colors,
     columns: dto.c.map<Column>((c) => ({
       blocks: c.b.map((b) => ({
-        color: BLOCK_COLORS[b.c],
+        blockType: numberToBlockType(b.c),
         revealed: b.r
       })),
       columnSize: c.s,
       limitColor: fromLimitColorDTO(c.l),
-      type: c.t === 1 ? "placement" : "buffer",
+      type: (["buffer", "placement", "inventory"] satisfies Column["type"][])[
+        c.t
+      ],
       locked: c.b.length === c.s && c.b.every((b) => b.c === c.b[0].c),
       paddingTop: c.p
     })),
