@@ -43,6 +43,7 @@
 
 .lockNKey::before {
   scale: 130%;
+  opacity: 0.8;
 }
 .lockNKey::after {
   scale: 150%;

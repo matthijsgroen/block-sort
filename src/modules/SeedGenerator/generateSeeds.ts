@@ -13,7 +13,11 @@ import {
   progressBar,
   spinnerFrames
 } from "./cliElements";
-import { GENERATE_BATCH_SIZE, MINIMAL_LEVELS, SEED } from "./constants";
+import {
+  GENERATE_BATCH_SIZE,
+  MAX_LEVELS_PER_DIFFICULTY,
+  SEED
+} from "./constants";
 import type { Seeder } from "./producers";
 import { levelProducers } from "./producers";
 import { updateSeeds } from "./updateSeeds";
@@ -186,23 +190,32 @@ export const updateLevelSeeds = async (
 
   const existingKeys = levelProducers.filter((h) => keys.includes(h.hash));
   const missingKeys = levelProducers.filter((h) => !keys.includes(h.hash));
+
   const missingNow =
-    missingKeys.length * MINIMAL_LEVELS +
+    missingKeys.reduce(
+      (acc, k) => acc + MAX_LEVELS_PER_DIFFICULTY[k.difficulty],
+      0
+    ) +
     existingKeys.reduce(
-      (acc, k) => acc + MINIMAL_LEVELS - levelSeedsCopy[k.hash].length,
+      (acc, k) =>
+        acc +
+        MAX_LEVELS_PER_DIFFICULTY[k.difficulty] -
+        levelSeedsCopy[k.hash].length,
       0
     );
 
   const totalSeeds = seedsMissing ?? missingNow;
 
   const incompleteSeed = existingKeys.find(
-    (k) => levelSeedsCopy[k.hash].length < MINIMAL_LEVELS
+    (k) =>
+      levelSeedsCopy[k.hash].length < MAX_LEVELS_PER_DIFFICULTY[k.difficulty]
   );
 
   if (incompleteSeed) {
     const additionalNeeded = Math.min(
       GENERATE_BATCH_SIZE,
-      MINIMAL_LEVELS - levelSeedsCopy[incompleteSeed.hash].length
+      MAX_LEVELS_PER_DIFFICULTY[incompleteSeed.difficulty] -
+        levelSeedsCopy[incompleteSeed.hash].length
     );
     await produceSeeds(
       additionalNeeded,

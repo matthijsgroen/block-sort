@@ -38,8 +38,56 @@ const garlic: LockOrKey<"vampire", "key"> = {
   role: "key"
 };
 
-export const locks = [ghost, vampire] as const;
-export const keys = [flashlight, garlic] as const;
+const dragon: LockOrKey<"dragon", "lock"> = {
+  name: "dragon-lock",
+  pairName: "dragon",
+  symbol: "🐉",
+  color: "#ff0000",
+  role: "lock"
+};
+
+const sword: LockOrKey<"dragon", "key"> = {
+  name: "dragon-key",
+  pairName: "dragon",
+  symbol: "️🗡️",
+  color: "#ff0000",
+  role: "key"
+};
+
+const fire: LockOrKey<"fire", "lock"> = {
+  name: "fire-lock",
+  pairName: "fire",
+  symbol: "🔥",
+  color: "#800080",
+  role: "lock"
+};
+
+const water: LockOrKey<"fire", "key"> = {
+  name: "fire-key",
+  pairName: "fire",
+  symbol: "💧",
+  color: "#800080",
+  role: "key"
+};
+
+const dinosaur: LockOrKey<"dinosaur", "lock"> = {
+  name: "dinosaur-lock",
+  pairName: "dinosaur",
+  symbol: "🦖",
+  color: "#008000",
+  role: "lock"
+};
+
+const comet: LockOrKey<"dinosaur", "key"> = {
+  name: "dinosaur-key",
+  pairName: "dinosaur",
+  symbol: "☄️",
+  color: "#008000",
+  role: "key"
+};
+
+export const locks = [ghost, vampire, dragon, fire, dinosaur] as const;
+export const keys = [flashlight, garlic, sword, water, comet] as const;
 
 export const lockNKeyPairs = [...locks, ...keys].reduce<string[]>(
   (result, { pairName }) =>
