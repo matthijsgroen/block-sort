@@ -22,7 +22,7 @@ import type { Seeder } from "./producers";
 import { levelProducers } from "./producers";
 import { updateSeeds } from "./updateSeeds";
 
-const MAX_GENERATE_ATTEMPTS = 100;
+const MAX_GENERATE_ATTEMPTS = 200;
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 

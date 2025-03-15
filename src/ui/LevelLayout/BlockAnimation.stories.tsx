@@ -230,9 +230,12 @@ export const LockKeyAnimation: Story = {
         4,
         createBlocks("vampire-lock", "white", "white", "green")
       ),
-      createPlacementColumn(4, createBlocks("ghost-lock", "black", "black")),
+      createPlacementColumn(
+        4,
+        createBlocks("ghost-lock", "dinosaur-key", "black", "black")
+      ),
       createPlacementColumn(4, createBlocks("black", "green", "green")),
-      createPlacementColumn(4, createBlocks("white", "white")),
+      createPlacementColumn(4, createBlocks("dinosaur-lock", "white", "white")),
       createBufferColumn(
         2,
         undefined,
@@ -242,7 +245,8 @@ export const LockKeyAnimation: Story = {
     ]);
     const moves: Move[] = [
       { from: 4, to: 0 },
-      { from: 4, to: 1 }
+      { from: 4, to: 1 },
+      { from: 1, to: 3 }
     ];
 
     return <AnimatePlay level={levelState} moves={moves} />;

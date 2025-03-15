@@ -126,7 +126,7 @@ export const getSpringSettings: SettingsProducer = (difficulty) => {
           extraBufferSize(difficulty),
         amount: 1,
         limit: 0,
-        unlimited: true
+        bufferType: "unlimited"
       }
     ],
     layoutMap: getLayoutMap(difficulty)
@@ -242,7 +242,7 @@ export const getEasySpringSettings: SettingsProducer = (difficulty) => {
           extraBufferSize(difficulty),
         amount: 1,
         limit: 0,
-        unlimited: true
+        bufferType: "unlimited"
       }
     ],
     layoutMap: getLayoutMap(difficulty)

@@ -3,6 +3,8 @@ import { useCallback, useEffect, useRef } from "react";
 import styles from "@/ui/Block/Block.module.css";
 
 import type { BlockType } from "@/game/blocks";
+import { locks } from "@/game/level-creation/lock-n-key";
+import { isKeyType, isLockType } from "@/game/state";
 import type { BlockTheme } from "@/game/themes";
 import { getColorMapping, getShapeMapping } from "@/game/themes";
 import type { LevelState } from "@/game/types";
@@ -21,7 +23,11 @@ export type AnimationPath = {
   blockType: BlockType;
 };
 
-const createBlock = (shape: string, color: string): HTMLDivElement => {
+const createBlock = (
+  shape: string,
+  color: string,
+  outline: boolean
+): HTMLDivElement => {
   const div = document.createElement("div");
   div.style.setProperty("--cube-color", color);
   div.style.setProperty("--shape-color", color);
@@ -38,6 +44,11 @@ const createBlock = (shape: string, color: string): HTMLDivElement => {
     styles.blockGradient,
     styles.shape
   );
+  if (outline) {
+    div.classList.add(styles.shapeOutline);
+  } else {
+    div.classList.add(styles.lockNKey);
+  }
 
   return div;
 };
@@ -162,8 +173,25 @@ export const useBlockAnimation = (
       );
       const target = shiftRect(animationData.targetSpot, 0, -5);
 
+      const stackType = prevLevel.columns[targetColumn].blocks[0]?.blockType;
+      if (stackType && isKeyType(blockType) && isLockType(stackType)) {
+        animateKeyLockClash(
+          animationData.targetColumnTop === animationData.targetSpot.top
+            ? target.x + 2
+            : target.x,
+          animationData.targetColumnTop === animationData.targetSpot.top
+            ? animationData.targetColumnTop + 18
+            : animationData.targetColumnTop + 60,
+          getScale(),
+          blockType,
+          stackType,
+          transitionTime - 20
+        );
+      }
+
       const color = getColorMapping(theme)[blockType];
       const shape = getShapeMapping(theme)[blockType];
+      const outline = !isKeyType(blockType) && !isLockType(blockType);
 
       animateBlocksByTranslate(
         source,
@@ -173,7 +201,8 @@ export const useBlockAnimation = (
         shape,
         color,
         getScale(),
-        transitionTime - 20
+        transitionTime - 20,
+        outline
       );
     }, 10); // delay to allow the DOM to update first
   }, [levelState]);
@@ -193,13 +222,14 @@ const animateBlocksByTranslate = (
   shape: string,
   color: string,
   scale: number,
-  transitionTime: number
+  transitionTime: number,
+  outline: boolean
 ) =>
   timesMap(blocksAdded, (i) => {
     const start = shiftRect(source, 0, -40 * i);
     const end = shiftRect(target, 0, -40 * (blocksAdded - 1 - i));
 
-    const div = createBlock(shape, color);
+    const div = createBlock(shape, color, outline);
     div.style.setProperty("top", `${start.y}px`);
     div.style.setProperty("scale", `${scale}`);
     div.style.setProperty("left", `${start.x}px`);
@@ -225,3 +255,61 @@ const animateBlocksByTranslate = (
 
     return div;
   });
+
+const animateKeyLockClash = (
+  x: number,
+  y: number,
+  scale: number,
+  _key: BlockType,
+  lock: BlockType,
+  delay: number
+) => {
+  // const keyData = keys.find((k) => k.name === key);
+  // if (keyData) {
+  //   const keyBlock = createBlock(keyData?.symbol, keyData?.color, false);
+  //   keyBlock.style.setProperty("top", `${y}px`);
+  //   keyBlock.style.setProperty("scale", `${scale}`);
+  //   keyBlock.style.setProperty("left", `${x}px`);
+  //   keyBlock.style.setProperty("opacity", "0");
+  //   keyBlock.classList.add("absolute");
+  //   document.body.appendChild(keyBlock);
+  //   const frames: Keyframe[] = [
+  //     { transform: `translate(0px, 0px)`, opacity: 1 },
+  //     { transform: `translate(-10px, -10px)`, opacity: 1 },
+  //     { transform: `translate(0px, -40px)`, opacity: 1, scale: 1.2 },
+  //     { transform: `translate(0px, 0px)`, opacity: 0, scale: 1 }
+  //   ];
+  //   keyBlock.animate(frames, {
+  //     duration: 300,
+  //     delay: delay,
+  //     fill: "forwards",
+  //     easing: "ease-in-out",
+  //     iterations: 1
+  //   }).onfinish = () => {
+  //     keyBlock.remove();
+  //   };
+  // }
+  const lockData = locks.find((k) => k.name === lock);
+  if (lockData) {
+    const lockBlock = createBlock(lockData?.symbol, lockData?.color, false);
+    lockBlock.style.setProperty("top", `${y}px`);
+    lockBlock.style.setProperty("scale", `${scale}`);
+    lockBlock.style.setProperty("left", `${x}px`);
+    lockBlock.style.setProperty("opacity", "0");
+    lockBlock.classList.add("absolute");
+    document.body.appendChild(lockBlock);
+    const frames: Keyframe[] = [
+      { transform: `translate(0px, 0px)`, opacity: 1 },
+      { transform: `translate(0px, 0px)`, opacity: 0, scale: 2 }
+    ];
+    lockBlock.animate(frames, {
+      duration: 300,
+      delay: delay,
+      fill: "forwards",
+      easing: "ease-in-out",
+      iterations: 1
+    }).onfinish = () => {
+      lockBlock.remove();
+    };
+  }
+};
