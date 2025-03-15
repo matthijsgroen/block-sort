@@ -83,6 +83,26 @@ export const BlockColumn: React.FC<Props> = ({
         clearTimeout(timeoutId);
         setColumn(columnProp);
       };
+    } else if (
+      columnProp.blocks.length < column.blocks.length &&
+      isLock(column.blocks[0])
+    ) {
+      if (onPlacement && columnRef.current) {
+        const colTop = columnRef.current.getBoundingClientRect().top;
+        onPlacement({
+          top: colTop,
+          rect: (
+            firstEmptyRef.current ?? columnRef.current
+          ).getBoundingClientRect()
+        });
+      }
+      const timeoutId = setTimeout(() => {
+        setColumn(columnProp);
+      }, motionDuration); // Delay to allow for animations
+      return () => {
+        clearTimeout(timeoutId);
+        setColumn(columnProp);
+      };
     } else {
       setColumn(columnProp);
     }

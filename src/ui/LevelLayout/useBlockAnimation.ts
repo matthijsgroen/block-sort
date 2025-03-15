@@ -65,6 +65,7 @@ export const useBlockAnimation = (
   } = {}
 ) => {
   const selectionRef = useRef<DOMRect[]>([]);
+  const sourceColumnRef = useRef<number>(-1);
   const transitionTop = useRef<number | undefined>(undefined);
 
   const animationRef = useRef<AnimationData | undefined>(undefined);
@@ -72,6 +73,8 @@ export const useBlockAnimation = (
   useEffect(() => {
     if (selection === undefined) {
       selectionRef.current = [];
+    } else {
+      sourceColumnRef.current = selection[0];
     }
   }, [selection]);
 
@@ -112,12 +115,21 @@ export const useBlockAnimation = (
     }
 
     return effectTimeout(() => {
-      const addedColumn = levelState.columns.findIndex(
+      let targetColumn = levelState.columns.findIndex(
         (c, i) => c.blocks.length > prevLevel.columns[i].blocks.length
       );
+      const sourceColumnIndex = sourceColumnRef.current;
+
+      if (targetColumn === -1 && sourceColumnIndex) {
+        targetColumn = levelState.columns.findIndex(
+          (c, i) =>
+            c.blocks.length < prevLevel.columns[i].blocks.length &&
+            i !== sourceColumnIndex
+        );
+      }
 
       if (
-        addedColumn === -1 ||
+        targetColumn === -1 ||
         !animationRef.current ||
         animationRef.current.sourceBlocks.length === 0
       ) {
@@ -127,16 +139,19 @@ export const useBlockAnimation = (
       const animationData = animationRef.current;
 
       const blocksAdded =
-        levelState.columns[addedColumn].blocks.length -
-        prevLevel.columns[addedColumn].blocks.length;
+        levelState.columns[targetColumn].blocks.length -
+        prevLevel.columns[targetColumn].blocks.length;
 
-      const blockColor = levelState.columns[addedColumn].blocks[0].blockType;
+      const blockType =
+        blocksAdded < 0
+          ? prevLevel.columns[sourceColumnIndex].blocks[0].blockType
+          : levelState.columns[targetColumn].blocks[0].blockType;
 
       const blocksDelta =
         levelState.columns.reduce((r, c) => r + c.blocks.length, 0) -
         prevLevel.columns.reduce((r, c) => r + c.blocks.length, 0);
 
-      const blocksMoving = blocksAdded - Math.max(blocksDelta, 0);
+      const blocksMoving = Math.abs(blocksAdded - Math.max(blocksDelta, 0));
 
       const source = shiftRect(
         animationData.sourceBlocks[
@@ -147,8 +162,8 @@ export const useBlockAnimation = (
       );
       const target = shiftRect(animationData.targetSpot, 0, -5);
 
-      const color = getColorMapping(theme)[blockColor];
-      const shape = getShapeMapping(theme)[blockColor];
+      const color = getColorMapping(theme)[blockType];
+      const shape = getShapeMapping(theme)[blockType];
 
       animateBlocksByTranslate(
         source,
