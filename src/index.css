@@ -29,3 +29,8 @@ body,
   height: 100%;
   overflow: hidden;
 }
+
+.sb-show-main {
+  overflow: scroll;
+  overscroll-behavior: contain;
+}

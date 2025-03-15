@@ -5,9 +5,11 @@ import { Transition } from "@/ui/Transition/Transition";
 import { ZEN_MODE } from "@/featureFlags";
 import type { LevelTypeString } from "@/game/level-types/index";
 import { getLevelSettings, getLevelType } from "@/game/level-types/index";
+import { getActiveTheme } from "@/game/themes";
 import { LevelLoader } from "@/modules/Level/LevelLoader";
 import { LevelTrack } from "@/modules/LevelTrack/LevelTrack";
 import { generateNewSeed, mulberry32 } from "@/support/random";
+import { getToday } from "@/support/schedule";
 import { useGameStorage } from "@/support/useGameStorage";
 import { useWakeLock } from "@/support/useWakeLock";
 
@@ -45,8 +47,9 @@ export const NormalMode: React.FC<Props> = ({
     setLevelSeed(generateNewSeed(BASE_SEED, levelNr));
   }, [levelNr]);
 
+  const theme = getActiveTheme(getToday());
   const random = mulberry32(levelSeed);
-  const settings = getLevelSettings(levelNr, random);
+  const settings = getLevelSettings(levelNr, theme, random);
 
   const { showBeta } = use(BetaContext);
 
@@ -61,6 +64,7 @@ export const NormalMode: React.FC<Props> = ({
         duration={SCREEN_TRANSITION}
       >
         <LevelTrack
+          theme={theme}
           levelNr={levelNr}
           hasZenMode={levelNr >= ZEN_MODE_UNLOCK - 1 && ZEN_MODE}
           showInstallButton={showInstallButton || showBeta}
@@ -92,7 +96,7 @@ export const NormalMode: React.FC<Props> = ({
           }}
           useStreak
           levelNr={levelNr}
-          levelType={getLevelType(levelNr).type as LevelTypeString}
+          levelType={getLevelType(levelNr, theme).type as LevelTypeString}
           showTutorial={levelNr === 0}
           seed={levelSeed}
           levelSettings={settings}

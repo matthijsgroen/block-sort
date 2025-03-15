@@ -1,6 +1,3 @@
-import { getActiveTheme } from "@/game/themes/index";
-import { getToday } from "@/support/schedule";
-
 import { getDifficultyLevel } from "../level-settings/levelSettings";
 
 import { getScrambledSettings } from "./scrambled";
@@ -24,10 +21,8 @@ export const summer: LevelType<"summer"> = {
     hideEvery: 2
   },
   introTextColor: "#ec4899",
-  occurrence: (levelNr) =>
-    getActiveTheme(getToday()) === "summer" &&
-    (levelNr - 1) % 6 === 0 &&
-    levelNr > 10,
+  occurrence: (levelNr, { theme }) =>
+    theme === "summer" && (levelNr - 1) % 6 === 0 && levelNr > 10,
   getSettings: (levelNr) => {
     const difficulty = getDifficultyLevel(levelNr);
     return getScrambledSettings(difficulty);

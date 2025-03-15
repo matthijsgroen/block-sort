@@ -1,6 +1,3 @@
-import { getActiveTheme } from "@/game/themes";
-import { getToday } from "@/support/schedule";
-
 import { hard } from "./hard";
 import type { LevelType } from "./types";
 
@@ -21,10 +18,8 @@ export const winter: LevelType<"winter"> = {
   },
   showIntro: true,
   introTextColor: "#e2e8f0",
-  occurrence: (levelNr) =>
-    getActiveTheme(getToday()) === "winter" &&
-    levelNr > 20 &&
-    (levelNr - 1) % 6 === 0,
+  occurrence: (levelNr, { theme }) =>
+    theme === "winter" && levelNr > 20 && (levelNr - 1) % 6 === 0,
   getSettings: (levelNr) => {
     return hard.getSettings(levelNr);
   },

@@ -9,6 +9,7 @@ import { ZenButton } from "@/ui/ZenButton";
 import { sound } from "@/audio";
 import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
 import { getLevelType, getLevelTypeByType } from "@/game/level-types";
+import type { BlockTheme } from "@/game/themes";
 import { LevelNode } from "@/modules/LevelTrack/LevelNode";
 import { effectTimeout } from "@/support/effectTimeout";
 import { useGameStorage } from "@/support/useGameStorage";
@@ -28,6 +29,7 @@ type Props = {
   levelNr: number;
   hasZenMode?: boolean;
   showInstallButton?: boolean;
+  theme?: BlockTheme;
   onInstall?: VoidFunction;
   onManual?: VoidFunction;
   onLevelStart: VoidFunction;
@@ -50,6 +52,7 @@ export const LevelTrack: React.FC<Props> = ({
   levelNr: officialLevelNr,
   hasZenMode = false,
   showInstallButton = false,
+  theme = "default",
   onInstall,
   onManual,
   onZenModeStart,
@@ -63,7 +66,7 @@ export const LevelTrack: React.FC<Props> = ({
   const [levelTypeString] = useGameStorage("levelType", null);
   const levelType = levelTypeString
     ? getLevelTypeByType(levelTypeString)
-    : getLevelType(officialLevelNr);
+    : getLevelType(officialLevelNr, theme);
 
   // If levelNr is lower than the official one (keep in offline state)
   // Start a transition to the next level
@@ -186,6 +189,7 @@ export const LevelTrack: React.FC<Props> = ({
               >
                 <LevelNode
                   levelNr={i}
+                  theme={theme}
                   className={translates[offset]}
                   completed={i < officialLevelNr}
                   isCurrent={i === officialLevelNr}
@@ -212,6 +216,7 @@ export const LevelTrack: React.FC<Props> = ({
                   {i > levelNr && (
                     <LevelTypeIcon
                       levelNr={i}
+                      theme={theme}
                       fadeOut={i === officialLevelNr}
                     />
                   )}

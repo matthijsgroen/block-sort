@@ -44,18 +44,18 @@ export const getDungeonSettings: SettingsProducer = (difficulty) => ({
 export const dungeon: LevelType<"dungeon"> = {
   type: "dungeon",
   name: "Dungeon",
-  unlocksAtLevel: 500,
+  unlocksAtLevel: 750,
   symbol: "🐉",
-  color: "#6b7280",
-  borderClassName: "border-2 border-gray-800",
+  color: "#9ca3af",
+  borderClassName: "border-2 border-gray-500",
   textClassName: "text-gray-500",
   buttonBackgroundClassName: "bg-gray-500",
   backgroundClassName: "bg-gray-500/40",
   showIntro: true,
   introTextColor: "#6b7280",
-  occurrence: (levelNr) => levelNr > 400 && (levelNr + 3) % 20 === 0,
+  occurrence: (levelNr) => levelNr + 1 >= 200 && (levelNr + 1) % 50 === 0,
   getSettings(levelNr) {
-    const difficulty = getDifficultyLevel(levelNr);
+    const difficulty = getDifficultyLevel(Math.floor((levelNr + 1 - 200) / 50));
 
     return getDungeonSettings(difficulty);
   },

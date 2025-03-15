@@ -32,7 +32,7 @@ export type LevelType<T extends string> = {
    * Must be a hex code
    */
   introTextColor?: string;
-  occurrence: (levelNr: number) => boolean;
+  occurrence: (levelNr: number, env: { theme: BlockTheme }) => boolean;
   getSettings: (levelNr: number, random?: () => number) => LevelSettings;
   getZenSettings: (levelNr: number, difficulty: number) => LevelSettings;
 };
