@@ -434,6 +434,39 @@ describe(moveBlocks, () => {
       expect(result).toEqual(expected);
     });
 
+    it("will stack a key into an inventory buffer", () => {
+      const level = createLevelState([
+        createPlacementColumn(
+          4,
+          createBlocks("ghost-key", "white", "white", "black", "white")
+        ),
+        createPlacementColumn(4, [], "black"),
+        createBufferColumn(
+          4,
+          undefined,
+          createBlocks("vampire-key"),
+          "inventory"
+        )
+      ]);
+
+      const expected = createLevelState([
+        createPlacementColumn(
+          4,
+          createBlocks("white", "white", "black", "white")
+        ),
+        createPlacementColumn(4, [], "black"),
+        createBufferColumn(
+          4,
+          undefined,
+          createBlocks("ghost-key", "vampire-key"),
+          "inventory"
+        )
+      ]);
+
+      const result = moveBlocks(level, { from: 0, to: 2 });
+      expect(result).toEqual(expected);
+    });
+
     it("will refuse non-keys into an inventory buffer", () => {
       const level = createLevelState([
         createPlacementColumn(

@@ -56,6 +56,8 @@ export const hasWon = (level: LevelState): boolean =>
 const createSignature = (level: LevelState) =>
   level.columns.map((c) => {
     const block = c.blocks[0];
+    if (c.type === "inventory") return "inventory";
+    if (block && isKey(block)) return "inventory";
     return block ? block.blockType : c.limitColor;
   });
 

@@ -215,6 +215,37 @@ describe(isStuck, () => {
     expect(result).toBe(true);
   });
 
+  it("returns true if a move makes no difference (locks and keys)", () => {
+    const level = createLevelState([
+      createPlacementColumn(
+        5,
+        createBlocks("white", "red", "dinosaur-key", "blue", "white")
+      ),
+      createPlacementColumn(
+        5,
+        createBlocks("yellow", "yellow", "dragon-lock", "darkblue", "blue")
+      ),
+      createPlacementColumn(
+        5,
+        createBlocks("dinosaur-lock", "brown", "dinosaur-key", "green")
+      ),
+      createPlacementColumn(
+        5,
+        createBlocks("white", "blue", "darkblue", "dinosaur-lock", "darkblue")
+      ),
+      createPlacementColumn(5, createBlocks("darkblue", "white", "brown")),
+      createPlacementColumn(
+        5,
+        createBlocks("yellow", "yellow", "yellow", "darkblue")
+      ),
+      createPlacementColumn(5, createBlocks("brown", "brown", "brown")),
+      createBufferColumn(1, undefined, [], "inventory"),
+      createBufferColumn(1, undefined, createBlocks("dragon-key"), "inventory")
+    ]);
+    const result = isStuck(level);
+    expect(result).toBe(true);
+  });
+
   it("returns false if move would clear a buffer", () => {
     const level = createLevelState([
       createPlacementColumn(4, createBlocks("black", "white")),

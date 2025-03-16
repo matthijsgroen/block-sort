@@ -5,17 +5,17 @@ import type { LevelState } from "./types";
 
 const isColor = (color: BlockType): color is BlockColor => color in shapeMap;
 
-const shape = (blockType: BlockType) => {
-  if (isColor(blockType)) {
-    const char = shapeMap[blockType];
+const singleWidth: BlockType[] = ["lightyellow", "dinosaur-key", "dragon-key"];
 
-    if (blockType === "lightyellow") {
-      return `${char} `;
-    }
-    return char;
-  } else {
-    return [...locks, ...keys].find((lk) => lk.name === blockType)?.symbol;
+const shape = (blockType: BlockType) => {
+  const char = isColor(blockType)
+    ? shapeMap[blockType]
+    : [...locks, ...keys].find((lk) => lk.name === blockType)?.symbol;
+
+  if (singleWidth.includes(blockType)) {
+    return `${char} `;
   }
+  return char;
 };
 
 export const debugLevel = (level: LevelState) => {
