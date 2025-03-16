@@ -32,6 +32,7 @@ type Props = {
   onPlacement?: Dispatch<{ top: number; rect: DOMRect }>;
   onDrop?: VoidFunction;
   onLock?: VoidFunction;
+  onMatch?: VoidFunction;
 };
 
 const MOTION_DURATION = 400;
@@ -44,6 +45,7 @@ export const BlockColumn: React.FC<Props> = ({
   onDrop,
   onLock,
   onPickUp,
+  onMatch,
   onPlacement,
   theme = "default",
   hovering,
@@ -98,6 +100,7 @@ export const BlockColumn: React.FC<Props> = ({
       }
       const timeoutId = setTimeout(() => {
         setColumn(columnProp);
+        onMatch?.();
       }, motionDuration); // Delay to allow for animations
       return () => {
         clearTimeout(timeoutId);

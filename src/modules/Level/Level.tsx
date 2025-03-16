@@ -263,6 +263,9 @@ export const Level: React.FC<Props> = ({
   const handlePickUp = useCallback(() => {
     sound.play("pickup");
   }, []);
+  const handleMatch = useCallback(() => {
+    sound.play("match");
+  }, []);
 
   return (
     <div className={"flex h-full flex-col"}>
@@ -423,6 +426,7 @@ export const Level: React.FC<Props> = ({
         onLock={handleLock}
         onDrop={handleDrop}
         onPickUp={handlePickUp}
+        onMatch={handleMatch}
       />
     </div>
   );

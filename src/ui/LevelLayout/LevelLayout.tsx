@@ -26,6 +26,7 @@ type Props = {
   onPickUp?: VoidFunction;
   onDrop?: VoidFunction;
   onLock?: VoidFunction;
+  onMatch?: VoidFunction;
 };
 
 const determineColumns = (
@@ -77,7 +78,8 @@ export const LevelLayout: React.FC<Props> = ({
   onColumnUp,
   onDrop,
   onLock,
-  onPickUp
+  onPickUp,
+  onMatch
 }) => {
   useScreenUpdate();
   const containerHeightRef = useRef<HTMLDivElement>(null);
@@ -235,6 +237,7 @@ export const LevelLayout: React.FC<Props> = ({
                 onDrop={onDrop}
                 onPickUp={handlePickup}
                 onPlacement={handlePlacement}
+                onMatch={onMatch}
               />
             ))}
           </div>
