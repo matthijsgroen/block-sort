@@ -6,12 +6,22 @@ import type { LevelType } from "./types";
 export const getDungeonSettings: SettingsProducer = (difficulty) => ({
   amountColors: Math.min(3 + difficulty, 10),
   stackSize: Math.min(Math.max(Math.floor(1 + difficulty), 4), 7),
-  extraPlacementStacks: 1,
+  extraPlacementStacks: difficulty <= 6 ? 1 : 0,
   extraBuffers: [
-    ...(difficulty > 4
+    ...(difficulty > 6
       ? ([
           {
             size: 3,
+            amount: 2,
+            limit: 0,
+            bufferType: "normal"
+          }
+        ] satisfies BufferSettings[])
+      : []),
+    ...(difficulty > 4
+      ? ([
+          {
+            size: difficulty > 8 ? 1 : 3,
             amount: 1,
             limit: 0,
             bufferType: "normal"
@@ -19,7 +29,7 @@ export const getDungeonSettings: SettingsProducer = (difficulty) => ({
         ] satisfies BufferSettings[])
       : []),
     {
-      size: 1,
+      size: difficulty > 8 ? 3 : 1,
       amount: 1,
       limit: 0,
       bufferType: "inventory"
@@ -44,7 +54,7 @@ export const getDungeonSettings: SettingsProducer = (difficulty) => ({
 export const dungeon: LevelType<"dungeon"> = {
   type: "dungeon",
   name: "Dungeon",
-  unlocksAtLevel: 750,
+  unlocksAtLevel: 450,
   symbol: "🐉",
   color: "#9ca3af",
   borderClassName: "border-2 border-gray-500",
