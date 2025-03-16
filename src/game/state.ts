@@ -182,7 +182,9 @@ export const isStuck = (level: LevelState): boolean => {
   const originalHidden = countHidden(level);
   const originalCompleted = countCompleted(level);
 
-  const hasBuffers = level.columns.some((c) => c.type === "buffer");
+  const hasBuffers = level.columns.some(
+    (c) => c.type === "buffer" || c.type === "inventory"
+  );
 
   const initialBlocked =
     hasBuffers && blockedByBuffer(level) && blockedByPlacement(level);
