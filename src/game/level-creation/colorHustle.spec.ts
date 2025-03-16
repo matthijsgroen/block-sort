@@ -23,5 +23,8 @@ describe(colorHustle, () => {
     expect(newState.columns[0].blocks).toEqual(
       createBlocks("red", "blue", "green", "red")
     );
+    expect(newState.columns[1].blocks).toEqual(
+      createBlocks("blue", "green", "red", "blue")
+    );
   });
 });

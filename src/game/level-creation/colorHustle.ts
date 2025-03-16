@@ -13,11 +13,12 @@ export const colorHustle = (
   const blockColors: BlockColor[] = state.blockTypes.filter((b) =>
     isColorType(b)
   );
+  const shuffledColors = blockColors.slice();
 
-  shuffle(blockColors.slice(), random);
+  shuffle(shuffledColors, random);
   const colorMap = blockColors.reduce<Record<BlockColor, BlockColor>>(
     (map, color, index) => {
-      map[color] = blockColors[index];
+      map[color] = shuffledColors[index];
       return map;
     },
     {} as Record<BlockColor, BlockColor>
