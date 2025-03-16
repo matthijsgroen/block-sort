@@ -68,10 +68,29 @@ program
     "updates all items that are broken, instead of batch of 50",
     false
   )
-  .action(async (options: { all?: boolean }) => {
-    console.log(c.bold("Updating level seeds..."));
-    await updateLevelSeeds(!!options.all, levelSeeds);
-  });
+  .option(
+    "-t, --type <levelTypes>",
+    "comma separated list of level types",
+    (value) =>
+      value.split(",").map((v) => {
+        const [name, ...levels] = v.trim().split(":");
+        return {
+          name,
+          levels: levels.map((l) => parseInt(l, 10))
+        };
+      })
+  )
+  .action(
+    async (options: {
+      all?: boolean;
+      type?: { name: string; levels: number[] }[];
+    }) => {
+      console.log(JSON.stringify(options));
+
+      console.log(c.bold("Updating level seeds..."));
+      await updateLevelSeeds(!!options.all, options.type, levelSeeds);
+    }
+  );
 
 program
   .command("purge")

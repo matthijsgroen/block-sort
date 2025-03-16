@@ -71,3 +71,16 @@ export const levelProducers = producers
     (seeder, index, seeders) =>
       seeders.findIndex((s) => s.hash === seeder.hash) === index
   );
+
+export const getFilteredProducers = (
+  types: { name: string; levels: number[] }[] | undefined,
+  producers = levelProducers
+) =>
+  producers.filter((l) => {
+    if (types === undefined) return true;
+    return types.some(
+      (t) =>
+        t.name === l.name &&
+        (t.levels.length === 0 || t.levels.includes(l.difficulty + 1))
+    );
+  });

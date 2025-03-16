@@ -5,7 +5,7 @@ import { mulberry32 } from "@/support/random";
 
 import { clearLine, doubleProgressBar } from "./cliElements";
 import type { Seeder } from "./producers";
-import { levelProducers } from "./producers";
+import { getFilteredProducers } from "./producers";
 import { updateSeeds } from "./updateSeeds";
 
 export const purgeSeeds = async (
@@ -14,14 +14,7 @@ export const purgeSeeds = async (
   let totalRemovedSeeds = 0;
   const updatedSeeds = levelSeeds;
 
-  const keysToPurge: Seeder[] = levelProducers.filter((l) => {
-    if (types === undefined) return true;
-    return types.some(
-      (t) =>
-        t.name === l.name &&
-        (t.levels.length === 0 || t.levels.includes(l.difficulty + 1))
-    );
-  });
+  const keysToPurge: Seeder[] = getFilteredProducers(types);
 
   const totalSeeds = keysToPurge.reduce(
     (acc, key) => acc + (updatedSeeds[key.hash]?.length ?? 0),

@@ -19,7 +19,7 @@ import {
   SEED
 } from "./constants";
 import type { Seeder } from "./producers";
-import { levelProducers } from "./producers";
+import { getFilteredProducers, levelProducers } from "./producers";
 import { updateSeeds } from "./updateSeeds";
 
 const MAX_GENERATE_ATTEMPTS = 200;
@@ -164,6 +164,7 @@ const produceSeeds = async (
 
 export const updateLevelSeeds = async (
   all: boolean,
+  types: { name: string; levels: number[] }[] | undefined = undefined,
   levelSeeds: SeedMap,
   seedsMissing: number | null = null
 ) => {
@@ -206,7 +207,7 @@ export const updateLevelSeeds = async (
 
   const totalSeeds = seedsMissing ?? missingNow;
 
-  const incompleteSeed = existingKeys.find(
+  const incompleteSeed = getFilteredProducers(types, existingKeys).find(
     (k) =>
       levelSeedsCopy[k.hash].length < MAX_LEVELS_PER_DIFFICULTY[k.difficulty]
   );
@@ -229,7 +230,8 @@ export const updateLevelSeeds = async (
     );
   }
 
-  const firstMissing = missingKeys[0];
+  const firstMissing = getFilteredProducers(types, missingKeys)[0];
+
   if (firstMissing && !incompleteSeed) {
     await produceSeeds(
       GENERATE_BATCH_SIZE,
@@ -249,7 +251,7 @@ export const updateLevelSeeds = async (
 
   await updateSeeds(levelSeedsCopy);
   if (all) {
-    await updateLevelSeeds(true, levelSeedsCopy, totalSeeds);
+    await updateLevelSeeds(true, types, levelSeedsCopy, totalSeeds);
   } else {
     console.log("Batch complete");
   }

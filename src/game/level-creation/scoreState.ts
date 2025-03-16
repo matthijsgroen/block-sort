@@ -1,4 +1,5 @@
 import { moveBlocks } from "../actions";
+import { isLock } from "../state";
 import type { Column, LevelState, Move } from "../types";
 
 import {
@@ -79,6 +80,12 @@ const balanceScore = (state: LevelState): number => {
   return (maxBlocks - minBlocks) * -1; // Negative score for imbalance
 };
 
+const lockScore = (state: LevelState): number =>
+  -state.columns.reduce(
+    (score, col) => score + col.blocks.filter((b) => isLock(b)).length * 5,
+    0
+  );
+
 const splittingPenalty = (state: LevelState, move: Move): number => {
   const fromColumn = state.columns[move.from];
   if (isColumnCorrectlySorted(fromColumn)) {
@@ -92,8 +99,8 @@ const isBufferMove = (state: LevelState, move: Move): boolean => {
   const toColumn = state.columns[move.to];
 
   return (
-    fromColumn.type === "buffer" &&
-    toColumn.type === "buffer" &&
+    (fromColumn.type === "buffer" || fromColumn.type === "inventory") &&
+    toColumn.type === fromColumn.type &&
     fromColumn.columnSize === toColumn.columnSize &&
     toColumn.blocks.length === 0
   );
@@ -118,6 +125,7 @@ export const scoreState = (state: LevelState): number => {
   const movePotential = futureMovePotential(state);
   const lockedReward = lockedColumnReward(state);
   const balance = balanceScore(state);
+  const removedLocksScore = lockScore(state);
 
   return (
     columnCompletion +
@@ -125,7 +133,8 @@ export const scoreState = (state: LevelState): number => {
     blockedPenalty +
     movePotential +
     lockedReward +
-    balance
+    balance +
+    removedLocksScore
   );
 };
 
