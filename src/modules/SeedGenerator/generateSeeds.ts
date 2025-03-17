@@ -1,11 +1,9 @@
 import c from "ansi-colors";
+import path from "path";
+import { fileURLToPath } from "url";
+import { Worker } from "worker_threads";
 
 import type { SeedMap } from "@/data/levelSeeds";
-import { optimizeMoves } from "@/game/level-creation/optimizeMoves";
-import { solvers } from "@/game/level-creation/solvers";
-import { generatePlayableLevel } from "@/game/level-creation/tactics";
-import type { LevelSettings, LevelState } from "@/game/types";
-import { mulberry32 } from "@/support/random";
 
 import {
   clearLine,
@@ -22,63 +20,66 @@ import type { Seeder } from "./producers";
 import { getFilteredProducers, levelProducers } from "./producers";
 import { updateSeeds } from "./updateSeeds";
 
-const MAX_GENERATE_ATTEMPTS = 200;
+// const MAX_GENERATE_ATTEMPTS = 200;
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+// const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const generateLevel = async (
-  settings: LevelSettings,
-  seed: number
-): Promise<LevelState> => {
-  let currentTries = 0;
-  let depth = 0;
-  let currentSeed = seed;
-  while (depth < 50) {
-    const random = mulberry32(currentSeed);
-    try {
-      process.stdout.write(
-        c.dim(
-          ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
-        )
-      );
-      const solver = solvers[settings.solver ?? "default"];
+// const generateLevel = async (
+//   settings: LevelSettings,
+//   seed: number
+// ): Promise<LevelState> => {
+//   let currentTries = 0;
+//   let depth = 0;
+//   let currentSeed = seed;
+//   while (depth < 50) {
+//     const random = mulberry32(currentSeed);
+//     try {
+//       process.stdout.write(
+//         c.dim(
+//           ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
+//         )
+//       );
+//       const solver = solvers[settings.solver ?? "default"];
 
-      return await generatePlayableLevel(
-        settings,
-        {
-          random,
-          attempts: MAX_GENERATE_ATTEMPTS,
-          afterAttempt: async () => {
-            process.stdout.moveCursor(-(5 + `${currentTries}`.length), 0);
-            currentTries++;
-            process.stdout.write(
-              c.dim(
-                ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
-              )
-            );
-            await delay(2);
-          }
-        },
-        solver
-      ).then(optimizeMoves);
-    } catch (ignoreError) {
-      process.stdout.moveCursor(-(5 + `${currentTries}`.length), 0);
-      currentSeed += 1000;
-      depth++;
-    }
-  }
-  throw new Error(`Too many retries (${currentTries})`);
-};
+//       return await generatePlayableLevel(
+//         settings,
+//         {
+//           random,
+//           attempts: MAX_GENERATE_ATTEMPTS,
+//           afterAttempt: async () => {
+//             process.stdout.moveCursor(-(5 + `${currentTries}`.length), 0);
+//             currentTries++;
+//             process.stdout.write(
+//               c.dim(
+//                 ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
+//               )
+//             );
+//             await delay(2);
+//           }
+//         },
+//         solver
+//       ).then(optimizeMoves);
+//     } catch (ignoreError) {
+//       process.stdout.moveCursor(-(5 + `${currentTries}`.length), 0);
+//       currentSeed += 1000;
+//       depth++;
+//     }
+//   }
+//   throw new Error(`Too many retries (${currentTries})`);
+// };
 
 const produceExtraSeeds = async (
   firstMissing: Seeder,
   copy: SeedMap,
   amount: number,
-  onSeedAdded: (seed: number) => Promise<void> = async () => {},
+  onSeedAdded: () => Promise<void> = async () => {},
   prefix = "",
   totalSeedsMissing = amount,
   seedsProduced = 0
 ) => {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+
   const producer = firstMissing.producer;
   const settings = producer(firstMissing.difficulty + 1);
   const existing = copy[firstMissing.hash]?.length ?? 0;
@@ -90,32 +91,111 @@ const produceExtraSeeds = async (
   } else {
     progressBar(0, amount);
   }
-  for (let i = 0; i < amount; i++) {
-    const seed = SEED + i + existing + Math.floor(Math.random() * 10_000); // introduce some randomness
-    const level = await generateLevel(settings, seed);
-    if (!copy[firstMissing.hash]) {
-      copy[firstMissing.hash] = [];
-    }
-    if (level.generationInformation?.seed) {
-      copy[firstMissing.hash].push([
-        level.generationInformation.seed,
-        level.moves.length
-      ]);
-      await onSeedAdded(level.generationInformation.seed);
-    }
-    clearLine();
-    process.stdout.write(prefix);
-    if (totalSeedsMissing > amount) {
-      doubleProgressBar(
-        seedsProduced + i + 1,
-        totalSeedsMissing,
-        i + 1,
-        amount
-      );
-    } else {
-      progressBar(i + 1, amount);
-    }
+
+  const MAX_WORKERS = 1;
+  if (!copy[firstMissing.hash]) {
+    copy[firstMissing.hash] = [];
   }
+  await new Promise<void>((resolve, reject) => {
+    let activeWorkers = 0;
+    let currentTries = 0;
+    let generated = 0;
+
+    const workers = Array.from({ length: MAX_WORKERS }).map((_v, i) => {
+      const startSeed =
+        SEED + (i + existing) * 5_000 + Math.floor(Math.random() * 10_000);
+      const workerPath = path.resolve(__dirname, "./workers/generate-seed.ts");
+      console.log("starting worker", workerPath);
+      const worker = new Worker(workerPath, {
+        workerData: {
+          startSeed,
+          settings,
+          amount
+        },
+        execArgv: ["-r", "ts-node/register", "--loader", "ts-node/worker"]
+      });
+      activeWorkers++;
+      return worker;
+    });
+
+    workers.forEach((worker) => {
+      worker.on("message", async (message) => {
+        if (message.seed) {
+          copy[firstMissing.hash].push([message.seed, message.moves]);
+          await onSeedAdded();
+          generated++;
+          clearLine();
+          process.stdout.write(prefix);
+          if (totalSeedsMissing > amount) {
+            doubleProgressBar(
+              seedsProduced + generated,
+              totalSeedsMissing,
+              generated,
+              amount
+            );
+          } else {
+            progressBar(generated, amount);
+          }
+          process.stdout.write(c.dim(` ${activeWorkers} workers`));
+          process.stdout.write(
+            c.dim(
+              ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
+            )
+          );
+          if (generated >= amount) {
+            resolve();
+            workers.forEach((w) => w.terminate());
+          }
+        } else {
+          currentTries++;
+          process.stdout.moveCursor(-(5 + `${currentTries}`.length), 0);
+          process.stdout.write(
+            c.dim(
+              ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
+            )
+          );
+        }
+      });
+      worker.on("error", (err) => console.error("Worker error:", err));
+      worker.on("exit", (code) => {
+        if (code !== 0) console.error(`Worker gestopt met code ${code}`);
+        activeWorkers--;
+        if (activeWorkers === 0) {
+          reject(new Error("All workers stopped"));
+        }
+      });
+    });
+  });
+
+  // const level = await generateLevel(settings, seed);
+
+  // for (let i = 0; i < amount; i++) {
+  //   const seed = SEED + i + existing + Math.floor(Math.random() * 10_000); // introduce some randomness
+  //   const level = await generateLevel(settings, seed);
+
+  //   if (!copy[firstMissing.hash]) {
+  //     copy[firstMissing.hash] = [];
+  //   }
+  //   if (level.generationInformation?.seed) {
+  //     copy[firstMissing.hash].push([
+  //       level.generationInformation.seed,
+  //       level.moves.length
+  //     ]);
+  //     await onSeedAdded(level.generationInformation.seed);
+  //   }
+  //   clearLine();
+  //   process.stdout.write(prefix);
+  //   if (totalSeedsMissing > amount) {
+  //     doubleProgressBar(
+  //       seedsProduced + i + 1,
+  //       totalSeedsMissing,
+  //       i + 1,
+  //       amount
+  //     );
+  //   } else {
+  //     progressBar(i + 1, amount);
+  //   }
+  // }
   clearLine();
 };
 
