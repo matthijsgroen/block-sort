@@ -102,10 +102,12 @@ const produceExtraSeeds = async (
         } else {
           currentTries++;
           process.stdout.moveCursor(
-            -(5 + `${activeWorkers} workers ${currentTries}`.length),
+            -(5 + ` ${activeWorkers} workers ${currentTries}`.length),
             0
           );
-          process.stdout.write(c.whiteBright(` ${activeWorkers} workers`));
+          process.stdout.write(
+            c.bold(c.whiteBright(`  ${activeWorkers} workers`))
+          );
           process.stdout.write(
             c.dim(
               ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
@@ -125,35 +127,6 @@ const produceExtraSeeds = async (
     });
   });
 
-  // const level = await generateLevel(settings, seed);
-
-  // for (let i = 0; i < amount; i++) {
-  //   const seed = SEED + i + existing + Math.floor(Math.random() * 10_000); // introduce some randomness
-  //   const level = await generateLevel(settings, seed);
-
-  //   if (!copy[firstMissing.hash]) {
-  //     copy[firstMissing.hash] = [];
-  //   }
-  //   if (level.generationInformation?.seed) {
-  //     copy[firstMissing.hash].push([
-  //       level.generationInformation.seed,
-  //       level.moves.length
-  //     ]);
-  //     await onSeedAdded(level.generationInformation.seed);
-  //   }
-  //   clearLine();
-  //   process.stdout.write(prefix);
-  //   if (totalSeedsMissing > amount) {
-  //     doubleProgressBar(
-  //       seedsProduced + i + 1,
-  //       totalSeedsMissing,
-  //       i + 1,
-  //       amount
-  //     );
-  //   } else {
-  //     progressBar(i + 1, amount);
-  //   }
-  // }
   clearLine();
 };
 
@@ -178,12 +151,12 @@ const produceSeeds = async (
         time = Date.now() - time;
         count++;
         if (time > 45_000) {
-          // longer than a minute
+          // longer than 45 seconds
           count = 0;
           await updateSeeds(levelSeedsCopy);
         }
         if (time * count > 45_000) {
-          // longer than a minute
+          // longer than 45 seconds
           count = 0;
           await updateSeeds(levelSeedsCopy);
         }

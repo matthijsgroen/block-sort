@@ -80,7 +80,7 @@ export const getFilteredProducers = (
     if (types === undefined) return true;
     return types.some(
       (t) =>
-        t.name === l.name &&
+        t.name.toLowerCase() === l.name.toLowerCase() &&
         (t.levels.length === 0 || t.levels.includes(l.difficulty + 1))
     );
   });
