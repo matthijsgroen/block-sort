@@ -24,3 +24,5 @@ The game is build in React + Typescript + Vite, and is open-source at: [https://
 Hi, I'm [Matthijs Groen](https://www.linkedin.com/in/matthijs-groen/), Front-end Developer at [Kabisa](https://kabisa.nl), in the Netherlands.
 
 In my spare time I like to develop as well, (this game is a result of that!) and have already a nice collection of tools and games on my [Github](https://github.com/matthijsgroen).
+
+You can follow me on [BlueSky 🦋](https://bsky.app/profile/matthijsgroen.bsky.social)

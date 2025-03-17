@@ -25,6 +25,8 @@ To install on an iOS device:
 
 5. Scrambled levels - These are normal levels, but someone has already done some moves towards solving them! The start occurring from level 180, and Occur every 9 levels, mostly just after a hard level.
 
+6. Dungeon levels - These levels have enemies and traps. Use the proper items to remove them to continue your sorting journey!
+
 ## Development setup
 
 ```
