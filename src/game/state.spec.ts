@@ -13,6 +13,7 @@ import {
   allShuffled,
   canPlaceAmount,
   hasWon,
+  isKeysReachable,
   isLockSolvable,
   isStuck
 } from "./state";
@@ -643,5 +644,77 @@ describe(isLockSolvable, () => {
     ]);
     const result = isLockSolvable(level);
     expect(result).toBe(false);
+  });
+});
+describe(isKeysReachable, () => {
+  it("returns true if all keys are reachable", () => {
+    const level = createLevelState([
+      createPlacementColumn(4, createBlocks("white", "red", "dinosaur-key")),
+      createPlacementColumn(4, createBlocks("yellow", "yellow", "dragon-lock")),
+      createPlacementColumn(4, createBlocks("dinosaur-lock", "brown")),
+      createPlacementColumn(4, createBlocks("white", "blue", "darkblue")),
+      createBufferColumn(1, undefined, [], "inventory"),
+      createBufferColumn(1, undefined, createBlocks("dragon-key"), "inventory")
+    ]);
+    const result = isKeysReachable(level);
+    expect(result).toBe(true);
+  });
+
+  it("returns true if a lock can be unlocked by a key", () => {
+    const level = createLevelState([
+      createPlacementColumn(4, createBlocks("white", "red", "dinosaur-key")),
+      createPlacementColumn(4, createBlocks("yellow", "yellow", "dragon-lock")),
+      createPlacementColumn(
+        4,
+        createBlocks("dinosaur-lock", "brown", "dinosaur-key")
+      ),
+      createPlacementColumn(4, createBlocks("white", "blue", "darkblue")),
+      createBufferColumn(1, undefined, [], "inventory"),
+      createBufferColumn(1, undefined, createBlocks("dragon-key"), "inventory")
+    ]);
+    const result = isKeysReachable(level);
+    expect(result).toBe(true);
+  });
+
+  it("returns true if keys are above their corresponding locks", () => {
+    const level = createLevelState([
+      createPlacementColumn(4, createBlocks("white", "red", "dinosaur-key")),
+      createPlacementColumn(4, createBlocks("yellow", "yellow", "dragon-lock")),
+      createPlacementColumn(
+        4,
+        createBlocks("dinosaur-key", "brown", "dinosaur-lock")
+      ),
+      createPlacementColumn(4, createBlocks("white", "blue", "darkblue")),
+      createBufferColumn(1, undefined, [], "inventory"),
+      createBufferColumn(1, undefined, createBlocks("dragon-key"), "inventory")
+    ]);
+    const result = isKeysReachable(level);
+    expect(result).toBe(true);
+  });
+
+  it("returns false if a key is blocked by another lock", () => {
+    const level = createLevelState([
+      createPlacementColumn(
+        4,
+        createBlocks("dragon-lock", "red", "dinosaur-key")
+      ),
+      createPlacementColumn(
+        4,
+        createBlocks("dinosaur-lock", "yellow", "dragon-key")
+      )
+    ]);
+    const result = isKeysReachable(level);
+    expect(result).toBe(false);
+  });
+
+  it("returns true if there are no keys", () => {
+    const level = createLevelState([
+      createPlacementColumn(4, createBlocks("white", "red")),
+      createPlacementColumn(4, createBlocks("yellow", "yellow")),
+      createPlacementColumn(4, createBlocks("brown")),
+      createPlacementColumn(4, createBlocks("white", "blue", "darkblue"))
+    ]);
+    const result = isKeysReachable(level);
+    expect(result).toBe(true);
   });
 });

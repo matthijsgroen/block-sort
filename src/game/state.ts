@@ -228,6 +228,11 @@ export const isColorType = (blockType: BlockType): blockType is BlockColor =>
 export const matchingLockFor = (block: Block) =>
   isKey(block) && block.blockType.split("-")[0] + "-lock";
 
+export const isMatch = (keyBlock: Block, lockBlock: Block) =>
+  isKey(keyBlock) &&
+  isLock(lockBlock) &&
+  lockBlock.blockType === matchingLockFor(keyBlock);
+
 export const isLockSolvable = (level: LevelState): boolean =>
   level.columns.every(
     (col) =>
@@ -239,7 +244,77 @@ export const isLockSolvable = (level: LevelState): boolean =>
         }
         return true;
       })
-  );
+  ) && isKeysReachable(level);
+
+export const isKeysReachable = (level: LevelState): boolean => {
+  // Check if locks could all be opened
+  // by keys in different columns, and that between keys and conditional locks are no circular dependencies
+
+  type BlockWithCoordinates = `${BlockType}-${number}-${number}`;
+
+  const keyDependencies = new Map<
+    BlockWithCoordinates,
+    Set<BlockWithCoordinates>
+  >();
+
+  level.columns.forEach((col, x) => {
+    col.blocks.forEach((block, y) => {
+      if (isKey(block)) {
+        const dependencies = new Set<BlockWithCoordinates>();
+        for (let i = y - 1; i >= 0; i--) {
+          const aboveBlock = col.blocks[i];
+          if (isLock(aboveBlock)) {
+            dependencies.add(`${aboveBlock.blockType}-${x}-${i}`);
+          }
+        }
+        keyDependencies.set(`${block.blockType}-${x}-${y}`, dependencies);
+      }
+      if (isLock(block)) {
+        const dependencies = new Set<BlockWithCoordinates>();
+
+        level.columns.forEach((col, x) => {
+          col.blocks.forEach((key, y) => {
+            if (isMatch(key, block)) {
+              dependencies.add(`${key.blockType}-${x}-${y}`);
+            }
+          });
+        });
+
+        keyDependencies.set(`${block.blockType}-${x}-${y}`, dependencies);
+      }
+    });
+  });
+
+  const canUnlock = (
+    lock: BlockWithCoordinates,
+    visited: Set<string>
+  ): boolean => {
+    if (visited.has(lock)) return false;
+    visited.add(lock);
+
+    const keys = keyDependencies.get(lock);
+    if (!keys || keys.size === 0) return false;
+
+    return Array.from(keys).some((key) => {
+      const blockLocks = keyDependencies.get(key);
+      if (!blockLocks || blockLocks.size === 0) return true;
+
+      return false;
+    });
+  };
+
+  for (const [block] of keyDependencies) {
+    const lockOrKey = block.split("-")[1];
+    if (lockOrKey === "lock") {
+      const visited = new Set<string>();
+      if (!canUnlock(block, visited)) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+};
 
 export const allShuffled = (level: LevelState): boolean =>
   level.columns.every(

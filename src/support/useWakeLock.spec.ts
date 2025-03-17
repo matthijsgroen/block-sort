@@ -71,7 +71,6 @@ describe("useWakeLock", () => {
     expect(request).toHaveBeenCalled();
     expect(release).not.toHaveBeenCalled();
 
-    console.log("releasing");
     result.current.releaseWakeLock();
     expect(release).toHaveBeenCalledTimes(1);
 

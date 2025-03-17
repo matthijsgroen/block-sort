@@ -1,10 +1,9 @@
 import { mulberry32 } from "@/support/random";
 
 import { moveBlocks } from "../actions";
-import { allShuffled, isLockSolvable, isStuck } from "../state";
 import type { LevelSettings, LevelState, Move } from "../types";
 
-import { generateRandomLevel } from "./generateRandomLevel";
+import { checkLevelQuality, generateRandomLevel } from "./generateRandomLevel";
 import { defaultSolver } from "./solvers";
 
 const MAX_GENERATE_COST = 2_000;
@@ -34,7 +33,7 @@ export const generatePlayableLevel = async (
 
     attempt++;
     const level = generateRandomLevel(settings, generationRandom);
-    if (isStuck(level) || !allShuffled(level) || !isLockSolvable(level)) {
+    if (!checkLevelQuality(level)) {
       continue;
     }
     const [beatable, solveMoves, cost] = await solver(level, generationRandom);
@@ -97,7 +96,7 @@ export const slowSolve = async (
 
   let level = generateRandomLevel(settings, generationRandom);
 
-  while (isStuck(level) || !allShuffled(level) || !isLockSolvable(level)) {
+  while (!checkLevelQuality(level)) {
     level = generateRandomLevel(settings, generationRandom);
   }
 

@@ -8,6 +8,7 @@ import {
   createLevelState,
   createPlacementColumn
 } from "../factories";
+import { allShuffled, isLockSolvable, isStuck } from "../state";
 import type { Column, LayoutMap, LevelSettings, LevelState } from "../types";
 
 import type { Key, Lock } from "./lock-n-key";
@@ -175,3 +176,6 @@ export const applyLayoutMap = (
 
   return { ...levelState, columns: newColumns, width: layoutMap.width };
 };
+
+export const checkLevelQuality = (level: LevelState) =>
+  !isStuck(level) && allShuffled(level) && isLockSolvable(level);
