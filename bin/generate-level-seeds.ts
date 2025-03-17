@@ -2,6 +2,7 @@
 
 import c from "ansi-colors";
 import { Command } from "commander";
+import os from "os";
 
 import { levelSeeds } from "../src/data/levelSeeds";
 import { debugLevel } from "../src/game/debugLevel";
@@ -85,10 +86,17 @@ program
       all?: boolean;
       type?: { name: string; levels: number[] }[];
     }) => {
-      console.log(JSON.stringify(options));
-
       console.log(c.bold("Updating level seeds..."));
-      await updateLevelSeeds(!!options.all, options.type, levelSeeds);
+      const cpuCount = os.cpus().length;
+      console.log("Amount of CPUs: ", cpuCount);
+      await updateLevelSeeds(
+        {
+          all: !!options.all,
+          types: options.type,
+          threads: Math.max(1, cpuCount - 2)
+        },
+        levelSeeds
+      );
     }
   );
 

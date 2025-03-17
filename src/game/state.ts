@@ -177,17 +177,35 @@ const countCompleted = (level: LevelState) =>
       col.blocks.every((b) => b.blockType === col.blocks[0].blockType)
   ).length;
 
+const countLocks = (level: LevelState) =>
+  level.columns.reduce(
+    (c, col) => c + col.blocks.filter((b) => isLock(b)).length,
+    0
+  );
+
+const keyLockSolves = (level: LevelState) => {
+  const locks = level.columns.filter((col) => isLock(col.blocks[0]));
+  const keys = level.columns.filter((col) => isKey(col.blocks[0]));
+  return locks.some((lock) =>
+    keys.some((key) => isMatch(key.blocks[0], lock.blocks[0]))
+  );
+};
+
 export const isStuck = (level: LevelState): boolean => {
   const topSignature = createSignature(level);
   const originalHidden = countHidden(level);
   const originalCompleted = countCompleted(level);
+  const originalLocks = countLocks(level);
 
   const hasBuffers = level.columns.some(
     (c) => c.type === "buffer" || c.type === "inventory"
   );
 
   const initialBlocked =
-    hasBuffers && blockedByBuffer(level) && blockedByPlacement(level);
+    hasBuffers &&
+    blockedByBuffer(level) &&
+    blockedByPlacement(level) &&
+    !keyLockSolves(level);
   if (initialBlocked) return true;
 
   return level.columns.every((_source, sourceIndex) => {
@@ -199,10 +217,12 @@ export const isStuck = (level: LevelState): boolean => {
       const resultSig = createSignature(playLevel);
       const resultHidden = countHidden(playLevel);
       const resultCompleted = countCompleted(playLevel);
+      const resultLocks = countLocks(playLevel);
 
       if (
         resultHidden !== originalHidden ||
         resultCompleted !== originalCompleted ||
+        resultLocks !== originalLocks ||
         resultSig.some((c, i) => c !== topSignature[i]) ||
         hasWon(playLevel)
       ) {
