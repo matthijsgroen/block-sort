@@ -20,58 +20,11 @@ import type { Seeder } from "./producers";
 import { getFilteredProducers, levelProducers } from "./producers";
 import { updateSeeds } from "./updateSeeds";
 
-// const MAX_GENERATE_ATTEMPTS = 200;
-
-// const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-// const generateLevel = async (
-//   settings: LevelSettings,
-//   seed: number
-// ): Promise<LevelState> => {
-//   let currentTries = 0;
-//   let depth = 0;
-//   let currentSeed = seed;
-//   while (depth < 50) {
-//     const random = mulberry32(currentSeed);
-//     try {
-//       process.stdout.write(
-//         c.dim(
-//           ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
-//         )
-//       );
-//       const solver = solvers[settings.solver ?? "default"];
-
-//       return await generatePlayableLevel(
-//         settings,
-//         {
-//           random,
-//           attempts: MAX_GENERATE_ATTEMPTS,
-//           afterAttempt: async () => {
-//             process.stdout.moveCursor(-(5 + `${currentTries}`.length), 0);
-//             currentTries++;
-//             process.stdout.write(
-//               c.dim(
-//                 ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
-//               )
-//             );
-//             await delay(2);
-//           }
-//         },
-//         solver
-//       ).then(optimizeMoves);
-//     } catch (ignoreError) {
-//       process.stdout.moveCursor(-(5 + `${currentTries}`.length), 0);
-//       currentSeed += 1000;
-//       depth++;
-//     }
-//   }
-//   throw new Error(`Too many retries (${currentTries})`);
-// };
-
 const produceExtraSeeds = async (
   firstMissing: Seeder,
   copy: SeedMap,
   amount: number,
+  threads: number,
   onSeedAdded: () => Promise<void> = async () => {},
   prefix = "",
   totalSeedsMissing = amount,
@@ -91,8 +44,10 @@ const produceExtraSeeds = async (
   } else {
     progressBar(0, amount);
   }
+  process.stdout.write(c.whiteBright(`  0 workers`));
+  process.stdout.write(c.dim(` ${spinnerFrames[0]} (${0})`));
 
-  const MAX_WORKERS = 1;
+  const MAX_WORKERS = threads;
   if (!copy[firstMissing.hash]) {
     copy[firstMissing.hash] = [];
   }
@@ -103,16 +58,14 @@ const produceExtraSeeds = async (
 
     const workers = Array.from({ length: MAX_WORKERS }).map((_v, i) => {
       const startSeed =
-        SEED + (i + existing) * 5_000 + Math.floor(Math.random() * 10_000);
-      const workerPath = path.resolve(__dirname, "./workers/generate-seed.ts");
-      console.log("starting worker", workerPath);
+        SEED + (i + existing) * 15_000 + Math.floor(Math.random() * 10_000);
+      const workerPath = path.resolve(__dirname, "../../workers/worker.js");
       const worker = new Worker(workerPath, {
         workerData: {
           startSeed,
           settings,
           amount
-        },
-        execArgv: ["-r", "ts-node/register", "--loader", "ts-node/worker"]
+        }
       });
       activeWorkers++;
       return worker;
@@ -148,7 +101,11 @@ const produceExtraSeeds = async (
           }
         } else {
           currentTries++;
-          process.stdout.moveCursor(-(5 + `${currentTries}`.length), 0);
+          process.stdout.moveCursor(
+            -(5 + `${activeWorkers} workers ${currentTries}`.length),
+            0
+          );
+          process.stdout.write(c.whiteBright(` ${activeWorkers} workers`));
           process.stdout.write(
             c.dim(
               ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
@@ -158,7 +115,8 @@ const produceExtraSeeds = async (
       });
       worker.on("error", (err) => console.error("Worker error:", err));
       worker.on("exit", (code) => {
-        if (code !== 0) console.error(`Worker gestopt met code ${code}`);
+        if (code !== 0 && code !== 1)
+          console.error(`Worker gestopt met code ${code}`);
         activeWorkers--;
         if (activeWorkers === 0) {
           reject(new Error("All workers stopped"));
@@ -203,6 +161,7 @@ const produceSeeds = async (
   amount: number,
   seeder: Seeder,
   levelSeedsCopy: SeedMap,
+  threads: number,
   infoLine: string,
   totalSeedsMissing: number,
   seedsProduced: number
@@ -214,6 +173,7 @@ const produceSeeds = async (
       seeder,
       levelSeedsCopy,
       amount,
+      threads,
       async () => {
         time = Date.now() - time;
         count++;
@@ -243,8 +203,11 @@ const produceSeeds = async (
 };
 
 export const updateLevelSeeds = async (
-  all: boolean,
-  types: { name: string; levels: number[] }[] | undefined = undefined,
+  options: {
+    all?: boolean;
+    types?: { name: string; levels: number[] }[];
+    threads?: number;
+  },
   levelSeeds: SeedMap,
   seedsMissing: number | null = null
 ) => {
@@ -287,7 +250,7 @@ export const updateLevelSeeds = async (
 
   const totalSeeds = seedsMissing ?? missingNow;
 
-  const incompleteSeed = getFilteredProducers(types, existingKeys).find(
+  const incompleteSeed = getFilteredProducers(options.types, existingKeys).find(
     (k) =>
       levelSeedsCopy[k.hash].length < MAX_LEVELS_PER_DIFFICULTY[k.difficulty]
   );
@@ -302,6 +265,7 @@ export const updateLevelSeeds = async (
       additionalNeeded,
       incompleteSeed,
       levelSeedsCopy,
+      options.threads ?? 1,
       c.green(
         `Seeding ${additionalNeeded} more for "${incompleteSeed.name}" - ${incompleteSeed.difficulty + 1}... `
       ),
@@ -310,13 +274,14 @@ export const updateLevelSeeds = async (
     );
   }
 
-  const firstMissing = getFilteredProducers(types, missingKeys)[0];
+  const firstMissing = getFilteredProducers(options.types, missingKeys)[0];
 
   if (firstMissing && !incompleteSeed) {
     await produceSeeds(
       GENERATE_BATCH_SIZE,
       firstMissing,
       levelSeedsCopy,
+      options.threads ?? 1,
       c.green(
         `Seeding ${GENERATE_BATCH_SIZE} for "${firstMissing.name}" - ${firstMissing.difficulty + 1}...      `
       ),
@@ -330,8 +295,8 @@ export const updateLevelSeeds = async (
   }
 
   await updateSeeds(levelSeedsCopy);
-  if (all) {
-    await updateLevelSeeds(true, types, levelSeedsCopy, totalSeeds);
+  if (options.all) {
+    await updateLevelSeeds(options, levelSeedsCopy, totalSeeds);
   } else {
     console.log("Batch complete");
   }

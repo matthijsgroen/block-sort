@@ -153,6 +153,31 @@ describe(isStuck, () => {
     expect(result).toBe(false);
   });
 
+  it("returns false if a lock can be removed", () => {
+    const level = createLevelState([
+      createPlacementColumn(4, createBlocks("pink", "vampire-lock", "red")),
+      createPlacementColumn(
+        4,
+        createBlocks("vampire-lock", "vampire-key", "red")
+      ),
+      createPlacementColumn(4, createBlocks("yellow", "yellow", "pink", "red")),
+      createPlacementColumn(4, createBlocks("red", "pink")),
+      createPlacementColumn(
+        4,
+        createBlocks("brown", "pink", "brown", "yellow")
+      ),
+      createPlacementColumn(
+        4,
+        createBlocks("brown", "brown", "yellow", "orange")
+      ),
+      createPlacementColumn(4, createBlocks("orange", "orange", "orange")),
+      createBufferColumn(1, undefined, createBlocks("vampire-key"), "inventory")
+    ]);
+    const result = isStuck(level);
+
+    expect(result).toBe(false);
+  });
+
   it("returns false if you can divide a stack over other columns", () => {
     const level = createLevelState([
       createPlacementColumn(
