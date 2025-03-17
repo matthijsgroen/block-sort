@@ -54,7 +54,7 @@ export const getDungeonSettings: SettingsProducer = (difficulty) => ({
 export const dungeon: LevelType<"dungeon"> = {
   type: "dungeon",
   name: "Dungeon",
-  unlocksAtLevel: 450,
+  unlocksAtLevel: 800,
   symbol: "🐉",
   color: "#9ca3af",
   borderClassName: "border-2 border-gray-500",
