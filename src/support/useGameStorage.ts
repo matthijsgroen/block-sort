@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 import type { LevelState } from "@/game/types";
 import {
   deleteOfflineValue,
@@ -31,5 +33,26 @@ export const useLevelStateStorage = (
     initialValue
   );
   const migratedValue = migrateLevelState(value);
-  return [migratedValue, setValue, deleteValue] as const;
+  const setMigratedValue = useCallback(
+    (value: LevelState | ((prev: LevelState) => LevelState)) => {
+      if (typeof value === "function") {
+        setValue((prev) => value(migrateLevelState(prev)));
+      }
+      setValue(value);
+    },
+    [setValue]
+  );
+  console.log(migratedValue);
+  return [migratedValue, setMigratedValue, deleteValue] as const;
+};
+
+export const getLevelStateValue = async (
+  key: string
+): Promise<LevelState | null> => {
+  const value = await getOfflineValue<LevelState>(key, GAME_STORE);
+  if (value === null) {
+    return value;
+  }
+  const migratedValue = migrateLevelState(value);
+  return migratedValue;
 };
