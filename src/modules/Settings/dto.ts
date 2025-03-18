@@ -86,7 +86,7 @@ export const toLevelStateDTO = (state: LevelState): LevelStateDTO => {
   return {
     c: state.columns.map((c) => ({
       b: c.blocks.map((b) => ({
-        c: blockTypeToNumber(b.color),
+        c: blockTypeToNumber(b.blockType),
         r: !!b.revealed
       })),
       s: c.columnSize,
@@ -122,7 +122,7 @@ export const toSolverDTO = (
 };
 
 export const fromLevelStateDTO = (dto: LevelStateDTO): LevelState => {
-  const colors = dto.c.reduce<BlockType[]>(
+  const blockTypes = dto.c.reduce<BlockType[]>(
     (r, c) =>
       c.b.reduce<BlockType[]>(
         (r, b) =>
@@ -133,13 +133,13 @@ export const fromLevelStateDTO = (dto: LevelStateDTO): LevelState => {
       ),
     []
   );
-  colors.sort();
+  blockTypes.sort();
 
   return {
-    colors: colors,
+    blockTypes,
     columns: dto.c.map<Column>((c) => ({
       blocks: c.b.map((b) => ({
-        color: numberToBlockType(b.c),
+        blockType: numberToBlockType(b.c),
         revealed: b.r
       })),
       columnSize: c.s,

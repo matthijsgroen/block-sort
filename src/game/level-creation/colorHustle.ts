@@ -10,7 +10,7 @@ export const colorHustle = (
   state: LevelState,
   random = Math.random
 ): LevelState => {
-  const blockColors: BlockColor[] = state.colors.filter((b) => isColorType(b));
+  const blockColors: BlockColor[] = state.blockTypes.filter((b) => isColorType(b));
   const shuffledColors = blockColors.slice();
 
   shuffle(shuffledColors, random);
@@ -25,8 +25,8 @@ export const colorHustle = (
   return produce(state, (draft) => {
     draft.columns.forEach((column) => {
       column.blocks.forEach((block) => {
-        if (isColorType(block.color)) {
-          block.color = colorMap[block.color];
+        if (isColorType(block.blockType)) {
+          block.blockType = colorMap[block.blockType];
         }
       });
       if (column.limitColor && column.limitColor !== "rainbow") {

@@ -23,7 +23,7 @@ import type { LevelSettings, LevelState, Move } from "@/game/types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { mulberry32, pick } from "@/support/random";
 import { getToday } from "@/support/schedule";
-import { useGameStorage } from "@/support/useGameStorage";
+import { useGameStorage, useLevelStateStorage } from "@/support/useGameStorage";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
 
@@ -62,7 +62,7 @@ export const Level: React.FC<Props> = ({
   const localRandom = mulberry32(levelNr * 386);
 
   const [storedLevelState, setLevelState, deleteLevelState] =
-    useGameStorage<LevelState>(storageKey, initialLevelState);
+    useLevelStateStorage(storageKey, initialLevelState);
   const [frozenLevelState, setFrozenLevelState] = useState<LevelState | null>(
     null
   );
