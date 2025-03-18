@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build:worker": "yarn dlx rollup -c rollup.worker.config.js",
+    "build:worker": "rollup -c rollup.worker.config.js",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "preview": "yarn build && vite preview",
     "test": "vitest",

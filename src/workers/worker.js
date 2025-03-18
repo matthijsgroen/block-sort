@@ -735,76 +735,29 @@ immer.applyPatches.bind(immer);
 immer.createDraft.bind(immer);
 immer.finishDraft.bind(immer);
 
-const ghost = {
-    name: "ghost-lock",
-    pairName: "ghost",
-    symbol: "👻",
-    color: "#333333",
-    role: "lock"
+const createLockAndKey = (pairName, color, lock, key) => {
+    return [
+        {
+            name: `${pairName}-lock`,
+            pairName,
+            symbol: lock,
+            color,
+            role: "lock"
+        },
+        {
+            name: `${pairName}-key`,
+            pairName,
+            symbol: key,
+            color,
+            role: "key"
+        }
+    ];
 };
-const flashlight = {
-    name: "ghost-key",
-    pairName: "ghost",
-    symbol: "🔦",
-    color: "#333333",
-    role: "key"
-};
-const vampire = {
-    name: "vampire-lock",
-    pairName: "vampire",
-    symbol: "🧛",
-    color: "#666699",
-    role: "lock"
-};
-const garlic = {
-    name: "vampire-key",
-    pairName: "vampire",
-    symbol: "🧄",
-    color: "#666699",
-    role: "key"
-};
-const dragon = {
-    name: "dragon-lock",
-    pairName: "dragon",
-    symbol: "🐉",
-    color: "#ff0000",
-    role: "lock"
-};
-const sword = {
-    name: "dragon-key",
-    pairName: "dragon",
-    symbol: "️🗡️",
-    color: "#ff0000",
-    role: "key"
-};
-const fire = {
-    name: "fire-lock",
-    pairName: "fire",
-    symbol: "🔥",
-    color: "#800080",
-    role: "lock"
-};
-const water = {
-    name: "fire-key",
-    pairName: "fire",
-    symbol: "💧",
-    color: "#800080",
-    role: "key"
-};
-const dinosaur = {
-    name: "dinosaur-lock",
-    pairName: "dinosaur",
-    symbol: "🦖",
-    color: "#008000",
-    role: "lock"
-};
-const comet = {
-    name: "dinosaur-key",
-    pairName: "dinosaur",
-    symbol: "☄️",
-    color: "#008000",
-    role: "key"
-};
+const [ghost, flashlight] = createLockAndKey("ghost", "#333333", "👻", "🔦");
+const [vampire, garlic] = createLockAndKey("vampire", "#666699", "🧛", "🧄");
+const [dragon, sword] = createLockAndKey("dragon", "#ff0000", "🐉", "️🗡️");
+const [fire, water] = createLockAndKey("fire", "#800080", "🔥", "💧");
+const [dinosaur, comet] = createLockAndKey("dinosaur", "#008000", "🦖", "☄️");
 const locks = [ghost, vampire, dragon, fire, dinosaur];
 const keys = [flashlight, garlic, sword, water, comet];
 const lockNKeyPairs = [...locks, ...keys].reduce((result, { pairName }) => result.includes(pairName) ? result : result.concat(pairName), []);
