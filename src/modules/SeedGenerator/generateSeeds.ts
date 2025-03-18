@@ -44,7 +44,8 @@ const produceExtraSeeds = async (
   } else {
     progressBar(0, amount);
   }
-  process.stdout.write(c.whiteBright(`  0 workers`));
+
+  process.stdout.write(c.bold(c.whiteBright(` 0 workers`)));
   process.stdout.write(c.dim(` ${spinnerFrames[0]} (${0})`));
 
   const MAX_WORKERS = threads;
@@ -89,7 +90,9 @@ const produceExtraSeeds = async (
           } else {
             progressBar(generated, amount);
           }
-          process.stdout.write(c.dim(` ${activeWorkers} workers`));
+          process.stdout.write(
+            c.bold(c.whiteBright(` ${activeWorkers} workers`))
+          );
           process.stdout.write(
             c.dim(
               ` ${spinnerFrames[currentTries % spinnerFrames.length]} (${currentTries})`
@@ -102,11 +105,11 @@ const produceExtraSeeds = async (
         } else {
           currentTries++;
           process.stdout.moveCursor(
-            -(5 + ` ${activeWorkers} workers ${currentTries}`.length),
+            -(4 + ` ${activeWorkers} workers ${currentTries}`.length),
             0
           );
           process.stdout.write(
-            c.bold(c.whiteBright(`  ${activeWorkers} workers`))
+            c.bold(c.whiteBright(` ${activeWorkers} workers`))
           );
           process.stdout.write(
             c.dim(
@@ -217,7 +220,10 @@ export const updateLevelSeeds = async (
       (acc, k) =>
         acc +
         MAX_LEVELS_PER_DIFFICULTY[k.difficulty] -
-        levelSeedsCopy[k.hash].length,
+        Math.min(
+          levelSeedsCopy[k.hash].length,
+          MAX_LEVELS_PER_DIFFICULTY[k.difficulty]
+        ),
       0
     );
 

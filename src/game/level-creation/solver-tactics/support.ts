@@ -9,10 +9,10 @@ export const canPlaceBlock = (column: Column, block: Block): boolean => {
   if (!hasSpace(column)) {
     return false;
   }
-  if ( isLock(block)) {
+  if (isLock(block)) {
     return false;
   }
-  if (column.limitColor === "rainbow" && !isKey(block) ) {
+  if (column.limitColor === "rainbow" && !isKey(block)) {
     return true;
   }
   if (destBlock?.blockType === block.blockType && !isKey(block)) {

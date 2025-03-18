@@ -55,6 +55,7 @@ export const dungeon: LevelType<"dungeon"> = {
   type: "dungeon",
   name: "Dungeon",
   unlocksAtLevel: 800,
+  inBetaTest: true,
   symbol: "🐉",
   color: "#9ca3af",
   borderClassName: "border-2 border-gray-500",

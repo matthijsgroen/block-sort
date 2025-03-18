@@ -1,11 +1,16 @@
 import { describe, expect, it } from "vitest";
 
+import {
+  createBlocks,
+  createBufferColumn,
+  createLevelState,
+  createPlacementColumn
+} from "@/game/factories";
 import { mulberry32 } from "@/support/random";
 
 import { generateRandomLevel } from "../generateRandomLevel";
 
-import { storeKey, removeLock } from "./lockAndKey";
-import { createBlocks, createBufferColumn, createLevelState, createPlacementColumn } from "@/game/factories";
+import { removeLock, storeKey } from "./lockAndKey";
 
 const TEST_SEED = 123456789;
 
@@ -30,7 +35,10 @@ describe(storeKey, () => {
     const level = createLevelState([
       createPlacementColumn(4, createBlocks("aqua", "pink", "green", "aqua")),
       createPlacementColumn(4, createBlocks("red", "pink", "red")),
-      createPlacementColumn(4, createBlocks("vampire-key", "pink", "red", "green")),
+      createPlacementColumn(
+        4,
+        createBlocks("vampire-key", "pink", "red", "green")
+      ),
       createPlacementColumn(4, createBlocks("pink", "aqua", "green", "green")),
       createPlacementColumn(4, createBlocks("aqua")),
       createPlacementColumn(4),
@@ -51,8 +59,14 @@ describe(removeLock, () => {
     const level = createLevelState([
       createPlacementColumn(4, createBlocks("aqua", "pink", "green", "aqua")),
       createPlacementColumn(4, createBlocks("red", "pink", "red")),
-      createPlacementColumn(4, createBlocks("vampire-key", "pink", "red", "green")),
-      createPlacementColumn(4, createBlocks("pink", "aqua", "vampire-lock", "green")),
+      createPlacementColumn(
+        4,
+        createBlocks("vampire-key", "pink", "red", "green")
+      ),
+      createPlacementColumn(
+        4,
+        createBlocks("pink", "aqua", "vampire-lock", "green")
+      ),
       createPlacementColumn(4, createBlocks("aqua")),
       createPlacementColumn(4),
       createBufferColumn(1, undefined, [], "inventory")
@@ -67,7 +81,10 @@ describe(removeLock, () => {
     const level = createLevelState([
       createPlacementColumn(4, createBlocks("aqua", "pink", "green", "aqua")),
       createPlacementColumn(4, createBlocks("red", "pink", "red")),
-      createPlacementColumn(4, createBlocks("vampire-key", "pink", "red", "green")),
+      createPlacementColumn(
+        4,
+        createBlocks("vampire-key", "pink", "red", "green")
+      ),
       createPlacementColumn(4, createBlocks("pink", "aqua", "green", "green")),
       createPlacementColumn(4, createBlocks("vampire-lock")),
       createPlacementColumn(4),
@@ -86,7 +103,10 @@ describe(removeLock, () => {
     const level = createLevelState([
       createPlacementColumn(4, createBlocks("aqua", "pink", "green", "aqua")),
       createPlacementColumn(4, createBlocks("red", "pink", "red")),
-      createPlacementColumn(4, createBlocks("vampire-key", "pink", "red", "green")),
+      createPlacementColumn(
+        4,
+        createBlocks("vampire-key", "pink", "red", "green")
+      ),
       createPlacementColumn(4, createBlocks("pink", "aqua", "green", "green")),
       createPlacementColumn(4, createBlocks("vampire-lock")),
       createPlacementColumn(4),

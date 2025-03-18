@@ -1190,15 +1190,15 @@ const removeLock = (level, _random = Math.random) => {
         };
     })
         .filter((c) => c !== undefined);
-    return keyBlocks.reduce((r, t) => {
-        const targets = lockBlocks.filter((source) => source && source.pairName === t?.pairName);
+    return keyBlocks.reduce((r, source) => {
+        const targets = lockBlocks.filter((source) => source && source.pairName === source?.pairName);
         if (targets.length === 0)
             return r;
-        return r.concat(targets.map((source) => {
+        return r.concat(targets.map((target) => {
             return {
                 name: "removeLock",
-                move: { from: source.index, to: t.index },
-                weight: 20 + source.columnType !== "inventory" ? 10 : 0
+                move: { from: source.index, to: target.index },
+                weight: 20 + (source.columnType !== "inventory" ? 10 : 0)
             };
         }));
     }, []);
@@ -1234,13 +1234,13 @@ const storeKey = (level, _random = Math.random) => {
         };
     })
         .filter((c) => c !== undefined);
-    return keyBlocks.reduce((r, t) => {
+    return keyBlocks.reduce((r, source) => {
         if (inventoryColumns.length === 0)
             return r;
-        return r.concat(inventoryColumns.map((source) => {
+        return r.concat(inventoryColumns.map((target) => {
             return {
                 name: "storeKey",
-                move: { from: source.index, to: t.index },
+                move: { from: source.index, to: target.index },
                 weight: 15
             };
         }));
@@ -1414,8 +1414,7 @@ const startColumn = (level, random = Math.random) => {
     const canStack = stackColumn(level, random);
     if (canStack.length > 0)
         return canStack;
-    const emptyColumns = level.columns.reduce((r, c, i) => c.blocks.length === 0 &&
-        c.type !== "inventory"
+    const emptyColumns = level.columns.reduce((r, c, i) => c.blocks.length === 0 && c.type !== "inventory"
         ? r.concat({
             index: i,
             type: c.type,

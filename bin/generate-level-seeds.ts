@@ -69,10 +69,7 @@ program
     "updates all items that are broken, instead of batch of 50",
     false
   )
-  .option(
-    "-p, --parallel <threads>",
-    "amount of maximum parallel threads"
-  )
+  .option("-p, --parallel <threads>", "amount of maximum parallel threads")
   .option(
     "-t, --type <levelTypes>",
     "comma separated list of level types",
@@ -93,13 +90,18 @@ program
     }) => {
       console.log(c.bold("Updating level seeds..."));
       const cpuCount = os.cpus().length;
-      const threads = Math.min(Math.max(1, cpuCount - 2), options.parallel ?? 1)
-      console.log(`Amount of CPUs: ${c.green(String(cpuCount))} Threads: ${c.bold(String(threads))}`);
+      const threads = Math.min(
+        Math.max(1, cpuCount - 2),
+        options.parallel ?? Infinity
+      );
+      console.log(
+        `Amount of CPUs: ${c.green(String(cpuCount))} Threads: ${c.bold(String(threads))}`
+      );
       await updateLevelSeeds(
         {
           all: !!options.all,
           types: options.type,
-          threads,
+          threads
         },
         levelSeeds
       );

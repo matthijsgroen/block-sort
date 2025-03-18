@@ -10,13 +10,12 @@ export const startColumn: Tactic = (level, random = Math.random) => {
   const emptyColumns = level.columns.reduce<
     {
       index: number;
-      type: "buffer" | "placement" 
+      type: "buffer" | "placement";
       limitColor?: LimitColor;
     }[]
   >(
     (r, c, i) =>
-      c.blocks.length === 0 &&
-      c.type !== "inventory" 
+      c.blocks.length === 0 && c.type !== "inventory"
         ? r.concat({
             index: i,
             type: c.type,

@@ -18,7 +18,16 @@ export default [
     }
   },
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
-  { ignores: [".yarn/*", "dist/*", ".pnp.*", "storybook-static/", "public/*"] },
+  {
+    ignores: [
+      ".yarn/*",
+      "dist/*",
+      ".pnp.*",
+      "storybook-static/",
+      "public/*",
+      "src/workers/worker.js"
+    ]
+  },
   { languageOptions: { globals: { ...globals.browser, ...globals.commonjs } } },
   ...tseslint.configs.recommended,
   {

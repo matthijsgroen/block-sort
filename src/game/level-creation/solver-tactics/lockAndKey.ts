@@ -86,17 +86,18 @@ export const storeKey: Tactic = (level, _random = Math.random) => {
     })
     .filter((c): c is ColumnData => c !== undefined);
   const inventoryColumns = level.columns
-    .map<{index: number, columnType: "inventory"} | undefined>((c, i) => {
-      const hasSpace = c.blocks.length < c.columnSize
+    .map<{ index: number; columnType: "inventory" } | undefined>((c, i) => {
+      const hasSpace = c.blocks.length < c.columnSize;
       if (c.type !== "inventory" || !hasSpace) return undefined;
-
 
       return {
         index: i,
         columnType: c.type
       };
     })
-    .filter((c): c is {index: number, columnType: "inventory"} => c !== undefined);
+    .filter(
+      (c): c is { index: number; columnType: "inventory" } => c !== undefined
+    );
 
   return keyBlocks.reduce<WeightedMove[]>((r, source) => {
     if (inventoryColumns.length === 0) return r;
@@ -105,7 +106,7 @@ export const storeKey: Tactic = (level, _random = Math.random) => {
         return {
           name: "storeKey",
           move: { from: source.index, to: target.index },
-          weight: 15 
+          weight: 15
         };
       })
     );

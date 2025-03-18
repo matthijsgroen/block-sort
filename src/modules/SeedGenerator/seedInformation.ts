@@ -23,7 +23,7 @@ export const showSeedStatistics = () => {
     }
     if (moves.length === 0) {
       console.log(
-        ` ${numPadding(producer.difficulty, 2)} ` + c.gray("No seeds")
+        ` ${numPadding(producer.difficulty + 1, 2)} ` + c.gray("No seeds")
       );
       return;
     }
@@ -46,7 +46,7 @@ export const showSeedStatistics = () => {
         : value;
 
     console.log(
-      ` ${numPadding(producer.difficulty, 2)} - ${formattedValue}/${numPadding(expectedMax, 3)} ` +
+      ` ${numPadding(producer.difficulty + 1, 2)} - ${formattedValue}/${numPadding(expectedMax, 3)} ` +
         `- Avg: ${c.bold(numPadding(average, 3))} - ${numPadding(lowest, 3)} ├──[${numPadding(q1, 3)} |${c.bold(numPadding(q2, 3))}| ${numPadding(q3, 3)}]──┤ ${numPadding(highest, 3)} ${hardLevels > 0 ? `(Hard: ${hardLevels})` : ""}`
     );
   });
