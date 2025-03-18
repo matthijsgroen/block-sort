@@ -111,7 +111,7 @@ export const useBlockAnimation = (
   useEffect(() => {
     if (
       !previousLevelState.current ||
-      levelState == previousLevelState.current ||
+      levelState === previousLevelState.current ||
       disabled
     ) {
       previousLevelState.current = levelState;

@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useEffect } from "react";
 
 import type { LevelState } from "@/game/types";
 import {
@@ -32,18 +32,13 @@ export const useLevelStateStorage = (
     key,
     initialValue
   );
-  const migratedValue = migrateLevelState(value);
-  const setMigratedValue = useCallback(
-    (value: LevelState | ((prev: LevelState) => LevelState)) => {
-      if (typeof value === "function") {
-        setValue((prev) => value(migrateLevelState(prev)));
-      }
-      setValue(value);
-    },
-    [setValue]
-  );
-  console.log(migratedValue);
-  return [migratedValue, setMigratedValue, deleteValue] as const;
+  useEffect(() => {
+    const migratedValue = migrateLevelState(value);
+    if (migratedValue !== value) {
+      setValue(migratedValue);
+    }
+  }, [value, setValue]);
+  return [value, setValue, deleteValue] as const;
 };
 
 export const getLevelStateValue = async (

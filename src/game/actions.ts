@@ -64,7 +64,6 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
 
       let index = 1;
       let nextBlockOrigin = draft.columns[move.from].blocks[index];
-      console.log(nextBlockOrigin?.blockType, topBlockOrigin?.blockType);
       while (nextBlockOrigin?.blockType === topBlockOrigin.blockType) {
         nextBlockOrigin.revealed = true;
         index++;
