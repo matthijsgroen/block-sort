@@ -13,7 +13,6 @@ type ColumnData = {
 };
 
 export const removeLock: Tactic = (level, _random = Math.random) => {
-  // collect color, seriesLength and space above
   const keyBlocks = level.columns
     .map<ColumnData | undefined>((c, i) => {
       const topBlock = c.blocks[0];
@@ -67,7 +66,6 @@ export const removeLock: Tactic = (level, _random = Math.random) => {
 };
 
 export const storeKey: Tactic = (level, _random = Math.random) => {
-  // collect color, seriesLength and space above
   const keyBlocks = level.columns
     .map<ColumnData | undefined>((c, i) => {
       const topBlock = c.blocks[0];
