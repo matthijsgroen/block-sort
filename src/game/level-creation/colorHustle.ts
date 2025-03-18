@@ -10,7 +10,9 @@ export const colorHustle = (
   state: LevelState,
   random = Math.random
 ): LevelState => {
-  const blockColors: BlockColor[] = state.blockTypes.filter((b) => isColorType(b));
+  const blockColors: BlockColor[] = state.blockTypes.filter((b) =>
+    isColorType(b)
+  );
   const shuffledColors = blockColors.slice();
 
   shuffle(shuffledColors, random);

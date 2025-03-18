@@ -203,7 +203,9 @@ export const BlockColumn: React.FC<Props> = ({
                 revealed={block.revealed}
                 color={activeColorMap[block.blockType]}
                 hideFormat={hideFormat}
-                shape={block.revealed ? activeShapeMap[block.blockType] : undefined}
+                shape={
+                  block.revealed ? activeShapeMap[block.blockType] : undefined
+                }
                 shapeColored={isKey(block) || isLock(block)}
                 selected={isSelected}
                 suggested={isSuggested}

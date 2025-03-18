@@ -931,8 +931,8 @@ const isStuck = (level) => {
         return !didChange;
     });
 };
-const isLock = (block) => !!block?.blockType.endsWith("-lock");
-const isKey = (block) => !!block?.blockType.endsWith("-key");
+const isLock = (block) => !!block?.blockType?.endsWith("-lock");
+const isKey = (block) => !!block?.blockType?.endsWith("-key");
 const matchingLockFor = (block) => isKey(block) && block.blockType.split("-")[0] + "-lock";
 const isMatch = (keyBlock, lockBlock) => isKey(keyBlock) &&
     isLock(lockBlock) &&
@@ -1106,7 +1106,6 @@ const optimizeMoves = (level) => {
 };
 
 const removeLock = (level, _random = Math.random) => {
-    // collect color, seriesLength and space above
     const keyBlocks = level.columns
         .map((c, i) => {
         const topBlock = c.blocks[0];
@@ -1157,7 +1156,6 @@ const removeLock = (level, _random = Math.random) => {
     }, []);
 };
 const storeKey = (level, _random = Math.random) => {
-    // collect color, seriesLength and space above
     const keyBlocks = level.columns
         .map((c, i) => {
         const topBlock = c.blocks[0];
@@ -1742,7 +1740,7 @@ const applyLayoutMap = (levelState, layoutMap) => {
     const newColumns = reorderedColumns.map((c) => c ?? unaffectedColumns.shift());
     return { ...levelState, columns: newColumns, width: layoutMap.width };
 };
-const checkLevelQuality = (level) => !isStuck(level) && allShuffled(level) && isLockSolvable(level);
+const hasMinimalLevelQuality = (level) => !isStuck(level) && allShuffled(level) && isLockSolvable(level);
 
 const MAX_GENERATE_COST = 2_000;
 const generatePlayableLevel = async (settings, { random = Math.random, seed = null, attempts = 1, afterAttempt } = {}, solver = defaultSolver) => {
@@ -1754,7 +1752,7 @@ const generatePlayableLevel = async (settings, { random = Math.random, seed = nu
         const generationRandom = mulberry32(seed);
         attempt++;
         const level = generateRandomLevel(settings, generationRandom);
-        if (!checkLevelQuality(level)) {
+        if (!hasMinimalLevelQuality(level)) {
             continue;
         }
         const [beatable, solveMoves, cost] = await solver(level, generationRandom);

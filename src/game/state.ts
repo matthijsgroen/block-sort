@@ -92,7 +92,8 @@ const blockedByPlacement = (level: LevelState) => {
       }
       if (
         col.type === "buffer" &&
-        (col.limitColor === blockColor || col.blocks[0]?.blockType === blockColor)
+        (col.limitColor === blockColor ||
+          col.blocks[0]?.blockType === blockColor)
       ) {
         return acc + col.columnSize - col.blocks.length;
       }
@@ -137,7 +138,8 @@ const blockedByBuffer = (level: LevelState) => {
       }
       if (
         col.type === "buffer" &&
-        (col.limitColor === blockColor || col.blocks[0]?.blockType === blockColor)
+        (col.limitColor === blockColor ||
+          col.blocks[0]?.blockType === blockColor)
       ) {
         return acc + col.columnSize - col.blocks.length;
       }
