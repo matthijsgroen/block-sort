@@ -1061,6 +1061,9 @@ const selectFromColumn = (level, columnIndex) => {
     if (isLock(topBlock)) {
         return result;
     }
+    if (isKey(topBlock)) {
+        return [topBlock];
+    }
     while ((topBlock?.blockType === color || color === null) &&
         topBlock?.revealed !== false &&
         topBlock !== undefined) {
@@ -1149,6 +1152,101 @@ const optimizeMoves = (level) => {
     return { ...level, moves: optimizedMoves };
 };
 
+const removeLock = (level, _random = Math.random) => {
+    // collect color, seriesLength and space above
+    const keyBlocks = level.columns
+        .map((c, i) => {
+        const topBlock = c.blocks[0];
+        if (!topBlock)
+            return undefined;
+        if (c.locked)
+            return undefined;
+        if (!isKey(topBlock))
+            return undefined;
+        return {
+            index: i,
+            pairName: locks.find((l) => l.name === topBlock.blockType)?.pairName ??
+                "unknown",
+            color: topBlock.blockType,
+            columnType: c.type
+        };
+    })
+        .filter((c) => c !== undefined);
+    const lockBlocks = level.columns
+        .map((c, i) => {
+        const topBlock = c.blocks[0];
+        if (!topBlock)
+            return undefined;
+        if (c.locked)
+            return undefined;
+        if (!isLock(topBlock))
+            return undefined;
+        return {
+            index: i,
+            pairName: keys.find((l) => l.name === topBlock.blockType)?.pairName ??
+                "unknown",
+            color: topBlock.blockType,
+            columnType: c.type
+        };
+    })
+        .filter((c) => c !== undefined);
+    return keyBlocks.reduce((r, t) => {
+        const targets = lockBlocks.filter((source) => source && source.pairName === t?.pairName);
+        if (targets.length === 0)
+            return r;
+        return r.concat(targets.map((source) => {
+            return {
+                name: "removeLock",
+                move: { from: source.index, to: t.index },
+                weight: 20 + source.columnType !== "inventory" ? 10 : 0
+            };
+        }));
+    }, []);
+};
+const storeKey = (level, _random = Math.random) => {
+    // collect color, seriesLength and space above
+    const keyBlocks = level.columns
+        .map((c, i) => {
+        const topBlock = c.blocks[0];
+        if (!topBlock)
+            return undefined;
+        if (c.locked)
+            return undefined;
+        if (!isKey(topBlock))
+            return undefined;
+        return {
+            index: i,
+            pairName: locks.find((l) => l.name === topBlock.blockType)?.pairName ??
+                "unknown",
+            color: topBlock.blockType,
+            columnType: c.type
+        };
+    })
+        .filter((c) => c !== undefined);
+    const inventoryColumns = level.columns
+        .map((c, i) => {
+        const hasSpace = c.blocks.length < c.columnSize;
+        if (c.type !== "inventory" || !hasSpace)
+            return undefined;
+        return {
+            index: i,
+            columnType: c.type
+        };
+    })
+        .filter((c) => c !== undefined);
+    return keyBlocks.reduce((r, t) => {
+        if (inventoryColumns.length === 0)
+            return r;
+        return r.concat(inventoryColumns.map((source) => {
+            return {
+                name: "storeKey",
+                move: { from: source.index, to: t.index },
+                weight: 15
+            };
+        }));
+    }, []);
+};
+
 // https://stackoverflow.com/a/47593316/2076990
 const mulberry32 = (seed) => () => {
     let t = (seed += 0x6d2b79f5);
@@ -1181,10 +1279,16 @@ const canPlaceBlock = (column, block) => {
     if (!hasSpace(column)) {
         return false;
     }
-    if (column.limitColor === "rainbow") {
+    if (isLock(block)) {
+        return false;
+    }
+    if (column.limitColor === "rainbow" && !isKey(block)) {
         return true;
     }
-    if (destBlock?.blockType === block.blockType) {
+    if (destBlock?.blockType === block.blockType && !isKey(block)) {
+        return true;
+    }
+    if (column.type === "inventory" && isKey(block)) {
         return true;
     }
     if (isKey(block) &&
@@ -1243,58 +1347,6 @@ const randomMove = (level, random = Math.random) => {
             weight: 1
         };
     });
-};
-
-const removeLock = (level, _random = Math.random) => {
-    // collect color, seriesLength and space above
-    const keyBlocks = level.columns
-        .map((c, i) => {
-        const topBlock = c.blocks[0];
-        if (!topBlock)
-            return undefined;
-        if (c.locked)
-            return undefined;
-        if (!isKey(topBlock))
-            return undefined;
-        return {
-            index: i,
-            pairName: locks.find((l) => l.name === topBlock.blockType)?.pairName ??
-                "unknown",
-            color: topBlock.blockType,
-            columnType: c.type
-        };
-    })
-        .filter((c) => c !== undefined);
-    const lockBlocks = level.columns
-        .map((c, i) => {
-        const topBlock = c.blocks[0];
-        if (!topBlock)
-            return undefined;
-        if (c.locked)
-            return undefined;
-        if (!isLock(topBlock))
-            return undefined;
-        return {
-            index: i,
-            pairName: keys.find((l) => l.name === topBlock.blockType)?.pairName ??
-                "unknown",
-            color: topBlock.blockType,
-            columnType: c.type
-        };
-    })
-        .filter((c) => c !== undefined);
-    return keyBlocks.reduce((r, t) => {
-        const targets = lockBlocks.filter((source) => source && source.pairName === t?.pairName);
-        if (targets.length === 0)
-            return r;
-        return r.concat(targets.map((source) => {
-            return {
-                name: "removeLock",
-                move: { from: source.index, to: t.index },
-                weight: 20 + source.columnType !== "inventory" ? 10 : 0
-            };
-        }));
-    }, []);
 };
 
 const stackColumn = (level, _random = Math.random) => {
@@ -1362,7 +1414,8 @@ const startColumn = (level, random = Math.random) => {
     const canStack = stackColumn(level, random);
     if (canStack.length > 0)
         return canStack;
-    const emptyColumns = level.columns.reduce((r, c, i) => c.blocks.length === 0
+    const emptyColumns = level.columns.reduce((r, c, i) => c.blocks.length === 0 &&
+        c.type !== "inventory"
         ? r.concat({
             index: i,
             type: c.type,
@@ -1594,7 +1647,7 @@ const scoreStateWithMove = (state, move) => {
     return score;
 };
 
-const defaultSolver = configureSolver([randomMove, startColumn, stackColumn, removeLock], scoreState, scoreStateWithMove, 2);
+const defaultSolver = configureSolver([randomMove, startColumn, stackColumn, removeLock, storeKey], scoreState, scoreStateWithMove, 2);
 const solvers = {
     default: defaultSolver
 };

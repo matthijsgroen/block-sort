@@ -23,6 +23,9 @@ export const selectFromColumn = (
   if (isLock(topBlock)) {
     return result;
   }
+  if (isKey(topBlock)) {
+    return [topBlock];
+  }
   while (
     (topBlock?.blockType === color || color === null) &&
     topBlock?.revealed !== false &&

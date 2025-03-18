@@ -1,4 +1,4 @@
-import { isKey, matchingLockFor } from "@/game/state";
+import { isKey, isLock, matchingLockFor } from "@/game/state";
 import type { Block, Column } from "@/game/types";
 
 export const hasSpace = (column: Column): boolean =>
@@ -9,10 +9,16 @@ export const canPlaceBlock = (column: Column, block: Block): boolean => {
   if (!hasSpace(column)) {
     return false;
   }
-  if (column.limitColor === "rainbow") {
+  if ( isLock(block)) {
+    return false;
+  }
+  if (column.limitColor === "rainbow" && !isKey(block) ) {
     return true;
   }
-  if (destBlock?.blockType === block.blockType) {
+  if (destBlock?.blockType === block.blockType && !isKey(block)) {
+    return true;
+  }
+  if (column.type === "inventory" && isKey(block)) {
     return true;
   }
   if (

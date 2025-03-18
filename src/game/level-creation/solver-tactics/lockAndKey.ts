@@ -65,3 +65,49 @@ export const removeLock: Tactic = (level, _random = Math.random) => {
     );
   }, []);
 };
+
+export const storeKey: Tactic = (level, _random = Math.random) => {
+  // collect color, seriesLength and space above
+  const keyBlocks = level.columns
+    .map<ColumnData | undefined>((c, i) => {
+      const topBlock = c.blocks[0];
+      if (!topBlock) return undefined;
+      if (c.locked) return undefined;
+      if (!isKey(topBlock)) return undefined;
+
+      return {
+        index: i,
+        pairName:
+          locks.find((l) => l.name === topBlock.blockType)?.pairName ??
+          "unknown",
+        color: topBlock.blockType,
+        columnType: c.type
+      };
+    })
+    .filter((c): c is ColumnData => c !== undefined);
+  const inventoryColumns = level.columns
+    .map<{index: number, columnType: "inventory"} | undefined>((c, i) => {
+      const hasSpace = c.blocks.length < c.columnSize
+      if (c.type !== "inventory" || !hasSpace) return undefined;
+
+
+      return {
+        index: i,
+        columnType: c.type
+      };
+    })
+    .filter((c): c is {index: number, columnType: "inventory"} => c !== undefined);
+
+  return keyBlocks.reduce<WeightedMove[]>((r, t) => {
+    if (inventoryColumns.length === 0) return r;
+    return r.concat(
+      inventoryColumns.map<WeightedMove>((source) => {
+        return {
+          name: "storeKey",
+          move: { from: source.index, to: t.index },
+          weight: 15 
+        };
+      })
+    );
+  }, []);
+};
