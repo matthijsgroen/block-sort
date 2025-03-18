@@ -31,13 +31,9 @@ const createLockAndKey = <TPairName extends string>(
 };
 
 const [ghost, flashlight] = createLockAndKey("ghost", "#333333", "👻", "🔦");
-
 const [vampire, garlic] = createLockAndKey("vampire", "#666699", "🧛", "🧄");
-
 const [dragon, sword] = createLockAndKey("dragon", "#ff0000", "🐉", "️🗡️");
-
 const [fire, water] = createLockAndKey("fire", "#800080", "🔥", "💧");
-
 const [dinosaur, comet] = createLockAndKey("dinosaur", "#008000", "🦖", "☄️");
 
 export const locks = [ghost, vampire, dragon, fire, dinosaur] as const;
