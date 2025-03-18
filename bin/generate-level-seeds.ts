@@ -70,6 +70,10 @@ program
     false
   )
   .option(
+    "-p, --parallel <threads>",
+    "amount of maximum parallel threads"
+  )
+  .option(
     "-t, --type <levelTypes>",
     "comma separated list of level types",
     (value) =>
@@ -84,16 +88,18 @@ program
   .action(
     async (options: {
       all?: boolean;
+      parallel?: number;
       type?: { name: string; levels: number[] }[];
     }) => {
       console.log(c.bold("Updating level seeds..."));
       const cpuCount = os.cpus().length;
-      console.log("Amount of CPUs: ", cpuCount);
+      const threads = Math.min(Math.max(1, cpuCount - 2), options.parallel ?? 1)
+      console.log(`Amount of CPUs: ${c.green(String(cpuCount))} Threads: ${c.bold(String(threads))}`);
       await updateLevelSeeds(
         {
           all: !!options.all,
           types: options.type,
-          threads: Math.max(1, cpuCount - 2)
+          threads,
         },
         levelSeeds
       );
