@@ -3,7 +3,10 @@ import { mulberry32 } from "@/support/random";
 import { moveBlocks } from "../actions";
 import type { LevelSettings, LevelState, Move } from "../types";
 
-import { checkLevelQuality, generateRandomLevel } from "./generateRandomLevel";
+import {
+  generateRandomLevel,
+  hasMinimalLevelQuality
+} from "./generateRandomLevel";
 import { defaultSolver } from "./solvers";
 
 const MAX_GENERATE_COST = 2_000;
@@ -33,7 +36,7 @@ export const generatePlayableLevel = async (
 
     attempt++;
     const level = generateRandomLevel(settings, generationRandom);
-    if (!checkLevelQuality(level)) {
+    if (!hasMinimalLevelQuality(level)) {
       continue;
     }
     const [beatable, solveMoves, cost] = await solver(level, generationRandom);
@@ -96,7 +99,7 @@ export const slowSolve = async (
 
   let level = generateRandomLevel(settings, generationRandom);
 
-  while (!checkLevelQuality(level)) {
+  while (!hasMinimalLevelQuality(level)) {
     level = generateRandomLevel(settings, generationRandom);
   }
 

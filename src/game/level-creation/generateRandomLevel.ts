@@ -177,5 +177,5 @@ export const applyLayoutMap = (
   return { ...levelState, columns: newColumns, width: layoutMap.width };
 };
 
-export const checkLevelQuality = (level: LevelState) =>
+export const hasMinimalLevelQuality = (level: LevelState) =>
   !isStuck(level) && allShuffled(level) && isLockSolvable(level);
