@@ -1,7 +1,8 @@
 import { Block } from "@/ui/Block/Block";
 
-import { BlockTheme, getColorMapping, getShapeMapping } from "@/game/themes";
-import { LevelState, Move } from "@/game/types";
+import type { BlockTheme } from "@/game/themes";
+import { getColorMapping, getShapeMapping } from "@/game/themes";
+import type { LevelState, Move } from "@/game/types";
 
 type Props = {
   selection?: [column: number, amount: number];
@@ -34,12 +35,12 @@ export const Tutorial: React.FC<Props> = ({
             moved={true}
             color={
               getColorMapping(activeTheme)[
-                levelState.columns[2].blocks[0].color
+                levelState.columns[2].blocks[0].blockType
               ]
             }
             shape={
               getShapeMapping(activeTheme)[
-                levelState.columns[2].blocks[0].color
+                levelState.columns[2].blocks[0].blockType
               ]
             }
           />

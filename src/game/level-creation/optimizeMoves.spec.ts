@@ -7,7 +7,7 @@ import { mulberry32 } from "@/support/random";
 import { moveBlocks } from "../actions";
 import { getNormal5Settings, getNormalSettings } from "../level-types/normal";
 import { hasWon } from "../state";
-import { LevelSettings } from "../types";
+import type { LevelSettings } from "../types";
 
 import { optimizeMoves } from "./optimizeMoves";
 import { generatePlayableLevel } from "./tactics";
@@ -25,7 +25,7 @@ describe(optimizeMoves, () => {
     const level = await generatePlayableLevel(settings, { random });
     const result = optimizeMoves(level);
     expect(result.columns).toBe(level.columns);
-    expect(result.colors).toBe(level.colors);
+    expect(result.blockTypes).toBe(level.blockTypes);
   });
 
   it("reduces the amount of moves", async () => {

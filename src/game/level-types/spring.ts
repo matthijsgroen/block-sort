@@ -1,10 +1,7 @@
-import { getActiveTheme } from "@/game/themes/index";
-import { getToday } from "@/support/schedule";
-
 import { getDifficultyLevel } from "../level-settings/levelSettings";
-import { LayoutMap, SettingsProducer } from "../types";
+import type { LayoutMap, SettingsProducer } from "../types";
 
-import { LevelType } from "./types";
+import type { LevelType } from "./types";
 
 export const getSpringSettings: SettingsProducer = (difficulty) => {
   const extraBufferSize = (difficulty: number) => {
@@ -129,7 +126,7 @@ export const getSpringSettings: SettingsProducer = (difficulty) => {
           extraBufferSize(difficulty),
         amount: 1,
         limit: 0,
-        unlimited: true
+        bufferType: "unlimited"
       }
     ],
     layoutMap: getLayoutMap(difficulty)
@@ -245,7 +242,7 @@ export const getEasySpringSettings: SettingsProducer = (difficulty) => {
           extraBufferSize(difficulty),
         amount: 1,
         limit: 0,
-        unlimited: true
+        bufferType: "unlimited"
       }
     ],
     layoutMap: getLayoutMap(difficulty)
@@ -264,10 +261,8 @@ export const spring: LevelType<"spring"> = {
   backgroundClassName: "bg-pink-200/10",
   showIntro: true,
   introTextColor: "#ec4899",
-  occurrence: (levelNr) =>
-    getActiveTheme(getToday()) === "spring" &&
-    (levelNr - 1) % 6 === 0 &&
-    levelNr > 10,
+  occurrence: (levelNr, { theme }) =>
+    theme === "spring" && (levelNr - 1) % 6 === 0 && levelNr > 10,
   getSettings: (levelNr) => {
     if (levelNr < 200) {
       const easyDifficulty = getDifficultyLevel(levelNr);

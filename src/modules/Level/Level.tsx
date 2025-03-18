@@ -8,8 +8,9 @@ import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { sound } from "@/audio";
 import { hideBlock, moveBlocks, selectFromColumn } from "@/game/actions";
-import { getLevelTypeByType, LevelTypeString } from "@/game/level-types";
-import { LevelModifiers } from "@/game/level-types/types";
+import type { LevelTypeString } from "@/game/level-types";
+import { getLevelTypeByType } from "@/game/level-types";
+import type { LevelModifiers } from "@/game/level-types/types";
 import {
   getRevealedIndices,
   hasWon,
@@ -18,7 +19,7 @@ import {
 } from "@/game/state";
 import { getActiveModifiers } from "@/game/themes";
 import { colorMap } from "@/game/themes/default";
-import { LevelSettings, LevelState, Move } from "@/game/types";
+import type { LevelSettings, LevelState, Move } from "@/game/types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { mulberry32, pick } from "@/support/random";
 import { getToday } from "@/support/schedule";
@@ -26,7 +27,8 @@ import { useGameStorage } from "@/support/useGameStorage";
 
 import { BackgroundContext } from "../Layout/BackgroundContext";
 
-import { getAutoMoveCount, HintMode } from "./autoMove";
+import type { HintMode } from "./autoMove";
+import { getAutoMoveCount } from "./autoMove";
 import { ghostModeModifier } from "./ghostModeModifier";
 import { Tutorial } from "./Tutorial";
 import { WIN_SENTENCES } from "./winSentences";
@@ -261,6 +263,9 @@ export const Level: React.FC<Props> = ({
   const handlePickUp = useCallback(() => {
     sound.play("pickup");
   }, []);
+  const handleMatch = useCallback(() => {
+    sound.play("match");
+  }, []);
 
   return (
     <div className={"flex h-full flex-col"}>
@@ -421,6 +426,7 @@ export const Level: React.FC<Props> = ({
         onLock={handleLock}
         onDrop={handleDrop}
         onPickUp={handlePickUp}
+        onMatch={handleMatch}
       />
     </div>
   );

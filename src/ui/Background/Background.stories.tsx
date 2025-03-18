@@ -20,7 +20,7 @@ const meta = {
   },
   argTypes: {
     levelType: {
-      options: ["none", "easy", "hard", "special", "scrambled"],
+      options: ["none", "easy", "hard", "special", "scrambled", "dungeon"],
       control: "select"
     },
     theme: {

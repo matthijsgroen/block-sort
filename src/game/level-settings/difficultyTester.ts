@@ -7,7 +7,7 @@ import { mulberry32 } from "@/support/random";
 import { moveBlocks } from "../actions";
 import { generatePlayableLevel } from "../level-creation/tactics";
 import { hasWon } from "../state";
-import { LevelSettings } from "../types";
+import type { LevelSettings } from "../types";
 
 import { LEVEL_SCALE } from "./levelSettings";
 
@@ -27,13 +27,10 @@ export const testDifficulties = (
       "can play difficulty $difficulty at level $level",
       async ({ difficulty }) => {
         const settings = getSettings(difficulty);
-
         const hash = settingsHash(settings);
-
         const seeds = levelSeeds[hash] ?? [];
         const preSeed = seeds[0]?.[0];
         expect(preSeed).toBeDefined();
-
         const random = mulberry32(preSeed);
         const result = await generatePlayableLevel(settings, {
           random,
@@ -41,7 +38,6 @@ export const testDifficulties = (
         });
         expect(result.moves.length).toBeGreaterThan(2);
         expect(result.generationInformation?.seed).toBe(preSeed);
-
         // actual play level
         let levelState = result;
         for (const move of result.moves) {

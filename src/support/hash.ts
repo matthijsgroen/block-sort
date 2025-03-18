@@ -1,4 +1,4 @@
-import { LevelSettings } from "@/game/types";
+import type { LevelSettings } from "@/game/types";
 
 // Source: https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
 export const hash = (str: string): number => {

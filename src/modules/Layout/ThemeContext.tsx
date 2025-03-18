@@ -1,11 +1,5 @@
-import {
-  createContext,
-  Dispatch,
-  PropsWithChildren,
-  useEffect,
-  useReducer,
-  useState
-} from "react";
+import type { Dispatch, PropsWithChildren } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 
 import { sound, Stream } from "@/audio";
 import { THEMES } from "@/featureFlags";

@@ -1,6 +1,5 @@
-import { solvers } from "./level-creation/solvers";
-import { BlockColor, LimitColor } from "./blocks";
-export { type BlockColor } from "./blocks";
+import type { solvers } from "./level-creation/solvers";
+import type { BlockType, LimitColor } from "./blocks";
 
 /**
  * The current state of a level.
@@ -16,7 +15,7 @@ export type LevelState = {
   /**
    * Colors in play for this level
    */
-  colors: BlockColor[];
+  blockTypes: BlockType[];
   width?: number;
   /**
    * Column in this level
@@ -52,14 +51,33 @@ export type Move = {
 
 export type Block = {
   /**
-   * Color of the block
+   * Type of the block (color / lock / key)
    */
-  color: BlockColor;
+  blockType: BlockType;
   /**
    * Wether the block color is revealed to the player
    * @default true
    */
   revealed?: boolean;
+};
+
+export type BufferSettings = {
+  /**
+   * Amount of blocks it can contain
+   */
+  size: number;
+  /**
+   * Amount of colors of this configuration
+   */
+  amount: number;
+  /**
+   * Amount of columns that will be limited in block-type
+   */
+  limit: number;
+  /**
+   * Can blocks of different kinds be freely stacked
+   */
+  bufferType?: "normal" | "unlimited" | "inventory";
 };
 
 /**
@@ -72,7 +90,7 @@ export type Column = {
    *
    * Buffer columns never get locked, and are meant for temporary storage.
    */
-  type: "placement" | "buffer";
+  type: "placement" | "buffer" | "inventory";
   /**
    * Wether the column is locked
    */
@@ -100,24 +118,83 @@ export type Column = {
  * and the data transfer functions (in the 'gameData' file).
  */
 export type LevelSettings = {
+  /**
+   * Solver algorithm to use for this level
+   */
   solver?: keyof typeof solvers;
+  /**
+   * Amount of colors in play
+   */
   amountColors?: number;
+  /**
+   * Hide block types:
+   *
+   * - "none": no blocks are hidden
+   * - "all": all blocks, except the top ones are hidden
+   * - "checker": blocks are hidden in a checker pattern
+   *
+   */
   hideBlockTypes?: "none" | "all" | "checker";
+  /**
+   * Height of the columns in this level
+   */
   stackSize?: number;
+  /**
+   * How many colors can be filled with the same color.
+   *
+   * @default 1
+   */
   stacksPerColor?: number;
+  /**
+   * Extra columns to place blocks in
+   */
   extraPlacementStacks?: number;
+  /**
+   * How many of the extra placement stacks should have a limit on block type
+   */
   extraPlacementLimits?: number;
+  /**
+   * Amount of buffer columns in this levels
+   *
+   * @deprecated use extraBuffers instead for more precise configuration
+   */
   buffers?: number;
+  /**
+   * Height of the buffer columns
+   *
+   * @deprecated use extraBuffers instead for more precise configuration
+   */
   bufferSizes?: number;
-  blockColorPick?: "start" | "end";
+  /**
+   * How many of the buffer stacks should have a limit on block type
+   *
+   * @deprecated use extraBuffers instead for more precise configuration
+   */
   bufferPlacementLimits?: number;
-  extraBuffers?: {
-    size: number;
-    amount: number;
-    limit: number;
-    unlimited?: boolean;
-  }[];
+  /**
+   * Should the column colors used in this level be picked from the front or the back of the color list
+   *
+   * @default "start"
+   */
+  blockColorPick?: "start" | "end";
+
+  /**
+   * Configuration of extra buffer columns.
+   */
+  extraBuffers?: BufferSettings[];
   playMoves?: [minCount: number, maxPercent: number];
+  /**
+   * Amount of variation in locks and keys
+   *
+   * @default 0
+   */
+  amountLockTypes?: number;
+  /**
+   * Amount of locks / keys in the level
+   *
+   * @default 0
+   */
+  amountLocks?: number;
   layoutMap?: LayoutMap;
 };
 

@@ -1,18 +1,25 @@
 import { pick } from "@/support/random";
 
 import { getDifficultyLevel } from "../level-settings/levelSettings";
-import { LayoutMap, SettingsProducer } from "../types";
+import type { LayoutMap, SettingsProducer } from "../types";
 
-import { LevelType } from "./types";
+import type { LevelType } from "./types";
 
 export const getSpecial1Settings: SettingsProducer = (difficulty) => ({
   amountColors: difficulty < 4 ? 3 : 4,
   stackSize: Math.min(12 + Math.max(Math.round(difficulty / 8), 0), 13),
   extraPlacementStacks: 0,
+  /* switch to new defintion if something else changes, because format change here causes seed change */
   buffers: difficulty < 4 ? 2 : 4,
   bufferSizes: 4 - Math.max(Math.round((difficulty - 7) / 4), 0),
   bufferPlacementLimits: 0 + Math.max(Math.round(difficulty / 4), 0),
+
   extraBuffers: [
+    // {
+    //   amount: difficulty < 4 ? 2 : 4,
+    //   size: 4 - Math.max(Math.round((difficulty - 7) / 4), 0),
+    //   limit: 0 + Math.max(Math.round(difficulty / 4), 0)
+    // },
     {
       amount: 1,
       size: difficulty > 8 ? 3 : 4,

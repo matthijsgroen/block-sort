@@ -1,5 +1,5 @@
-import { AudioItemName } from "@/audio";
-import { BlockTheme } from "@/game/themes";
+import type { AudioItemName } from "@/audio";
+import type { BlockTheme } from "@/game/themes";
 
 const song: Record<BlockTheme, AudioItemName> = {
   default: "music",

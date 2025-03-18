@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { testDifficulties } from "../level-settings/difficultyTester";
 import { LEVEL_SCALE } from "../level-settings/levelSettings";
-import { LevelSettings } from "../types";
+import type { LevelSettings } from "../types";
 
 import {
   getSpecial1Settings,

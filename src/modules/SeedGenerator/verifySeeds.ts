@@ -7,7 +7,7 @@ import { mulberry32 } from "@/support/random";
 import { timesMap } from "@/support/timeMap";
 
 import { clearLine, doubleProgressBar, progressBar } from "./cliElements";
-import { MINIMAL_LEVELS, VERIFICATION_STEPS } from "./constants";
+import { MAX_LEVELS_PER_DIFFICULTY, VERIFICATION_STEPS } from "./constants";
 import { levelProducers } from "./producers";
 import { updateSeeds } from "./updateSeeds";
 
@@ -49,10 +49,10 @@ export const verifySeeds = async (
     if (!seeds) {
       continue;
     }
-    if (seeds.length < MINIMAL_LEVELS) {
+    if (seeds.length < MAX_LEVELS_PER_DIFFICULTY[key.difficulty]) {
       console.log(
         c.red(
-          `Seed for "${key.name}", difficulty ${key.difficulty + 1} are incomplete. Only ${seeds.length}/${MINIMAL_LEVELS} available.`
+          `Seed for "${key.name}", difficulty ${key.difficulty + 1} are incomplete. Only ${seeds.length}/${MAX_LEVELS_PER_DIFFICULTY[key.difficulty]} available.`
         )
       );
       if (!all) {

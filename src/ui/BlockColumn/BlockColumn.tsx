@@ -1,18 +1,15 @@
-import {
-  Dispatch,
-  memo,
-  useCallback,
-  useEffect,
-  useRef,
-  useState
-} from "react";
+import type { Dispatch } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 
-import { Block, HideFormat } from "@/ui/Block/Block";
+import type { HideFormat } from "@/ui/Block/Block";
+import { Block } from "@/ui/Block/Block";
 import { Tray } from "@/ui/Tray/Tray";
 
-import { BlockTheme, getColorMapping, getShapeMapping } from "@/game/themes";
-import { Column } from "@/game/types";
+import { isKey, isLock } from "@/game/state";
+import type { BlockTheme } from "@/game/themes";
+import { getColorMapping, getShapeMapping } from "@/game/themes";
+import type { Column } from "@/game/types";
 import { colPadding, rowSpans } from "@/support/grid";
 import { timesMap } from "@/support/timeMap";
 
@@ -35,6 +32,7 @@ type Props = {
   onPlacement?: Dispatch<{ top: number; rect: DOMRect }>;
   onDrop?: VoidFunction;
   onLock?: VoidFunction;
+  onMatch?: VoidFunction;
 };
 
 const MOTION_DURATION = 400;
@@ -47,6 +45,7 @@ export const BlockColumn: React.FC<Props> = ({
   onDrop,
   onLock,
   onPickUp,
+  onMatch,
   onPlacement,
   theme = "default",
   hovering,
@@ -81,6 +80,27 @@ export const BlockColumn: React.FC<Props> = ({
       }
       const timeoutId = setTimeout(() => {
         setColumn(columnProp);
+      }, motionDuration); // Delay to allow for animations
+      return () => {
+        clearTimeout(timeoutId);
+        setColumn(columnProp);
+      };
+    } else if (
+      columnProp.blocks.length < column.blocks.length &&
+      isLock(column.blocks[0])
+    ) {
+      if (onPlacement && columnRef.current) {
+        const colTop = columnRef.current.getBoundingClientRect().top;
+        onPlacement({
+          top: colTop,
+          rect: (
+            firstEmptyRef.current ?? columnRef.current
+          ).getBoundingClientRect()
+        });
+      }
+      const timeoutId = setTimeout(() => {
+        setColumn(columnProp);
+        onMatch?.();
       }, motionDuration); // Delay to allow for animations
       return () => {
         clearTimeout(timeoutId);
@@ -145,16 +165,21 @@ export const BlockColumn: React.FC<Props> = ({
         })}
       >
         {suggested && (
-          <div className="pointer-events-none absolute w-block translate-y-1 animate-pulse bg-green-200 bg-clip-text text-center text-2xl text-transparent opacity-30">
+          <div className="pointer-events-none absolute w-block translate-y-1 animate-suggested bg-green-200 bg-clip-text text-center text-2xl text-transparent opacity-30">
             👇
           </div>
         )}
         <div
           ref={ref}
           className={clsx(
-            "box-content flex w-block cursor-pointer touch-none flex-col-reverse",
+            "relative box-content flex w-block cursor-pointer touch-none flex-col-reverse",
             {
               [styles.buffer]: column.type === "buffer",
+              [styles.inventory]: column.type === "inventory",
+              [styles.open]:
+                column.type === "inventory" &&
+                (amountSelected > 0 ||
+                  columnProp.blocks.length !== column.blocks.length),
               "rounded-md border border-t-0 border-black/60 bg-black/20 shadow-inner":
                 column.type === "placement"
             }
@@ -176,9 +201,12 @@ export const BlockColumn: React.FC<Props> = ({
                 moved={started}
                 shadow={column.type === "placement" || isSelected}
                 revealed={block.revealed}
-                color={activeColorMap[block.color]}
+                color={activeColorMap[block.blockType]}
                 hideFormat={hideFormat}
-                shape={block.revealed ? activeShapeMap[block.color] : undefined}
+                shape={
+                  block.revealed ? activeShapeMap[block.blockType] : undefined
+                }
+                shapeColored={isKey(block) || isLock(block)}
                 selected={isSelected}
                 suggested={isSuggested}
                 onDrop={onDrop}

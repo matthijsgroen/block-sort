@@ -29,3 +29,11 @@ body,
   height: 100%;
   overflow: hidden;
 }
+
+/**
+ * Allow scrolling in storybook stories
+ */
+.sb-show-main {
+  overflow: scroll;
+  overscroll-behavior: contain;
+}

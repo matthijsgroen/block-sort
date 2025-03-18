@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   createBlocks,
+  createBufferColumn,
   createLevelState,
   createPlacementColumn
 } from "@/game/factories";
@@ -87,6 +88,20 @@ describe(startColumn, () => {
       createPlacementColumn(4, createBlocks("aqua", "red", "pink", "red")),
       createPlacementColumn(4, createBlocks("red", "pink", "red", "green")),
       createPlacementColumn(4, createBlocks("pink", "aqua", "green", "green"))
+    ]);
+    const moves = startColumn(level, random);
+
+    expect(moves).toHaveLength(0);
+  });
+
+  it("does not return moves when there is no empty column (inventory)", () => {
+    const random = mulberry32(TEST_SEED);
+    const level = createLevelState([
+      createPlacementColumn(4, createBlocks("aqua", "pink", "green", "aqua")),
+      createPlacementColumn(4, createBlocks("aqua", "red", "pink", "red")),
+      createPlacementColumn(4, createBlocks("red", "pink", "red", "green")),
+      createPlacementColumn(4, createBlocks("pink", "aqua", "green", "green")),
+      createBufferColumn(1, undefined, [], "inventory")
     ]);
     const moves = startColumn(level, random);
 

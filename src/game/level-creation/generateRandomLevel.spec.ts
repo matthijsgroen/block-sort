@@ -24,7 +24,7 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["blue", "white"]);
+    expect(level.blockTypes).toEqual(["blue", "white"]);
     expect(level.columns).toEqual([
       createPlacementColumn(4, createBlocks("white", "white", "blue", "blue")),
       createPlacementColumn(4, createBlocks("blue", "white", "white", "blue")),
@@ -44,7 +44,7 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["blue", "white"]);
+    expect(level.blockTypes).toEqual(["blue", "white"]);
     expect(level.columns).toEqual([
       createPlacementColumn(
         4,
@@ -72,7 +72,7 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["blue", "white"]);
+    expect(level.blockTypes).toEqual(["blue", "white"]);
     expect(level.columns).toEqual([
       createPlacementColumn(
         4,
@@ -101,7 +101,7 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["blue", "white"]);
+    expect(level.blockTypes).toEqual(["blue", "white"]);
     expect(level.columns).toEqual([
       createPlacementColumn(
         4,
@@ -131,7 +131,7 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["blue", "red", "white", "yellow"]);
+    expect(level.blockTypes).toEqual(["blue", "red", "white", "yellow"]);
     expect(level.columns).toEqual([
       createPlacementColumn(
         4,
@@ -170,7 +170,7 @@ describe(generateRandomLevel, () => {
       },
       random
     );
-    expect(level.colors).toEqual(["blue", "red", "white", "yellow"]);
+    expect(level.blockTypes).toEqual(["blue", "red", "white", "yellow"]);
     expect(level.columns).toEqual([
       createPlacementColumn(
         4,

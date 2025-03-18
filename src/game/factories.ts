@@ -1,23 +1,23 @@
-import { solvers } from "./level-creation/solvers";
-import { LimitColor } from "./blocks";
-import { Block, BlockColor, Column, LevelState } from "./types";
+import type { solvers } from "./level-creation/solvers";
+import type { BlockType, LimitColor } from "./blocks";
+import type { Block, Column, LevelState } from "./types";
 
 export const createLevelState = (
   columns: Column[],
   solver: keyof typeof solvers = "default"
 ): LevelState => {
-  const colors = columns.reduce<BlockColor[]>(
+  const blockTypes = columns.reduce<BlockType[]>(
     (r, c) =>
-      c.blocks.reduce<BlockColor[]>(
-        (r, b) => (r.includes(b.color) ? r : r.concat(b.color)),
+      c.blocks.reduce<BlockType[]>(
+        (r, b) => (r.includes(b.blockType) ? r : r.concat(b.blockType)),
         r
       ),
     []
   );
-  colors.sort();
+  blockTypes.sort();
 
   const state: LevelState = {
-    colors,
+    blockTypes,
     columns,
     moves: []
   };
@@ -43,25 +43,26 @@ export const createPlacementColumn = (
 export const createBufferColumn = (
   size: number,
   limitColor?: LimitColor,
-  blocks: Block[] = []
+  blocks: Block[] = [],
+  type: Exclude<Column["type"], "placement"> = "buffer"
 ): Column => ({
-  type: "buffer",
+  type,
   locked: false,
   columnSize: size,
   blocks,
   limitColor
 });
 
-export const createBlock = (color: BlockColor, hidden?: boolean) => ({
-  color,
+export const createBlock = (blockType: BlockType, hidden?: boolean): Block => ({
+  blockType,
   revealed: hidden !== true
 });
 
-export const createBlocks = (...color: BlockColor[]) =>
+export const createBlocks = (...color: BlockType[]) =>
   color.map((c) => createBlock(c));
 
-export const createBlockSeries = (amount: number, color: BlockColor) =>
-  Array.from({ length: amount }, () => createBlock(color));
+export const createBlockSeries = (amount: number, blockType: BlockType) =>
+  Array.from({ length: amount }, () => createBlock(blockType));
 
-export const createHiddenBlocks = (...color: BlockColor[]) =>
-  color.map((c, i) => createBlock(c, i > 0));
+export const createHiddenBlocks = (...blockTypes: BlockType[]) =>
+  blockTypes.map((c, i) => createBlock(c, i > 0));

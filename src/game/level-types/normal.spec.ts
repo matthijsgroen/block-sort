@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { testDifficulties } from "../level-settings/difficultyTester";
-import { LevelSettings } from "../types";
+import type { LevelSettings } from "../types";
 
 import {
   getNormal2Settings,

@@ -9,12 +9,13 @@ import { moveBlocks, replayMoves, selectFromColumn } from "./actions";
 import {
   createBlock,
   createBlocks,
+  createBufferColumn,
   createHiddenBlocks,
   createLevelState,
   createPlacementColumn
 } from "./factories";
 import { hasWon } from "./state";
-import { LevelState } from "./types";
+import type { LevelState } from "./types";
 
 const TEST_SEED = 123456789;
 
@@ -89,6 +90,19 @@ describe(selectFromColumn, () => {
     const blocks = selectFromColumn(level, 0);
     expect(blocks).toEqual([]);
   });
+
+  it("cannot select a lock", () => {
+    const level = createLevelState([
+      createPlacementColumn(
+        4,
+        createBlocks("white", "white", "white", "ghost-lock"),
+        undefined,
+        true
+      )
+    ]);
+    const blocks = selectFromColumn(level, 0);
+    expect(blocks).toEqual([]);
+  });
 });
 
 describe(moveBlocks, () => {
@@ -112,7 +126,7 @@ describe(moveBlocks, () => {
 
     const result = moveBlocks(level, { from: 0, to: 3 });
     const expected: LevelState = {
-      colors: ["black", "green", "white"],
+      blockTypes: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, createBlocks("black", "green")),
         createPlacementColumn(
@@ -195,7 +209,7 @@ describe(moveBlocks, () => {
 
     const result = moveBlocks(level, { from: 0, to: 3 });
     const expected: LevelState = {
-      colors: ["black", "green", "white"],
+      blockTypes: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, createBlocks("black", "green")),
         createPlacementColumn(
@@ -234,7 +248,7 @@ describe(moveBlocks, () => {
 
     const result = moveBlocks(level, { from: 0, to: 3 });
     const expected: LevelState = {
-      colors: ["black", "green", "white"],
+      blockTypes: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, createHiddenBlocks("white", "black", "green")),
         createPlacementColumn(
@@ -270,7 +284,7 @@ describe(moveBlocks, () => {
 
     const result = moveBlocks(level, { from: 2, to: 2 });
     const expected: LevelState = {
-      colors: ["black", "green", "white"],
+      blockTypes: ["black", "green", "white"],
       columns: [
         createPlacementColumn(
           4,
@@ -309,7 +323,7 @@ describe(moveBlocks, () => {
     const result = moveBlocks(level, { from: 0, to: 3 });
 
     const expected: LevelState = {
-      colors: ["black", "green", "white"],
+      blockTypes: ["black", "green", "white"],
       columns: [
         createPlacementColumn(4, [
           createBlock("black"),
@@ -352,6 +366,143 @@ describe(moveBlocks, () => {
     ]);
     const result = moveBlocks(level, { from: 0, to: 3 });
     expect(result.columns[3].locked).toBe(true);
+  });
+
+  describe("locks and keys", () => {
+    it("will not move lock", () => {
+      const level = createLevelState([
+        createPlacementColumn(
+          4,
+          createBlocks("ghost-lock", "white", "white", "black", "white")
+        ),
+        createPlacementColumn(4, [], "black"),
+        createPlacementColumn(4)
+      ]);
+
+      const result = moveBlocks(level, { from: 0, to: 2 });
+      expect(result).toEqual(level);
+    });
+
+    it("will not move a key into placement buffer", () => {
+      const level = createLevelState([
+        createPlacementColumn(
+          4,
+          createBlocks("ghost-key", "white", "white", "black", "white")
+        ),
+        createPlacementColumn(4, [], "black"),
+        createPlacementColumn(4)
+      ]);
+
+      const result = moveBlocks(level, { from: 0, to: 2 });
+      expect(result).toEqual(level);
+    });
+
+    it("will not move a key into buffer", () => {
+      const level = createLevelState([
+        createPlacementColumn(
+          4,
+          createBlocks("ghost-key", "white", "white", "black", "white")
+        ),
+        createPlacementColumn(4, [], "black"),
+        createBufferColumn(4)
+      ]);
+
+      const result = moveBlocks(level, { from: 0, to: 2 });
+      expect(result).toEqual(level);
+    });
+
+    it("will move a key into an inventory buffer", () => {
+      const level = createLevelState([
+        createPlacementColumn(
+          4,
+          createBlocks("ghost-key", "white", "white", "black", "white")
+        ),
+        createPlacementColumn(4, [], "black"),
+        createBufferColumn(4, undefined, [], "inventory")
+      ]);
+
+      const expected = createLevelState([
+        createPlacementColumn(
+          4,
+          createBlocks("white", "white", "black", "white")
+        ),
+        createPlacementColumn(4, [], "black"),
+        createBufferColumn(4, undefined, createBlocks("ghost-key"), "inventory")
+      ]);
+
+      const result = moveBlocks(level, { from: 0, to: 2 });
+      expect(result).toEqual(expected);
+    });
+
+    it("will stack a key into an inventory buffer", () => {
+      const level = createLevelState([
+        createPlacementColumn(
+          4,
+          createBlocks("ghost-key", "white", "white", "black", "white")
+        ),
+        createPlacementColumn(4, [], "black"),
+        createBufferColumn(
+          4,
+          undefined,
+          createBlocks("vampire-key"),
+          "inventory"
+        )
+      ]);
+
+      const expected = createLevelState([
+        createPlacementColumn(
+          4,
+          createBlocks("white", "white", "black", "white")
+        ),
+        createPlacementColumn(4, [], "black"),
+        createBufferColumn(
+          4,
+          undefined,
+          createBlocks("ghost-key", "vampire-key"),
+          "inventory"
+        )
+      ]);
+
+      const result = moveBlocks(level, { from: 0, to: 2 });
+      expect(result).toEqual(expected);
+    });
+
+    it("will refuse non-keys into an inventory buffer", () => {
+      const level = createLevelState([
+        createPlacementColumn(
+          4,
+          createBlocks("white", "white", "black", "white")
+        ),
+        createPlacementColumn(4, [], "black"),
+        createBufferColumn(4, undefined, [], "inventory")
+      ]);
+
+      const result = moveBlocks(level, { from: 0, to: 2 });
+      expect(result).toEqual(level);
+    });
+
+    it("will move a key on a matching lock", () => {
+      const level = createLevelState([
+        createPlacementColumn(
+          4,
+          createBlocks("ghost-key", "white", "white", "black", "white")
+        ),
+        createPlacementColumn(4, createBlocks("ghost-lock", "red")),
+        createBufferColumn(4, undefined, [], "inventory")
+      ]);
+
+      const expected = createLevelState([
+        createPlacementColumn(
+          4,
+          createBlocks("white", "white", "black", "white")
+        ),
+        createPlacementColumn(4, createBlocks("red")),
+        createBufferColumn(4, undefined, [], "inventory")
+      ]);
+
+      const result = moveBlocks(level, { from: 0, to: 1 });
+      expect(result.columns).toEqual(expected.columns);
+    });
   });
 });
 

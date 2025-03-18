@@ -1,4 +1,5 @@
-import { Dispatch, useEffect, useRef } from "react";
+import type { Dispatch } from "react";
+import { useEffect, useRef } from "react";
 import clsx from "clsx";
 
 import { encodeForContent } from "@/support/emojiEncoding";
@@ -21,6 +22,7 @@ export type Props = {
   index?: number;
   locked?: boolean;
   shape?: string;
+  shapeColored?: boolean;
   shadow?: boolean;
   blur?: boolean;
   onPickUp?: Dispatch<DOMRect>;
@@ -52,7 +54,8 @@ export const Block: React.FC<Props> = ({
   suggested = null,
   locked = false,
   shadow = true,
-  blur = false
+  blur = false,
+  shapeColored = false
 }) => {
   const blockRef = useRef<HTMLDivElement>(null);
   const isLocked = useDelayedToggle(locked, {
@@ -120,6 +123,7 @@ export const Block: React.FC<Props> = ({
         className={clsx(
           "absolute bottom-0 h-height-block w-block rounded-md text-center",
           styles.shape,
+          shapeColored ? styles.lockNKey : styles.shapeOutline,
           {
             "[transition-duration:0ms]": isRevealed && hideFormat !== "ice",
             "[transition-duration:3s]": hideFormat === "ice",

@@ -1,10 +1,10 @@
 import { pick } from "@/support/random";
 
 import { getDifficultyLevel } from "../level-settings/levelSettings";
-import { LevelSettings } from "../types";
-import { SettingsProducer } from "../types";
+import type { LevelSettings } from "../types";
+import type { SettingsProducer } from "../types";
 
-import { LevelType } from "./types";
+import type { LevelType } from "./types";
 
 export const getNormalSettings: SettingsProducer = (difficulty) => ({
   amountColors: Math.min(1 + difficulty, 10),

@@ -2,8 +2,9 @@ import { produce } from "immer";
 
 import { findLastIndex } from "@/support/findLastIndex";
 
-import { canPlaceAmount } from "./state";
-import { Block, BlockColor, Column, LevelState, Move } from "./types";
+import type { BlockType } from "./blocks";
+import { canPlaceAmount, isKey, isLock, matchingLockFor } from "./state";
+import type { Block, Column, LevelState, Move } from "./types";
 
 export const selectFromColumn = (
   level: LevelState,
@@ -14,17 +15,24 @@ export const selectFromColumn = (
     return result;
   }
 
-  let color: BlockColor | null = null;
+  let color: BlockType | null = null;
   let index = 0;
 
   let topBlock = level.columns[columnIndex].blocks[index];
+
+  if (isLock(topBlock)) {
+    return result;
+  }
+  if (isKey(topBlock)) {
+    return [topBlock];
+  }
   while (
-    (topBlock?.color === color || color === null) &&
+    (topBlock?.blockType === color || color === null) &&
     topBlock?.revealed !== false &&
     topBlock !== undefined
   ) {
     result.push(topBlock);
-    color = topBlock.color;
+    color = topBlock.blockType;
     index++;
     topBlock = level.columns[columnIndex].blocks[index];
   }
@@ -42,13 +50,21 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
     const moving = draft.columns[move.from].blocks.splice(0, amountToMove);
     if (moving.length === 0 || amountToMove === 0) return;
 
+    if (moving.length === 1 && isKey(blocks[0])) {
+      const lock = matchingLockFor(blocks[0]);
+      if (draft.columns[move.to].blocks[0]?.blockType === lock) {
+        draft.columns[move.to].blocks.shift();
+        return;
+      }
+    }
+
     const topBlockOrigin = draft.columns[move.from].blocks[0];
     if (topBlockOrigin?.revealed === false) {
       topBlockOrigin.revealed = true;
 
       let index = 1;
       let nextBlockOrigin = draft.columns[move.from].blocks[index];
-      while (nextBlockOrigin?.color === topBlockOrigin.color) {
+      while (nextBlockOrigin?.blockType === topBlockOrigin.blockType) {
         nextBlockOrigin.revealed = true;
         index++;
         nextBlockOrigin = draft.columns[move.from].blocks[index];
@@ -56,13 +72,29 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
     }
     const endCol = draft.columns[move.to];
     endCol.blocks.unshift(...moving);
-    const moveColor = moving[0].color;
+    const moveColor = moving[0].blockType;
 
     if (
       endCol.type === "placement" &&
       endCol.blocks.length === endCol.columnSize &&
-      endCol.blocks.every((b) => b.color === moveColor)
+      endCol.blocks.every((b) => b.blockType === moveColor)
     ) {
+      endCol.blocks.forEach((b) => {
+        b.revealed = true;
+      });
+      endCol.locked = true;
+    }
+    if (
+      endCol.type === "placement" &&
+      endCol.blocks.length < endCol.columnSize &&
+      endCol.blocks.every((b) => b.blockType === moveColor) &&
+      draft.columns.every(
+        (c) => c === endCol || c.blocks.every((b) => b.blockType !== moveColor)
+      )
+    ) {
+      while (endCol.blocks.length < endCol.columnSize) {
+        endCol.blocks.push({ blockType: moveColor, revealed: true });
+      }
       endCol.blocks.forEach((b) => {
         b.revealed = true;
       });

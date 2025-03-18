@@ -6,7 +6,7 @@ declare module "*.md" {
   const attributes: Record<string, unknown>;
 
   // When "Mode.React" is requested. FC could take a generic like React.FC<{ MyComponent: TypeOfMyComponent }>
-  import React from "react";
+  import type React from "react";
   const ReactComponent: React.FC;
 
   // Modify below per your usage

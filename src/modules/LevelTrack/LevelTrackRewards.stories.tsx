@@ -2,8 +2,12 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
 import { getUnlockableLevelTypes } from "@/game/level-types";
+import { timesMap } from "@/support/timeMap";
 
 import { DIFFICULTIES, DIFFICULTY_LEVELS } from "../GameModi/constants";
+
+import { LevelNode } from "./LevelNode";
+import { LevelTypeIcon } from "./LevelTypeIcon";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta: Meta = {
@@ -54,6 +58,32 @@ export const Rewards: Story = {
             </li>
           ))}
         </ol>
+      </div>
+    );
+  }
+};
+
+export const LevelTypesOverview: Story = {
+  args: {
+    theme: "default"
+  },
+  argTypes: {
+    theme: {
+      options: ["default", "halloween", "winter", "spring", "summer"],
+      control: "select"
+    }
+  },
+  render: ({ theme }) => {
+    return (
+      <div>
+        <h1 className="mb-2 text-xl font-bold">Level Track</h1>
+        <div className="m-4 grid grid-cols-8 gap-4 pb-32">
+          {timesMap(300, (index) => (
+            <LevelNode key={index} levelNr={index} theme={theme}>
+              <LevelTypeIcon levelNr={index} theme={theme} />
+            </LevelNode>
+          ))}
+        </div>
       </div>
     );
   }

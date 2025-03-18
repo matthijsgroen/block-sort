@@ -1,5 +1,5 @@
 import { selectFromColumn } from "@/game/actions";
-import { LevelState, Move } from "@/game/types";
+import type { LevelState, Move } from "@/game/types";
 
 const EMPTY = { ghostTarget: undefined, ghostSelection: undefined };
 

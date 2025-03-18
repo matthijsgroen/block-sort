@@ -1,5 +1,5 @@
 import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
-import { getDailySettings } from "@/game/level-types/daily";
+import { getDungeonSettings } from "@/game/level-types/dungeon";
 import { getHard2Settings, getHardSettings } from "@/game/level-types/hard";
 import {
   getNormal2Settings,
@@ -19,7 +19,7 @@ import {
   getEasySpringSettings,
   getSpringSettings
 } from "@/game/level-types/spring";
-import { SettingsProducer } from "@/game/types";
+import type { SettingsProducer } from "@/game/types";
 import { settingsHash } from "@/support/hash";
 
 export type Producer = {
@@ -42,7 +42,8 @@ export const producers: Producer[] = [
   { name: "Hard2", producer: getHard2Settings },
   { name: "Spring", producer: getSpringSettings },
   { name: "SpringEasy", producer: getEasySpringSettings },
-  { name: "Daily", producer: getDailySettings }
+  { name: "Dungeon", producer: getDungeonSettings }
+  // { name: "Daily", producer: getDailySettings }
 ];
 
 const scale: number[] = [0, ...LEVEL_SCALE];
@@ -70,3 +71,16 @@ export const levelProducers = producers
     (seeder, index, seeders) =>
       seeders.findIndex((s) => s.hash === seeder.hash) === index
   );
+
+export const getFilteredProducers = (
+  types: { name: string; levels: number[] }[] | undefined,
+  producers = levelProducers
+) =>
+  producers.filter((l) => {
+    if (types === undefined) return true;
+    return types.some(
+      (t) =>
+        t.name.toLowerCase() === l.name.toLowerCase() &&
+        (t.levels.length === 0 || t.levels.includes(l.difficulty + 1))
+    );
+  });

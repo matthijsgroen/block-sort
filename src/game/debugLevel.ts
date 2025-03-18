@@ -1,10 +1,18 @@
+import { keys, locks } from "./level-creation/lock-n-key";
 import { shapeMap } from "./themes/default";
-import { BlockColor, LevelState } from "./types";
+import type { BlockColor, BlockType } from "./blocks";
+import type { LevelState } from "./types";
 
-const shape = (color: BlockColor) => {
-  const char = shapeMap[color];
+const isColor = (color: BlockType): color is BlockColor => color in shapeMap;
 
-  if (color === "lightyellow") {
+const singleWidth: BlockType[] = ["lightyellow", "dinosaur-key", "dragon-key"];
+
+const shape = (blockType: BlockType) => {
+  const char = isColor(blockType)
+    ? shapeMap[blockType]
+    : [...locks, ...keys].find((lk) => lk.name === blockType)?.symbol;
+
+  if (singleWidth.includes(blockType)) {
     return `${char} `;
   }
   return char;
@@ -19,6 +27,9 @@ export const debugLevel = (level: LevelState) => {
     }
     if (col.type === "buffer") {
       lineStr += "     ";
+    }
+    if (col.type === "inventory") {
+      lineStr += ".--. ";
     }
   }
   console.log(lineStr);
@@ -43,7 +54,7 @@ export const debugLevel = (level: LevelState) => {
           if (block.revealed === false) {
             lineStr += `│﹖│ `;
           } else {
-            lineStr += `│${shape(block.color)}│ `;
+            lineStr += `│${shape(block.blockType)}│ `;
           }
         }
       }

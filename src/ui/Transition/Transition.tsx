@@ -1,12 +1,10 @@
-import {
-  cloneElement,
+import type {
   CSSProperties,
   Dispatch,
   PropsWithChildren,
-  SetStateAction,
-  useEffect,
-  useState
+  SetStateAction
 } from "react";
+import { cloneElement, useEffect, useState } from "react";
 
 import { effectTimeout } from "@/support/effectTimeout";
 

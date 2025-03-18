@@ -1,15 +1,15 @@
 import { selectFromColumn } from "@/game/actions";
-import { BlockColor } from "@/game/blocks";
+import type { BlockType } from "@/game/blocks";
 
-import { Tactic, WeightedMove } from "./types";
+import type { Tactic, WeightedMove } from "./types";
 
 type ColumnData = {
   index: number;
-  color: BlockColor;
+  color: BlockType;
   seriesLength: number;
   spaceAvailable: number;
   bottomStacked: boolean;
-  columnType: "placement" | "buffer";
+  columnType: "placement" | "buffer" | "inventory";
 };
 
 export const stackColumn: Tactic = (level, _random = Math.random) => {
@@ -22,7 +22,7 @@ export const stackColumn: Tactic = (level, _random = Math.random) => {
 
     return {
       index: i,
-      color: topBlock.color,
+      color: topBlock.blockType,
       seriesLength,
       spaceAvailable: c.columnSize - c.blocks.length,
       bottomStacked: c.blocks.length === seriesLength,
@@ -50,11 +50,11 @@ export const stackColumn: Tactic = (level, _random = Math.random) => {
       r.concat(
         t.sources.map((source) => {
           const revealedColor =
-            level.columns[source.index].blocks[source.seriesLength]?.color;
+            level.columns[source.index].blocks[source.seriesLength]?.blockType;
 
           const hasServiceColor = level.columns.some(
             (column, index) =>
-              column.blocks[0]?.color === revealedColor &&
+              column.blocks[0]?.blockType === revealedColor &&
               index !== source.index
           );
 

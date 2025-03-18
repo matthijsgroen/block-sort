@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-import { LevelType } from "@/game/level-types/types";
+import type { LevelType } from "@/game/level-types/types";
 
 import styles from "./PlayButton.module.css";
 

@@ -1,5 +1,5 @@
 .empty {
-  @apply h-block w-block;
+  @apply size-block;
 }
 .empty::after {
   content: " ";
@@ -11,7 +11,7 @@
     #0003 97%,
     #0000 97%
   );
-  @apply h-block w-block bg-clip-content px-2;
+  @apply size-block bg-clip-content px-2;
 }
 
 .shade {
@@ -58,4 +58,103 @@
       border-box;
   border-width: 2px 4px 4px 4px;
   border-radius: 2px 2px 6px 6px;
+}
+
+.inventory {
+  /* #6d7174 */
+  box-shadow: 8px 4px 4px #0007;
+  border-color: transparent;
+  background:
+    linear-gradient(to right, #0006 0%, #0000 60%, #0000 100%) content-box,
+    linear-gradient(to bottom, #5f462d, #5f462d) padding-box,
+    repeating-linear-gradient(
+        to bottom,
+        #9c9ea400 0rem,
+        #dfddde00 1rem,
+        #dfddde90 1.1rem,
+        #9c9ea4 1.25rem,
+        #3b2f2480 1.4rem,
+        #3b2f2400 1.5rem,
+        #9c9ea400 2.5rem
+      )
+      border-box,
+    /* linear-gradient(to bottom, #9c9ea4 1.25rem, #6d7174 1.5rem, #6d7174) border-box */
+      linear-gradient(to bottom, #9c9ea4 1.25rem, #78634c 1.5rem, #78634c)
+      border-box;
+  border-width: 2px 4px 4px 4px;
+  border-radius: 2px 2px 6px 6px;
+}
+.inventory::before {
+  content: " ";
+  position: absolute;
+  top: -0.5rem;
+  left: 0;
+  z-index: 1;
+  display: block;
+  border-color: transparent;
+  border-width: 0px 4px 8px 4px;
+  border-radius: 6px 6px 2px 2px;
+  background:
+    linear-gradient(to right, #31281e 0%, #31281e 3%, #31281e00 5%, #31281e00)
+      content-box,
+    linear-gradient(
+        #7e715c 0%,
+        #7e715c 5%,
+        #47382a 60%,
+        #47382a 89%,
+        #31281e 95%
+      )
+      content-box,
+    linear-gradient(
+        to right,
+        #ffd70000,
+        #ffd70000 45%,
+        #b9a62c 40%,
+        #b9a62c 60%,
+        #ffd70000 55%
+      )
+      border-box,
+    linear-gradient(
+        to bottom,
+        #dfddde,
+        #807774 1rem,
+        #807774 1.25rem,
+        #807774 1.5rem,
+        #5b5553
+      )
+      border-box;
+  height: 2rem;
+  @apply w-block;
+  transform-origin: 0 0.5rem;
+  transform: rotateX(0deg);
+  transition: transform 0.2s;
+}
+
+.open::before {
+  z-index: -1;
+  transform: rotateX(180deg) scaleY(1.7);
+  background: red;
+  /* border-color: transparent; */
+  border-width: 1px 3px 3px 3px;
+  border-radius: 6px 6px 2px 2px;
+  background:
+    linear-gradient(to right, #31281e 0%, #31281e 3%, #31281e00 5%, #31281e00)
+      content-box,
+    linear-gradient(
+        #31281e 0%,
+        #47382a 30%,
+        #7e715c 60%,
+        #47382a 90%,
+        #31281e 95%
+      )
+      content-box,
+    linear-gradient(
+        to bottom,
+        #dfddde,
+        #807774 1rem,
+        #807774 1.25rem,
+        #807774 1.5rem,
+        #5b5553
+      )
+      border-box;
 }

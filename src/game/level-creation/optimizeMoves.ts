@@ -1,7 +1,7 @@
 import { findLastIndex } from "@/support/findLastIndex";
 
 import { moveBlocks } from "../actions";
-import { LevelState } from "../types";
+import type { LevelState } from "../types";
 
 export const optimizeMoves = (level: LevelState): LevelState => {
   let levelClone: LevelState = JSON.parse(JSON.stringify(level)) as LevelState;

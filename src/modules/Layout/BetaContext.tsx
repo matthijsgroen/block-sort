@@ -1,4 +1,5 @@
-import { createContext, Dispatch, PropsWithChildren, useState } from "react";
+import type { Dispatch, PropsWithChildren } from "react";
+import { createContext, useState } from "react";
 
 export const BetaContext = createContext<{
   showBeta: boolean;

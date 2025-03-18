@@ -1,7 +1,7 @@
-import { HideFormat } from "@/ui/Block/Block";
+import type { HideFormat } from "@/ui/Block/Block";
 
-import { BlockTheme } from "../themes";
-import { LevelSettings } from "../types";
+import type { BlockTheme } from "../themes";
+import type { LevelSettings } from "../types";
 
 export type LevelModifiers = {
   theme?: BlockTheme;
@@ -32,7 +32,7 @@ export type LevelType<T extends string> = {
    * Must be a hex code
    */
   introTextColor?: string;
-  occurrence: (levelNr: number) => boolean;
+  occurrence: (levelNr: number, env: { theme: BlockTheme }) => boolean;
   getSettings: (levelNr: number, random?: () => number) => LevelSettings;
   getZenSettings: (levelNr: number, difficulty: number) => LevelSettings;
 };

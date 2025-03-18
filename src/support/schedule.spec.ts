@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { filterInRange, RangedItem } from "./schedule";
+import type { RangedItem } from "./schedule";
+import { filterInRange } from "./schedule";
 
 describe(filterInRange, () => {
   it("returns items that are in range", () => {

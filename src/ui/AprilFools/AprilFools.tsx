@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 
 import { Block } from "../Block/Block";
 import { Dialog } from "../Dialog/Dialog";

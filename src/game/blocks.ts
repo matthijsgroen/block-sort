@@ -1,3 +1,5 @@
+import type { Key, Lock } from "./level-creation/lock-n-key";
+
 export const BLOCK_COLORS = [
   "white", // square
   "red", // cross
@@ -19,3 +21,5 @@ export const BLOCK_COLORS = [
 
 export type BlockColor = (typeof BLOCK_COLORS)[number];
 export type LimitColor = BlockColor | "rainbow";
+
+export type BlockType = BlockColor | Lock | Key;

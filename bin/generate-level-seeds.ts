@@ -2,10 +2,13 @@
 
 import c from "ansi-colors";
 import { Command } from "commander";
+import os from "os";
 
 import { levelSeeds } from "../src/data/levelSeeds";
 import { debugLevel } from "../src/game/debugLevel";
+import { solvers } from "../src/game/level-creation/solvers";
 import { slowSolve } from "../src/game/level-creation/tactics";
+import type { LevelSettings } from "../src/game/types";
 import { SEED } from "../src/modules/SeedGenerator/constants";
 import { updateLevelSeeds } from "../src/modules/SeedGenerator/generateSeeds";
 import { producers } from "../src/modules/SeedGenerator/producers";
@@ -66,10 +69,44 @@ program
     "updates all items that are broken, instead of batch of 50",
     false
   )
-  .action(async (options: { all?: boolean }) => {
-    console.log(c.bold("Updating level seeds..."));
-    await updateLevelSeeds(!!options.all, levelSeeds);
-  });
+  .option("-p, --parallel <threads>", "amount of maximum parallel threads")
+  .option(
+    "-t, --type <levelTypes>",
+    "comma separated list of level types",
+    (value) =>
+      value.split(",").map((v) => {
+        const [name, ...levels] = v.trim().split(":");
+        return {
+          name,
+          levels: levels.map((l) => parseInt(l, 10))
+        };
+      })
+  )
+  .action(
+    async (options: {
+      all?: boolean;
+      parallel?: number;
+      type?: { name: string; levels: number[] }[];
+    }) => {
+      console.log(c.bold("Updating level seeds..."));
+      const cpuCount = os.cpus().length;
+      const threads = Math.min(
+        Math.max(1, cpuCount - 2),
+        options.parallel ?? Infinity
+      );
+      console.log(
+        `Amount of CPUs: ${c.green(String(cpuCount))} Threads: ${c.bold(String(threads))}`
+      );
+      await updateLevelSeeds(
+        {
+          all: !!options.all,
+          types: options.type,
+          threads
+        },
+        levelSeeds
+      );
+    }
+  );
 
 program
   .command("purge")
@@ -187,7 +224,7 @@ program
       console.log(c.red("Difficulty must be a number between 1 and 11"));
       process.exit(1);
     }
-    const settings = producer.producer(difficulty);
+    const settings: LevelSettings = producer.producer(Number(difficulty));
 
     const clearScreen = () => {
       console.clear();
@@ -197,6 +234,7 @@ program
     const wait = (ms: number) =>
       new Promise((resolve) => setTimeout(resolve, ms));
 
+    const solver = solvers[settings.solver ?? "default"];
     const random = mulberry32(SEED);
     await slowSolve(
       settings,
@@ -217,7 +255,9 @@ program
 
         return true;
       },
-      random
+      random,
+      null,
+      solver
     );
     console.log("ended");
   });

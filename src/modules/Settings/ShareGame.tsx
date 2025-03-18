@@ -1,4 +1,5 @@
-import { FC, Suspense, use } from "react";
+import type { FC } from "react";
+import { Suspense, use } from "react";
 import QRCode from "qrcode";
 
 import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";

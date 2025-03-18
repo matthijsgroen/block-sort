@@ -1,6 +1,7 @@
 import { lazy } from "react";
 
-import { filterInRange, RangedItem } from "@/support/schedule";
+import type { RangedItem } from "@/support/schedule";
+import { filterInRange } from "@/support/schedule";
 
 export type ActionSchedule = RangedItem & {
   name: string;

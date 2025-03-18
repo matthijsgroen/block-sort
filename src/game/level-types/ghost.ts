@@ -1,7 +1,7 @@
-import { SettingsProducer } from "../types";
+import type { SettingsProducer } from "../types";
 
 import { getNormalSettings, normal } from "./normal";
-import { LevelType } from "./types";
+import type { LevelType } from "./types";
 
 export const getScrambledSettings: SettingsProducer = (difficulty) => ({
   ...getNormalSettings(difficulty),

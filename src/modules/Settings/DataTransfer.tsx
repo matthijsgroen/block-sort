@@ -9,7 +9,8 @@ import { version } from "@/../package.json";
 import { decryptData, encryptData } from "@/support/dataTransfer";
 import { useWakeLock } from "@/support/useWakeLock";
 
-import { DataFormat, getGameData, setGameData } from "./gameData";
+import type { DataFormat } from "./gameData";
+import { getGameData, setGameData } from "./gameData";
 
 const DATA_VALIDITY_TIME = 10; // minutes
 

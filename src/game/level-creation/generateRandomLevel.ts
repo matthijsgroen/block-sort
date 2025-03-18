@@ -1,14 +1,18 @@
 import { shuffle } from "@/support/random";
 import { timesMap } from "@/support/timeMap";
 
-import { BLOCK_COLORS, BlockColor } from "../blocks";
+import { BLOCK_COLORS, type BlockType } from "../blocks";
 import {
   createBlock,
   createBufferColumn,
   createLevelState,
   createPlacementColumn
 } from "../factories";
-import { Column, LayoutMap, LevelSettings, LevelState } from "../types";
+import { allShuffled, isLockSolvable, isStuck } from "../state";
+import type { Column, LayoutMap, LevelSettings, LevelState } from "../types";
+
+import type { Key, Lock } from "./lock-n-key";
+import { lockNKeyPairs } from "./lock-n-key";
 
 export const generateRandomLevel = (
   {
@@ -24,6 +28,8 @@ export const generateRandomLevel = (
     hideBlockTypes = "none",
     stacksPerColor = 1,
     solver = "default",
+    amountLockTypes = 0,
+    amountLocks = 0,
     layoutMap
   }: LevelSettings,
   random: () => number
@@ -47,20 +53,38 @@ export const generateRandomLevel = (
         amount: buffers,
         size: bufferSizes,
         limit: bufferPlacementLimits,
-        unlimited: false
+        bufferType: "normal"
       }
     ] as Exclude<LevelSettings["extraBuffers"], undefined>
   ).concat(extraBuffers);
 
   const blockColors = availableColors.slice(0, amountColors);
   let stackLimit = blockColors.length - extraPlacementLimits;
+  // 1. select lock type
+
+  const lockKeyBlocks: (Lock | Key)[] = [];
+  if (amountLockTypes > 0) {
+    const lockKeyPairs = lockNKeyPairs.slice();
+    shuffle(lockKeyPairs, random);
+    const lockTypes = lockKeyPairs.slice(0, amountLockTypes);
+
+    const lockAndKeys = new Array(amountLocks).fill(0).flatMap((_v, i) => {
+      const lockType = lockTypes[i % lockTypes.length];
+      return [`${lockType}-lock`, `${lockType}-key`];
+    }) as (Lock | Key)[];
+
+    lockKeyBlocks.push(...lockAndKeys);
+  }
 
   const amountBars = amountColors * stacksPerColor;
-  const blocks: BlockColor[] = [];
+  const blocks: BlockType[] = [];
   for (const color of blockColors) {
     blocks.push(...new Array(stackSize * stacksPerColor).fill(color));
   }
+  blocks.splice(0, lockKeyBlocks.length, ...lockKeyBlocks);
+
   shuffle(blocks, random);
+
   const columns = timesMap<Column>(amountBars, (ci) =>
     createPlacementColumn(
       stackSize,
@@ -86,17 +110,19 @@ export const generateRandomLevel = (
       )
     )
     .concat(
-      bufferList.flatMap(({ amount, size, limit, unlimited = false }) => {
+      bufferList.flatMap(({ amount, size, limit, bufferType = "normal" }) => {
         stackLimit -= limit;
 
         return timesMap(amount, (i) =>
           createBufferColumn(
             size,
-            unlimited
+            bufferType === "unlimited"
               ? "rainbow"
               : i < limit
                 ? blockColors[stackLimit + i]
-                : undefined
+                : undefined,
+            [],
+            bufferType === "inventory" ? "inventory" : "buffer"
           )
         );
       })
@@ -150,3 +176,6 @@ export const applyLayoutMap = (
 
   return { ...levelState, columns: newColumns, width: layoutMap.width };
 };
+
+export const hasMinimalLevelQuality = (level: LevelState) =>
+  !isStuck(level) && allShuffled(level) && isLockSolvable(level);

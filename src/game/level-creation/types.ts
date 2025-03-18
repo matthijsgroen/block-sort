@@ -1,4 +1,4 @@
-import { LevelState, Move } from "../types";
+import type { LevelState, Move } from "../types";
 
 export type Solver = (
   level: LevelState,

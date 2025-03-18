@@ -1,6 +1,7 @@
-import { BlockTheme } from "../themes";
-import { LevelSettings } from "../types";
+import type { BlockTheme } from "../themes";
+import type { LevelSettings } from "../types";
 
+import { dungeon } from "./dungeon";
 import { easy } from "./easy";
 import { hard } from "./hard";
 import { normal } from "./normal";
@@ -8,11 +9,12 @@ import { scrambled } from "./scrambled";
 import { special } from "./special";
 import { spring } from "./spring";
 import { summer } from "./summer";
-import { LevelType, Unlockable } from "./types";
+import type { LevelType, Unlockable } from "./types";
 import { winter } from "./winter";
 
 const levelTypes = [
   // ghost, // -- not yet ready for release
+  dungeon,
   special,
   hard,
   easy,
@@ -25,8 +27,11 @@ const levelTypes = [
 
 export type LevelTypeString = (typeof levelTypes)[number]["type"];
 
-export const getLevelType = (levelNr: number): LevelType<string> =>
-  levelTypes.find((level) => level.occurrence(levelNr))!;
+export const getLevelType = (
+  levelNr: number,
+  theme: BlockTheme
+): LevelType<string> =>
+  levelTypes.find((level) => level.occurrence(levelNr, { theme }))!;
 
 export const getLevelTypeByType = <T extends LevelTypeString>(
   type: T
@@ -58,22 +63,26 @@ export const getUnlockableLevelTypes = (
     )
     .sort((a, b) => (a.unlocksAtLevel ?? 1000) - (b.unlocksAtLevel ?? 1000));
 
-export const levelTypeTextColor = (levelNr: number): string => {
-  const levelType = getLevelType(levelNr);
+export const levelTypeTextColor = (
+  levelNr: number,
+  theme: BlockTheme
+): string => {
+  const levelType = getLevelType(levelNr, theme);
 
   return levelType.textClassName;
 };
 
-export const levelTypeBorder = (levelNr: number): string => {
-  const levelType = getLevelType(levelNr);
+export const levelTypeBorder = (levelNr: number, theme: BlockTheme): string => {
+  const levelType = getLevelType(levelNr, theme);
 
   return levelType.borderClassName;
 };
 
 export const getLevelSettings = (
   levelNr: number,
+  theme: BlockTheme,
   random = Math.random
 ): LevelSettings => {
-  const levelType = getLevelType(levelNr);
+  const levelType = getLevelType(levelNr, theme);
   return levelType.getSettings(levelNr, random);
 };

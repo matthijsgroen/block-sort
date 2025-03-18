@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
 
 import { createBlock } from "@/game/factories";
-import { Block, Column } from "@/game/types";
+import type { Block, Column } from "@/game/types";
 
 import { BlockColumn } from "./BlockColumn";
 
@@ -51,7 +51,7 @@ const meta: Meta<BlockColumnPropsAndCustomArgs> = {
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
     type: {
-      options: ["placement", "buffer"],
+      options: ["placement", "buffer", "inventory"],
       control: { type: "radio" }
     },
     hideFormat: {

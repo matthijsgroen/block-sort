@@ -1,4 +1,4 @@
-import { LevelState, Move } from "@/game/types";
+import type { LevelState, Move } from "@/game/types";
 
 export type WeightedMove = { move: Move; name?: string; weight: number };
 

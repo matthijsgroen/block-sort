@@ -21,6 +21,10 @@ In these levels someone already did some moves, so chances are you start with a 
 
 These are levels that are 1 or even multiple difficulty levels below your current difficulty, as lucky break!
 
+## Dungeon levels 🐉
+
+These levels have a twist! Enemies and traps are in these levels, and you must defeat them!
+
 ## Seasonal level types
 
 During some seasons, new level types might pop-up! Don't worry, these levels appear also if the theme slider is off.

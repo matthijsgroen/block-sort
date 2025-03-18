@@ -1,17 +1,12 @@
-import React, {
-  Dispatch,
-  useCallback,
-  useEffect,
-  useRef,
-  useState
-} from "react";
+import type { Dispatch } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { BlockTheme } from "@/game/themes";
-import { LevelState } from "@/game/types";
+import type { BlockTheme } from "@/game/themes";
+import type { LevelState } from "@/game/types";
 import { colSizes } from "@/support/grid";
 import { useScreenUpdate } from "@/support/useScreenUpdate";
 
-import { HideFormat } from "../Block/Block";
+import type { HideFormat } from "../Block/Block";
 import { MemoizedBlockColumn } from "../BlockColumn/BlockColumn";
 
 import { useBlockAnimation } from "./useBlockAnimation";
@@ -31,6 +26,7 @@ type Props = {
   onPickUp?: VoidFunction;
   onDrop?: VoidFunction;
   onLock?: VoidFunction;
+  onMatch?: VoidFunction;
 };
 
 const determineColumns = (
@@ -82,7 +78,8 @@ export const LevelLayout: React.FC<Props> = ({
   onColumnUp,
   onDrop,
   onLock,
-  onPickUp
+  onPickUp,
+  onMatch
 }) => {
   useScreenUpdate();
   const containerHeightRef = useRef<HTMLDivElement>(null);
@@ -240,6 +237,7 @@ export const LevelLayout: React.FC<Props> = ({
                 onDrop={onDrop}
                 onPickUp={handlePickup}
                 onPlacement={handlePlacement}
+                onMatch={onMatch}
               />
             ))}
           </div>

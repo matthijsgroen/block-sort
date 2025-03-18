@@ -1,9 +1,9 @@
 import { moveBlocks } from "../actions";
 import { hasWon, isStuck } from "../state";
-import { LevelState, Move } from "../types";
+import type { LevelState, Move } from "../types";
 
-import { Tactic, WeightedMove } from "./solver-tactics/types";
-import { Solver } from "./types";
+import type { Tactic, WeightedMove } from "./solver-tactics/types";
+import type { Solver } from "./types";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const MAX_LEVEL_MOVES = 2_000; // The dumb moves get filtered out, so this is a safe upper limit
