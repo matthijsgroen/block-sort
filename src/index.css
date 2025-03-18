@@ -30,6 +30,9 @@ body,
   overflow: hidden;
 }
 
+/**
+ * Allow scrolling in storybook stories
+ */
 .sb-show-main {
   overflow: scroll;
   overscroll-behavior: contain;
