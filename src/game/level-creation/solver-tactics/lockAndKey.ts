@@ -49,17 +49,17 @@ export const removeLock: Tactic = (level, _random = Math.random) => {
     })
     .filter((c): c is ColumnData => c !== undefined);
 
-  return keyBlocks.reduce<WeightedMove[]>((r, t) => {
+  return keyBlocks.reduce<WeightedMove[]>((r, source) => {
     const targets = lockBlocks.filter(
-      (source) => source && source.pairName === t?.pairName
+      (source) => source && source.pairName === source?.pairName
     );
     if (targets.length === 0) return r;
     return r.concat(
-      targets.map<WeightedMove>((source) => {
+      targets.map<WeightedMove>((target) => {
         return {
           name: "removeLock",
-          move: { from: source.index, to: t.index },
-          weight: 20 + source.columnType !== "inventory" ? 10 : 0
+          move: { from: source.index, to: target.index },
+          weight: 20 + (source.columnType !== "inventory" ? 10 : 0)
         };
       })
     );
@@ -98,13 +98,13 @@ export const storeKey: Tactic = (level, _random = Math.random) => {
     })
     .filter((c): c is {index: number, columnType: "inventory"} => c !== undefined);
 
-  return keyBlocks.reduce<WeightedMove[]>((r, t) => {
+  return keyBlocks.reduce<WeightedMove[]>((r, source) => {
     if (inventoryColumns.length === 0) return r;
     return r.concat(
-      inventoryColumns.map<WeightedMove>((source) => {
+      inventoryColumns.map<WeightedMove>((target) => {
         return {
           name: "storeKey",
-          move: { from: source.index, to: t.index },
+          move: { from: source.index, to: target.index },
           weight: 15 
         };
       })
