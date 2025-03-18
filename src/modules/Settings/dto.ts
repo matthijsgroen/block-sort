@@ -1,4 +1,4 @@
-import type { BlockColor, BlockType, LimitColor } from "@/game/blocks";
+import type { BlockType, LimitColor } from "@/game/blocks";
 import { BLOCK_COLORS } from "@/game/blocks";
 import { keys, locks } from "@/game/level-creation/lock-n-key";
 import type { solvers } from "@/game/level-creation/solvers";
@@ -122,11 +122,13 @@ export const toSolverDTO = (
 };
 
 export const fromLevelStateDTO = (dto: LevelStateDTO): LevelState => {
-  const colors = dto.c.reduce<BlockColor[]>(
+  const colors = dto.c.reduce<BlockType[]>(
     (r, c) =>
-      c.b.reduce<BlockColor[]>(
+      c.b.reduce<BlockType[]>(
         (r, b) =>
-          r.includes(BLOCK_COLORS[b.c]) ? r : r.concat(BLOCK_COLORS[b.c]),
+          r.includes(numberToBlockType(b.c))
+            ? r
+            : r.concat(numberToBlockType(b.c)),
         r
       ),
     []
