@@ -136,7 +136,7 @@ export type LevelSettings = {
    */
   hideBlockTypes?: "none" | "all" | "checker";
   /**
-   * Hight of the columns in this level
+   * Height of the columns in this level
    */
   stackSize?: number;
   /**
@@ -160,7 +160,7 @@ export type LevelSettings = {
    */
   buffers?: number;
   /**
-   * Hight of the buffer columns
+   * Height of the buffer columns
    *
    * @deprecated use extraBuffers instead for more precise configuration
    */
