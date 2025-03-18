@@ -23,9 +23,8 @@ export const removeLock: Tactic = (level, _random = Math.random) => {
       return {
         index: i,
         pairName:
-          locks.find((l) => l.name === topBlock.blockType)?.pairName ??
-          "unknown",
-        color: topBlock.blockType,
+          locks.find((l) => l.name === topBlock.color)?.pairName ?? "unknown",
+        color: topBlock.color,
         columnType: c.type
       };
     })
@@ -40,9 +39,8 @@ export const removeLock: Tactic = (level, _random = Math.random) => {
       return {
         index: i,
         pairName:
-          keys.find((l) => l.name === topBlock.blockType)?.pairName ??
-          "unknown",
-        color: topBlock.blockType,
+          keys.find((l) => l.name === topBlock.color)?.pairName ?? "unknown",
+        color: topBlock.color,
         columnType: c.type
       };
     })
@@ -76,9 +74,8 @@ export const storeKey: Tactic = (level, _random = Math.random) => {
       return {
         index: i,
         pairName:
-          locks.find((l) => l.name === topBlock.blockType)?.pairName ??
-          "unknown",
-        color: topBlock.blockType,
+          locks.find((l) => l.name === topBlock.color)?.pairName ?? "unknown",
+        color: topBlock.color,
         columnType: c.type
       };
     })

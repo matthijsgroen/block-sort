@@ -54,7 +54,7 @@ export const debugLevel = (level: LevelState) => {
           if (block.revealed === false) {
             lineStr += `│﹖│ `;
           } else {
-            lineStr += `│${shape(block.blockType)}│ `;
+            lineStr += `│${shape(block.color)}│ `;
           }
         }
       }

@@ -21,7 +21,7 @@ export const canPlaceAmount = (
 
     if (column.blocks[0]) {
       const lock = matchingLockFor(blocks[0]);
-      return column.blocks[0]?.blockType === lock ? 1 : 0;
+      return column.blocks[0]?.color === lock ? 1 : 0;
     }
 
     return 0;
@@ -34,11 +34,11 @@ export const canPlaceAmount = (
     return Math.min(spaceLeft, blocks.length);
   }
 
-  const setColor = blocks[0].blockType;
+  const setColor = blocks[0].color;
   if (column.limitColor && column.limitColor !== setColor) {
     return 0;
   }
-  if (column.blocks[0] && column.blocks[0].blockType !== setColor) {
+  if (column.blocks[0] && column.blocks[0].color !== setColor) {
     return 0;
   }
   return Math.min(spaceLeft, blocks.length);
@@ -49,7 +49,7 @@ export const hasWon = (level: LevelState): boolean =>
     (col) =>
       (col.type === "placement" &&
         col.columnSize === col.blocks.length &&
-        col.blocks.every((b) => b.blockType === col.blocks[0].blockType)) ||
+        col.blocks.every((b) => b.color === col.blocks[0].color)) ||
       col.blocks.length === 0
   );
 
@@ -58,7 +58,7 @@ const createSignature = (level: LevelState) =>
     const block = c.blocks[0];
     if (c.type === "inventory") return "inventory";
     if (block && isKey(block)) return "inventory";
-    return block ? block.blockType : c.limitColor;
+    return block ? block.color : c.limitColor;
   });
 
 const countHidden = (level: LevelState) =>
@@ -73,7 +73,7 @@ const blockedByPlacement = (level: LevelState) => {
     if (col.blocks.length === 0) return;
     if (col.type !== "buffer") return;
     const countSame = selectFromColumn(level, index).length;
-    bufferSeries.push([col.blocks[0].blockType, countSame, index]);
+    bufferSeries.push([col.blocks[0].color, countSame, index]);
   });
 
   const placementSpaceForColor = (blockColor: BlockType, index: number) =>
@@ -82,7 +82,7 @@ const blockedByPlacement = (level: LevelState) => {
       if (
         col.type === "placement" &&
         (col.limitColor === blockColor ||
-          col.blocks[0]?.blockType === blockColor ||
+          col.blocks[0]?.color === blockColor ||
           (col.limitColor === undefined && col.blocks.length === 0))
       ) {
         return acc + col.columnSize - col.blocks.length;
@@ -92,8 +92,7 @@ const blockedByPlacement = (level: LevelState) => {
       }
       if (
         col.type === "buffer" &&
-        (col.limitColor === blockColor ||
-          col.blocks[0]?.blockType === blockColor)
+        (col.limitColor === blockColor || col.blocks[0]?.color === blockColor)
       ) {
         return acc + col.columnSize - col.blocks.length;
       }
@@ -120,7 +119,7 @@ const blockedByBuffer = (level: LevelState) => {
     if (col.blocks.length === 0 || col.type !== "placement" || col.locked)
       return;
     const countSame = selectFromColumn(level, index).length;
-    placementSeries.push([col.blocks[0].blockType, countSame, index]);
+    placementSeries.push([col.blocks[0].color, countSame, index]);
   });
 
   const bufferSpaceForColor = (blockColor: BlockType, index: number) =>
@@ -138,15 +137,14 @@ const blockedByBuffer = (level: LevelState) => {
       }
       if (
         col.type === "buffer" &&
-        (col.limitColor === blockColor ||
-          col.blocks[0]?.blockType === blockColor)
+        (col.limitColor === blockColor || col.blocks[0]?.color === blockColor)
       ) {
         return acc + col.columnSize - col.blocks.length;
       }
       if (
         col.type === "placement" &&
         (col.limitColor === blockColor ||
-          col.blocks[0]?.blockType === blockColor ||
+          col.blocks[0]?.color === blockColor ||
           (col.limitColor === undefined && col.blocks.length === 0))
       ) {
         return acc + col.columnSize - col.blocks.length;
@@ -174,7 +172,7 @@ const countCompleted = (level: LevelState) =>
     (col) =>
       col.type === "placement" &&
       col.columnSize === col.blocks.length &&
-      col.blocks.every((b) => b.blockType === col.blocks[0].blockType)
+      col.blocks.every((b) => b.color === col.blocks[0].color)
   ).length;
 
 const countLocks = (level: LevelState) =>
@@ -235,8 +233,8 @@ export const isStuck = (level: LevelState): boolean => {
   });
 };
 
-export const isLock = (block?: Block) => !!block?.blockType.endsWith("-lock");
-export const isKey = (block?: Block) => !!block?.blockType.endsWith("-key");
+export const isLock = (block?: Block) => !!block?.color?.endsWith("-lock");
+export const isKey = (block?: Block) => !!block?.color?.endsWith("-key");
 
 export const isLockType = (blockType: BlockType): blockType is Lock =>
   locks.find((lk) => lk.name === blockType) !== undefined;
@@ -246,12 +244,12 @@ export const isColorType = (blockType: BlockType): blockType is BlockColor =>
   !isKeyType(blockType) && !isLockType(blockType);
 
 export const matchingLockFor = (block: Block) =>
-  isKey(block) && block.blockType.split("-")[0] + "-lock";
+  isKey(block) && block.color.split("-")[0] + "-lock";
 
 export const isMatch = (keyBlock: Block, lockBlock: Block) =>
   isKey(keyBlock) &&
   isLock(lockBlock) &&
-  lockBlock.blockType === matchingLockFor(keyBlock);
+  lockBlock.color === matchingLockFor(keyBlock);
 
 export const isLockSolvable = (level: LevelState): boolean =>
   level.columns.every(
@@ -260,7 +258,7 @@ export const isLockSolvable = (level: LevelState): boolean =>
       col.blocks.every((b, i) => {
         if (isKey(b)) {
           const lock = col.blocks[i + 1];
-          return !lock || lock.blockType !== matchingLockFor(b);
+          return !lock || lock.color !== matchingLockFor(b);
         }
         return true;
       })
@@ -284,10 +282,10 @@ export const isKeysReachable = (level: LevelState): boolean => {
         for (let i = y - 1; i >= 0; i--) {
           const aboveBlock = col.blocks[i];
           if (isLock(aboveBlock)) {
-            dependencies.add(`${aboveBlock.blockType}-${x}-${i}`);
+            dependencies.add(`${aboveBlock.color}-${x}-${i}`);
           }
         }
-        keyDependencies.set(`${block.blockType}-${x}-${y}`, dependencies);
+        keyDependencies.set(`${block.color}-${x}-${y}`, dependencies);
       }
       if (isLock(block)) {
         const dependencies = new Set<BlockWithCoordinates>();
@@ -295,12 +293,12 @@ export const isKeysReachable = (level: LevelState): boolean => {
         level.columns.forEach((col, x) => {
           col.blocks.forEach((key, y) => {
             if (isMatch(key, block)) {
-              dependencies.add(`${key.blockType}-${x}-${y}`);
+              dependencies.add(`${key.color}-${x}-${y}`);
             }
           });
         });
 
-        keyDependencies.set(`${block.blockType}-${x}-${y}`, dependencies);
+        keyDependencies.set(`${block.color}-${x}-${y}`, dependencies);
       }
     });
   });
@@ -340,7 +338,7 @@ export const allShuffled = (level: LevelState): boolean =>
   level.columns.every(
     (c) =>
       c.blocks.length < c.columnSize ||
-      c.blocks.map((b) => b.blockType).filter((b, i, l) => l.indexOf(b) === i)
+      c.blocks.map((b) => b.color).filter((b, i, l) => l.indexOf(b) === i)
         .length > 1
   );
 

@@ -86,7 +86,7 @@ export const toLevelStateDTO = (state: LevelState): LevelStateDTO => {
   return {
     c: state.columns.map((c) => ({
       b: c.blocks.map((b) => ({
-        c: blockTypeToNumber(b.blockType),
+        c: blockTypeToNumber(b.color),
         r: !!b.revealed
       })),
       s: c.columnSize,
@@ -134,7 +134,7 @@ export const fromLevelStateDTO = (dto: LevelStateDTO): LevelState => {
   colors.sort();
 
   return {
-    blockTypes: colors,
+    colors: colors,
     columns: dto.c.map<Column>((c) => ({
       blocks: c.b.map((b) => ({
         blockType: numberToBlockType(b.c),

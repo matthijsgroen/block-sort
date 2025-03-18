@@ -35,12 +35,12 @@ export const Tutorial: React.FC<Props> = ({
             moved={true}
             color={
               getColorMapping(activeTheme)[
-                levelState.columns[2].blocks[0].blockType
+                levelState.columns[2].blocks[0].color
               ]
             }
             shape={
               getShapeMapping(activeTheme)[
-                levelState.columns[2].blocks[0].blockType
+                levelState.columns[2].blocks[0].color
               ]
             }
           />
