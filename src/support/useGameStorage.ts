@@ -38,7 +38,7 @@ export const useLevelStateStorage = (
       setValue(migratedValue);
     }
   }, [value, setValue]);
-  return [value, setValue, deleteValue] as const;
+  return [migrateLevelState(value), setValue, deleteValue] as const;
 };
 
 export const getLevelStateValue = async (
