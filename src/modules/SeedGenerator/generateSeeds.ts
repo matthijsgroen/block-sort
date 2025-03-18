@@ -236,7 +236,7 @@ export const updateLevelSeeds = async (
 
   if (incompleteSeed) {
     const additionalNeeded = Math.min(
-      GENERATE_BATCH_SIZE,
+      options.all ? Infinity : GENERATE_BATCH_SIZE,
       MAX_LEVELS_PER_DIFFICULTY[incompleteSeed.difficulty] -
         levelSeedsCopy[incompleteSeed.hash].length
     );
