@@ -15,7 +15,7 @@ export type LevelState = {
   /**
    * Colors in play for this level
    */
-  colors: BlockType[];
+  blockTypes: BlockType[];
   width?: number;
   /**
    * Column in this level
@@ -53,7 +53,7 @@ export type Block = {
   /**
    * Type of the block (color / lock / key)
    */
-  color: BlockType;
+  blockType: BlockType;
   /**
    * Wether the block color is revealed to the player
    * @default true

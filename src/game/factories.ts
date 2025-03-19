@@ -9,7 +9,7 @@ export const createLevelState = (
   const blockTypes = columns.reduce<BlockType[]>(
     (r, c) =>
       c.blocks.reduce<BlockType[]>(
-        (r, b) => (r.includes(b.color) ? r : r.concat(b.color)),
+        (r, b) => (r.includes(b.blockType) ? r : r.concat(b.blockType)),
         r
       ),
     []
@@ -17,7 +17,7 @@ export const createLevelState = (
   blockTypes.sort();
 
   const state: LevelState = {
-    colors: blockTypes,
+    blockTypes,
     columns,
     moves: []
   };
@@ -54,7 +54,7 @@ export const createBufferColumn = (
 });
 
 export const createBlock = (blockType: BlockType, hidden?: boolean): Block => ({
-  color: blockType,
+  blockType,
   revealed: hidden !== true
 });
 

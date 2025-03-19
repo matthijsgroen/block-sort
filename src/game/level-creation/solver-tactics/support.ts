@@ -15,18 +15,22 @@ export const canPlaceBlock = (column: Column, block: Block): boolean => {
   if (column.limitColor === "rainbow" && !isKey(block)) {
     return true;
   }
-  if (destBlock?.color === block.color && !isKey(block)) {
+  if (destBlock?.blockType === block.blockType && !isKey(block)) {
     return true;
   }
   if (column.type === "inventory" && isKey(block)) {
     return true;
   }
-  if (isKey(block) && destBlock && matchingLockFor(block) === destBlock.color) {
+  if (
+    isKey(block) &&
+    destBlock &&
+    matchingLockFor(block) === destBlock.blockType
+  ) {
     return true;
   }
   if (
     destBlock === undefined &&
-    (column.limitColor === undefined || column.limitColor === block.color)
+    (column.limitColor === undefined || column.limitColor === block.blockType)
   ) {
     return true;
   }
@@ -35,9 +39,9 @@ export const canPlaceBlock = (column: Column, block: Block): boolean => {
 
 export const isColumnCorrectlySorted = (column: Column): boolean => {
   if (column.blocks.length === 0) return false;
-  const firstColor = column.blocks[0].color;
+  const firstColor = column.blocks[0].blockType;
   return (
-    column.blocks.every((block) => block.color === firstColor) &&
+    column.blocks.every((block) => block.blockType === firstColor) &&
     column.type === "placement"
   );
 };

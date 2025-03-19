@@ -15,6 +15,7 @@ import { generateNewSeed, mulberry32 } from "@/support/random";
 import {
   deleteGameValue,
   getGameValue,
+  getLevelStateValue,
   setGameValue,
   useGameStorage
 } from "@/support/useGameStorage";
@@ -42,7 +43,7 @@ const generateLevelContent = async (
   levelSettings: LevelSettings,
   levelNr: number
 ): Promise<LevelState> => {
-  const existingState = await getGameValue<LevelState>(storageKey);
+  const existingState = await getLevelStateValue(storageKey);
   if (existingState !== null) {
     return existingState;
   }

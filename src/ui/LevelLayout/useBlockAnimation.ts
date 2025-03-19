@@ -111,7 +111,7 @@ export const useBlockAnimation = (
   useEffect(() => {
     if (
       !previousLevelState.current ||
-      levelState == previousLevelState.current ||
+      levelState === previousLevelState.current ||
       disabled
     ) {
       previousLevelState.current = levelState;
@@ -155,8 +155,8 @@ export const useBlockAnimation = (
 
       const blockType =
         blocksAdded < 0
-          ? prevLevel.columns[sourceColumnIndex].blocks[0].color
-          : levelState.columns[targetColumn].blocks[0].color;
+          ? prevLevel.columns[sourceColumnIndex].blocks[0].blockType
+          : levelState.columns[targetColumn].blocks[0].blockType;
 
       const blocksDelta =
         levelState.columns.reduce((r, c) => r + c.blocks.length, 0) -
@@ -173,7 +173,7 @@ export const useBlockAnimation = (
       );
       const target = shiftRect(animationData.targetSpot, 0, -5);
 
-      const stackType = prevLevel.columns[targetColumn].blocks[0]?.color;
+      const stackType = prevLevel.columns[targetColumn].blocks[0]?.blockType;
       if (stackType && isKeyType(blockType) && isLockType(stackType)) {
         animateKeyLockClash(
           animationData.targetColumnTop === animationData.targetSpot.top

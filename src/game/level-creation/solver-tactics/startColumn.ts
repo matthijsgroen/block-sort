@@ -32,7 +32,7 @@ export const startColumn: Tactic = (level, random = Math.random) => {
       const block = c.blocks[0];
       if (c.locked) return r;
       if (block) {
-        r[block.color] = (r[block.color] ?? []).concat(i);
+        r[block.blockType] = (r[block.blockType] ?? []).concat(i);
       }
       return r;
     },
@@ -55,7 +55,7 @@ export const startColumn: Tactic = (level, random = Math.random) => {
                       },
                       weight:
                         emptyCol.limitColor !== undefined &&
-                        level.columns[pos].blocks[0]?.color !==
+                        level.columns[pos].blocks[0]?.blockType !==
                           emptyCol.limitColor &&
                         emptyCol.limitColor !== "rainbow"
                           ? -2000
@@ -65,7 +65,7 @@ export const startColumn: Tactic = (level, random = Math.random) => {
                             (emptyCol.type === "buffer" ? -3 : 1) +
                             // Prefer columns with the same color as the limit color
                             (emptyCol.limitColor ===
-                            level.columns[pos].blocks[0]?.color
+                            level.columns[pos].blocks[0]?.blockType
                               ? 4
                               : 0)
                     }),

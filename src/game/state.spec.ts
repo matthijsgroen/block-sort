@@ -24,7 +24,7 @@ describe(canPlaceAmount, () => {
       createPlacementColumn(4, createBlocks("red", "white", "white"))
     ]);
 
-    const result = canPlaceAmount(level, 0, [{ color: "red" }]);
+    const result = canPlaceAmount(level, 0, [{ blockType: "red" }]);
     expect(result).toEqual(1);
   });
 
@@ -33,7 +33,7 @@ describe(canPlaceAmount, () => {
       createPlacementColumn(4, createBlocks("red", "red", "white", "white"))
     ]);
 
-    const result = canPlaceAmount(level, 0, [{ color: "red" }]);
+    const result = canPlaceAmount(level, 0, [{ blockType: "red" }]);
     expect(result).toEqual(0);
   });
 
@@ -43,8 +43,8 @@ describe(canPlaceAmount, () => {
     ]);
 
     const result = canPlaceAmount(level, 0, [
-      { color: "red" },
-      { color: "red" }
+      { blockType: "red" },
+      { blockType: "red" }
     ]);
     expect(result).toEqual(1);
   });

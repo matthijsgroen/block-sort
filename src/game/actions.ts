@@ -27,12 +27,12 @@ export const selectFromColumn = (
     return [topBlock];
   }
   while (
-    (topBlock?.color === color || color === null) &&
+    (topBlock?.blockType === color || color === null) &&
     topBlock?.revealed !== false &&
     topBlock !== undefined
   ) {
     result.push(topBlock);
-    color = topBlock.color;
+    color = topBlock.blockType;
     index++;
     topBlock = level.columns[columnIndex].blocks[index];
   }
@@ -52,7 +52,7 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
 
     if (moving.length === 1 && isKey(blocks[0])) {
       const lock = matchingLockFor(blocks[0]);
-      if (draft.columns[move.to].blocks[0]?.color === lock) {
+      if (draft.columns[move.to].blocks[0]?.blockType === lock) {
         draft.columns[move.to].blocks.shift();
         return;
       }
@@ -64,7 +64,7 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
 
       let index = 1;
       let nextBlockOrigin = draft.columns[move.from].blocks[index];
-      while (nextBlockOrigin?.color === topBlockOrigin.color) {
+      while (nextBlockOrigin?.blockType === topBlockOrigin.blockType) {
         nextBlockOrigin.revealed = true;
         index++;
         nextBlockOrigin = draft.columns[move.from].blocks[index];
@@ -72,12 +72,12 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
     }
     const endCol = draft.columns[move.to];
     endCol.blocks.unshift(...moving);
-    const moveColor = moving[0].color;
+    const moveColor = moving[0].blockType;
 
     if (
       endCol.type === "placement" &&
       endCol.blocks.length === endCol.columnSize &&
-      endCol.blocks.every((b) => b.color === moveColor)
+      endCol.blocks.every((b) => b.blockType === moveColor)
     ) {
       endCol.blocks.forEach((b) => {
         b.revealed = true;
@@ -87,13 +87,13 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
     if (
       endCol.type === "placement" &&
       endCol.blocks.length < endCol.columnSize &&
-      endCol.blocks.every((b) => b.color === moveColor) &&
+      endCol.blocks.every((b) => b.blockType === moveColor) &&
       draft.columns.every(
-        (c) => c === endCol || c.blocks.every((b) => b.color !== moveColor)
+        (c) => c === endCol || c.blocks.every((b) => b.blockType !== moveColor)
       )
     ) {
       while (endCol.blocks.length < endCol.columnSize) {
-        endCol.blocks.push({ color: moveColor, revealed: true });
+        endCol.blocks.push({ blockType: moveColor, revealed: true });
       }
       endCol.blocks.forEach((b) => {
         b.revealed = true;

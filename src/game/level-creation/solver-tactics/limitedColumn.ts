@@ -16,7 +16,7 @@ export const limitedColumn: Tactic = (level, _random = Math.random) => {
     return {
       index: i,
       limit: c.limitColor,
-      blockType: topBlock?.color
+      blockType: topBlock?.blockType
     };
   });
 

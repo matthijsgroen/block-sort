@@ -25,7 +25,7 @@ describe(optimizeMoves, () => {
     const level = await generatePlayableLevel(settings, { random });
     const result = optimizeMoves(level);
     expect(result.columns).toBe(level.columns);
-    expect(result.colors).toBe(level.colors);
+    expect(result.blockTypes).toBe(level.blockTypes);
   });
 
   it("reduces the amount of moves", async () => {
