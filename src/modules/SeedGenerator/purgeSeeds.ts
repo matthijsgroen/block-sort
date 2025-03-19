@@ -23,6 +23,7 @@ export const purgeSeeds = async (
   let seedsChecked = 0;
   let removedSeeds = 0;
   let replacedSeeds = 0;
+  let replacedMoves = 0;
 
   let lastWrite = Date.now();
 
@@ -32,7 +33,7 @@ export const purgeSeeds = async (
     for (const seed of seeds) {
       clearLine();
       process.stdout.write(
-        `Removing invalid seeds (${removedSeeds}) for "${key.name}" difficulty ${key.difficulty + 1}... `
+        `Testing seeds (removed: ${removedSeeds}) for "${key.name}" difficulty ${key.difficulty + 1}... `
       );
       doubleProgressBar(
         seedsChecked,
@@ -59,6 +60,11 @@ export const purgeSeeds = async (
             ]);
           }
           replacedSeeds++;
+        } else {
+          if (level.moves.length !== seed[1]) {
+            seed[1] = level.moves.length;
+            replacedMoves++;
+          }
         }
       } catch (ignoreError) {
         updatedSeeds[key.hash] = updatedSeeds[key.hash].filter(
@@ -79,8 +85,20 @@ export const purgeSeeds = async (
   await updateSeeds(updatedSeeds);
 
   clearLine();
-  console.log(
-    `Please run 'run' to regenerate the ${totalRemovedSeeds} removed seeds. ${replacedSeeds} were already replaced.`
-  );
+  const summary: string[] = [];
+
+  if (totalRemovedSeeds === 0) {
+    summary.push("No invalid seeds found.");
+  } else {
+    summary.push(
+      `Please run 'run' to regenerate the ${totalRemovedSeeds} removed seeds.`
+    );
+  }
+  summary.push(`${replacedSeeds} were already replaced.`);
+  if (replacedMoves > 0) {
+    summary.push(`Updated move counter for ${replacedMoves} seeds.`);
+  }
+
+  console.log(summary.join(" "));
   process.exit(0);
 };
