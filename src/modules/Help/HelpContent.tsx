@@ -2,13 +2,13 @@ import { useState } from "react";
 
 import Christmas from "@/docs/christmas.md";
 import Halloween from "@/docs/halloween.md";
-import HowToPlay from "@/docs/how-to-play.md";
+import HowToPlay from "@/docs/how-to-play.mdx";
 import RefreshInstallation from "@/docs/how-to-refresh-installation.md";
 import RefreshInstallationAndroid from "@/docs/how-to-refresh-installation-android.md";
 import RefreshInstallationIOS from "@/docs/how-to-refresh-installation-ios.md";
 import LevelTypes from "@/docs/level-types.mdx";
 import Motivation from "@/docs/making-of.md";
-import Spring from "@/docs/spring.md";
+import Spring from "@/docs/spring.mdx";
 import Summer from "@/docs/summer.md";
 import ZenMode from "@/docs/zen-mode.md";
 import { getActiveTheme } from "@/game/themes";

@@ -1,3 +1,6 @@
+import { BlockColumn } from "@/ui/BlockColumn/BlockColumn";
+import { createBufferColumn, createBlocks } from "@/game/factories";
+
 ## Spring
 
 It's Spring! Nature will start blossoming again!
@@ -11,3 +14,8 @@ But, in these buffers you can stack all kinds of blocks on top of each other!
 If that's a blessing or a curse is up to you!
 
 Have fun!
+
+
+<span className="scale-75 inline-flex align-baseline gap-4 mb-4">
+    <BlockColumn column={createBufferColumn(4, "rainbow", createBlocks("red", "white"))} />
+</span>

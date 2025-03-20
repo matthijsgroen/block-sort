@@ -2,22 +2,22 @@
   @apply text-xl font-bold;
 }
 .textStyling p {
-  @apply my-1 text-xs;
+  @apply my-1 text-base;
 }
 .textStyling h2 {
-  @apply text-lg font-bold;
+  @apply text-lg font-bold mt-4;
 }
 .textStyling h3 {
   @apply font-bold;
 }
 .textStyling ul {
-  @apply list-outside list-disc pl-4;
+  @apply list-outside list-disc pl-8;
 }
 .textStyling ol {
-  @apply list-outside list-decimal pl-4;
+  @apply list-outside list-decimal pl-8;
 }
 .textStyling li {
-  @apply my-2 text-xs;
+  @apply my-2 text-base;
 }
 .textStyling a {
   @apply underline;
