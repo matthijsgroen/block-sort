@@ -4,7 +4,7 @@ import { Dialog } from "@/ui/Dialog/Dialog";
 import { DialogTitle } from "@/ui/Dialog/DialogTitle";
 import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";
 
-import { ReactComponent as InstallationInstructions } from "@/../docs/installation.md";
+import InstallationInstructions from "@/docs/installation.md";
 
 import styles from "../Settings/TextStyling.module.css";
 

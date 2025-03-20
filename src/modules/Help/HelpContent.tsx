@@ -1,16 +1,16 @@
 import { useState } from "react";
 
-import { ReactComponent as Christmas } from "@/../docs/christmas.md";
-import { ReactComponent as Halloween } from "@/../docs/halloween.md";
-import { ReactComponent as HowToPlay } from "@/../docs/how-to-play.md";
-import { ReactComponent as RefreshInstallation } from "@/../docs/how-to-refresh-installation.md";
-import { ReactComponent as RefreshInstallationAndroid } from "@/../docs/how-to-refresh-installation-android.md";
-import { ReactComponent as RefreshInstallationIOS } from "@/../docs/how-to-refresh-installation-ios.md";
-import { ReactComponent as LevelTypes } from "@/../docs/level-types.md";
-import { ReactComponent as Motivation } from "@/../docs/making-of.md";
-import { ReactComponent as Spring } from "@/../docs/spring.md";
-import { ReactComponent as Summer } from "@/../docs/summer.md";
-import { ReactComponent as ZenMode } from "@/../docs/zen-mode.md";
+import Christmas from "@/docs/christmas.md";
+import Halloween from "@/docs/halloween.md";
+import HowToPlay from "@/docs/how-to-play.md";
+import RefreshInstallation from "@/docs/how-to-refresh-installation.md";
+import RefreshInstallationAndroid from "@/docs/how-to-refresh-installation-android.md";
+import RefreshInstallationIOS from "@/docs/how-to-refresh-installation-ios.md";
+import LevelTypes from "@/docs/level-types.mdx";
+import Motivation from "@/docs/making-of.md";
+import Spring from "@/docs/spring.md";
+import Summer from "@/docs/summer.md";
+import ZenMode from "@/docs/zen-mode.md";
 import { getActiveTheme } from "@/game/themes";
 import { getToday } from "@/support/schedule";
 

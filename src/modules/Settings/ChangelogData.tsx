@@ -1,5 +1,5 @@
-import { ReactComponent } from "@/../CHANGELOG.md";
+import ChangelogContent from "@/../CHANGELOG.md";
 
-const ChangelogData: React.FC = () => <ReactComponent />;
+const ChangelogData: React.FC = () => <ChangelogContent />;
 
 export default ChangelogData;
