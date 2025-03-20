@@ -191,6 +191,16 @@ const keyLockSolves = (level: LevelState) => {
   );
 };
 
+const keyStores = (level: LevelState) => {
+  const chests = level.columns.filter(
+    (col) => col.type === "inventory" && col.columnSize > col.blocks.length
+  );
+  const keys = level.columns.filter(
+    (col) => col.type !== "inventory" && isKey(col.blocks[0])
+  );
+  return keys.length > 0 && chests.length > 0;
+};
+
 export const isStuck = (level: LevelState): boolean => {
   const topSignature = createSignature(level);
   const originalHidden = countHidden(level);
@@ -205,7 +215,8 @@ export const isStuck = (level: LevelState): boolean => {
     hasBuffers &&
     blockedByBuffer(level) &&
     blockedByPlacement(level) &&
-    !keyLockSolves(level);
+    !keyLockSolves(level) &&
+    !keyStores(level);
   if (initialBlocked) return true;
 
   return level.columns.every((_source, sourceIndex) => {
