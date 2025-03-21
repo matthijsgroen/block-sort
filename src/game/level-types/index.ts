@@ -63,21 +63,6 @@ export const getUnlockableLevelTypes = (
     )
     .sort((a, b) => (a.unlocksAtLevel ?? 1000) - (b.unlocksAtLevel ?? 1000));
 
-export const levelTypeTextColor = (
-  levelNr: number,
-  theme: BlockTheme
-): string => {
-  const levelType = getLevelType(levelNr, theme);
-
-  return levelType.textClassName;
-};
-
-export const levelTypeBorder = (levelNr: number, theme: BlockTheme): string => {
-  const levelType = getLevelType(levelNr, theme);
-
-  return levelType.borderClassName;
-};
-
 export const getLevelSettings = (
   levelNr: number,
   theme: BlockTheme,
