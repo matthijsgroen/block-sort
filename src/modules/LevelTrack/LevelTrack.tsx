@@ -1,16 +1,14 @@
-import { Fragment, use, useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import clsx from "clsx";
 
 import { GameTitle } from "@/ui/GameTitle/GameTitle";
-import { Smiley } from "@/ui/Smiley/Smiley";
+import { Track } from "@/ui/LevelTrack/LevelTrack";
 import { TopButton } from "@/ui/TopButton/TopButton";
 import { ZenButton } from "@/ui/ZenButton";
 
 import { sound } from "@/audio";
-import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
 import { getLevelType, getLevelTypeByType } from "@/game/level-types";
 import type { BlockTheme } from "@/game/themes";
-import { LevelNode } from "@/modules/LevelTrack/LevelNode";
 import { effectTimeout } from "@/support/effectTimeout";
 import { useGameStorage } from "@/support/useGameStorage";
 
@@ -18,12 +16,7 @@ import { PlayButton } from "../../ui/PlayButton";
 import { BackgroundContext } from "../Layout/BackgroundContext";
 import { BetaContext } from "../Layout/BetaContext";
 
-import { LevelDoneIcon } from "./LevelDoneIcon";
 import { getLevelMessage } from "./levelMessage";
-import { LevelTrackMessageBar } from "./LevelTrackMessageBar";
-import { LevelTypeIcon } from "./LevelTypeIcon";
-
-import styles from "./levelTrack.module.css";
 
 type Props = {
   levelNr: number;
@@ -36,17 +29,6 @@ type Props = {
   onZenModeStart?: VoidFunction;
   onOpenSettings?: VoidFunction;
 };
-
-const translates = [
-  "",
-  "translate-x-10",
-  "translate-x-20",
-  "translate-x-10",
-  "",
-  "-translate-x-10",
-  "-translate-x-20",
-  "-translate-x-10"
-];
 
 export const LevelTrack: React.FC<Props> = ({
   levelNr: officialLevelNr,
@@ -94,8 +76,7 @@ export const LevelTrack: React.FC<Props> = ({
     };
   }, [officialLevelNr, levelNr]);
 
-  const startNumbering = Math.max(Math.floor(levelNr - 2), 0);
-  const levelNrs = new Array(30).fill(0).map((_, i) => startNumbering + i);
+  const numberFrom = Math.max(Math.floor(levelNr - 2), 0);
 
   const { setLevelType, setScreenLayout } = use(BackgroundContext);
   useEffect(() => {
@@ -117,10 +98,6 @@ export const LevelTrack: React.FC<Props> = ({
       setBetaCounter(0);
     }
   }, [betaCounter]);
-
-  const jumpRight = (levelNr + 2) % 8 < 4;
-
-  const hasMessage = getLevelMessage(officialLevelNr) !== undefined;
 
   return (
     <div className="flex h-full flex-col items-center">
@@ -149,83 +126,14 @@ export const LevelTrack: React.FC<Props> = ({
           />
         )}
       </div>
+      <Track
+        levelNr={levelNr}
+        officialLevelNr={officialLevelNr}
+        numberFrom={numberFrom}
+        getLevelMessage={getLevelMessage}
+        theme={theme}
+      />
 
-      <ol
-        className="flex w-full flex-1 flex-col-reverse overflow-y-hidden"
-        style={{
-          "--distance": hasMessage ? "-4.5rem" : "-3.5rem",
-          "--jump-distance": hasMessage ? "4.5rem" : "3.5rem"
-        }}
-      >
-        {levelNrs.map((i) => {
-          const offset = i % 8;
-
-          const levelMessage = getLevelMessage(i);
-
-          return (
-            <Fragment key={i}>
-              {levelMessage !== undefined && (
-                <li
-                  className={clsx(
-                    "flex w-full flex-shrink-0 items-center justify-center border-b-2 border-b-black/10 align-middle",
-                    {
-                      [styles.shiftDown]:
-                        levelNr < officialLevelNr && levelNr >= 2
-                    }
-                  )}
-                >
-                  <LevelTrackMessageBar levelNr={i} message={levelMessage} />
-                </li>
-              )}
-              <li
-                style={{ "--levelNr": `'${LEVEL_SCALE.indexOf(i) + 1}'` }}
-                className={clsx(
-                  "flex h-height-block w-full flex-shrink-0 items-center justify-center align-middle",
-                  {
-                    [styles.shiftDown]:
-                      levelNr < officialLevelNr && levelNr >= 2
-                  }
-                )}
-              >
-                <LevelNode
-                  levelNr={i}
-                  theme={theme}
-                  className={translates[offset]}
-                  completed={i < officialLevelNr}
-                  isCurrent={i === officialLevelNr}
-                >
-                  {i == officialLevelNr && (
-                    <span
-                      className={clsx("inline-block w-10", {
-                        [styles.hop]: levelNr < officialLevelNr
-                      })}
-                      style={{
-                        "--direction": jumpRight ? "-2.6rem" : "2.4rem",
-                        "--rotateDirection": jumpRight ? "40deg" : "-40deg"
-                      }}
-                    >
-                      <Smiley />
-                    </span>
-                  )}
-                  {(i < levelNr ||
-                    (levelNr < officialLevelNr && i === levelNr)) && (
-                    <LevelDoneIcon
-                      fadeIn={i === levelNr && levelNr < officialLevelNr}
-                    />
-                  )}
-                  {i > levelNr && (
-                    <LevelTypeIcon
-                      levelNr={i}
-                      theme={theme}
-                      fadeOut={i === officialLevelNr}
-                    />
-                  )}
-                </LevelNode>
-              </li>
-            </Fragment>
-          );
-        })}
-      </ol>
       <div className="flex w-full flex-row justify-between px-2 pb-7 text-center">
         <div className="w-22"></div>
         <PlayButton

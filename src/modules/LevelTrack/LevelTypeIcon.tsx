@@ -1,23 +1,16 @@
 import React from "react";
 import clsx from "clsx";
 
-import { getLevelType } from "@/game/level-types";
-import type { BlockTheme } from "@/game/themes";
+import type { LevelType } from "@/game/level-types/types";
 
 import styles from "./LevelTypeIcon.module.css";
 
 type Props = {
-  levelNr: number;
   fadeOut?: boolean;
-  theme?: BlockTheme;
+  levelType: LevelType<string>;
 };
 
-export const LevelTypeIcon: React.FC<Props> = ({
-  levelNr,
-  fadeOut,
-  theme = "default"
-}) => {
-  const levelType = getLevelType(levelNr, theme);
+export const LevelTypeIcon: React.FC<Props> = ({ fadeOut, levelType }) => {
   if (levelType.symbol === undefined) {
     return null;
   }

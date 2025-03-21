@@ -1,10 +1,10 @@
 import { use, useCallback, useEffect, useState } from "react";
 
+import { AutoMove } from "@/ui/AutoMove/AutoMove";
 import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
 import { Message } from "@/ui/Message/Message";
 import { StartAnimation } from "@/ui/StartAnimation/StartAnimation";
 import { TopButton } from "@/ui/TopButton/TopButton";
-import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { sound } from "@/audio";
 import { hideBlock, moveBlocks, selectFromColumn } from "@/game/actions";
@@ -360,7 +360,7 @@ export const Level: React.FC<Props> = ({
         />
         <div className="flex-1"></div>
         {autoMoves > 0 ? (
-          <WoodButton
+          <AutoMove
             onClick={() => {
               const moveIndex = autoMoveLimit - autoMoves;
               setUsedAutoMoves((a) => a + 1);
@@ -378,16 +378,8 @@ export const Level: React.FC<Props> = ({
                 }, 200);
               }
             }}
-          >
-            <>
-              <span className={"inline-block px-2 pt-[4px] text-lg"}>
-                Automove
-              </span>
-              <span className="mr-1 inline-block rounded-md bg-black/20 p-1 text-xs">
-                {autoMoves}
-              </span>
-            </>
-          </WoodButton>
+            autoMoves={autoMoves}
+          />
         ) : (
           <div className="text-center font-block-sort tracking-widest text-orange-400">
             {title}

@@ -13,7 +13,7 @@ export const HelpSection: FC<
         Back
       </TransparentButton>
     </div>
-    <div className="max-h-[60vh] flex-1 overflow-y-scroll overscroll-y-contain text-sm">
+    <div className="max-h-[60vh] flex-1 overflow-y-auto overscroll-y-contain p-4 text-base">
       {children}
     </div>
   </HelpContainer>

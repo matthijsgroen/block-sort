@@ -65,11 +65,11 @@ export const dungeon: LevelType<"dungeon"> = {
   introTextColor: "#6b7280",
   occurrence: (levelNr) => levelNr + 1 >= 200 && (levelNr + 1) % 50 === 0,
   getSettings(levelNr) {
-    const difficulty = getDifficultyLevel(Math.floor((levelNr + 1 - 200) / 50));
+    const encounter = Math.floor((levelNr + 1 - 200) / 50);
+    const difficulty = getDifficultyLevel(encounter);
 
     return getDungeonSettings(difficulty);
   },
-  getZenSettings: (_zenLevel, difficultyLevel) => {
-    return getDungeonSettings(difficultyLevel);
-  }
+  getZenSettings: (_zenLevel, difficultyLevel) =>
+    getDungeonSettings(difficultyLevel)
 };
