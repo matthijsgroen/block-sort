@@ -62,7 +62,7 @@ program
   );
 
 program
-  .command("run")
+  .command("generate")
   .description("Generate new level seeds")
   .option(
     "-a, --all",
@@ -109,8 +109,8 @@ program
   );
 
 program
-  .command("purge")
-  .description("Purge invalid level seeds")
+  .command("test")
+  .description("Test seeds and purge invalid level seeds")
   .option(
     "-t, --type <levelTypes>",
     "comma separated list of level types",
@@ -167,8 +167,8 @@ program
   });
 
 program
-  .command("erase")
-  .description("Erase level seeds for a specific level type and difficulty")
+  .command("remove")
+  .description("Remove level seeds for a specific level type and difficulty")
   .argument("levelType", "The level type to erase")
   .argument("difficulty", "The difficulty to erase")
   .action(async (levelType, difficulty) => {
@@ -191,7 +191,7 @@ program
       process.exit(1);
     }
     console.log(
-      c.bold(`Erasing seeds for ${levelType} difficulty ${difficulty}`)
+      c.bold(`Removing seeds for ${levelType} difficulty ${difficulty}`)
     );
     const settings = producer.producer(difficulty);
 

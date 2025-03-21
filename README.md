@@ -55,7 +55,7 @@ The game will use pre-created seeds to generate levels in a fast way on mobile (
 To generate all the seeds, run:
 
 ```
-bin/generate-level-seeds.ts run --all
+bin/level-seeds.ts generate --all
 ```
 
 This project uses the [CC BY-NC-SA 4.0](./LICENSE) license.
