@@ -4,7 +4,7 @@ import clsx from "clsx";
 import styles from "./LevelNode.module.css";
 
 type LevelNodeProps = PropsWithChildren<{
-  levelNr: number;
+  levelNr: number | string;
   className?: string;
   textColor?: string;
   borderColor?: string;
@@ -38,7 +38,7 @@ export const LevelNode: FC<LevelNodeProps> = ({
           styles.textShadow
         )}
       >
-        {levelNr + 1}&nbsp;
+        {levelNr}&nbsp;
       </span>
       <span
         className={clsx(

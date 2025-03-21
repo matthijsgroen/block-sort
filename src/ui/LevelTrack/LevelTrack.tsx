@@ -93,7 +93,7 @@ export const Track: React.FC<Props> = ({
               )}
             >
               <LevelNode
-                levelNr={i}
+                levelNr={i + 1}
                 className={translates[offset]}
                 completed={i < officialLevelNr}
                 isCurrent={i === officialLevelNr}
