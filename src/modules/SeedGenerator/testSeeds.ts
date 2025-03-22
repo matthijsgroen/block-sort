@@ -1,6 +1,8 @@
 import { levelSeeds } from "@/data/levelSeeds";
+import { moveBlocks } from "@/game/actions";
 import { optimizeMoves } from "@/game/level-creation/optimizeMoves";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
+import { hasWon } from "@/game/state";
 import { mulberry32 } from "@/support/random";
 
 import { clearLine, doubleProgressBar } from "./cliElements";
@@ -8,7 +10,7 @@ import type { Seeder } from "./producers";
 import { getFilteredProducers } from "./producers";
 import { updateSeeds } from "./updateSeeds";
 
-export const purgeSeeds = async (
+export const testSeeds = async (
   types: { name: string; levels: number[] }[] | undefined = undefined
 ) => {
   let totalRemovedSeeds = 0;
@@ -49,6 +51,18 @@ export const purgeSeeds = async (
           random,
           seed: seed[0]
         }).then(optimizeMoves);
+        const playedLevel = level.moves.reduce(
+          (state, move) => moveBlocks(state, move),
+          level
+        );
+        if (!hasWon(playedLevel)) {
+          updatedSeeds[key.hash] = updatedSeeds[key.hash].filter(
+            (s) => s[0] !== seed[0]
+          );
+          removedSeeds++;
+          totalRemovedSeeds++;
+          continue;
+        }
         if (level.generationInformation?.seed !== seed[0]) {
           updatedSeeds[key.hash] = updatedSeeds[key.hash].filter(
             (s) => s[0] !== seed[0]

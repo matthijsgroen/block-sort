@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
-import { getUnlockableLevelTypes } from "@/game/level-types";
+import { getLevelType, getUnlockableLevelTypes } from "@/game/level-types";
 import { timesMap } from "@/support/timeMap";
 
 import { DIFFICULTIES, DIFFICULTY_LEVELS } from "../GameModi/constants";
@@ -78,11 +78,20 @@ export const LevelTypesOverview: Story = {
       <div>
         <h1 className="mb-2 text-xl font-bold">Level Track</h1>
         <div className="m-4 grid grid-cols-8 gap-4 pb-32">
-          {timesMap(300, (index) => (
-            <LevelNode key={index} levelNr={index} theme={theme}>
-              <LevelTypeIcon levelNr={index} theme={theme} />
-            </LevelNode>
-          ))}
+          {timesMap(300, (index) => {
+            const levelType = getLevelType(index, theme);
+
+            return (
+              <LevelNode
+                key={index}
+                levelNr={index}
+                borderColor={levelType.borderClassName}
+                textColor={levelType.textClassName}
+              >
+                <LevelTypeIcon levelType={levelType} />
+              </LevelNode>
+            );
+          })}
         </div>
       </div>
     );
