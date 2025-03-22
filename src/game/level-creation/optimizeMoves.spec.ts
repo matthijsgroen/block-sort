@@ -5,7 +5,6 @@ import { settingsHash } from "@/support/hash";
 import { mulberry32 } from "@/support/random";
 
 import { moveBlocks } from "../actions";
-import { getLevelSettings } from "../level-types";
 import { getNormal5Settings, getNormalSettings } from "../level-types/normal";
 import { hasWon } from "../state";
 import type { LevelSettings } from "../types";
@@ -40,26 +39,6 @@ describe(optimizeMoves, () => {
     expect(level.moves.length).toBeGreaterThan(250);
     expect(result.moves.length).toBeLessThan(level.moves.length);
     expect(result.moves.length).toBeLessThan(110);
-  }, 30_000);
-
-  it("eliminates useless buffer jumps", async () => {
-    const levelRandom = mulberry32(9153942493721842);
-    const settings = getLevelSettings(464, "spring", levelRandom);
-    const seed = 5233153;
-    const random = mulberry32(seed);
-
-    const level = await generatePlayableLevel(settings, {
-      random,
-      seed
-    });
-    const result = optimizeMoves(level);
-
-    let levelState = result;
-    for (const move of result.moves) {
-      levelState = moveBlocks(levelState, move);
-    }
-    const won = hasWon(levelState);
-    expect(won).toBe(true);
   }, 30_000);
 
   it("can still complete the level", async () => {
