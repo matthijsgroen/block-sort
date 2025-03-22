@@ -62,7 +62,7 @@ const determineColumns = (
   return "grid-cols-6";
 };
 
-export const BLOCK_ANIMATION_TIME = 400;
+export const BLOCK_ANIMATION_TIME = 500;
 
 export const LevelLayout: React.FC<Props> = ({
   started,
