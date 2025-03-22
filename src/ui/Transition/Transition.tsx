@@ -1,6 +1,7 @@
 import type {
   CSSProperties,
   Dispatch,
+  JSX,
   PropsWithChildren,
   SetStateAction
 } from "react";
