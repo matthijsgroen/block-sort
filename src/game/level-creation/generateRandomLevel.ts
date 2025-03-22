@@ -78,11 +78,16 @@ export const generateRandomLevel = (
 
   const amountBars = amountColors * stacksPerColor;
   const blocks: BlockType[] = [];
-  for (const color of blockColors) {
-    blocks.push(...new Array(stackSize * stacksPerColor).fill(color));
-  }
-  blocks.splice(0, lockKeyBlocks.length, ...lockKeyBlocks);
 
+  const amountPerColor = Math.ceil(lockKeyBlocks.length / blockColors.length);
+
+  for (const color of blockColors) {
+    const newColor = new Array(stackSize * stacksPerColor).fill(color);
+    // Evenly distribute locks and keys over the colors
+    const locksOrKeys = lockKeyBlocks.splice(0, amountPerColor);
+    newColor.splice(0, locksOrKeys.length, ...locksOrKeys);
+    blocks.push(...newColor);
+  }
   shuffle(blocks, random);
 
   const columns = timesMap<Column>(amountBars, (ci) =>
