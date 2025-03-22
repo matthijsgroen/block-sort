@@ -897,6 +897,11 @@ const keyLockSolves = (level) => {
     const keys = level.columns.filter((col) => isKey(col.blocks[0]));
     return locks.some((lock) => keys.some((key) => isMatch(key.blocks[0], lock.blocks[0])));
 };
+const keyStores = (level) => {
+    const chests = level.columns.filter((col) => col.type === "inventory" && col.columnSize > col.blocks.length);
+    const keys = level.columns.filter((col) => col.type !== "inventory" && isKey(col.blocks[0]));
+    return keys.length > 0 && chests.length > 0;
+};
 const isStuck = (level) => {
     const topSignature = createSignature(level);
     const originalHidden = countHidden(level);
@@ -906,7 +911,8 @@ const isStuck = (level) => {
     const initialBlocked = hasBuffers &&
         blockedByBuffer(level) &&
         blockedByPlacement(level) &&
-        !keyLockSolves(level);
+        !keyLockSolves(level) &&
+        !keyStores(level);
     if (initialBlocked)
         return true;
     return level.columns.every((_source, sourceIndex) => {
@@ -1042,6 +1048,10 @@ const moveBlocks = (level, move) => produce((draft) => {
         const lock = matchingLockFor(blocks[0]);
         if (draft.columns[move.to].blocks[0]?.blockType === lock) {
             draft.columns[move.to].blocks.shift();
+            const topBlockTarget = draft.columns[move.to].blocks[0];
+            if (topBlockTarget?.revealed === false) {
+                topBlockTarget.revealed = true;
+            }
             return;
         }
     }
@@ -1688,10 +1698,14 @@ const generateRandomLevel = ({ amountColors = 2, stackSize = 4, extraPlacementSt
     }
     const amountBars = amountColors * stacksPerColor;
     const blocks = [];
+    const amountPerColor = Math.ceil(lockKeyBlocks.length / blockColors.length);
     for (const color of blockColors) {
-        blocks.push(...new Array(stackSize * stacksPerColor).fill(color));
+        const newColor = new Array(stackSize * stacksPerColor).fill(color);
+        // Evenly distribute locks and keys over the colors
+        const locksOrKeys = lockKeyBlocks.splice(0, amountPerColor);
+        newColor.splice(0, locksOrKeys.length, ...locksOrKeys);
+        blocks.push(...newColor);
     }
-    blocks.splice(0, lockKeyBlocks.length, ...lockKeyBlocks);
     shuffle(blocks, random);
     const columns = timesMap(amountBars, (ci) => createPlacementColumn(stackSize, new Array(stackSize)
         .fill(0)
