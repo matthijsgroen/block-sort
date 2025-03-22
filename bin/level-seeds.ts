@@ -12,12 +12,12 @@ import type { LevelSettings } from "../src/game/types";
 import { SEED } from "../src/modules/SeedGenerator/constants";
 import { updateLevelSeeds } from "../src/modules/SeedGenerator/generateSeeds";
 import { producers } from "../src/modules/SeedGenerator/producers";
-import { purgeSeeds } from "../src/modules/SeedGenerator/purgeSeeds";
 import { removeSeedsForKey } from "../src/modules/SeedGenerator/removeSeeds";
 import {
   exportSeedInformation,
   showSeedStatistics
 } from "../src/modules/SeedGenerator/seedInformation";
+import { testSeeds } from "../src/modules/SeedGenerator/testSeeds";
 import { updateSeeds } from "../src/modules/SeedGenerator/updateSeeds";
 import { verifySeeds } from "../src/modules/SeedGenerator/verifySeeds";
 import { settingsHash } from "../src/support/hash";
@@ -149,7 +149,7 @@ program
       }
     }
 
-    await purgeSeeds(options.type);
+    await testSeeds(options.type);
   });
 
 program
