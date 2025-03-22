@@ -51,6 +51,43 @@ export const getDungeonSettings: SettingsProducer = (difficulty) => ({
   blockColorPick: "end"
 });
 
+export const getDungeonSettings2: SettingsProducer = (difficulty) => ({
+  amountColors: difficulty < 4 ? 3 : 4,
+  stackSize: Math.min(12 + Math.max(Math.round(difficulty / 8), 0), 13),
+  extraPlacementStacks: 0,
+  layoutMap: {
+    width: difficulty > 3 ? 6 : 5,
+    columns: []
+  },
+  amountLocks: 1 + Math.floor(difficulty / 4),
+  amountLockTypes: Math.max(1, Math.floor(difficulty / 4)),
+  hideBlockTypes: "checker",
+
+  extraBuffers: [
+    {
+      amount: difficulty < 4 ? 2 : 4,
+      size: 3,
+      limit: 1
+    },
+    {
+      amount: 1,
+      size: 2,
+      limit: 0
+    },
+    {
+      amount: 1,
+      size: 3,
+      limit: 0
+    },
+    {
+      amount: 1,
+      size: 1,
+      bufferType: "inventory",
+      limit: 0
+    }
+  ]
+});
+
 export const dungeon: LevelType<"dungeon"> = {
   type: "dungeon",
   name: "Dungeon",
