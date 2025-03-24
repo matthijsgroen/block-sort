@@ -31,6 +31,7 @@ const meta = {
     revealed: true,
     shadow: true,
     suggested: false,
+    shapeColored: false,
     index: 0,
     onDrop: fn(),
     onLock: fn(),
