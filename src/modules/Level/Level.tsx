@@ -10,7 +10,6 @@ import { sound } from "@/audio";
 import { hideBlock, moveBlocks, selectFromColumn } from "@/game/actions";
 import type { LevelTypeString } from "@/game/level-types";
 import { getLevelTypeByType } from "@/game/level-types";
-import type { LevelModifiers } from "@/game/level-types/types";
 import {
   getRevealedIndices,
   hasWon,
@@ -19,7 +18,12 @@ import {
 } from "@/game/state";
 import { getActiveModifiers } from "@/game/themes";
 import { colorMap } from "@/game/themes/default";
-import type { LevelSettings, LevelState, Move } from "@/game/types";
+import type {
+  LevelModifiers,
+  LevelSettings,
+  LevelState,
+  Move
+} from "@/game/types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { mulberry32, pick } from "@/support/random";
 import { getToday } from "@/support/schedule";

@@ -1,5 +1,8 @@
+import type { HideFormat } from "@/ui/Block/Block";
+
 import type { solvers } from "./level-creation/solvers";
 import type { BlockType, LimitColor } from "./blocks";
+import type { BlockTheme } from "./themes";
 
 /**
  * The current state of a level.
@@ -206,5 +209,21 @@ export type LayoutMap = {
     fromColumn: number;
     toColumn?: number;
     paddingTop?: number;
+  }[];
+};
+
+export type LevelModifiers = {
+  theme?: BlockTheme;
+  ghostMode?: boolean;
+  hideMode?: HideFormat;
+  keepRevealed?: boolean;
+  hideEvery?: number;
+};
+
+export type MultiStageLevelSettings = {
+  stages: {
+    settings: LevelSettings;
+    levelModifiers?: LevelModifiers;
+    name?: string;
   }[];
 };

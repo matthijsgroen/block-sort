@@ -1,15 +1,5 @@
-import type { HideFormat } from "@/ui/Block/Block";
-
 import type { BlockTheme } from "../themes";
-import type { LevelSettings } from "../types";
-
-export type LevelModifiers = {
-  theme?: BlockTheme;
-  ghostMode?: boolean;
-  hideMode?: HideFormat;
-  keepRevealed?: boolean;
-  hideEvery?: number;
-};
+import type { LevelModifiers, LevelSettings } from "../types";
 
 export type LevelType<T extends string> = {
   type: T;
