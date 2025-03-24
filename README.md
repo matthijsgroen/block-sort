@@ -38,21 +38,24 @@ yarn dev
 > This project uses _yarn pnp_. This means you need to install the
 > [ZipFS](https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs) extension, and you possibly need to run `yarn dlx @yarnpkg/sdks`
 
-Running tests:
-
-```
-yarn test
-```
-
-Lint code:
-
-```
-yarn lint
-```
+- Running tests: `yarn test`
+- Lint code: `yarn lint`
 
 The game will use pre-created seeds to generate levels in a fast way on mobile (reduces power usage and loading times).
 
-To generate all the seeds, run:
+For all management around these seeds, check out:
+
+```
+bin/level-seeds.ts --help
+```
+
+To test all the seeds, and remove the invalid ones:
+
+```
+bin/level-seeds.ts test
+```
+
+To generate missing seeds, run:
 
 ```
 bin/level-seeds.ts generate --all
