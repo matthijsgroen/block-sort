@@ -71,3 +71,24 @@ export const getLevelSettings = (
   const levelType = getLevelType(levelNr, theme);
   return levelType.getSettings(levelNr, random);
 };
+
+export const getLevelTypesForStorybook = (): Unlockable<LevelType<string>>[] =>
+  (levelTypes as LevelType<string>[])
+    .map<Unlockable<LevelType<string>>>((level) =>
+      level.unlocksAtLevel === undefined
+        ? {
+            ...level,
+            unlocksAtLevel: getFirstOccurrence(level)
+          }
+        : (level as Unlockable<LevelType<string>>)
+    )
+    .sort((a, b) => (a.unlocksAtLevel ?? 1000) - (b.unlocksAtLevel ?? 1000));
+
+const getFirstOccurrence = (level: LevelType<string>): number => {
+  for (let i = 1; i < 1000; i++) {
+    if (level.occurrence(i, { theme: "default" })) {
+      return i;
+    }
+  }
+  return 1000;
+};

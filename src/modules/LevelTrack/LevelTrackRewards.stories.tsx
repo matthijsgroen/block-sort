@@ -1,7 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
+import { PlayButton } from "@/ui/PlayButton";
+
 import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
-import { getLevelType, getUnlockableLevelTypes } from "@/game/level-types";
+import {
+  getLevelType,
+  getLevelTypesForStorybook,
+  getUnlockableLevelTypes
+} from "@/game/level-types";
 import { timesMap } from "@/support/timeMap";
 
 import { DIFFICULTIES, DIFFICULTY_LEVELS } from "../GameModi/constants";
@@ -63,7 +69,7 @@ export const Rewards: Story = {
   }
 };
 
-export const LevelTypesOverview: Story = {
+export const LevelTypeDistribution: Story = {
   args: {
     theme: "default"
   },
@@ -84,7 +90,7 @@ export const LevelTypesOverview: Story = {
             return (
               <LevelNode
                 key={index}
-                levelNr={index}
+                levelNr={index + 1}
                 borderColor={levelType.borderClassName}
                 textColor={levelType.textClassName}
               >
@@ -92,6 +98,37 @@ export const LevelTypesOverview: Story = {
               </LevelNode>
             );
           })}
+        </div>
+      </div>
+    );
+  }
+};
+
+export const LevelTypes: Story = {
+  args: {},
+  argTypes: {},
+  render: () => {
+    return (
+      <div>
+        <h1 className="mb-2 text-xl font-bold">Level Types</h1>
+        <div className="m-4 grid grid-cols-2 gap-8 pb-32">
+          {getLevelTypesForStorybook().map((levelType, index) => (
+            <>
+              <LevelNode
+                key={index}
+                levelNr={levelType.unlocksAtLevel}
+                borderColor={levelType.borderClassName}
+                textColor={levelType.textClassName}
+              >
+                <LevelTypeIcon levelType={levelType} />
+              </LevelNode>
+              <PlayButton
+                label={`Play level ${levelType.unlocksAtLevel}`}
+                onClick={() => {}}
+                type={levelType}
+              />
+            </>
+          ))}
         </div>
       </div>
     );
