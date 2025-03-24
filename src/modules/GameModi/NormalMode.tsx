@@ -8,6 +8,7 @@ import { getLevelSettings, getLevelType } from "@/game/level-types/index";
 import { getActiveTheme } from "@/game/themes";
 import { LevelLoader } from "@/modules/Level/LevelLoader";
 import { LevelTrack } from "@/modules/LevelTrack/LevelTrack";
+import { levelForDevelopment } from "@/support/developmentSettings";
 import { generateNewSeed, mulberry32 } from "@/support/random";
 import { getToday } from "@/support/schedule";
 import { useGameStorage } from "@/support/useGameStorage";
@@ -36,7 +37,7 @@ export const NormalMode: React.FC<Props> = ({
 }) => {
   const [levelNr, setLevelNr] = useGameStorage(
     "levelNr",
-    process.env.NODE_ENV === "production" ? 0 : 0
+    process.env.NODE_ENV === "production" ? 0 : levelForDevelopment
   );
   const [levelSeed, setLevelSeed] = useState(() =>
     generateNewSeed(BASE_SEED, levelNr)

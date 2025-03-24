@@ -1,3 +1,5 @@
+import { dateForDevelopment } from "./developmentSettings";
+
 export type ScheduleDate = { month: number; day: number };
 
 export type RangedItem = {
@@ -44,4 +46,4 @@ export const filterInRange = <TItem extends RangedItem>(
  * @returns the current date
  */
 export const getToday = (): Date =>
-  process.env.NODE_ENV === "production" ? new Date() : new Date();
+  process.env.NODE_ENV === "production" ? new Date() : dateForDevelopment;
