@@ -54,3 +54,11 @@ export const hidden: Story = {
     revealed: false
   }
 };
+
+export const lock: Story = {
+  args: {
+    shape: "👻",
+    color: "#333333",
+    shapeColored: true
+  }
+};
