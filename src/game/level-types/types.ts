@@ -1,5 +1,9 @@
 import type { BlockTheme } from "../themes";
-import type { LevelModifiers, LevelSettings } from "../types";
+import type {
+  LevelModifiers,
+  LevelSettings,
+  MultiStageLevelSettings
+} from "../types";
 
 export type LevelType<T extends string> = {
   type: T;
@@ -23,8 +27,14 @@ export type LevelType<T extends string> = {
    */
   introTextColor?: string;
   occurrence: (levelNr: number, env: { theme: BlockTheme }) => boolean;
-  getSettings: (levelNr: number, random?: () => number) => LevelSettings;
-  getZenSettings: (levelNr: number, difficulty: number) => LevelSettings;
+  getSettings: (
+    levelNr: number,
+    random?: () => number
+  ) => LevelSettings | MultiStageLevelSettings;
+  getZenSettings: (
+    levelNr: number,
+    difficulty: number
+  ) => LevelSettings | MultiStageLevelSettings;
 };
 
 export type Unlockable<T> = T & { unlocksAtLevel: number };

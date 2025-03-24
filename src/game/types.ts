@@ -193,7 +193,7 @@ export type LevelSettings = {
    */
   amountLockTypes?: number;
   /**
-   * Amount of locks / keys in the level
+   * Amount of lock / key pairs in the level
    *
    * @default 0
    */

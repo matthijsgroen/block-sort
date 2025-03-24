@@ -1,5 +1,5 @@
 import type { BlockTheme } from "../themes";
-import type { LevelSettings } from "../types";
+import type { LevelSettings, MultiStageLevelSettings } from "../types";
 
 import { dungeon } from "./dungeon";
 import { easy } from "./easy";
@@ -67,7 +67,7 @@ export const getLevelSettings = (
   levelNr: number,
   theme: BlockTheme,
   random = Math.random
-): LevelSettings => {
+): LevelSettings | MultiStageLevelSettings => {
   const levelType = getLevelType(levelNr, theme);
   return levelType.getSettings(levelNr, random);
 };

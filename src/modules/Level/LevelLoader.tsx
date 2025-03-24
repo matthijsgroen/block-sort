@@ -9,7 +9,11 @@ import { solvers } from "@/game/level-creation/solvers";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import type { LevelTypeString } from "@/game/level-types";
 import { hasWon } from "@/game/state";
-import type { LevelSettings, LevelState } from "@/game/types";
+import type {
+  LevelSettings,
+  LevelState,
+  MultiStageLevelSettings
+} from "@/game/types";
 import { settingsHash } from "@/support/hash";
 import { generateNewSeed, mulberry32 } from "@/support/random";
 import {
@@ -28,7 +32,7 @@ import { Level } from "./Level";
 type Props = {
   seed: number;
   onComplete: (won: boolean) => void;
-  levelSettings: LevelSettings;
+  levelSettings: LevelSettings | MultiStageLevelSettings;
   levelNr: number;
   useStreak?: boolean;
   title: string;
@@ -83,11 +87,13 @@ const createLevel = async (
   levelNr: number,
   levelSettings: LevelSettings,
   storagePrefix: string,
-  levelType: LevelTypeString
+  levelType: LevelTypeString,
+  stage: number
 ): Promise<LevelState> => {
+  const storeKey = `${storagePrefix}initialLevelState${levelNr}${stage !== 0 ? `-${stage}` : ""}`;
   const level = await generateLevelContent(
     seed,
-    `${storagePrefix}initialLevelState${levelNr}`,
+    storeKey,
     levelSettings,
     levelNr
   );
@@ -98,10 +104,10 @@ const createLevel = async (
   if (!won) {
     const newSeed = generateNewSeed(seed, 2);
     // Level content is botched, retry
-    await deleteGameValue(`${storagePrefix}initialLevelState${levelNr}`);
+    await deleteGameValue(storeKey);
     const level = await generateLevelContent(
       newSeed,
-      `${storagePrefix}initialLevelState${levelNr}`,
+      storeKey,
       levelSettings,
       levelNr
     );
@@ -113,6 +119,11 @@ const createLevel = async (
 
   return level;
 };
+
+const isMultiStageLevel = (
+  settings: LevelSettings | MultiStageLevelSettings
+): settings is MultiStageLevelSettings =>
+  (settings as MultiStageLevelSettings).stages !== undefined;
 
 export const LevelLoader: React.FC<Props> = ({
   seed,
@@ -126,28 +137,38 @@ export const LevelLoader: React.FC<Props> = ({
   storagePrefix = ""
 }) => {
   const [locked] = useState({ levelNr, levelSettings, seed, title });
+  const [stage, _setState, deleteStage] = useGameStorage(
+    `${storagePrefix}levelStage`,
+    0
+  );
 
   const [storedLevelType, , deleteLevelType] = useGameStorage(
     `${storagePrefix}levelType`,
     null
   );
-  const levelSettingsString = JSON.stringify(levelSettings);
+  const stageSettings = isMultiStageLevel(locked.levelSettings)
+    ? locked.levelSettings.stages[stage].settings
+    : locked.levelSettings;
+
+  const stageSettingsString = JSON.stringify(stageSettings);
 
   const level = useMemo(() => {
     return createLevel(
       locked.seed,
       locked.levelNr,
-      locked.levelSettings,
+      stageSettings,
       storagePrefix,
-      levelType
+      levelType,
+      stage
     );
-  }, [locked.seed, levelSettingsString]);
+  }, [locked.seed, stageSettingsString, stage]);
 
   return (
     <ErrorBoundary
       fallback={
         <ErrorScreen
           levelNr={locked.levelNr}
+          stageNr={stage}
           onBack={() => {
             onComplete(false);
           }}
@@ -170,16 +191,18 @@ export const LevelLoader: React.FC<Props> = ({
           levelNr={levelNr}
           useStreak={useStreak}
           showTutorial={showTutorial}
-          levelSettings={levelSettings}
+          levelSettings={stageSettings}
           levelType={
             storagePrefix === "" ? (storedLevelType ?? levelType) : levelType
           }
           onComplete={(won) => {
+            // TODO: Switch to next stage
             if (won) {
               deleteLevelType();
               deleteGameValue(
                 `${storagePrefix}initialLevelState${locked.levelNr}`
               );
+              deleteStage();
             }
             onComplete(won);
           }}
