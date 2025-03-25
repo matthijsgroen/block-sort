@@ -224,6 +224,7 @@ export type MultiStageLevelSettings = {
   stages: {
     settings: LevelSettings;
     levelModifiers?: LevelModifiers;
+    backgroundClassname?: string;
     name?: string;
   }[];
 };

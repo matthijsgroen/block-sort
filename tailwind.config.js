@@ -44,6 +44,8 @@ export default {
         trayLocked: "trayLocked 0.3s ease-in-out forwards",
         fadeIn: "fadeIn 1s ease-in-out forwards",
         fadeOut: "fadeOut 1s ease-in-out forwards",
+        columnFadeIn: "columnFadeIn 0.5s ease-in-out forwards",
+        columnFadeOut: "columnFadeOut 0.5s ease-in-out forwards",
         popInOut: "popInOut 3s ease-in-out forwards",
         rotate: "rotate 2s linear infinite",
         flyTopLeft:
@@ -154,6 +156,14 @@ export default {
           "0%": { backgroundPosition: "calc(50% - 400px) 100%" },
           "90%": { backgroundPosition: "calc(50% - 400px) 0%", opacity: "1" },
           "100%": { backgroundPosition: "calc(50% - 400px) 100%", opacity: "0" }
+        },
+        columnFadeIn: {
+          "0%": { opacity: "0", translate: "0 -4rem" },
+          "100%": { opacity: "1", translate: "0 0" }
+        },
+        columnFadeOut: {
+          "0%": { opacity: "1", translate: "0 0" },
+          "100%": { opacity: "0", translate: "0 4rem" }
         },
         "intro-bg": {
           "0%": { opacity: "0" },

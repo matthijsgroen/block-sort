@@ -2,7 +2,7 @@ import { use, useCallback, useEffect, useState } from "react";
 
 import { AutoMove } from "@/ui/AutoMove/AutoMove";
 import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
-import { Message } from "@/ui/Message/Message";
+import { InvisibleMessage, Message } from "@/ui/Message/Message";
 import { StartAnimation } from "@/ui/StartAnimation/StartAnimation";
 import { TopButton } from "@/ui/TopButton/TopButton";
 
@@ -43,6 +43,8 @@ type Props = {
   useStreak?: boolean;
   title: string;
   levelNr: number;
+  currentStageNr: number;
+  maxStages: number;
   levelType: LevelTypeString;
   levelSettings: LevelSettings;
   showTutorial?: boolean;
@@ -56,6 +58,8 @@ export const Level: React.FC<Props> = ({
   title,
   levelType,
   levelNr,
+  currentStageNr,
+  maxStages,
   storageKey,
   useStreak = false,
   showTutorial = false,
@@ -262,8 +266,10 @@ export const Level: React.FC<Props> = ({
     sound.play("lock");
   }, []);
   const handleDrop = useCallback(() => {
-    sound.play("place");
-  }, []);
+    if (playState !== "starting") {
+      sound.play("place");
+    }
+  }, [playState]);
   const handlePickUp = useCallback(() => {
     sound.play("pickup");
   }, []);
@@ -274,6 +280,7 @@ export const Level: React.FC<Props> = ({
   return (
     <div className={"flex h-full flex-col"}>
       {playState === "starting" &&
+        currentStageNr === 0 &&
         levelMoves.length === 0 &&
         levelTypePlugin.showIntro && (
           <StartAnimation
@@ -285,8 +292,15 @@ export const Level: React.FC<Props> = ({
             afterShow={() => {
               setPlayState("busy");
             }}
-            onShow={() => {
-              // sound.play("restart");
+          />
+        )}
+      {playState === "starting" &&
+        currentStageNr !== 0 &&
+        levelMoves.length === 0 && (
+          <InvisibleMessage
+            delay={500}
+            afterShow={() => {
+              setPlayState("busy");
             }}
           />
         )}
@@ -309,7 +323,7 @@ export const Level: React.FC<Props> = ({
           }}
         />
       )}
-      {playState === "won" && (
+      {playState === "won" && currentStageNr >= maxStages - 1 && (
         <Message
           delay={1000}
           message={pick(WIN_SENTENCES, localRandom)}
@@ -323,11 +337,26 @@ export const Level: React.FC<Props> = ({
             deletePreviousMoves();
             deleteRevealed();
             clearThemeOverride();
-            deleteLevelState(false);
+            await deleteLevelState(false);
             onComplete(playState === "won");
           }}
           onShow={() => {
             sound.play("win");
+          }}
+        />
+      )}
+      {playState === "won" && currentStageNr < maxStages - 1 && (
+        <InvisibleMessage
+          afterShow={async () => {
+            await Promise.all([
+              deleteMoves(),
+              deletePreviousMoves(),
+              deleteRevealed(),
+              deleteLevelState(false)
+            ]);
+
+            clearThemeOverride();
+            onComplete(playState === "won");
           }}
         />
       )}
@@ -413,6 +442,13 @@ export const Level: React.FC<Props> = ({
           ) : undefined
         }
         animateBlocks={blockAnimations}
+        animateColumns={
+          playState === "won" && currentStageNr < maxStages - 1
+            ? "fadeOut"
+            : playState === "starting" && currentStageNr > 0
+              ? "fadeIn"
+              : "none"
+        }
         onColumnDown={onColumnDown}
         onColumnUp={onColumnUp}
         selection={activeSelectStart?.selection}

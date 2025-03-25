@@ -107,6 +107,10 @@ export const dungeon: LevelType<"dungeon"> = {
 
     return getDungeonSettings(difficulty);
   },
-  getZenSettings: (_zenLevel, difficultyLevel) =>
-    getDungeonSettings(difficultyLevel)
+  getZenSettings: (_zenLevel, difficultyLevel) => ({
+    stages: [
+      { settings: getDungeonSettings(difficultyLevel) },
+      { settings: getDungeonSettings2(difficultyLevel) }
+    ]
+  })
 };

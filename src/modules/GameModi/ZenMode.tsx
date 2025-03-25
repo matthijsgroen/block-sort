@@ -127,8 +127,10 @@ export const ZenMode: React.FC<Props> = ({
               setInLevel(true);
               return;
             }
+
             deleteGameValue(`zeninitialLevelState${zenLevelNr}`);
             deleteGameValue(`zenlevelState${zenLevelNr}`);
+            deleteGameValue(`zenlevelStage`);
 
             const difficulty = pick(difficultySettings.difficulties, random);
             const settings = levelType.getZenSettings(

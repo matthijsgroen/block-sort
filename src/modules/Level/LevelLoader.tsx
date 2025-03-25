@@ -45,7 +45,8 @@ const generateLevelContent = async (
   seed: number,
   storageKey: string,
   levelSettings: LevelSettings,
-  levelNr: number
+  levelNr: number,
+  stageNr = 0
 ): Promise<LevelState> => {
   const existingState = await getLevelStateValue(storageKey);
   if (existingState !== null) {
@@ -60,7 +61,9 @@ const generateLevelContent = async (
 
   const seeds = levelSeeds[hash] ?? [];
   const preSeed =
-    seeds.length > 0 ? seeds[levelNr % seeds.length]?.[0] : undefined;
+    seeds.length > 0
+      ? seeds[(levelNr + stageNr) % seeds.length]?.[0]
+      : undefined;
   const random = mulberry32(preSeed ?? seed);
 
   const solver = solvers[levelSettings.solver ?? "default"];
@@ -95,7 +98,8 @@ const createLevel = async (
     seed,
     storeKey,
     levelSettings,
-    levelNr
+    levelNr,
+    stage
   );
 
   // Verify level content
@@ -109,7 +113,8 @@ const createLevel = async (
       newSeed,
       storeKey,
       levelSettings,
-      levelNr
+      levelNr,
+      stage
     );
     return level;
   }
@@ -137,7 +142,7 @@ export const LevelLoader: React.FC<Props> = ({
   storagePrefix = ""
 }) => {
   const [locked] = useState({ levelNr, levelSettings, seed, title });
-  const [stage, _setState, deleteStage] = useGameStorage(
+  const [stage, setStage, deleteStage] = useGameStorage(
     `${storagePrefix}levelStage`,
     0
   );
@@ -149,6 +154,9 @@ export const LevelLoader: React.FC<Props> = ({
   const stageSettings = isMultiStageLevel(locked.levelSettings)
     ? locked.levelSettings.stages[stage].settings
     : locked.levelSettings;
+  const maxStages = isMultiStageLevel(locked.levelSettings)
+    ? locked.levelSettings.stages.length
+    : 1;
 
   const stageSettingsString = JSON.stringify(stageSettings);
 
@@ -184,27 +192,38 @@ export const LevelLoader: React.FC<Props> = ({
         }
       >
         <Level
+          key={`${locked.levelNr}-${stage}`}
           level={level}
           title={locked.title}
-          storageKey={`${storagePrefix}levelState${locked.levelNr}`}
+          storageKey={`${storagePrefix}levelState${locked.levelNr}${stage !== 0 ? `-${stage}` : ""}`}
           storagePrefix={storagePrefix}
           levelNr={levelNr}
+          currentStageNr={stage}
+          maxStages={maxStages}
           useStreak={useStreak}
           showTutorial={showTutorial}
           levelSettings={stageSettings}
           levelType={
             storagePrefix === "" ? (storedLevelType ?? levelType) : levelType
           }
-          onComplete={(won) => {
-            // TODO: Switch to next stage
-            if (won) {
+          onComplete={async (won) => {
+            if (stage >= maxStages - 1 && won) {
               deleteLevelType();
               deleteGameValue(
-                `${storagePrefix}initialLevelState${locked.levelNr}`
+                `${storagePrefix}initialLevelState${levelNr}${stage !== 0 ? `-${stage}` : ""}`
               );
               deleteStage();
+              onComplete(true);
             }
-            onComplete(won);
+            if (stage < maxStages - 1 && won) {
+              await deleteGameValue(
+                `${storagePrefix}initialLevelState${levelNr}${stage !== 0 ? `-${stage}` : ""}`
+              );
+              setStage((stage) => stage + 1);
+            }
+            if (!won) {
+              onComplete(false);
+            }
           }}
         />
       </Suspense>
