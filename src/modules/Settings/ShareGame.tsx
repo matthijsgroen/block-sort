@@ -12,7 +12,7 @@ const LazyQRCode: FC<{ url: Promise<string> }> = ({ url }) => {
   const dataUrl = use(url);
   return (
     <img
-      className="h-48 w-48 rounded-3xl"
+      className="h-48 w-48 rounded-3xl [-webkit-touch-callout:default]"
       src={dataUrl}
       alt="QR code for sharing the game"
     />
