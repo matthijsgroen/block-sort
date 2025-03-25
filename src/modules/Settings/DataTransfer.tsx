@@ -208,7 +208,12 @@ const ExportData: React.FC<{
 }> = ({ data }) => {
   return (
     <div className="flex flex-col items-center">
-      <img src={data} width={200} height={200} className="[-webkit-touch-callout:default]"></img>
+      <img
+        src={data}
+        width={200}
+        height={200}
+        className="[-webkit-touch-callout:default]"
+      ></img>
       <p className="pt-2 text-sm">
         This image contains all your game data. <strong>Long press</strong> to
         download it and upload it to your new game instance (on another device
