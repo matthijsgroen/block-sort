@@ -109,8 +109,13 @@ export const dungeon: LevelType<"dungeon"> = {
   },
   getZenSettings: (_zenLevel, difficultyLevel) => ({
     stages: [
-      { settings: getDungeonSettings(difficultyLevel) },
-      { settings: getDungeonSettings2(difficultyLevel) }
+      {
+        settings: getDungeonSettings(difficultyLevel)
+      },
+      {
+        settings: getDungeonSettings2(difficultyLevel),
+        backgroundClassname: "bg-gray-700/40"
+      }
     ]
   })
 };

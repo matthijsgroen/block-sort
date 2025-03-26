@@ -29,8 +29,6 @@ import { mulberry32, pick } from "@/support/random";
 import { getToday } from "@/support/schedule";
 import { useGameStorage, useLevelStateStorage } from "@/support/useGameStorage";
 
-import { BackgroundContext } from "../Layout/BackgroundContext";
-
 import type { HintMode } from "./autoMove";
 import { getAutoMoveCount } from "./autoMove";
 import { ghostModeModifier } from "./ghostModeModifier";
@@ -127,16 +125,9 @@ export const Level: React.FC<Props> = ({
 
   const [started, setStarted] = useState(false);
   const levelTypePlugin = getLevelTypeByType(levelType);
-  const { setThemeOverride, clearThemeOverride } = use(ThemeContext);
   const [, setStreak] = useGameStorage<number | null>("streak", null);
 
-  const { setLevelType } = use(BackgroundContext);
   useEffect(() => {
-    setLevelType(levelType);
-    if (levelTypePlugin.levelModifiers?.theme) {
-      setThemeOverride(levelTypePlugin.levelModifiers.theme);
-    }
-
     const cleanup = setTimeout(() => setStarted(true), 300);
     return () => clearTimeout(cleanup);
   }, []);
@@ -336,7 +327,6 @@ export const Level: React.FC<Props> = ({
             deleteMoves();
             deletePreviousMoves();
             deleteRevealed();
-            clearThemeOverride();
             await deleteLevelState(false);
             onComplete(playState === "won");
           }}
@@ -355,7 +345,6 @@ export const Level: React.FC<Props> = ({
               deleteLevelState(false)
             ]);
 
-            clearThemeOverride();
             onComplete(playState === "won");
           }}
         />
@@ -387,7 +376,6 @@ export const Level: React.FC<Props> = ({
         <TopButton
           buttonType="back"
           onClick={() => {
-            clearThemeOverride();
             onComplete(false);
           }}
         />

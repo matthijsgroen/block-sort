@@ -78,9 +78,9 @@ export const LevelTrack: React.FC<Props> = ({
 
   const numberFrom = Math.max(Math.floor(levelNr - 2), 0);
 
-  const { setLevelType, setScreenLayout } = use(BackgroundContext);
+  const { setBackgroundClassName, setScreenLayout } = use(BackgroundContext);
   useEffect(() => {
-    setLevelType(undefined);
+    setBackgroundClassName(undefined);
     setScreenLayout("levelTrack");
   }, []);
   const { setShowBeta, showBeta } = use(BetaContext);

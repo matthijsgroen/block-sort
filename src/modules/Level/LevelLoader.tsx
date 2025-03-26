@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, use, useEffect, useMemo, useState } from "react";
 
 import { Loading } from "@/ui/Loading/Loading";
 
@@ -7,7 +7,7 @@ import { colorHustle } from "@/game/level-creation/colorHustle";
 import { optimizeMoves } from "@/game/level-creation/optimizeMoves";
 import { solvers } from "@/game/level-creation/solvers";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
-import type { LevelTypeString } from "@/game/level-types";
+import { getLevelTypeByType, type LevelTypeString } from "@/game/level-types";
 import { hasWon } from "@/game/state";
 import type {
   LevelSettings,
@@ -24,7 +24,9 @@ import {
   useGameStorage
 } from "@/support/useGameStorage";
 
+import { BackgroundContext } from "../Layout/BackgroundContext";
 import { ErrorBoundary } from "../Layout/ErrorBoundary";
+import { ThemeContext } from "../Layout/ThemeContext";
 
 import { ErrorScreen } from "./ErrorScreen";
 import { Level } from "./Level";
@@ -151,9 +153,13 @@ export const LevelLoader: React.FC<Props> = ({
     `${storagePrefix}levelType`,
     null
   );
+  const stageData = isMultiStageLevel(locked.levelSettings)
+    ? locked.levelSettings.stages[stage]
+    : undefined;
   const stageSettings = isMultiStageLevel(locked.levelSettings)
     ? locked.levelSettings.stages[stage].settings
     : locked.levelSettings;
+
   const maxStages = isMultiStageLevel(locked.levelSettings)
     ? locked.levelSettings.stages.length
     : 1;
@@ -171,6 +177,20 @@ export const LevelLoader: React.FC<Props> = ({
     );
   }, [locked.seed, stageSettingsString, stage]);
 
+  const levelTypePlugin = getLevelTypeByType(levelType);
+  const { setThemeOverride, clearThemeOverride } = use(ThemeContext);
+  const { setBackgroundClassName } = use(BackgroundContext);
+  useEffect(() => {
+    setBackgroundClassName(
+      stageData?.backgroundClassname ?? levelTypePlugin.backgroundClassName
+    );
+    const themeOverride =
+      stageData?.levelModifiers?.theme ?? levelTypePlugin.levelModifiers?.theme;
+    if (themeOverride) {
+      setThemeOverride(themeOverride);
+    }
+  }, [stageData, levelTypePlugin]);
+
   return (
     <ErrorBoundary
       fallback={
@@ -178,6 +198,7 @@ export const LevelLoader: React.FC<Props> = ({
           levelNr={locked.levelNr}
           stageNr={stage}
           onBack={() => {
+            clearThemeOverride();
             onComplete(false);
           }}
         />
@@ -207,6 +228,7 @@ export const LevelLoader: React.FC<Props> = ({
             storagePrefix === "" ? (storedLevelType ?? levelType) : levelType
           }
           onComplete={async (won) => {
+            clearThemeOverride();
             if (stage >= maxStages - 1 && won) {
               deleteLevelType();
               deleteGameValue(
