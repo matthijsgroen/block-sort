@@ -193,6 +193,12 @@ export type LevelSettings = {
    */
   amountLockTypes?: number;
   /**
+   * From what position should we start picking locks and key pairs from the list
+   *
+   * @default 0
+   */
+  lockOffset?: number;
+  /**
    * Amount of lock / key pairs in the level
    *
    * @default 0

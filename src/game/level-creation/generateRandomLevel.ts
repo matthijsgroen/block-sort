@@ -30,6 +30,7 @@ export const generateRandomLevel = (
     solver = "default",
     amountLockTypes = 0,
     amountLocks = 0,
+    lockOffset = 0,
     layoutMap
   }: LevelSettings,
   random: () => number
@@ -65,8 +66,8 @@ export const generateRandomLevel = (
   const lockKeyBlocks: (Lock | Key)[] = [];
   if (amountLockTypes > 0) {
     const lockKeyPairs = lockNKeyPairs.slice();
-    shuffle(lockKeyPairs, random);
-    const lockTypes = lockKeyPairs.slice(0, amountLockTypes);
+    const start = Math.min(lockOffset, lockKeyPairs.length - amountLockTypes);
+    const lockTypes = lockKeyPairs.slice(start, start + amountLockTypes);
 
     const lockAndKeys = new Array(amountLocks).fill(0).flatMap((_v, i) => {
       const lockType = lockTypes[i % lockTypes.length];

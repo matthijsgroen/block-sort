@@ -61,6 +61,7 @@ export const getDungeonSettings2: SettingsProducer = (difficulty) => ({
   },
   amountLocks: 1 + Math.floor(difficulty / 4),
   amountLockTypes: Math.max(1, Math.floor(difficulty / 4)),
+  lockOffset: 2,
   hideBlockTypes: "checker",
 
   extraBuffers: [
@@ -87,6 +88,62 @@ export const getDungeonSettings2: SettingsProducer = (difficulty) => ({
     }
   ]
 });
+
+export const getDungeonSettings3: SettingsProducer = (difficulty) => {
+  const stackSize = Math.min(
+    Math.max(Math.floor(3 + (difficulty - 2) / 2), 4),
+    7
+  );
+
+  return {
+    amountColors: Math.min(1 + difficulty, 10),
+    stackSize,
+    extraPlacementStacks: 0,
+    extraPlacementLimits: difficulty > 9 ? 1 : undefined,
+    hideBlockTypes: "all",
+    amountLocks: 1 + Math.floor(difficulty / 4),
+    amountLockTypes: Math.max(1, Math.floor(difficulty / 4)),
+    lockOffset: 4,
+    extraBuffers: [
+      ...(difficulty >= 2 && difficulty < 9
+        ? [
+            {
+              amount: 1,
+              size: stackSize,
+              limit: 0
+            }
+          ]
+        : []),
+      ...(difficulty >= 9
+        ? [
+            {
+              amount: 2,
+              size: 3,
+              limit: 0
+            }
+          ]
+        : []),
+      {
+        amount: 1,
+        size: Math.min(stackSize, 4),
+        limit: 1
+      },
+      {
+        amount: 1,
+        size: 2,
+        bufferType: "inventory",
+        limit: 0
+      }
+    ],
+    layoutMap:
+      difficulty >= 9
+        ? {
+            width: 6,
+            columns: [{ fromColumn: 12, toColumn: 11 }]
+          }
+        : undefined
+  };
+};
 
 export const dungeon: LevelType<"dungeon"> = {
   type: "dungeon",
@@ -115,7 +172,18 @@ export const dungeon: LevelType<"dungeon"> = {
       {
         settings: getDungeonSettings2(difficultyLevel),
         backgroundClassname: "bg-gray-700/40"
-      }
+      },
+      ...(difficultyLevel > 3
+        ? [
+            {
+              settings: getDungeonSettings3(difficultyLevel),
+              backgroundClassname: "bg-gray-800/40",
+              levelModifiers: {
+                keepRevealed: true
+              }
+            }
+          ]
+        : [])
     ]
   })
 };
