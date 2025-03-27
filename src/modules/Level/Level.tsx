@@ -16,7 +16,6 @@ import {
   isStuck,
   revealBlocks
 } from "@/game/state";
-import { getActiveModifiers } from "@/game/themes";
 import { colorMap } from "@/game/themes/default";
 import type {
   LevelModifiers,
@@ -26,7 +25,6 @@ import type {
 } from "@/game/types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { mulberry32, pick } from "@/support/random";
-import { getToday } from "@/support/schedule";
 import { useGameStorage, useLevelStateStorage } from "@/support/useGameStorage";
 
 import type { HintMode } from "./autoMove";
@@ -48,6 +46,7 @@ type Props = {
   showTutorial?: boolean;
   storageKey: string;
   storagePrefix?: string;
+  modifiers?: LevelModifiers[];
 };
 
 export const Level: React.FC<Props> = ({
@@ -61,6 +60,7 @@ export const Level: React.FC<Props> = ({
   storageKey,
   useStreak = false,
   showTutorial = false,
+  modifiers = [],
   storagePrefix = ""
 }) => {
   const initialLevelState = use(level);
@@ -151,13 +151,11 @@ export const Level: React.FC<Props> = ({
     }
   }, [playState, levelMoves]);
 
-  const levelModifiers = getActiveModifiers(getToday());
-
   const getLevelModifier = <TModifier extends keyof LevelModifiers>(
     modifier: TModifier
   ): LevelModifiers[TModifier] =>
     levelTypePlugin.levelModifiers?.[modifier] ??
-    levelModifiers.find((m) => m.modifiers[modifier])?.modifiers[modifier];
+    modifiers.find((m) => m[modifier])?.[modifier];
 
   const ghostMode = !!getLevelModifier("ghostMode");
   const hideFormat = getLevelModifier("hideMode");

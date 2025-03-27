@@ -9,6 +9,7 @@ import { solvers } from "@/game/level-creation/solvers";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { getLevelTypeByType, type LevelTypeString } from "@/game/level-types";
 import { hasWon } from "@/game/state";
+import { getActiveModifiers } from "@/game/themes";
 import type {
   LevelSettings,
   LevelState,
@@ -16,6 +17,7 @@ import type {
 } from "@/game/types";
 import { settingsHash } from "@/support/hash";
 import { generateNewSeed, mulberry32 } from "@/support/random";
+import { getToday } from "@/support/schedule";
 import {
   deleteGameValue,
   getGameValue,
@@ -190,6 +192,10 @@ export const LevelLoader: React.FC<Props> = ({
       setThemeOverride(themeOverride);
     }
   }, [stageData, levelTypePlugin]);
+  const levelModifiers = getActiveModifiers(getToday()).map((m) => m.modifiers);
+  if (stageData?.levelModifiers) {
+    levelModifiers.push(stageData.levelModifiers);
+  }
 
   return (
     <ErrorBoundary
@@ -224,6 +230,7 @@ export const LevelLoader: React.FC<Props> = ({
           useStreak={useStreak}
           showTutorial={showTutorial}
           levelSettings={stageSettings}
+          modifiers={levelModifiers}
           levelType={
             storagePrefix === "" ? (storedLevelType ?? levelType) : levelType
           }
