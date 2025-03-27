@@ -31,7 +31,7 @@ program
   .version("1.1.0");
 
 program
-  .command("verify", { isDefault: true })
+  .command("verify")
   .description("Verify level seeds if they are still valid")
   .option(
     "-a, --all",
@@ -262,4 +262,6 @@ program
     console.log("ended");
   });
 
-program.parse(process.argv);
+program
+  .showHelpAfterError("(add --help for additional information)")
+  .parse(process.argv);

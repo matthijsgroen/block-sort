@@ -7,7 +7,7 @@ import { mulberry32 } from "@/support/random";
 
 import { clearLine, doubleProgressBar } from "./cliElements";
 import type { Seeder } from "./producers";
-import { getFilteredProducers } from "./producers";
+import { getFilteredProducers, levelProducers } from "./producers";
 import { updateSeeds } from "./updateSeeds";
 
 export const testSeeds = async (
@@ -16,9 +16,9 @@ export const testSeeds = async (
   let totalRemovedSeeds = 0;
   const updatedSeeds = levelSeeds;
 
-  const keysToPurge: Seeder[] = getFilteredProducers(types);
+  const keysToTest: Seeder[] = getFilteredProducers(types);
 
-  const totalSeeds = keysToPurge.reduce(
+  const totalSeeds = keysToTest.reduce(
     (acc, key) => acc + (updatedSeeds[key.hash]?.length ?? 0),
     0
   );
@@ -29,7 +29,25 @@ export const testSeeds = async (
 
   let lastWrite = Date.now();
 
-  for (const key of keysToPurge) {
+  const allKeys = levelProducers.map((p) => p.hash);
+  const unknownKeys = Object.keys(updatedSeeds).filter(
+    (key) => !allKeys.includes(key)
+  );
+  if (unknownKeys.length > 0) {
+    const amountUnknown = unknownKeys.reduce(
+      (acc, key) => acc + updatedSeeds[key].length,
+      0
+    );
+    console.log(
+      `Found ${unknownKeys.length} unknown level templates in the seed data. (Removing ${amountUnknown} level seeds)`
+    );
+    for (const key of unknownKeys) {
+      delete updatedSeeds[key];
+    }
+    await updateSeeds(updatedSeeds);
+  }
+
+  for (const key of keysToTest) {
     let currentCheck = 0;
     const seeds = updatedSeeds[`${key.hash}`] ?? [];
     for (const seed of seeds) {
