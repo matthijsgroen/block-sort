@@ -78,6 +78,7 @@ const produceExtraSeeds = async (
           copy[firstMissing.hash].push([message.seed, message.moves]);
           await onSeedAdded();
           generated++;
+          currentTries = 0;
           clearLine();
           process.stdout.write(prefix);
           if (totalSeedsMissing > amount) {
