@@ -2,6 +2,8 @@
 
 import c from "ansi-colors";
 import { Command } from "commander";
+import child_process from "node:child_process";
+import util from "node:util";
 import os from "os";
 
 import { levelSeeds } from "../src/data/levelSeeds";
@@ -22,6 +24,8 @@ import { updateSeeds } from "../src/modules/SeedGenerator/updateSeeds";
 import { verifySeeds } from "../src/modules/SeedGenerator/verifySeeds";
 import { settingsHash } from "../src/support/hash";
 import { mulberry32 } from "../src/support/random";
+
+const exec = util.promisify(child_process.exec);
 
 const program = new Command();
 
@@ -97,6 +101,9 @@ program
       console.log(
         `Amount of CPUs: ${c.green(String(cpuCount))} Threads: ${c.bold(String(threads))}`
       );
+      process.stdout.write("Compiling worker...");
+      await exec("rollup -c rollup.worker.config.js");
+      process.stdout.write(c.bold(" done\n"));
       await updateLevelSeeds(
         {
           all: !!options.all,
