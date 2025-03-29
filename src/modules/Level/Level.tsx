@@ -343,10 +343,8 @@ export const Level: React.FC<Props> = ({
               deleteLevelState(false)
             ]);
 
-            onComplete(playState === "won");
-          }}
-          onShow={() => {
             sound.play("stageWin");
+            onComplete(playState === "won");
           }}
         />
       )}

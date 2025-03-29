@@ -150,16 +150,18 @@ export const LevelLoader: React.FC<Props> = ({
     `${storagePrefix}levelStage`,
     0
   );
+  const [storedLockedStage, setLockedStage] = useState(stage);
+  const lockedStage = Math.max(storedLockedStage, stage);
 
   const [storedLevelType, , deleteLevelType] = useGameStorage(
     `${storagePrefix}levelType`,
     null
   );
   const stageData = isMultiStageLevel(locked.levelSettings)
-    ? locked.levelSettings.stages[stage]
+    ? locked.levelSettings.stages[lockedStage]
     : undefined;
   const stageSettings = isMultiStageLevel(locked.levelSettings)
-    ? locked.levelSettings.stages[stage].settings
+    ? locked.levelSettings.stages[lockedStage].settings
     : locked.levelSettings;
 
   const maxStages = isMultiStageLevel(locked.levelSettings)
@@ -175,9 +177,9 @@ export const LevelLoader: React.FC<Props> = ({
       stageSettings,
       storagePrefix,
       levelType,
-      stage
+      lockedStage
     );
-  }, [locked.seed, stageSettingsString, stage]);
+  }, [locked.seed, stageSettingsString, lockedStage]);
 
   const levelTypePlugin = getLevelTypeByType(levelType);
   const { setThemeOverride, clearThemeOverride } = use(ThemeContext);
@@ -202,7 +204,7 @@ export const LevelLoader: React.FC<Props> = ({
       fallback={
         <ErrorScreen
           levelNr={locked.levelNr}
-          stageNr={stage}
+          stageNr={lockedStage}
           onBack={() => {
             clearThemeOverride();
             onComplete(false);
@@ -219,13 +221,13 @@ export const LevelLoader: React.FC<Props> = ({
         }
       >
         <Level
-          key={`${locked.levelNr}-${stage}`}
+          key={`${locked.levelNr}-${lockedStage}`}
           level={level}
           title={locked.title}
-          storageKey={`${storagePrefix}levelState${locked.levelNr}${stage !== 0 ? `-${stage}` : ""}`}
+          storageKey={`${storagePrefix}levelState${locked.levelNr}${lockedStage !== 0 ? `-${lockedStage}` : ""}`}
           storagePrefix={storagePrefix}
           levelNr={levelNr}
-          currentStageNr={stage}
+          currentStageNr={lockedStage}
           maxStages={maxStages}
           useStreak={useStreak}
           showTutorial={showTutorial}
@@ -236,18 +238,19 @@ export const LevelLoader: React.FC<Props> = ({
           }
           onComplete={async (won) => {
             clearThemeOverride();
-            if (stage >= maxStages - 1 && won) {
+            if (lockedStage >= maxStages - 1 && won) {
               deleteLevelType();
               deleteGameValue(
-                `${storagePrefix}initialLevelState${levelNr}${stage !== 0 ? `-${stage}` : ""}`
+                `${storagePrefix}initialLevelState${levelNr}${lockedStage !== 0 ? `-${lockedStage}` : ""}`
               );
-              deleteStage();
+              deleteStage(false);
               onComplete(true);
             }
-            if (stage < maxStages - 1 && won) {
+            if (lockedStage < maxStages - 1 && won) {
               await deleteGameValue(
-                `${storagePrefix}initialLevelState${levelNr}${stage !== 0 ? `-${stage}` : ""}`
+                `${storagePrefix}initialLevelState${levelNr}${lockedStage !== 0 ? `-${lockedStage}` : ""}`
               );
+              setLockedStage((stage) => stage + 1);
               setStage((stage) => stage + 1);
             }
             if (!won) {
