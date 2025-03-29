@@ -160,9 +160,30 @@ export const dungeon: LevelType<"dungeon"> = {
   occurrence: (levelNr) => levelNr + 1 >= 200 && (levelNr + 1) % 50 === 0,
   getSettings(levelNr) {
     const encounter = Math.floor((levelNr + 1 - 200) / 50);
-    const difficulty = getDifficultyLevel(encounter);
+    const difficultyLevel = getDifficultyLevel(encounter);
 
-    return getDungeonSettings(difficulty);
+    return {
+      stages: [
+        {
+          settings: getDungeonSettings(difficultyLevel)
+        },
+        {
+          settings: getDungeonSettings2(difficultyLevel),
+          backgroundClassname: "bg-gray-700/40"
+        },
+        ...(difficultyLevel > 3
+          ? [
+              {
+                settings: getDungeonSettings3(difficultyLevel),
+                backgroundClassname: "bg-gray-800/40",
+                levelModifiers: {
+                  keepRevealed: true
+                }
+              }
+            ]
+          : [])
+      ]
+    };
   },
   getZenSettings: (_zenLevel, difficultyLevel) => ({
     stages: [
