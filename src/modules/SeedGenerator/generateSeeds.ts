@@ -76,6 +76,7 @@ const produceExtraSeeds = async (
     workers.forEach((worker) => {
       worker.on("message", async (message) => {
         if (message.seed) {
+          currentTries++;
           // test seed
           const [verified] = await verifySeed(settings, message.seed);
 
@@ -85,7 +86,9 @@ const produceExtraSeeds = async (
           }
           copy[firstMissing.hash].push([message.seed, message.moves]);
           await onSeedAdded();
-          generated++;
+          if (generated < amount) {
+            generated++;
+          }
           currentTries = 0;
           clearLine();
           process.stdout.write(prefix);
