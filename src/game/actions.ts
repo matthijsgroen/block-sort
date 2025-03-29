@@ -58,6 +58,10 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
         if (topBlockTarget?.revealed === false) {
           topBlockTarget.revealed = true;
         }
+        const topBlockOrigin = draft.columns[move.from].blocks[0];
+        if (topBlockOrigin?.revealed === false) {
+          topBlockOrigin.revealed = true;
+        }
         return;
       }
     }
