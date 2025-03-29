@@ -1,5 +1,5 @@
 import type { Dispatch } from "react";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import clsx from "clsx";
 
 import { encodeForContent } from "@/support/emojiEncoding";
@@ -21,6 +21,7 @@ export type Props = {
    */
   index?: number;
   locked?: boolean;
+  blocked?: boolean;
   shape?: string;
   shapeColored?: boolean;
   shadow?: boolean;
@@ -53,6 +54,7 @@ export const Block: React.FC<Props> = ({
   selected = null,
   suggested = null,
   locked = false,
+  blocked = false,
   shadow = true,
   blur = false,
   shapeColored = false
@@ -95,6 +97,11 @@ export const Block: React.FC<Props> = ({
   const hiddenColor = hideFormatToColor[hideFormat];
   const showTopShape = revealed || hideFormat !== "present";
 
+  const isPlacing = useMemo(
+    () => !selected && !isLocked && blocked,
+    [selected]
+  );
+
   return (
     <div
       ref={blockRef}
@@ -114,7 +121,9 @@ export const Block: React.FC<Props> = ({
         {
           [styles.shadow]: shadow && !selected,
           "animate-locked": !selected && isLocked,
-          "animate-place": !selected && !isLocked,
+          "animate-blocked": blocked,
+          "animate-place": isPlacing && !blocked,
+          "translate-y-4": !selected && !isLocked && !blocked && !isPlacing,
           [styles.selected]: selected && !isLocked
         }
       )}

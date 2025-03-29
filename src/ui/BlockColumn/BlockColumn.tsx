@@ -26,6 +26,7 @@ type Props = {
   theme?: BlockTheme;
   hideFormat?: HideFormat;
   motionDuration?: number;
+  blocked?: boolean;
 
   animation: "fadeIn" | "fadeOut" | "none";
   animationDelay?: number;
@@ -55,6 +56,7 @@ export const BlockColumn: React.FC<Props> = ({
   hideFormat = "glass",
   started = true,
   suggested = false,
+  blocked = false,
   amountSelected = 0,
   amountSuggested = 0,
   animation = "none",
@@ -217,6 +219,7 @@ export const BlockColumn: React.FC<Props> = ({
                 }
                 shapeColored={(isKey(block) || isLock(block)) && block.revealed}
                 selected={isSelected}
+                blocked={index === 0 && blocked}
                 suggested={isSuggested}
                 onDrop={onDrop}
                 onPickUp={handlePickup}

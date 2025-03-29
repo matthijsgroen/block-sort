@@ -210,7 +210,7 @@ export const Level: React.FC<Props> = ({
 
   const onColumnDown = useCallback(
     (columnIndex: number) => {
-      if (activeSelectStart) {
+      if (activeSelectStart && activeSelectStart.selection[1] > 0) {
         if (activeSelectStart.selection[0] === columnIndex) {
           setSelectStart(null);
           return;
@@ -219,19 +219,17 @@ export const Level: React.FC<Props> = ({
         setUsedAutoMoves(-1);
       } else {
         const selection = selectFromColumn(levelState, columnIndex);
-        if (selection.length > 0) {
-          setSelectStart({
-            selection: [columnIndex, selection.length],
-            state: levelState
-          });
-        }
+        setSelectStart({
+          selection: [columnIndex, selection.length],
+          state: levelState
+        });
       }
     },
     [levelState, activeSelectStart]
   );
   const onColumnUp = useCallback(
     (columnIndex: number) => {
-      if (activeSelectStart) {
+      if (activeSelectStart && activeSelectStart.selection[1] > 0) {
         if (activeSelectStart.selection[0] === columnIndex) {
           return;
         }
@@ -343,8 +341,10 @@ export const Level: React.FC<Props> = ({
               deleteLevelState(false)
             ]);
 
-            sound.play("stageWin");
             onComplete(playState === "won");
+          }}
+          onShow={() => {
+            sound.play("stageWin");
           }}
         />
       )}

@@ -231,6 +231,7 @@ export const LevelLayout: React.FC<Props> = ({
                 onPointerUp={handlePointerUp}
                 started={started}
                 suggested={suggestionTarget === i}
+                blocked={selection && i === selection[0] && selection[1] === 0}
                 amountSelected={
                   selection && i === selection[0] ? selection[1] : 0
                 }

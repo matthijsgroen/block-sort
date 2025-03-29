@@ -42,6 +42,7 @@ export default {
         pulseEase: "pulseEase 2s ease-in-out infinite",
         rayShift: "rayShift 6s ease-in-out alternate infinite",
         rayShift2: "rayShift2 5.5s ease-in-out alternate infinite",
+        blocked: "blocked 0.2s 3 ease-in-out forwards",
         place: "place 0.2s ease-out 2ms forwards",
         moveBlock: "moveBlock 1.4s ease-out 2ms forwards",
         locked: "locked 0.5s ease-in-out forwards",
@@ -250,6 +251,12 @@ export default {
           "60%": { translate: "0 -2rem" },
           "85%": { translate: "0 1.2rem" },
           "95%": { translate: "0 0.9rem" },
+          "100%": { translate: "0 1rem" }
+        },
+        blocked: {
+          "0%": { translate: "0 1rem" },
+          "33%": { translate: "-0.1rem 1rem" },
+          "66%": { translate: "0.1rem 1rem" },
           "100%": { translate: "0 1rem" }
         },
         place: {
