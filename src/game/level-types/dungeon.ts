@@ -160,7 +160,7 @@ export const dungeon: LevelType<"dungeon"> = {
   occurrence: (levelNr) => levelNr + 1 >= 200 && (levelNr + 1) % 50 === 0,
   getSettings(levelNr) {
     const encounter = Math.floor((levelNr + 1 - 200) / 50);
-    const difficultyLevel = getDifficultyLevel(encounter);
+    const difficultyLevel = getDifficultyLevel(encounter * 3);
 
     return {
       stages: [
