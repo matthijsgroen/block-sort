@@ -3,12 +3,29 @@ import { moveBlocks } from "@/game/actions";
 import { optimizeMoves } from "@/game/level-creation/optimizeMoves";
 import { generatePlayableLevel } from "@/game/level-creation/tactics";
 import { hasWon } from "@/game/state";
+import type { LevelSettings, LevelState } from "@/game/types";
 import { mulberry32 } from "@/support/random";
 
 import { clearLine, doubleProgressBar } from "./cliElements";
 import type { Seeder } from "./producers";
 import { getFilteredProducers, levelProducers } from "./producers";
 import { updateSeeds } from "./updateSeeds";
+
+export const verifySeed = async (
+  settings: LevelSettings,
+  seed: number
+): Promise<[boolean, LevelState]> => {
+  const random = mulberry32(seed);
+  const level = await generatePlayableLevel(settings, {
+    random,
+    seed: seed
+  }).then(optimizeMoves);
+  const playedLevel = level.moves.reduce(
+    (state, move) => moveBlocks(state, move),
+    level
+  );
+  return [hasWon(playedLevel), level];
+};
 
 export const testSeeds = async (
   types: { name: string; levels: number[] }[] | undefined = undefined
@@ -62,18 +79,10 @@ export const testSeeds = async (
         seeds.length,
         20
       );
-      const random = mulberry32(seed[0]);
       const settings = key.producer(key.difficulty + 1);
       try {
-        const level = await generatePlayableLevel(settings, {
-          random,
-          seed: seed[0]
-        }).then(optimizeMoves);
-        const playedLevel = level.moves.reduce(
-          (state, move) => moveBlocks(state, move),
-          level
-        );
-        if (!hasWon(playedLevel)) {
+        const [verified, level] = await verifySeed(settings, seed[0]);
+        if (!verified) {
           updatedSeeds[key.hash] = updatedSeeds[key.hash].filter(
             (s) => s[0] !== seed[0]
           );

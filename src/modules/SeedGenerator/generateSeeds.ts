@@ -18,13 +18,14 @@ import {
 } from "./constants";
 import type { Seeder } from "./producers";
 import { getFilteredProducers, levelProducers } from "./producers";
+import { verifySeed } from "./testSeeds";
 import { updateSeeds } from "./updateSeeds";
 
 const produceExtraSeeds = async (
   firstMissing: Seeder,
   copy: SeedMap,
   amount: number,
-  threads: number,
+  concurrency: number,
   onSeedAdded: () => Promise<void> = async () => {},
   prefix = "",
   totalSeedsMissing = amount,
@@ -48,7 +49,7 @@ const produceExtraSeeds = async (
   process.stdout.write(c.bold(c.whiteBright(` 0 workers`)));
   process.stdout.write(c.dim(` ${spinnerFrames[0]} (${0})`));
 
-  const MAX_WORKERS = threads;
+  const MAX_WORKERS = concurrency;
   if (!copy[firstMissing.hash]) {
     copy[firstMissing.hash] = [];
   }
@@ -75,6 +76,13 @@ const produceExtraSeeds = async (
     workers.forEach((worker) => {
       worker.on("message", async (message) => {
         if (message.seed) {
+          // test seed
+          const [verified] = await verifySeed(settings, message.seed);
+
+          if (!verified) {
+            // invalid seed
+            return;
+          }
           copy[firstMissing.hash].push([message.seed, message.moves]);
           await onSeedAdded();
           generated++;
@@ -138,7 +146,7 @@ const produceSeeds = async (
   amount: number,
   seeder: Seeder,
   levelSeedsCopy: SeedMap,
-  threads: number,
+  concurrency: number,
   infoLine: string,
   totalSeedsMissing: number,
   seedsProduced: number
@@ -150,7 +158,7 @@ const produceSeeds = async (
       seeder,
       levelSeedsCopy,
       amount,
-      threads,
+      concurrency,
       async () => {
         time = Date.now() - time;
         count++;

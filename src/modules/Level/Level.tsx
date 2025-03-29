@@ -345,6 +345,9 @@ export const Level: React.FC<Props> = ({
 
             onComplete(playState === "won");
           }}
+          onShow={() => {
+            sound.play("stageWin");
+          }}
         />
       )}
       {playState === "lost" && (
