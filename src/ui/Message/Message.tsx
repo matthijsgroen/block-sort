@@ -1,20 +1,34 @@
-import { useEffect, useState } from "react";
 import clsx from "clsx";
 
 import { Block } from "../Block/Block";
 
+import { useDelay } from "./useDelay";
+
 import styles from "./Message.module.css";
 
-type Props = {
-  message: string;
-  color: string;
-  shape?: string;
+type InvisibleMessageProps = {
   delay?: number;
   afterShow?: VoidFunction;
   onShow?: VoidFunction;
 };
 
-export const Message: React.FC<Props> = ({
+type MessageProps = {
+  message: string;
+  color: string;
+  shape?: string;
+} & InvisibleMessageProps;
+
+export const InvisibleMessage: React.FC<InvisibleMessageProps> = ({
+  afterShow,
+  onShow,
+  delay = 0
+}) => {
+  useDelay(delay, 3000, onShow, afterShow);
+
+  return null;
+};
+
+export const Message: React.FC<MessageProps> = ({
   message,
   afterShow,
   onShow,
@@ -22,23 +36,7 @@ export const Message: React.FC<Props> = ({
   shape = "❤️",
   color = "green"
 }) => {
-  const [started, setStarted] = useState(false);
-  useEffect(() => {
-    const timeOut = setTimeout(() => {
-      setStarted(true);
-      onShow?.();
-    }, delay);
-    return () => clearTimeout(timeOut);
-  }, [delay]);
-
-  useEffect(() => {
-    if (started) {
-      const timeOut = setTimeout(() => {
-        afterShow?.();
-      }, 3000);
-      return () => clearTimeout(timeOut);
-    }
-  }, [started]);
+  const started = useDelay(delay, 3000, onShow, afterShow);
 
   return started ? (
     <div

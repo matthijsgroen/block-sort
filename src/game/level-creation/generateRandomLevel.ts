@@ -30,6 +30,7 @@ export const generateRandomLevel = (
     solver = "default",
     amountLockTypes = 0,
     amountLocks = 0,
+    lockOffset = 0,
     layoutMap
   }: LevelSettings,
   random: () => number
@@ -65,8 +66,8 @@ export const generateRandomLevel = (
   const lockKeyBlocks: (Lock | Key)[] = [];
   if (amountLockTypes > 0) {
     const lockKeyPairs = lockNKeyPairs.slice();
-    shuffle(lockKeyPairs, random);
-    const lockTypes = lockKeyPairs.slice(0, amountLockTypes);
+    const start = Math.min(lockOffset, lockKeyPairs.length - amountLockTypes);
+    const lockTypes = lockKeyPairs.slice(start, start + amountLockTypes);
 
     const lockAndKeys = new Array(amountLocks).fill(0).flatMap((_v, i) => {
       const lockType = lockTypes[i % lockTypes.length];
@@ -78,11 +79,16 @@ export const generateRandomLevel = (
 
   const amountBars = amountColors * stacksPerColor;
   const blocks: BlockType[] = [];
-  for (const color of blockColors) {
-    blocks.push(...new Array(stackSize * stacksPerColor).fill(color));
-  }
-  blocks.splice(0, lockKeyBlocks.length, ...lockKeyBlocks);
 
+  const amountPerColor = Math.ceil(lockKeyBlocks.length / blockColors.length);
+
+  for (const color of blockColors) {
+    const newColor = new Array(stackSize * stacksPerColor).fill(color);
+    // Evenly distribute locks and keys over the colors
+    const locksOrKeys = lockKeyBlocks.splice(0, amountPerColor);
+    newColor.splice(0, locksOrKeys.length, ...locksOrKeys);
+    blocks.push(...newColor);
+  }
   shuffle(blocks, random);
 
   const columns = timesMap<Column>(amountBars, (ci) =>

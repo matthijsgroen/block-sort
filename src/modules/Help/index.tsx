@@ -10,7 +10,7 @@ type Props = {
 
 export const Help: React.FC<Props> = ({ onClose }) => (
   <Dialog
-    wide={false}
+    wide={true}
     onClose={() => {
       onClose?.();
     }}

@@ -2,6 +2,8 @@
 
 import c from "ansi-colors";
 import { Command } from "commander";
+import child_process from "node:child_process";
+import util from "node:util";
 import os from "os";
 
 import { levelSeeds } from "../src/data/levelSeeds";
@@ -12,16 +14,18 @@ import type { LevelSettings } from "../src/game/types";
 import { SEED } from "../src/modules/SeedGenerator/constants";
 import { updateLevelSeeds } from "../src/modules/SeedGenerator/generateSeeds";
 import { producers } from "../src/modules/SeedGenerator/producers";
-import { purgeSeeds } from "../src/modules/SeedGenerator/purgeSeeds";
 import { removeSeedsForKey } from "../src/modules/SeedGenerator/removeSeeds";
 import {
   exportSeedInformation,
   showSeedStatistics
 } from "../src/modules/SeedGenerator/seedInformation";
+import { testSeeds } from "../src/modules/SeedGenerator/testSeeds";
 import { updateSeeds } from "../src/modules/SeedGenerator/updateSeeds";
 import { verifySeeds } from "../src/modules/SeedGenerator/verifySeeds";
 import { settingsHash } from "../src/support/hash";
 import { mulberry32 } from "../src/support/random";
+
+const exec = util.promisify(child_process.exec);
 
 const program = new Command();
 
@@ -31,7 +35,7 @@ program
   .version("1.1.0");
 
 program
-  .command("verify", { isDefault: true })
+  .command("verify")
   .description("Verify level seeds if they are still valid")
   .option(
     "-a, --all",
@@ -62,7 +66,7 @@ program
   );
 
 program
-  .command("run")
+  .command("generate")
   .description("Generate new level seeds")
   .option(
     "-a, --all",
@@ -97,6 +101,9 @@ program
       console.log(
         `Amount of CPUs: ${c.green(String(cpuCount))} Threads: ${c.bold(String(threads))}`
       );
+      process.stdout.write("Compiling worker...");
+      await exec("rollup -c rollup.worker.config.js");
+      process.stdout.write(c.bold(" done\n"));
       await updateLevelSeeds(
         {
           all: !!options.all,
@@ -109,8 +116,8 @@ program
   );
 
 program
-  .command("purge")
-  .description("Purge invalid level seeds")
+  .command("test")
+  .description("Test seeds and purge invalid level seeds")
   .option(
     "-t, --type <levelTypes>",
     "comma separated list of level types",
@@ -149,7 +156,7 @@ program
       }
     }
 
-    await purgeSeeds(options.type);
+    await testSeeds(options.type);
   });
 
 program
@@ -167,8 +174,8 @@ program
   });
 
 program
-  .command("erase")
-  .description("Erase level seeds for a specific level type and difficulty")
+  .command("remove")
+  .description("Remove level seeds for a specific level type and difficulty")
   .argument("levelType", "The level type to erase")
   .argument("difficulty", "The difficulty to erase")
   .action(async (levelType, difficulty) => {
@@ -191,7 +198,7 @@ program
       process.exit(1);
     }
     console.log(
-      c.bold(`Erasing seeds for ${levelType} difficulty ${difficulty}`)
+      c.bold(`Removing seeds for ${levelType} difficulty ${difficulty}`)
     );
     const settings = producer.producer(difficulty);
 
@@ -262,4 +269,6 @@ program
     console.log("ended");
   });
 
-program.parse(process.argv);
+program
+  .showHelpAfterError("(add --help for additional information)")
+  .parse(process.argv);

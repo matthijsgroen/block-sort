@@ -54,6 +54,14 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
       const lock = matchingLockFor(blocks[0]);
       if (draft.columns[move.to].blocks[0]?.blockType === lock) {
         draft.columns[move.to].blocks.shift();
+        const topBlockTarget = draft.columns[move.to].blocks[0];
+        if (topBlockTarget?.revealed === false) {
+          topBlockTarget.revealed = true;
+        }
+        const topBlockOrigin = draft.columns[move.from].blocks[0];
+        if (topBlockOrigin?.revealed === false) {
+          topBlockOrigin.revealed = true;
+        }
         return;
       }
     }

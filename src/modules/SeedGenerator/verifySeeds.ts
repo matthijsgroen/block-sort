@@ -35,7 +35,7 @@ export const verifySeeds = async (
         );
       });
     if (!all) {
-      console.log("Please run 'run' first.\n");
+      console.log("Please run 'generate' first.\n");
       process.exit(1);
     } else {
       foundIssues = true;
@@ -57,7 +57,7 @@ export const verifySeeds = async (
       );
       if (!all) {
         console.log(
-          "Please use the 'run' command to regenerate the missing seeds.\n"
+          "Please use the 'generate' command to regenerate the missing seeds.\n"
         );
         process.exit(1);
       } else {
@@ -115,7 +115,7 @@ export const verifySeeds = async (
 
           if (!all) {
             console.log(
-              "Please use the 'purge' command to remove the invalid seeds."
+              "Please use the 'test' command to remove the invalid seeds."
             );
             process.exit(1);
           } else {
@@ -140,7 +140,7 @@ export const verifySeeds = async (
         );
         if (!all) {
           console.log(
-            "Please use the 'purge' command to remove the invalid seeds."
+            "Please use the 'test' command to remove the invalid seeds."
           );
           process.exit(1);
         } else {
@@ -153,8 +153,10 @@ export const verifySeeds = async (
   console.log("");
 
   if (foundIssues) {
-    console.log("Please use the 'purge' command to remove the invalid seeds.");
-    console.log("Please use the 'run' command to generate the missing seeds.");
+    console.log("Please use the 'test' command to remove the invalid seeds.");
+    console.log(
+      "Please use the 'generate' command to generate the missing seeds."
+    );
     process.exit(1);
   } else {
     console.log("All ok!");

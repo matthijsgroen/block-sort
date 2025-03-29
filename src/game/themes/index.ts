@@ -1,10 +1,9 @@
-import type { LevelModifiers } from "@/game/level-types/types";
 import { filterInRange, type RangedItem } from "@/support/schedule";
 
 import type { BlockColor, BlockType } from "../blocks";
 import { type Key, keys, type Lock, locks } from "../level-creation/lock-n-key";
+import type { LevelModifiers } from "../types";
 
-import { colorMap as colorMapDaily, shapeMap as shapeMapDaily } from "./daily";
 import { colorMap, shapeMap } from "./default";
 import { colorMap as colorMapFall, shapeMap as shapeMapFall } from "./fall";
 import {
@@ -25,8 +24,7 @@ export type BlockTheme =
   | "halloween"
   | "winter"
   | "spring"
-  | "summer"
-  | "daily";
+  | "summer";
 
 export const getShapeMapping = (
   theme: BlockTheme
@@ -44,8 +42,7 @@ export const getShapeMapping = (
     halloween: shapeMapFall,
     winter: shapeMapWinter,
     spring: shapeMapSpring,
-    summer: shapeMapSummer,
-    daily: shapeMapDaily
+    summer: shapeMapSummer
   };
   return { ...mapping[theme], ...lockNKeyMapping };
 };
@@ -66,8 +63,7 @@ export const getColorMapping = (
     halloween: colorMapFall,
     winter: colorMapWinter,
     spring: colorMapSpring,
-    summer: colorMapSummer,
-    daily: colorMapDaily
+    summer: colorMapSummer
   };
   return { ...mapping[theme], ...lockNKeyMapping };
 };

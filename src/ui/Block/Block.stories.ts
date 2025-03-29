@@ -31,6 +31,7 @@ const meta = {
     revealed: true,
     shadow: true,
     suggested: false,
+    shapeColored: false,
     index: 0,
     onDrop: fn(),
     onLock: fn(),
@@ -51,5 +52,13 @@ export const hidden: Story = {
   args: {
     shape: "✔",
     revealed: false
+  }
+};
+
+export const lock: Story = {
+  args: {
+    shape: "👻",
+    color: "#333333",
+    shapeColored: true
   }
 };

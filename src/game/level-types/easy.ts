@@ -4,7 +4,7 @@ import {
   getDifficultyLevel,
   LEVEL_SCALE
 } from "../level-settings/levelSettings";
-import type { LevelSettings } from "../types";
+import type { LevelSettings, MultiStageLevelSettings } from "../types";
 
 import { hard } from "./hard";
 import { normal } from "./normal";
@@ -32,7 +32,7 @@ export const easy: LevelType<"easy"> = {
     );
     const lvlSimulation = LEVEL_SCALE[easyDifficulty - 1];
 
-    const templates: LevelSettings[] = [
+    const templates: (LevelSettings | MultiStageLevelSettings)[] = [
       normal.getSettings(lvlSimulation, random),
       hard.getSettings(lvlSimulation, random),
       special.getSettings(lvlSimulation, random)

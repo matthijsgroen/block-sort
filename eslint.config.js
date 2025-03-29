@@ -57,6 +57,7 @@ export default [
           mp3: "always",
           json: "always",
           md: "always",
+          mdx: "always",
           aac: "always",
           css: "always"
         }

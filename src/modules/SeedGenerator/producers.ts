@@ -1,5 +1,9 @@
 import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";
-import { getDungeonSettings } from "@/game/level-types/dungeon";
+import {
+  getDungeonSettings,
+  getDungeonSettings2,
+  getDungeonSettings3
+} from "@/game/level-types/dungeon";
 import { getHard2Settings, getHardSettings } from "@/game/level-types/hard";
 import {
   getNormal2Settings,
@@ -42,7 +46,9 @@ export const producers: Producer[] = [
   { name: "Hard2", producer: getHard2Settings },
   { name: "Spring", producer: getSpringSettings },
   { name: "SpringEasy", producer: getEasySpringSettings },
-  { name: "Dungeon", producer: getDungeonSettings }
+  { name: "Dungeon", producer: getDungeonSettings },
+  { name: "Dungeon2", producer: getDungeonSettings2 },
+  { name: "Dungeon3", producer: getDungeonSettings3 }
   // { name: "Daily", producer: getDailySettings }
 ];
 

@@ -7,6 +7,7 @@ import progress from "@/assets/progress.mp3";
 import restart from "@/assets/restart.mp3";
 import match from "@/assets/splash-audio.mp3";
 import spring from "@/assets/spring.aac";
+import stageWin from "@/assets/stage.mp3";
 import summer from "@/assets/summer.aac";
 import win from "@/assets/win.mp3";
 import winter from "@/assets/winter.aac";
@@ -55,6 +56,7 @@ const audioItems = {
   place: createItem(Stream.effects, place),
   lock: createItem(Stream.effects, place, 1.0, { multipleInstances: true }),
   win: createItem(Stream.effects, win),
+  stageWin: createItem(Stream.effects, stageWin),
   pickup: createItem(Stream.effects, pickup, 2.0),
   progress: createItem(Stream.effects, progress),
   match: createItem(Stream.effects, match)

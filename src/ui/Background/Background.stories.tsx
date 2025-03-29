@@ -1,5 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
+import { dungeon } from "@/game/level-types/dungeon";
+import { easy } from "@/game/level-types/easy";
+import { hard } from "@/game/level-types/hard";
+import { scrambled } from "@/game/level-types/scrambled";
+import { special } from "@/game/level-types/special";
+
 import { Background } from "./Background";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
@@ -13,15 +19,22 @@ const meta = {
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ["autodocs"],
   args: {
-    levelType: "normal",
+    backgroundClassName: "",
     theme: "default",
     layout: "levelTrack",
     musicEnabled: true
   },
   argTypes: {
-    levelType: {
+    backgroundClassName: {
       options: ["none", "easy", "hard", "special", "scrambled", "dungeon"],
-      control: "select"
+      mapping: {
+        none: "",
+        easy: easy.backgroundClassName,
+        hard: hard.backgroundClassName,
+        special: special.backgroundClassName,
+        scrambled: scrambled.backgroundClassName,
+        dungeon: dungeon.backgroundClassName
+      }
     },
     theme: {
       options: ["default", "halloween", "winter", "spring", "summer"],

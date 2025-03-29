@@ -758,8 +758,26 @@ const [vampire, garlic] = createLockAndKey("vampire", "#666699", "🧛", "🧄")
 const [dragon, sword] = createLockAndKey("dragon", "#ff0000", "🐉", "️🗡️");
 const [fire, water] = createLockAndKey("fire", "#800080", "🔥", "💧");
 const [dinosaur, comet] = createLockAndKey("dinosaur", "#008000", "🦖", "☄️");
-const locks = [ghost, vampire, dragon, fire, dinosaur];
-const keys = [flashlight, garlic, sword, water, comet];
+const [lock, key] = createLockAndKey("locked", "#2a2627", "🔒", "️🗝️");
+const [robot, lightning] = createLockAndKey("robot", "#a684ff", "🤖", "️️⚡️");
+const locks = [
+    lock,
+    fire,
+    ghost,
+    vampire,
+    robot,
+    dinosaur,
+    dragon
+];
+const keys = [
+    key,
+    water,
+    flashlight,
+    garlic,
+    lightning,
+    comet,
+    sword
+];
 const lockNKeyPairs = [...locks, ...keys].reduce((result, { pairName }) => result.includes(pairName) ? result : result.concat(pairName), []);
 
 const canPlaceAmount = (level, columnIndex, blocks) => {
@@ -897,6 +915,11 @@ const keyLockSolves = (level) => {
     const keys = level.columns.filter((col) => isKey(col.blocks[0]));
     return locks.some((lock) => keys.some((key) => isMatch(key.blocks[0], lock.blocks[0])));
 };
+const keyStores = (level) => {
+    const chests = level.columns.filter((col) => col.type === "inventory" && col.columnSize > col.blocks.length);
+    const keys = level.columns.filter((col) => col.type !== "inventory" && isKey(col.blocks[0]));
+    return keys.length > 0 && chests.length > 0;
+};
 const isStuck = (level) => {
     const topSignature = createSignature(level);
     const originalHidden = countHidden(level);
@@ -906,7 +929,8 @@ const isStuck = (level) => {
     const initialBlocked = hasBuffers &&
         blockedByBuffer(level) &&
         blockedByPlacement(level) &&
-        !keyLockSolves(level);
+        !keyLockSolves(level) &&
+        !keyStores(level);
     if (initialBlocked)
         return true;
     return level.columns.every((_source, sourceIndex) => {
@@ -1042,6 +1066,10 @@ const moveBlocks = (level, move) => produce((draft) => {
         const lock = matchingLockFor(blocks[0]);
         if (draft.columns[move.to].blocks[0]?.blockType === lock) {
             draft.columns[move.to].blocks.shift();
+            const topBlockTarget = draft.columns[move.to].blocks[0];
+            if (topBlockTarget?.revealed === false) {
+                topBlockTarget.revealed = true;
+            }
             return;
         }
     }
@@ -1653,7 +1681,7 @@ const createBlock = (blockType, hidden) => ({
     revealed: hidden !== true
 });
 
-const generateRandomLevel = ({ amountColors = 2, stackSize = 4, extraPlacementStacks = 2, extraPlacementLimits = 0, buffers = 0, bufferSizes = 1, bufferPlacementLimits = 0, extraBuffers = [], blockColorPick = "start", hideBlockTypes = "none", stacksPerColor = 1, solver = "default", amountLockTypes = 0, amountLocks = 0, layoutMap }, random) => {
+const generateRandomLevel = ({ amountColors = 2, stackSize = 4, extraPlacementStacks = 2, extraPlacementLimits = 0, buffers = 0, bufferSizes = 1, bufferPlacementLimits = 0, extraBuffers = [], blockColorPick = "start", hideBlockTypes = "none", stacksPerColor = 1, solver = "default", amountLockTypes = 0, amountLocks = 0, lockOffset = 0, layoutMap }, random) => {
     // This results in gradually reveal new colors as you progress
     const colorPool = Math.ceil(amountColors / 4) * 4;
     // Generate level, this should be extracted
@@ -1678,8 +1706,8 @@ const generateRandomLevel = ({ amountColors = 2, stackSize = 4, extraPlacementSt
     const lockKeyBlocks = [];
     if (amountLockTypes > 0) {
         const lockKeyPairs = lockNKeyPairs.slice();
-        shuffle(lockKeyPairs, random);
-        const lockTypes = lockKeyPairs.slice(0, amountLockTypes);
+        const start = Math.min(lockOffset, lockKeyPairs.length - amountLockTypes);
+        const lockTypes = lockKeyPairs.slice(start, start + amountLockTypes);
         const lockAndKeys = new Array(amountLocks).fill(0).flatMap((_v, i) => {
             const lockType = lockTypes[i % lockTypes.length];
             return [`${lockType}-lock`, `${lockType}-key`];
@@ -1688,10 +1716,14 @@ const generateRandomLevel = ({ amountColors = 2, stackSize = 4, extraPlacementSt
     }
     const amountBars = amountColors * stacksPerColor;
     const blocks = [];
+    const amountPerColor = Math.ceil(lockKeyBlocks.length / blockColors.length);
     for (const color of blockColors) {
-        blocks.push(...new Array(stackSize * stacksPerColor).fill(color));
+        const newColor = new Array(stackSize * stacksPerColor).fill(color);
+        // Evenly distribute locks and keys over the colors
+        const locksOrKeys = lockKeyBlocks.splice(0, amountPerColor);
+        newColor.splice(0, locksOrKeys.length, ...locksOrKeys);
+        blocks.push(...newColor);
     }
-    blocks.splice(0, lockKeyBlocks.length, ...lockKeyBlocks);
     shuffle(blocks, random);
     const columns = timesMap(amountBars, (ci) => createPlacementColumn(stackSize, new Array(stackSize)
         .fill(0)
