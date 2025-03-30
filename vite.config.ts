@@ -1,6 +1,5 @@
 import mdx from "@mdx-js/rollup";
 import react from "@vitejs/plugin-react";
-// import markdownIt from "markdown-it";
 import * as path from "node:path";
 import type { Plugin } from "vite";
 import { defineConfig } from "vite";
@@ -11,20 +10,6 @@ import info from "./package.json";
 const ReactCompilerConfig = {
   /* ... */
 };
-
-// const md = markdownIt();
-// const defaultRender =
-//   md.renderer.rules.link_open ||
-//   function (tokens, idx, options, _env, self) {
-//     return self.renderToken(tokens, idx, options);
-//   };
-
-// md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
-//   // Add a new `target` attribute, or replace the value of the existing one.
-//   tokens[idx].attrSet("target", "_blank");
-//   // Pass the token to the default renderer.
-//   return defaultRender(tokens, idx, options, env, self);
-// };
 
 const htmlPlugin = () => {
   return {
@@ -49,7 +34,6 @@ export default defineConfig({
         plugins: [["babel-plugin-react-compiler", ReactCompilerConfig]]
       }
     }),
-    // markDown({ mode: [Mode.REACT], markdownIt: md }),
     htmlPlugin(),
     VitePWA({
       registerType: "prompt",
