@@ -120,7 +120,9 @@ const blockedByBuffer = (level: LevelState) => {
     if (col.blocks.length === 0 || col.type !== "placement" || col.locked)
       return;
     const countSame = selectFromColumn(level, index).length;
-    placementSeries.push([col.blocks[0].blockType, countSame, index]);
+    if (countSame > 0) {
+      placementSeries.push([col.blocks[0].blockType, countSame, index]);
+    }
   });
 
   const bufferSpaceForColor = (blockColor: BlockType, index: number) =>
