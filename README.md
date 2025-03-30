@@ -38,24 +38,46 @@ yarn dev
 > This project uses _yarn pnp_. This means you need to install the
 > [ZipFS](https://marketplace.visualstudio.com/items?itemName=arcanis.vscode-zipfs) extension, and you possibly need to run `yarn dlx @yarnpkg/sdks`
 
-Running tests:
-
-```
-yarn test
-```
-
-Lint code:
-
-```
-yarn lint
-```
+- Running tests: `yarn test`
+- Lint code: `yarn lint`
 
 The game will use pre-created seeds to generate levels in a fast way on mobile (reduces power usage and loading times).
 
-To generate all the seeds, run:
+For all management around these seeds, check out:
 
 ```
-bin/generate-level-seeds.ts run --all
+bin/level-seeds.ts --help
+```
+
+To test all the seeds, and remove the invalid ones:
+
+```
+bin/level-seeds.ts test
+```
+
+To generate missing seeds, run:
+
+```
+bin/level-seeds.ts generate --all
+```
+
+Reading output of generation process:
+
+```
+Seeding 198 more for "Dungeon" - 9... [██▀▀▀▀▀▀▀▀▀▀------------] 461/847 (54.43%) - 10/198 10 workers ⠸ (233)
+         |            |          |     |  |                      |                  |      |          |  |
+         1.           2.         3.    4. 5.                     6.                 7.     8.         9. 10.
+
+1. Amount to seed for this level type / difficulty level combination
+2. Name of the template producer (level type)
+3. Difficulty level (1 - 11)
+4. Bottom progressbar, current template / level combination progress
+5. Top progressbar, overall progress entire command
+6. Amount generated of total amount to generate (top progress)
+7. Amount generated current difficulty (bottom progress) 
+8. Amount of work in parallel
+9. Alive animation
+10. Current solver attempts to get a new seed
 ```
 
 This project uses the [CC BY-NC-SA 4.0](./LICENSE) license.

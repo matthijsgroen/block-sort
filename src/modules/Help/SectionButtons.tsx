@@ -9,7 +9,7 @@ export const SectionButtons = <T extends string>({
   setSection: Dispatch<T>;
   buttons: { label: string; section: T; disabled?: boolean }[];
 }) => (
-  <div className="my-4 flex flex-col gap-4">
+  <div className="my-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
     {buttons
       .filter((b) => !b.disabled)
       .map(({ label, section }) => (

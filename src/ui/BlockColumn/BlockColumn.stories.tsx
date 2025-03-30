@@ -58,6 +58,10 @@ const meta: Meta<BlockColumnPropsAndCustomArgs> = {
       options: ["glass", "present", "ice"],
       control: { type: "radio" }
     },
+    animation: {
+      options: ["none", "fadeIn", "fadeOut"],
+      control: { type: "select" }
+    },
     columnSize: {
       control: { type: "number" }
     },
@@ -76,6 +80,7 @@ const meta: Meta<BlockColumnPropsAndCustomArgs> = {
     started: true,
     locked: false,
     limited: false,
+    blocked: false,
     column: {
       type: "placement",
       columnSize: 1,

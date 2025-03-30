@@ -1,5 +1,5 @@
 import type { BlockTheme } from "../themes";
-import type { LevelSettings } from "../types";
+import type { LevelSettings, MultiStageLevelSettings } from "../types";
 
 import { dungeon } from "./dungeon";
 import { easy } from "./easy";
@@ -63,26 +63,32 @@ export const getUnlockableLevelTypes = (
     )
     .sort((a, b) => (a.unlocksAtLevel ?? 1000) - (b.unlocksAtLevel ?? 1000));
 
-export const levelTypeTextColor = (
-  levelNr: number,
-  theme: BlockTheme
-): string => {
-  const levelType = getLevelType(levelNr, theme);
-
-  return levelType.textClassName;
-};
-
-export const levelTypeBorder = (levelNr: number, theme: BlockTheme): string => {
-  const levelType = getLevelType(levelNr, theme);
-
-  return levelType.borderClassName;
-};
-
 export const getLevelSettings = (
   levelNr: number,
   theme: BlockTheme,
   random = Math.random
-): LevelSettings => {
+): LevelSettings | MultiStageLevelSettings => {
   const levelType = getLevelType(levelNr, theme);
   return levelType.getSettings(levelNr, random);
+};
+
+export const getLevelTypesForStorybook = (): Unlockable<LevelType<string>>[] =>
+  (levelTypes as LevelType<string>[])
+    .map<Unlockable<LevelType<string>>>((level) =>
+      level.unlocksAtLevel === undefined
+        ? {
+            ...level,
+            unlocksAtLevel: getFirstOccurrence(level)
+          }
+        : (level as Unlockable<LevelType<string>>)
+    )
+    .sort((a, b) => (a.unlocksAtLevel ?? 1000) - (b.unlocksAtLevel ?? 1000));
+
+const getFirstOccurrence = (level: LevelType<string>): number => {
+  for (let i = 1; i < 1000; i++) {
+    if (level.occurrence(i, { theme: "default" })) {
+      return i;
+    }
+  }
+  return 1000;
 };

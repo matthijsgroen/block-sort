@@ -1,5 +1,5 @@
 import type { Dispatch } from "react";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 
 import type { HideFormat } from "@/ui/Block/Block";
@@ -26,6 +26,10 @@ type Props = {
   theme?: BlockTheme;
   hideFormat?: HideFormat;
   motionDuration?: number;
+  blocked?: boolean;
+
+  animation: "fadeIn" | "fadeOut" | "none";
+  animationDelay?: number;
   onPointerDown?: Dispatch<React.PointerEvent<HTMLDivElement>>;
   onPointerUp?: Dispatch<React.PointerEvent<HTMLDivElement>>;
   onPickUp?: Dispatch<{ top: number; rect: DOMRect }>;
@@ -52,8 +56,11 @@ export const BlockColumn: React.FC<Props> = ({
   hideFormat = "glass",
   started = true,
   suggested = false,
+  blocked = false,
   amountSelected = 0,
   amountSuggested = 0,
+  animation = "none",
+  animationDelay = 0,
   motionDuration = MOTION_DURATION
 }) => {
   const [columnState, setColumn] = useState(columnProp);
@@ -161,8 +168,12 @@ export const BlockColumn: React.FC<Props> = ({
           "contain-paint": locked,
           "rounded-b-md": column.type === "buffer",
           "rounded-md border-t-black/60": column.type === "placement",
-          "outline outline-2 outline-offset-1 outline-white/20": hovering
+          "outline outline-2 outline-offset-1 outline-white/20": hovering,
+          "animate-columnFadeOut": animation === "fadeOut",
+          "animate-columnFadeIn opacity-0": animation === "fadeIn",
+          [`[animation-delay:--animation-delay]`]: animationDelay > 0
         })}
+        style={{ "--animation-delay": `${animationDelay}ms` }}
       >
         {suggested && (
           <div className="pointer-events-none absolute w-block translate-y-1 animate-suggested bg-green-200 bg-clip-text text-center text-2xl text-transparent opacity-30">
@@ -206,8 +217,9 @@ export const BlockColumn: React.FC<Props> = ({
                 shape={
                   block.revealed ? activeShapeMap[block.blockType] : undefined
                 }
-                shapeColored={isKey(block) || isLock(block)}
+                shapeColored={(isKey(block) || isLock(block)) && block.revealed}
                 selected={isSelected}
+                blocked={index === 0 && blocked}
                 suggested={isSuggested}
                 onDrop={onDrop}
                 onPickUp={handlePickup}
@@ -253,20 +265,3 @@ export const BlockColumn: React.FC<Props> = ({
     </div>
   );
 };
-
-export const MemoizedBlockColumn: React.FC<Props> = memo(
-  BlockColumn,
-  (prev, next) => {
-    return (
-      prev.column === next.column &&
-      prev.amountSelected === next.amountSelected &&
-      prev.amountSuggested === next.amountSuggested &&
-      prev.suggested === next.suggested &&
-      prev.started === next.started &&
-      prev.hovering === next.hovering &&
-      prev.theme === next.theme &&
-      prev.hideFormat === next.hideFormat &&
-      prev.motionDuration === next.motionDuration
-    );
-  }
-);

@@ -1,8 +1,6 @@
 import type { PropsWithChildren } from "react";
 import clsx from "clsx";
 
-import type { LevelTypeString } from "@/game/level-types";
-import { getLevelTypeByType } from "@/game/level-types";
 import type { BlockTheme } from "@/game/themes";
 
 import { CSSParticles } from "./CSSParticles";
@@ -10,7 +8,7 @@ import { CSSParticles } from "./CSSParticles";
 import styles from "./Background.module.css";
 
 type Props = {
-  levelType?: LevelTypeString;
+  backgroundClassName?: string;
   theme?: BlockTheme;
   layout?: string;
   musicEnabled?: boolean;
@@ -25,18 +23,16 @@ const symbols = {
 
 export const Background: React.FC<PropsWithChildren<Props>> = ({
   children,
-  levelType = "normal",
+  backgroundClassName = "",
   theme = "default",
   layout = "default",
   musicEnabled = true
 }) => {
-  const lvlType = getLevelTypeByType(levelType);
-
   return (
     <div
       className={clsx(
         "relative h-full overflow-hidden transition-all [transition-duration:1.5s] [transition-timing-function:ease-out]",
-        lvlType?.backgroundClassName
+        backgroundClassName
       )}
     >
       {theme === "halloween" && (

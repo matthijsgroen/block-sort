@@ -3,18 +3,17 @@ import { createContext, use, useState } from "react";
 
 import { Background } from "@/ui/Background/Background";
 
-import type { LevelTypeString } from "@/game/level-types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { useGameStorage } from "@/support/useGameStorage";
 
 export const BackgroundContext = createContext<{
-  levelType: LevelTypeString | undefined;
-  setLevelType: Dispatch<LevelTypeString | undefined>;
+  backgroundClassName: string | undefined;
+  setBackgroundClassName: Dispatch<string | undefined>;
   screenLayout: string;
   setScreenLayout: Dispatch<string>;
 }>({
-  levelType: undefined,
-  setLevelType: () => {},
+  backgroundClassName: undefined,
+  setBackgroundClassName: () => {},
   screenLayout: "",
   setScreenLayout: () => {}
 });
@@ -22,23 +21,24 @@ export const BackgroundContext = createContext<{
 export const BackgroundProvider: React.FC<PropsWithChildren> = ({
   children
 }) => {
-  const [levelType, setLevelType] = useState<LevelTypeString | undefined>(
-    undefined
-  );
+  const [backgroundClassName, setBackgroundClassName] = useState<
+    string | undefined
+  >(undefined);
   const [screenLayout, setScreenLayout] = useState<string>("levelTrack");
   const [musicEnabled] = useGameStorage("musicEnabled", null);
   const { activeTheme } = use(ThemeContext);
+
   return (
     <BackgroundContext
       value={{
-        levelType,
-        setLevelType,
+        backgroundClassName,
+        setBackgroundClassName,
         screenLayout,
         setScreenLayout
       }}
     >
       <Background
-        levelType={levelType}
+        backgroundClassName={backgroundClassName}
         theme={activeTheme}
         layout={screenLayout}
         musicEnabled={musicEnabled ?? true}

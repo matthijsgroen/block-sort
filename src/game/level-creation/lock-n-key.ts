@@ -35,9 +35,28 @@ const [vampire, garlic] = createLockAndKey("vampire", "#666699", "🧛", "🧄")
 const [dragon, sword] = createLockAndKey("dragon", "#ff0000", "🐉", "️🗡️");
 const [fire, water] = createLockAndKey("fire", "#800080", "🔥", "💧");
 const [dinosaur, comet] = createLockAndKey("dinosaur", "#008000", "🦖", "☄️");
+const [lock, key] = createLockAndKey("locked", "#2a2627", "🔒", "️🗝️");
+const [robot, lightning] = createLockAndKey("robot", "#a684ff", "🤖", "️️⚡️");
 
-export const locks = [ghost, vampire, dragon, fire, dinosaur] as const;
-export const keys = [flashlight, garlic, sword, water, comet] as const;
+export const locks = [
+  lock,
+  fire,
+  ghost,
+  vampire,
+  robot,
+  dinosaur,
+  dragon
+] as const;
+
+export const keys = [
+  key,
+  water,
+  flashlight,
+  garlic,
+  lightning,
+  comet,
+  sword
+] as const;
 
 export const lockNKeyPairs = [...locks, ...keys].reduce<string[]>(
   (result, { pairName }) =>

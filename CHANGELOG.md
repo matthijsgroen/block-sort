@@ -5,11 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.38.0 - 2025-03-30
+
+### Fixed
+
+- Triggering text selection during play in iOS (Contributed by **Lennart Klein**, thanks!)
+
+### Changed
+
+- Changed how **Dungeon** levels work. They still have Enemies and Traps, but they are now also
+  multiple stages. You need to decent to the bottom of the dungeon before you defeat a level.
+- Tweaked difficulty of Dungeon levels, making them harder.
+- Updated some help sections to contain visual game elements for clarification.
+
 ## Version 1.37.4 - 2025-03-20
+
+### Fixed
 
 - Dungeon levels were falsely reporting 'Blocked!' while a key could still be stored in a chest.
 
 ## Version 1.37.3 - 2025-03-19
+
+### Fixed
 
 - Fixed level 750, thanks for reporting Penny!
 

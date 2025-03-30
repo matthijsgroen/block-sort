@@ -1,31 +1,31 @@
 import { use, useCallback, useEffect, useState } from "react";
 
+import { AutoMove } from "@/ui/AutoMove/AutoMove";
 import { LevelLayout } from "@/ui/LevelLayout/LevelLayout";
-import { Message } from "@/ui/Message/Message";
+import { InvisibleMessage, Message } from "@/ui/Message/Message";
 import { StartAnimation } from "@/ui/StartAnimation/StartAnimation";
 import { TopButton } from "@/ui/TopButton/TopButton";
-import { WoodButton } from "@/ui/WoodButton/WoodButton";
 
 import { sound } from "@/audio";
 import { hideBlock, moveBlocks, selectFromColumn } from "@/game/actions";
 import type { LevelTypeString } from "@/game/level-types";
 import { getLevelTypeByType } from "@/game/level-types";
-import type { LevelModifiers } from "@/game/level-types/types";
 import {
   getRevealedIndices,
   hasWon,
   isStuck,
   revealBlocks
 } from "@/game/state";
-import { getActiveModifiers } from "@/game/themes";
 import { colorMap } from "@/game/themes/default";
-import type { LevelSettings, LevelState, Move } from "@/game/types";
+import type {
+  LevelModifiers,
+  LevelSettings,
+  LevelState,
+  Move
+} from "@/game/types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
 import { mulberry32, pick } from "@/support/random";
-import { getToday } from "@/support/schedule";
 import { useGameStorage, useLevelStateStorage } from "@/support/useGameStorage";
-
-import { BackgroundContext } from "../Layout/BackgroundContext";
 
 import type { HintMode } from "./autoMove";
 import { getAutoMoveCount } from "./autoMove";
@@ -39,11 +39,14 @@ type Props = {
   useStreak?: boolean;
   title: string;
   levelNr: number;
+  currentStageNr: number;
+  maxStages: number;
   levelType: LevelTypeString;
   levelSettings: LevelSettings;
   showTutorial?: boolean;
   storageKey: string;
   storagePrefix?: string;
+  modifiers?: LevelModifiers[];
 };
 
 export const Level: React.FC<Props> = ({
@@ -52,9 +55,12 @@ export const Level: React.FC<Props> = ({
   title,
   levelType,
   levelNr,
+  currentStageNr,
+  maxStages,
   storageKey,
   useStreak = false,
   showTutorial = false,
+  modifiers = [],
   storagePrefix = ""
 }) => {
   const initialLevelState = use(level);
@@ -119,16 +125,9 @@ export const Level: React.FC<Props> = ({
 
   const [started, setStarted] = useState(false);
   const levelTypePlugin = getLevelTypeByType(levelType);
-  const { setThemeOverride, clearThemeOverride } = use(ThemeContext);
   const [, setStreak] = useGameStorage<number | null>("streak", null);
 
-  const { setLevelType } = use(BackgroundContext);
   useEffect(() => {
-    setLevelType(levelType);
-    if (levelTypePlugin.levelModifiers?.theme) {
-      setThemeOverride(levelTypePlugin.levelModifiers.theme);
-    }
-
     const cleanup = setTimeout(() => setStarted(true), 300);
     return () => clearTimeout(cleanup);
   }, []);
@@ -152,13 +151,11 @@ export const Level: React.FC<Props> = ({
     }
   }, [playState, levelMoves]);
 
-  const levelModifiers = getActiveModifiers(getToday());
-
   const getLevelModifier = <TModifier extends keyof LevelModifiers>(
     modifier: TModifier
   ): LevelModifiers[TModifier] =>
     levelTypePlugin.levelModifiers?.[modifier] ??
-    levelModifiers.find((m) => m.modifiers[modifier])?.modifiers[modifier];
+    modifiers.find((m) => m[modifier])?.[modifier];
 
   const ghostMode = !!getLevelModifier("ghostMode");
   const hideFormat = getLevelModifier("hideMode");
@@ -213,7 +210,7 @@ export const Level: React.FC<Props> = ({
 
   const onColumnDown = useCallback(
     (columnIndex: number) => {
-      if (activeSelectStart) {
+      if (activeSelectStart && activeSelectStart.selection[1] > 0) {
         if (activeSelectStart.selection[0] === columnIndex) {
           setSelectStart(null);
           return;
@@ -222,19 +219,17 @@ export const Level: React.FC<Props> = ({
         setUsedAutoMoves(-1);
       } else {
         const selection = selectFromColumn(levelState, columnIndex);
-        if (selection.length > 0) {
-          setSelectStart({
-            selection: [columnIndex, selection.length],
-            state: levelState
-          });
-        }
+        setSelectStart({
+          selection: [columnIndex, selection.length],
+          state: levelState
+        });
       }
     },
     [levelState, activeSelectStart]
   );
   const onColumnUp = useCallback(
     (columnIndex: number) => {
-      if (activeSelectStart) {
+      if (activeSelectStart && activeSelectStart.selection[1] > 0) {
         if (activeSelectStart.selection[0] === columnIndex) {
           return;
         }
@@ -258,8 +253,10 @@ export const Level: React.FC<Props> = ({
     sound.play("lock");
   }, []);
   const handleDrop = useCallback(() => {
-    sound.play("place");
-  }, []);
+    if (playState !== "starting") {
+      sound.play("place");
+    }
+  }, [playState]);
   const handlePickUp = useCallback(() => {
     sound.play("pickup");
   }, []);
@@ -270,6 +267,7 @@ export const Level: React.FC<Props> = ({
   return (
     <div className={"flex h-full flex-col"}>
       {playState === "starting" &&
+        currentStageNr === 0 &&
         levelMoves.length === 0 &&
         levelTypePlugin.showIntro && (
           <StartAnimation
@@ -281,8 +279,15 @@ export const Level: React.FC<Props> = ({
             afterShow={() => {
               setPlayState("busy");
             }}
-            onShow={() => {
-              // sound.play("restart");
+          />
+        )}
+      {playState === "starting" &&
+        currentStageNr !== 0 &&
+        levelMoves.length === 0 && (
+          <InvisibleMessage
+            delay={500}
+            afterShow={() => {
+              setPlayState("busy");
             }}
           />
         )}
@@ -305,7 +310,7 @@ export const Level: React.FC<Props> = ({
           }}
         />
       )}
-      {playState === "won" && (
+      {playState === "won" && currentStageNr >= maxStages - 1 && (
         <Message
           delay={1000}
           message={pick(WIN_SENTENCES, localRandom)}
@@ -318,12 +323,28 @@ export const Level: React.FC<Props> = ({
             deleteMoves();
             deletePreviousMoves();
             deleteRevealed();
-            clearThemeOverride();
-            deleteLevelState(false);
+            await deleteLevelState(false);
             onComplete(playState === "won");
           }}
           onShow={() => {
             sound.play("win");
+          }}
+        />
+      )}
+      {playState === "won" && currentStageNr < maxStages - 1 && (
+        <InvisibleMessage
+          afterShow={async () => {
+            await Promise.all([
+              deleteMoves(),
+              deletePreviousMoves(),
+              deleteRevealed(),
+              deleteLevelState(false)
+            ]);
+
+            onComplete(playState === "won");
+          }}
+          onShow={() => {
+            sound.play("stageWin");
           }}
         />
       )}
@@ -354,13 +375,12 @@ export const Level: React.FC<Props> = ({
         <TopButton
           buttonType="back"
           onClick={() => {
-            clearThemeOverride();
             onComplete(false);
           }}
         />
         <div className="flex-1"></div>
         {autoMoves > 0 ? (
-          <WoodButton
+          <AutoMove
             onClick={() => {
               const moveIndex = autoMoveLimit - autoMoves;
               setUsedAutoMoves((a) => a + 1);
@@ -378,16 +398,8 @@ export const Level: React.FC<Props> = ({
                 }, 200);
               }
             }}
-          >
-            <>
-              <span className={"inline-block px-2 pt-[4px] text-lg"}>
-                Automove
-              </span>
-              <span className="mr-1 inline-block rounded-md bg-black/20 p-1 text-xs">
-                {autoMoves}
-              </span>
-            </>
-          </WoodButton>
+            autoMoves={autoMoves}
+          />
         ) : (
           <div className="text-center font-block-sort tracking-widest text-orange-400">
             {title}
@@ -417,6 +429,13 @@ export const Level: React.FC<Props> = ({
           ) : undefined
         }
         animateBlocks={blockAnimations}
+        animateColumns={
+          playState === "won" && currentStageNr < maxStages - 1
+            ? "fadeOut"
+            : playState === "starting" && currentStageNr > 0
+              ? "fadeIn"
+              : "none"
+        }
         onColumnDown={onColumnDown}
         onColumnUp={onColumnUp}
         selection={activeSelectStart?.selection}

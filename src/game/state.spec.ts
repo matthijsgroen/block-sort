@@ -234,6 +234,33 @@ describe(isStuck, () => {
     expect(result).toBe(true);
   });
 
+  it("returns true if column is blocked by an obstacle", () => {
+    const level = createLevelState([
+      createPlacementColumn(13, [
+        ...createBlockSeries(10, "yellow"),
+        ...createBlocks("red", "yellow")
+      ]),
+      createPlacementColumn(13, createBlocks("ghost-lock", "red", "green")),
+      createPlacementColumn(13, [
+        ...createBlockSeries(9, "blue"),
+        ...createBlocks("yellow", "red", "blue")
+      ]),
+      createPlacementColumn(13, [
+        ...createBlockSeries(9, "green"),
+        ...createBlocks("ghost-key", "red", "yellow", "blue")
+      ]),
+      createBufferColumn(3, "green", createBlocks("green")),
+      createBufferColumn(3, undefined, []),
+      createBufferColumn(2, undefined, []),
+      createBufferColumn(1, undefined, [], "inventory"),
+      createBufferColumn(3, undefined, createBlocks("red", "red", "red")),
+      createBufferColumn(3, undefined, createBlocks("red", "red", "red")),
+      createBufferColumn(3, undefined, createBlocks("red", "red", "red"))
+    ]);
+    const result = isStuck(level);
+    expect(result).toBe(true);
+  });
+
   it("returns true if a move makes no difference (locked columns)", () => {
     const level = createLevelState([
       createPlacementColumn(4, createBlocks("white")),

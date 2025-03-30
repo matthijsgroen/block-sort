@@ -6,15 +6,19 @@ import type { LevelState } from "../types";
 export const optimizeMoves = (level: LevelState): LevelState => {
   let levelClone: LevelState = JSON.parse(JSON.stringify(level)) as LevelState;
 
-  const movesWithHash: { from: number; to: number; hash: string }[] =
-    level.moves.map((move) => {
-      levelClone = moveBlocks(levelClone, move);
-      return {
-        from: move.from,
-        to: move.to,
-        hash: JSON.stringify(levelClone.columns)
-      };
-    });
+  const movesWithHash: {
+    from: number;
+    to: number;
+    hash: string;
+  }[] = level.moves.map((move) => {
+    levelClone = moveBlocks(levelClone, move);
+
+    return {
+      from: move.from,
+      to: move.to,
+      hash: JSON.stringify(levelClone.columns)
+    };
+  });
 
   for (let i = 0; i < movesWithHash.length; i++) {
     const hash = movesWithHash[i].hash;
@@ -26,6 +30,7 @@ export const optimizeMoves = (level: LevelState): LevelState => {
       movesWithHash.splice(i + 1, highestIndex - i);
     }
   }
+
   const optimizedMoves = movesWithHash.map((move) => ({
     from: move.from,
     to: move.to

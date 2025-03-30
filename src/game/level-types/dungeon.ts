@@ -51,6 +51,100 @@ export const getDungeonSettings: SettingsProducer = (difficulty) => ({
   blockColorPick: "end"
 });
 
+export const getDungeonSettings2: SettingsProducer = (difficulty) => ({
+  amountColors: difficulty < 4 ? 3 : 4,
+  stackSize: Math.min(12 + Math.max(Math.round(difficulty / 8), 0), 13),
+  extraPlacementStacks: 0,
+  layoutMap: {
+    width: difficulty > 3 ? 6 : 5,
+    columns: []
+  },
+  amountLocks: 1 + Math.floor(difficulty / 4),
+  amountLockTypes: Math.max(1, Math.floor(difficulty / 4)),
+  lockOffset: 2,
+  hideBlockTypes: "checker",
+
+  extraBuffers: [
+    {
+      amount: difficulty < 4 ? 2 : 4,
+      size: 3,
+      limit: 1
+    },
+    {
+      amount: 1,
+      size: 2,
+      limit: 0
+    },
+    {
+      amount: 1,
+      size: 3,
+      limit: 0
+    },
+    {
+      amount: 1,
+      size: 1,
+      bufferType: "inventory",
+      limit: 0
+    }
+  ]
+});
+
+export const getDungeonSettings3: SettingsProducer = (difficulty) => {
+  const stackSize = Math.min(
+    Math.max(Math.floor(3 + (difficulty - 2) / 2), 4),
+    7
+  );
+
+  return {
+    amountColors: Math.min(1 + difficulty, 10),
+    stackSize,
+    extraPlacementStacks: 0,
+    extraPlacementLimits: difficulty > 9 ? 1 : undefined,
+    hideBlockTypes: "all",
+    amountLocks: 1 + Math.floor(difficulty / 4),
+    amountLockTypes: Math.max(1, Math.floor(difficulty / 4)),
+    lockOffset: 4,
+    extraBuffers: [
+      ...(difficulty >= 2 && difficulty < 9
+        ? [
+            {
+              amount: 1,
+              size: stackSize,
+              limit: 0
+            }
+          ]
+        : []),
+      ...(difficulty >= 9
+        ? [
+            {
+              amount: 2,
+              size: 3,
+              limit: 0
+            }
+          ]
+        : []),
+      {
+        amount: 1,
+        size: Math.min(stackSize, 4),
+        limit: 1
+      },
+      {
+        amount: 1,
+        size: 2,
+        bufferType: "inventory",
+        limit: 0
+      }
+    ],
+    layoutMap:
+      difficulty >= 9
+        ? {
+            width: 6,
+            columns: [{ fromColumn: 12, toColumn: 11 }]
+          }
+        : undefined
+  };
+};
+
 export const dungeon: LevelType<"dungeon"> = {
   type: "dungeon",
   name: "Dungeon",
@@ -65,11 +159,52 @@ export const dungeon: LevelType<"dungeon"> = {
   introTextColor: "#6b7280",
   occurrence: (levelNr) => levelNr + 1 >= 200 && (levelNr + 1) % 50 === 0,
   getSettings(levelNr) {
-    const difficulty = getDifficultyLevel(Math.floor((levelNr + 1 - 200) / 50));
+    const encounter = Math.floor((levelNr + 1 - 200) / 50);
+    const difficultyLevel = getDifficultyLevel(encounter * 3);
 
-    return getDungeonSettings(difficulty);
+    return {
+      stages: [
+        {
+          settings: getDungeonSettings(difficultyLevel)
+        },
+        {
+          settings: getDungeonSettings2(difficultyLevel),
+          backgroundClassname: "bg-gray-700/40"
+        },
+        ...(difficultyLevel > 3
+          ? [
+              {
+                settings: getDungeonSettings3(difficultyLevel),
+                backgroundClassname: "bg-gray-800/40",
+                levelModifiers: {
+                  keepRevealed: true
+                }
+              }
+            ]
+          : [])
+      ]
+    };
   },
-  getZenSettings: (_zenLevel, difficultyLevel) => {
-    return getDungeonSettings(difficultyLevel);
-  }
+  getZenSettings: (_zenLevel, difficultyLevel) => ({
+    stages: [
+      {
+        settings: getDungeonSettings(difficultyLevel)
+      },
+      {
+        settings: getDungeonSettings2(difficultyLevel),
+        backgroundClassname: "bg-gray-700/40"
+      },
+      ...(difficultyLevel > 3
+        ? [
+            {
+              settings: getDungeonSettings3(difficultyLevel),
+              backgroundClassname: "bg-gray-800/40",
+              levelModifiers: {
+                keepRevealed: true
+              }
+            }
+          ]
+        : [])
+    ]
+  })
 };

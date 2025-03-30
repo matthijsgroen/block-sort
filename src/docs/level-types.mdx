@@ -1,0 +1,67 @@
+import { Block } from "@/ui/Block/Block";
+import { BlockColumn } from "@/ui/BlockColumn/BlockColumn";
+import { shapeMap, colorMap } from "@/game/themes/default";
+import { createBufferColumn } from "@/game/factories";
+import { locks, keys } from "@/game/level-creation/lock-n-key";
+
+There are multiple level types in the game
+
+## Normal levels
+
+In these levels, you sort blocks between 'placement' columns. Only in the highest difficulty you will encounter buffers.
+Some columns can be locked to specific block types. Indicated by their icon.
+
+Example: 
+<span className="scale-75 inline-flex align-baseline gap-4 mb-4">
+    <Block shape={shapeMap["darkgreen"]} color={colorMap["darkgreen"]} />
+    <Block shape={shapeMap["yellow"]} color={colorMap["yellow"]} />
+</span>
+
+## Special levels ⭐️
+
+These levels use different blocks. The use buffers more often, and can vary from really long columns, or lots of small columns,
+
+Example: 
+<span className="scale-75 inline-flex align-baseline gap-4 mb-4">
+    <Block shape={shapeMap["orange"]} color={colorMap["orange"]} />
+    <Block shape={shapeMap["lightyellow"]} color={colorMap["lightyellow"]} />
+</span>
+
+## Hard levels 🔥
+
+In hard levels, blocks are hidden. When they become the top block, their identity will be revealed. In these levels its good to remember what was hidden, so in subsequent tries you figure out how to solve the puzzle.
+
+Example of a hidden block:
+<span className="scale-75 inline-flex align-baseline gap-4 mb-4">
+    <Block shape={shapeMap["darkgreen"]} color={colorMap["darkgreen"]} revealed={false} hideFormat={"glass"} />
+</span>
+
+## Scrambled levels 🧩
+
+In these levels someone already did some moves, so chances are you start with a partial solve, but also probably without any empty columns...
+
+## Easy levels 🍀
+
+These are levels that are 1 or even multiple difficulty levels below your current difficulty, as lucky break!
+
+## Dungeon levels 🐉
+
+These levels have a twist! Enemies and traps are in these levels, and you must defeat them!
+
+Example: You can use the flashlight to scare away the ghost
+
+<span className="scale-75 inline-flex align-baseline gap-4 mb-4">
+    <Block shape={keys[0].symbol} color={keys[0].color} shapeColored />
+    <span className="text-3xl mt-3">→</span>
+    <Block shape={locks[0].symbol} color={locks[0].color} shapeColored />
+</span>
+
+These new inventory items (like the flashlight) can be stored in a new type of column: **the treasure chest**.
+
+<span className="scale-75 inline-flex align-baseline gap-4 mb-4">
+    <BlockColumn column={createBufferColumn(1, undefined, [], "inventory")} />
+</span>
+
+## Seasonal level types
+
+During some seasons, new level types might pop-up! Don't worry, these levels appear also if the theme slider is off.

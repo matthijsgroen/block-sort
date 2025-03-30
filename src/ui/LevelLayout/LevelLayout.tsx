@@ -7,7 +7,7 @@ import { colSizes } from "@/support/grid";
 import { useScreenUpdate } from "@/support/useScreenUpdate";
 
 import type { HideFormat } from "../Block/Block";
-import { MemoizedBlockColumn } from "../BlockColumn/BlockColumn";
+import { BlockColumn } from "../BlockColumn/BlockColumn";
 
 import { useBlockAnimation } from "./useBlockAnimation";
 
@@ -21,6 +21,7 @@ type Props = {
   theme?: BlockTheme;
   tutorialContent?: React.ReactNode;
   animateBlocks?: boolean;
+  animateColumns?: "fadeOut" | "fadeIn" | "none";
   onColumnDown?: Dispatch<number>;
   onColumnUp?: Dispatch<number>;
   onPickUp?: VoidFunction;
@@ -62,7 +63,7 @@ const determineColumns = (
   return "grid-cols-6";
 };
 
-export const BLOCK_ANIMATION_TIME = 400;
+export const BLOCK_ANIMATION_TIME = 500;
 
 export const LevelLayout: React.FC<Props> = ({
   started,
@@ -72,6 +73,7 @@ export const LevelLayout: React.FC<Props> = ({
   suggestionTarget,
   tutorialContent,
   animateBlocks = true,
+  animateColumns = "none",
   theme = "default",
   hideFormat = "glass",
   onColumnDown,
@@ -211,10 +213,16 @@ export const LevelLayout: React.FC<Props> = ({
         <div className="box-border w-full origin-top scale-[--levelScale]">
           <div className={`grid grid-flow-dense ${cols} py-2`}>
             {levelState.columns.map((bar, i) => (
-              <MemoizedBlockColumn
+              <BlockColumn
                 column={bar}
                 key={i}
                 ref={(el) => addToRefsArray(el, i)}
+                animation={animateColumns}
+                animationDelay={
+                  animateColumns === "fadeOut"
+                    ? 2_000 + (levelState.columns.length - 1 - i) * 100
+                    : (levelState.columns.length - 1 - i) * 100
+                }
                 theme={theme}
                 motionDuration={animateBlocks ? BLOCK_ANIMATION_TIME : 0}
                 onPointerDown={() => {
@@ -223,6 +231,7 @@ export const LevelLayout: React.FC<Props> = ({
                 onPointerUp={handlePointerUp}
                 started={started}
                 suggested={suggestionTarget === i}
+                blocked={selection && i === selection[0] && selection[1] === 0}
                 amountSelected={
                   selection && i === selection[0] ? selection[1] : 0
                 }

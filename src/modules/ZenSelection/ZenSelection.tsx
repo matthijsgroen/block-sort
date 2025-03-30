@@ -40,9 +40,9 @@ export const ZenSelection: React.FC<Props> = ({
   onLevelStart,
   onOpenSettings
 }) => {
-  const { setLevelType, setScreenLayout } = use(BackgroundContext);
+  const { setBackgroundClassName, setScreenLayout } = use(BackgroundContext);
   useEffect(() => {
-    setLevelType("easy");
+    setBackgroundClassName("bg-green-600/40");
     setScreenLayout("zenMode");
   }, []);
 

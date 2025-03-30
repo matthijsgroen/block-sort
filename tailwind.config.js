@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.stories.{js,ts,jsx,tsx,mdx}"
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -38,12 +42,15 @@ export default {
         pulseEase: "pulseEase 2s ease-in-out infinite",
         rayShift: "rayShift 6s ease-in-out alternate infinite",
         rayShift2: "rayShift2 5.5s ease-in-out alternate infinite",
+        blocked: "blocked 0.2s 3 ease-in-out forwards",
         place: "place 0.2s ease-out 2ms forwards",
         moveBlock: "moveBlock 1.4s ease-out 2ms forwards",
         locked: "locked 0.5s ease-in-out forwards",
         trayLocked: "trayLocked 0.3s ease-in-out forwards",
         fadeIn: "fadeIn 1s ease-in-out forwards",
         fadeOut: "fadeOut 1s ease-in-out forwards",
+        columnFadeIn: "columnFadeIn 0.5s ease-in-out forwards",
+        columnFadeOut: "columnFadeOut 0.5s ease-in-out forwards",
         popInOut: "popInOut 3s ease-in-out forwards",
         rotate: "rotate 2s linear infinite",
         flyTopLeft:
@@ -155,6 +162,14 @@ export default {
           "90%": { backgroundPosition: "calc(50% - 400px) 0%", opacity: "1" },
           "100%": { backgroundPosition: "calc(50% - 400px) 100%", opacity: "0" }
         },
+        columnFadeIn: {
+          "0%": { opacity: "0", translate: "0 -4rem" },
+          "100%": { opacity: "1", translate: "0 0" }
+        },
+        columnFadeOut: {
+          "0%": { opacity: "1", translate: "0 0" },
+          "100%": { opacity: "0", translate: "0 4rem" }
+        },
         "intro-bg": {
           "0%": { opacity: "0" },
           "20%": { opacity: "1" },
@@ -236,6 +251,12 @@ export default {
           "60%": { translate: "0 -2rem" },
           "85%": { translate: "0 1.2rem" },
           "95%": { translate: "0 0.9rem" },
+          "100%": { translate: "0 1rem" }
+        },
+        blocked: {
+          "0%": { translate: "0 1rem" },
+          "33%": { translate: "-0.1rem 1rem" },
+          "66%": { translate: "0.1rem 1rem" },
           "100%": { translate: "0 1rem" }
         },
         place: {
