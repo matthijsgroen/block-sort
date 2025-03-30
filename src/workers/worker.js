@@ -868,7 +868,9 @@ const blockedByBuffer = (level) => {
         if (col.blocks.length === 0 || col.type !== "placement" || col.locked)
             return;
         const countSame = selectFromColumn(level, index).length;
-        placementSeries.push([col.blocks[0].blockType, countSame, index]);
+        if (countSame > 0) {
+            placementSeries.push([col.blocks[0].blockType, countSame, index]);
+        }
     });
     const bufferSpaceForColor = (blockColor, index) => level.columns.reduce((acc, col, i) => {
         if (i === index)
@@ -1069,6 +1071,10 @@ const moveBlocks = (level, move) => produce((draft) => {
             const topBlockTarget = draft.columns[move.to].blocks[0];
             if (topBlockTarget?.revealed === false) {
                 topBlockTarget.revealed = true;
+            }
+            const topBlockOrigin = draft.columns[move.from].blocks[0];
+            if (topBlockOrigin?.revealed === false) {
+                topBlockOrigin.revealed = true;
             }
             return;
         }
