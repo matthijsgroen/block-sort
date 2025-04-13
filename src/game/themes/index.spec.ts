@@ -53,8 +53,8 @@ describe(getActiveTheme, () => {
       expect(getActiveTheme(date)).toBe("spring");
     });
 
-    it("returns default theme end of april", () => {
-      const date = new Date("2023-04-30");
+    it("returns default theme end of may", () => {
+      const date = new Date("2023-05-31");
       expect(getActiveTheme(date)).toBe("default");
     });
   });
