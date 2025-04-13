@@ -85,7 +85,7 @@ export const themeSchedule: ThemeSchedule[] = [
     levelModifiers: [
       {
         modifiers: { ghostMode: true },
-        begin: { month: 10, day: 15 },
+        begin: { month: 10, day: 5 },
         end: { month: 11, day: 2 }
       }
     ]
@@ -105,13 +105,13 @@ export const themeSchedule: ThemeSchedule[] = [
   },
   {
     begin: { month: 3, day: 15 },
-    end: { month: 4, day: 20 },
+    end: { month: 5, day: 15 },
     name: "Spring",
     theme: "spring"
   },
   {
-    begin: { month: 7, day: 15 },
-    end: { month: 8, day: 20 },
+    begin: { month: 6, day: 25 },
+    end: { month: 8, day: 25 },
     name: "Summer",
     theme: "summer"
   }
