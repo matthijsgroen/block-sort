@@ -113,7 +113,14 @@ export const themeSchedule: ThemeSchedule[] = [
     begin: { month: 6, day: 25 },
     end: { month: 8, day: 25 },
     name: "Summer",
-    theme: "summer"
+    theme: "summer",
+    levelModifiers: [
+      {
+        modifiers: { hideMode: "ice", keepRevealed: false },
+        begin: { month: 7, day: 1 },
+        end: { month: 8, day: 1 }
+      }
+    ]
   }
 ];
 
