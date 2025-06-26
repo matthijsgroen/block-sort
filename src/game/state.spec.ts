@@ -608,6 +608,33 @@ describe(isStuck, () => {
     const result = isStuck(level);
     expect(result).toBe(false);
   });
+
+  it("returns false if buffers contents are moved to free more space", () => {
+    const level = createLevelState([
+      createPlacementColumn(
+        6,
+        createBlocks("black", "black", "black", "black", "white")
+      ),
+      createPlacementColumn(
+        6,
+        createBlocks("white", "white", "white", "white", "white", "red")
+      ),
+      createPlacementColumn(
+        6,
+        createBlocks("red", "red", "red", "red", "red", "black")
+      ),
+      createBufferColumn(1, undefined, createBlocks("green")),
+      createBufferColumn(2, undefined, createBlocks("black", "black")),
+      createBufferColumn(3, undefined, createBlocks()),
+      createBufferColumn(
+        4,
+        undefined,
+        createBlocks("turquoise", "turquoise", "turquoise")
+      )
+    ]);
+    const result = isStuck(level);
+    expect(result).toBe(false);
+  });
 });
 
 describe(allShuffled, () => {

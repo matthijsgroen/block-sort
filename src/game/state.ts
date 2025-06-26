@@ -116,12 +116,22 @@ const blockedByPlacement = (level: LevelState) => {
 
 const blockedByBuffer = (level: LevelState) => {
   const placementSeries: [BlockType, amount: number, index: number][] = [];
+  const bufferSeries: [BlockType, amount: number, index: number][] = [];
+
   level.columns.forEach((col, index) => {
     if (col.blocks.length === 0 || col.type !== "placement" || col.locked)
       return;
     const countSame = selectFromColumn(level, index).length;
     if (countSame > 0) {
       placementSeries.push([col.blocks[0].blockType, countSame, index]);
+    }
+  });
+
+  level.columns.forEach((col, index) => {
+    if (col.blocks.length === 0 || col.type !== "buffer" || col.locked) return;
+    const countSame = selectFromColumn(level, index).length;
+    if (countSame > 0) {
+      bufferSeries.push([col.blocks[0].blockType, countSame, index]);
     }
   });
 
@@ -162,13 +172,29 @@ const blockedByBuffer = (level: LevelState) => {
   });
   if (!hasBufferSpace) return true;
 
-  const canFit = placementSeries.some(([color, amount, index]) => {
+  const canFitFromPlacement = placementSeries.some(([color, amount, index]) => {
     const largestFreeBufferSpace = bufferSpaceForColor(color, index);
 
     return amount <= largestFreeBufferSpace;
   });
 
-  return !canFit;
+  const canMoveToSmallerBuffer = bufferSeries.some(([color, amount, index]) => {
+    const currentColSize = level.columns[index].columnSize;
+    if (level.columns[index].limitColor === color) return false;
+    return level.columns.some(
+      (col, bufIndex) =>
+        col.type === "buffer" &&
+        (col.limitColor === "rainbow" ||
+          col.limitColor === color ||
+          col.blocks[0]?.blockType === color ||
+          (col.blocks.length === 0 && col.limitColor === undefined)) &&
+        col.columnSize - col.blocks.length >= amount &&
+        bufIndex !== index &&
+        col.columnSize < currentColSize
+    );
+  });
+
+  return !canFitFromPlacement && !canMoveToSmallerBuffer;
 };
 
 const countCompleted = (level: LevelState) =>
@@ -219,6 +245,7 @@ export const isStuck = (level: LevelState): boolean => {
     blockedByPlacement(level) &&
     !keyLockSolves(level) &&
     !keyStores(level);
+
   if (initialBlocked) return true;
 
   return level.columns.every((_source, sourceIndex) => {
