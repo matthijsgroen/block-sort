@@ -343,6 +343,7 @@ export const Level: React.FC<Props> = ({
 
             onComplete(playState === "won");
           }}
+          delay={1500}
           onShow={() => {
             sound.play("stageWin");
           }}
