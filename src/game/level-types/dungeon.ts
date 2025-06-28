@@ -169,13 +169,13 @@ export const dungeon: LevelType<"dungeon"> = {
         },
         {
           settings: getDungeonSettings2(difficultyLevel),
-          backgroundClassname: "bg-gray-700/40"
+          backgroundClassname: "bg-gray-700/50"
         },
         ...(difficultyLevel > 3
           ? [
               {
                 settings: getDungeonSettings3(difficultyLevel),
-                backgroundClassname: "bg-gray-800/40",
+                backgroundClassname: "bg-gray-800/70",
                 levelModifiers: {
                   keepRevealed: true
                 }
