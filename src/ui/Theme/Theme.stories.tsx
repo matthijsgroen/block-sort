@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { generateRandomLevel } from "@/game/level-creation/generateRandomLevel";
-import { getDailySettings } from "@/game/level-types/daily";
 import { getSpecial2Settings } from "@/game/level-types/special";
 import type { BlockTheme } from "@/game/themes";
 import { mulberry32 } from "@/support/random";
@@ -45,8 +44,7 @@ const random = mulberry32(SEED);
 export const Theme: Story = {
   args: {},
   render: (args) => {
-    const settings =
-      args.theme === "daily" ? getDailySettings(11) : getSpecial2Settings(11);
+    const settings = getSpecial2Settings(11);
     const level = generateRandomLevel(settings, random);
     return (
       <div className="flex w-full flex-col">
