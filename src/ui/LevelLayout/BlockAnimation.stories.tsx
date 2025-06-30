@@ -1,5 +1,5 @@
 import { Suspense, use, useEffect, useState } from "react";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { levelSeeds } from "@/data/levelSeeds";
 import { moveBlocks, selectFromColumn } from "@/game/actions";

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { generateRandomLevel } from "@/game/level-creation/generateRandomLevel";
 import { getDailySettings } from "@/game/level-types/daily";
