@@ -2,7 +2,7 @@ import type { HideFormat } from "@/ui/Block/Block";
 
 import type { solvers } from "./level-creation/solvers";
 import type { BlockType, LimitColor } from "./blocks";
-import type { BlockTheme } from "./themes";
+import type { BlockTheme, Particles } from "./themes";
 
 /**
  * The current state of a level.
@@ -220,6 +220,7 @@ export type LayoutMap = {
 
 export type LevelModifiers = {
   theme?: BlockTheme;
+  particles?: Particles
   ghostMode?: boolean;
   hideMode?: HideFormat;
   keepRevealed?: boolean;

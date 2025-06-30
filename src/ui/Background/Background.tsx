@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from "react";
 import clsx from "clsx";
 
-import type { BlockTheme } from "@/game/themes";
+import type { BlockTheme, Particles } from "@/game/themes";
 
 import { CSSParticles } from "./CSSParticles";
 
@@ -10,6 +10,7 @@ import styles from "./Background.module.css";
 type Props = {
   backgroundClassName?: string;
   theme?: BlockTheme;
+  particles?: Particles;
   layout?: string;
   musicEnabled?: boolean;
 };
@@ -26,6 +27,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
   backgroundClassName = "",
   theme = "default",
   layout = "default",
+  particles,
   musicEnabled = true
 }) => {
   return (
@@ -177,7 +179,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           🌱
         </div>
       )}
-      {theme === "halloween" && (
+      {particles === "ghosts" && (
         <CSSParticles
           symbol={symbols.ghost}
           amount={10}
@@ -189,7 +191,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           floatSpeed={[5, 10]}
         />
       )}
-      {theme === "winter" && (
+      {particles === "snow" && (
         <CSSParticles
           symbol={symbols.snow}
           amount={30}
@@ -201,7 +203,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           floatSpeed={[5, 10]}
         />
       )}
-      {theme === "spring" && (
+      {particles === "pollen" && (
         <CSSParticles
           symbol={symbols.yellowCircle}
           amount={10}
@@ -213,7 +215,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           floatSpeed={[5, 10]}
         />
       )}
-      {theme === "summer" && (
+      {particles === "bubbles" && (
         <CSSParticles
           symbol={symbols.bubbles}
           amount={10}

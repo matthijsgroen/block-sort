@@ -26,7 +26,7 @@ export const BackgroundProvider: React.FC<PropsWithChildren> = ({
   >(undefined);
   const [screenLayout, setScreenLayout] = useState<string>("levelTrack");
   const [musicEnabled] = useGameStorage("musicEnabled", null);
-  const { activeTheme } = use(ThemeContext);
+  const { activeTheme, activeParticles } = use(ThemeContext);
 
   return (
     <BackgroundContext
@@ -40,6 +40,7 @@ export const BackgroundProvider: React.FC<PropsWithChildren> = ({
       <Background
         backgroundClassName={backgroundClassName}
         theme={activeTheme}
+        particles={activeParticles}
         layout={screenLayout}
         musicEnabled={musicEnabled ?? true}
       >
