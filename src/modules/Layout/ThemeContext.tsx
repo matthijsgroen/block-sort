@@ -3,7 +3,12 @@ import { createContext, useEffect, useReducer, useState } from "react";
 
 import { sound, Stream } from "@/audio";
 import { THEMES } from "@/featureFlags";
-import { type BlockTheme, getActiveParticles, getActiveTheme, Particles } from "@/game/themes";
+import type { Particles } from "@/game/themes";
+import {
+  type BlockTheme,
+  getActiveParticles,
+  getActiveTheme
+} from "@/game/themes";
 import { getToday } from "@/support/schedule";
 import { getThemeSong } from "@/support/themeMusic";
 
@@ -20,18 +25,21 @@ export const ThemeContext = createContext<{
   setThemeOverride: () => {},
   clearThemeOverride: () => {},
   setParticleOverride: () => {},
-  clearParticleOverride: () => {},
+  clearParticleOverride: () => {}
 });
 
 export const ThemeProvider: React.FC<
   PropsWithChildren<{ themesEnabled: boolean; musicEnabled: boolean }>
 > = ({ children, themesEnabled, musicEnabled }) => {
   const [themeOverride, setThemeOverride] = useState<BlockTheme | undefined>();
-  const [particleOverride, setParticleOverride] = useState<Particles | undefined>();
+  const [particleOverride, setParticleOverride] = useState<
+    Particles | undefined
+  >();
   const theme =
     themeOverride ??
     (themesEnabled && THEMES ? getActiveTheme(getToday()) : "default");
-  const particles = particleOverride ??
+  const particles =
+    particleOverride ??
     (themesEnabled && THEMES ? getActiveParticles(getToday()) : undefined);
 
   const song = getThemeSong(theme);

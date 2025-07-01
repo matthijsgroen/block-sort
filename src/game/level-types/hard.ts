@@ -21,7 +21,6 @@ export const getHard3Settings: SettingsProducer = (difficulty) => ({
   hideBlockTypes: "all"
 });
 
-
 export const hard: LevelType<"hard"> = {
   type: "hard",
   name: "Hard",

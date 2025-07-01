@@ -220,7 +220,7 @@ export type LayoutMap = {
 
 export type LevelModifiers = {
   theme?: BlockTheme;
-  particles?: Particles
+  particles?: Particles;
   ghostMode?: boolean;
   hideMode?: HideFormat;
   keepRevealed?: boolean;

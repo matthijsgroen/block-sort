@@ -57,10 +57,15 @@ const produceExtraSeeds = async (
     let activeWorkers = 0;
     let currentTries = 0;
     let generated = 0;
+    let workerIndex = 0;
 
-    const workers = Array.from({ length: MAX_WORKERS }).map((_v, i) => {
+    const spawnWorker = () => {
       const startSeed =
-        SEED + (i + existing) * 15_000 + Math.floor(Math.random() * 10_000);
+        SEED +
+        (workerIndex + existing) * 15_000 +
+        Math.floor(Math.random() * 10_000);
+      workerIndex++;
+
       const workerPath = path.resolve(__dirname, "../../workers/worker.js");
       const worker = new Worker(workerPath, {
         workerData: {
@@ -71,7 +76,9 @@ const produceExtraSeeds = async (
       });
       activeWorkers++;
       return worker;
-    });
+    };
+
+    const workers = Array.from({ length: MAX_WORKERS }).map(spawnWorker);
 
     workers.forEach((worker) => {
       worker.on("message", async (message) => {
@@ -132,9 +139,13 @@ const produceExtraSeeds = async (
       });
       worker.on("error", (err) => console.error("Worker error:", err));
       worker.on("exit", (code) => {
+        activeWorkers--;
+        if (code === 0 && generated < amount) {
+          spawnWorker();
+        }
+
         if (code !== 0 && code !== 1)
           console.error(`Worker gestopt met code ${code}`);
-        activeWorkers--;
         if (activeWorkers === 0) {
           reject(new Error("All workers stopped"));
         }

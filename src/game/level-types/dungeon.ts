@@ -1,5 +1,9 @@
 import { getDifficultyLevel } from "../level-settings/levelSettings";
-import type { BufferSettings, MultiStageLevelSettings, SettingsProducer } from "../types";
+import type {
+  BufferSettings,
+  MultiStageLevelSettings,
+  SettingsProducer
+} from "../types";
 
 import type { LevelType } from "./types";
 
@@ -172,7 +176,7 @@ export const dungeon: LevelType<"dungeon"> = {
           backgroundClassname: "bg-gray-700/50"
         },
         ...(difficultyLevel > 3
-          ? [
+          ? ([
               {
                 settings: getDungeonSettings3(difficultyLevel),
                 backgroundClassname: "bg-gray-800/70",
@@ -180,7 +184,7 @@ export const dungeon: LevelType<"dungeon"> = {
                   keepRevealed: true
                 }
               }
-            ] satisfies MultiStageLevelSettings["stages"]
+            ] satisfies MultiStageLevelSettings["stages"])
           : [])
       ]
     };

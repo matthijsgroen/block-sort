@@ -4,7 +4,11 @@ import {
   getDungeonSettings2,
   getDungeonSettings3
 } from "@/game/level-types/dungeon";
-import { getHard2Settings, getHard3Settings, getHardSettings } from "@/game/level-types/hard";
+import {
+  getHard2Settings,
+  getHard3Settings,
+  getHardSettings
+} from "@/game/level-types/hard";
 import {
   getNormal2Settings,
   getNormal3Settings,

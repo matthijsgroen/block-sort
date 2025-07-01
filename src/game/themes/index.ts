@@ -26,11 +26,7 @@ export type BlockTheme =
   | "spring"
   | "summer";
 
-export type Particles =
-  | "ghosts"
-  | "snow"
-  | "pollen"
-  | "bubbles";
+export type Particles = "ghosts" | "snow" | "pollen" | "bubbles";
 
 export const getShapeMapping = (
   theme: BlockTheme
@@ -117,7 +113,7 @@ export const themeSchedule: ThemeSchedule[] = [
     end: { month: 5, day: 15 },
     name: "Spring",
     theme: "spring",
-    particles: "pollen",
+    particles: "pollen"
   },
   {
     begin: { month: 6, day: 25 },
@@ -146,10 +142,13 @@ export const getActiveModifiers = (date: Date) =>
   );
 
 export const getActiveParticles = (date: Date): Particles | undefined => {
-  const particleModifiers = getActiveModifiers(date).find(m => m.modifiers.particles);
-  if (particleModifiers) { return particleModifiers.modifiers.particles; }  
+  const particleModifiers = getActiveModifiers(date).find(
+    (m) => m.modifiers.particles
+  );
+  if (particleModifiers) {
+    return particleModifiers.modifiers.particles;
+  }
 
   const activeSchedule = filterInRange(date, themeSchedule)[0];
-  return activeSchedule?.particles
+  return activeSchedule?.particles;
 };
-
