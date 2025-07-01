@@ -40,6 +40,10 @@ const meta = {
       options: ["default", "halloween", "winter", "spring", "summer"],
       control: "select"
     },
+    particles: {
+      options: ["none", "bubbles", "ghosts", "snow", "pollen"],
+      control: "select"
+    },
     layout: {
       options: ["levelTrack", "zenMode"],
       control: "select"
