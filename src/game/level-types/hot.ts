@@ -1,8 +1,23 @@
 import { getDifficultyLevel } from "../level-settings/levelSettings";
-import type { MultiStageLevelSettings } from "../types";
+import type { MultiStageLevelSettings, SettingsProducer } from "../types";
 
-import { getHard2Settings, getHard3Settings, getHardSettings } from "./hard";
+import { getNormal3Settings, getNormal4Settings, getNormal5Settings } from "./normal";
 import type { LevelType } from "./types";
+
+export const getHotSettings: SettingsProducer = (difficulty) => ({
+  ...getNormal3Settings(difficulty),
+  hideBlockTypes: "checker"
+});
+
+export const getHot2Settings: SettingsProducer = (difficulty) => ({
+  ...getNormal4Settings(difficulty),
+  hideBlockTypes: "all"
+});
+
+export const getHot3Settings: SettingsProducer = (difficulty) => ({
+  ...getNormal5Settings(difficulty),
+  hideBlockTypes: "all"
+});
 
 export const hot: LevelType<"hot"> = {
   type: "hot",
@@ -26,20 +41,20 @@ export const hot: LevelType<"hot"> = {
     return {
       stages: [
         {
-          settings: getHard2Settings(difficultyLevel),
+          settings: getHotSettings(difficultyLevel),
           levelModifiers: {
             keepRevealed: true
           }
         },
         {
-          settings: getHardSettings(difficultyLevel),
+          settings: getHot2Settings(difficultyLevel),
           backgroundClassname: "bg-red-500/90",
           levelModifiers: {
             particles: "none"
           }
         },
         {
-          settings: getHard3Settings(difficultyLevel),
+          settings: getHot3Settings(difficultyLevel),
           backgroundClassname: "bg-red-600/90",
           levelModifiers: {
             particles: "sweat"
@@ -51,20 +66,20 @@ export const hot: LevelType<"hot"> = {
   getZenSettings: (_zenLevel, difficultyLevel) => ({
     stages: [
       {
-        settings: getHardSettings(difficultyLevel),
+        settings: getHotSettings(difficultyLevel),
         levelModifiers: {
           keepRevealed: true
         }
       },
       {
-        settings: getHard2Settings(difficultyLevel),
+        settings: getHot2Settings(difficultyLevel),
         backgroundClassname: "bg-red-700/50",
         levelModifiers: {
           particles: "none"
         }
       },
       {
-        settings: getHard3Settings(difficultyLevel),
+        settings: getHot3Settings(difficultyLevel),
         backgroundClassname: "bg-red-800/70",
         levelModifiers: {
           particles: "sweat"

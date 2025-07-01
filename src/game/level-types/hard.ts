@@ -3,7 +3,7 @@ import { pick } from "@/support/random";
 import { getDifficultyLevel } from "../level-settings/levelSettings";
 import type { SettingsProducer } from "../types";
 
-import { getNormal4Settings, getNormalSettings } from "./normal";
+import { getNormalSettings } from "./normal";
 import type { LevelType } from "./types";
 
 export const getHardSettings: SettingsProducer = (difficulty) => ({
@@ -14,11 +14,6 @@ export const getHardSettings: SettingsProducer = (difficulty) => ({
 export const getHard2Settings: SettingsProducer = (difficulty) => ({
   ...getNormalSettings(difficulty),
   hideBlockTypes: "checker"
-});
-
-export const getHard3Settings: SettingsProducer = (difficulty) => ({
-  ...getNormal4Settings(difficulty),
-  hideBlockTypes: "all"
 });
 
 export const hard: LevelType<"hard"> = {
