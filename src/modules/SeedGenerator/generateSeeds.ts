@@ -140,7 +140,7 @@ const produceExtraSeeds = async (
       worker.on("error", (err) => console.error("Worker error:", err));
       worker.on("exit", (code) => {
         activeWorkers--;
-        if (code === 0 && generated < amount) {
+        if (code === 0 && generated < amount && activeWorkers < MAX_WORKERS) {
           spawnWorker();
         }
 
