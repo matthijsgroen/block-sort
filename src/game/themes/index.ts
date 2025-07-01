@@ -26,7 +26,13 @@ export type BlockTheme =
   | "spring"
   | "summer";
 
-export type Particles = "ghosts" | "snow" | "pollen" | "bubbles";
+export type Particles =
+  | "ghosts"
+  | "snow"
+  | "pollen"
+  | "bubbles"
+  | "sweat"
+  | "none";
 
 export const getShapeMapping = (
   theme: BlockTheme

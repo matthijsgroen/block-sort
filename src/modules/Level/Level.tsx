@@ -132,7 +132,8 @@ export const Level: React.FC<Props> = ({
     return () => clearTimeout(cleanup);
   }, []);
 
-  const { activeTheme } = use(ThemeContext);
+  const { activeTheme, setParticleOverride, clearParticleOverride } =
+    use(ThemeContext);
 
   useEffect(() => {
     if (hasWon(levelState)) {
@@ -159,6 +160,14 @@ export const Level: React.FC<Props> = ({
 
   const ghostMode = !!getLevelModifier("ghostMode");
   const hideFormat = getLevelModifier("hideMode");
+  const particles = getLevelModifier("particles");
+  useEffect(() => {
+    if (particles) {
+      setParticleOverride(particles);
+    } else {
+      clearParticleOverride();
+    }
+  }, [particles, setParticleOverride]);
   const keepRevealed = getLevelModifier("keepRevealed");
   const hideEvery = getLevelModifier("hideEvery");
 

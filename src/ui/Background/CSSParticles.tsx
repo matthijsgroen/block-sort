@@ -11,6 +11,7 @@ type Props = {
   direction: "up" | "down";
   scale: [min: number, max: number];
   speed: [min: number, max: number];
+  opacity?: [min: number, max: number];
   shift?: number;
   floatSpeed: [min: number, max: number];
   floatDistance: [min: number, max: number];
@@ -24,6 +25,7 @@ export const CSSParticles: React.FC<Props> = ({
   direction,
   shift = 0,
   scale,
+  opacity = [0.5, 0.8],
   speed,
   floatDistance,
   floatSpeed
@@ -58,7 +60,7 @@ export const CSSParticles: React.FC<Props> = ({
               "--directionXEnd": `${between(-shift, shift, random)}px`,
               "--float": `${Math.round(between(floatDistance[0], floatDistance[1], random))}px`,
               scale: `${between(scale[0], scale[1], random)}`,
-              opacity: `${between(0.5, 0.8, random)}`
+              opacity: `${between(opacity[0], opacity[1], random)}`
             }}
             className={clsx(styles.float, styles.particle)}
           ></div>

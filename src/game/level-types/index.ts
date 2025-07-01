@@ -4,6 +4,7 @@ import type { LevelSettings, MultiStageLevelSettings } from "../types";
 import { dungeon } from "./dungeon";
 import { easy } from "./easy";
 import { hard } from "./hard";
+import { hot } from "./hot";
 import { normal } from "./normal";
 import { scrambled } from "./scrambled";
 import { special } from "./special";
@@ -14,6 +15,7 @@ import { winter } from "./winter";
 
 const levelTypes = [
   // ghost, // -- not yet ready for release
+  hot,
   dungeon,
   special,
   hard,

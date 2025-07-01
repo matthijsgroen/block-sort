@@ -19,7 +19,8 @@ const symbols = {
   ghost: "\\1F47B",
   snow: "\\2744",
   yellowCircle: "\\1F7E1",
-  bubbles: "\\1FAE7"
+  bubbles: "\\1FAE7",
+  drop: "\\1F4A7"
 };
 
 export const Background: React.FC<PropsWithChildren<Props>> = ({
@@ -200,6 +201,19 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           scale={[0.2, 1]}
           speed={[30, 50]}
           floatDistance={[20, 100]}
+          floatSpeed={[5, 10]}
+        />
+      )}
+      {particles === "sweat" && (
+        <CSSParticles
+          symbol={symbols.drop}
+          amount={20}
+          shift={100}
+          direction="down"
+          scale={[0.8, 1.2]}
+          opacity={[0.4, 0.7]}
+          speed={[70, 90]}
+          floatDistance={[0, 10]}
           floatSpeed={[5, 10]}
         />
       )}

@@ -15,8 +15,8 @@ import { getThemeSong } from "@/support/themeMusic";
 export const ThemeContext = createContext<{
   activeTheme: BlockTheme;
   activeParticles?: Particles;
-  setParticleOverride?: Dispatch<Particles>;
-  clearParticleOverride?: VoidFunction;
+  setParticleOverride: Dispatch<Particles>;
+  clearParticleOverride: VoidFunction;
   setThemeOverride: Dispatch<BlockTheme>;
   clearThemeOverride: VoidFunction;
 }>({

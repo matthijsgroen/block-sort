@@ -410,6 +410,8 @@ export const revealBlocks = (
 ) =>
   produce(levelState, (draft) => {
     revealed.forEach(({ col, row }) => {
-      draft.columns[col].blocks[row].revealed = true;
+      if (draft.columns[col].blocks[row]) {
+        draft.columns[col].blocks[row].revealed = true;
+      }
     });
   });
