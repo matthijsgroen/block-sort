@@ -14,9 +14,7 @@ export const summer: LevelType<"summer"> = {
   buttonBackgroundClassName: "bg-yellow-400",
   backgroundClassName: "bg-yellow-200/10",
   showIntro: true,
-  inBetaTest: true,
   levelModifiers: {
-    // theme: "summer",
     hideMode: "ice",
     hideEvery: 2
   },

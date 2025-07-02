@@ -1,2 +1,2 @@
-export const levelForDevelopment = 1 - 1;
+export const levelForDevelopment = 800 - 1;
 export const dateForDevelopment = new Date();

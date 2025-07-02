@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from "react";
 import clsx from "clsx";
 
-import type { BlockTheme } from "@/game/themes";
+import type { BlockTheme, Particles } from "@/game/themes";
 
 import { CSSParticles } from "./CSSParticles";
 
@@ -10,6 +10,7 @@ import styles from "./Background.module.css";
 type Props = {
   backgroundClassName?: string;
   theme?: BlockTheme;
+  particles?: Particles;
   layout?: string;
   musicEnabled?: boolean;
 };
@@ -18,7 +19,8 @@ const symbols = {
   ghost: "\\1F47B",
   snow: "\\2744",
   yellowCircle: "\\1F7E1",
-  bubbles: "\\1FAE7"
+  bubbles: "\\1FAE7",
+  drop: "\\1F4A7"
 };
 
 export const Background: React.FC<PropsWithChildren<Props>> = ({
@@ -26,6 +28,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
   backgroundClassName = "",
   theme = "default",
   layout = "default",
+  particles,
   musicEnabled = true
 }) => {
   return (
@@ -62,7 +65,9 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           </div>
           <div className="absolute left-4 top-[30px] -rotate-12">
             <div className={clsx("absolute origin-bottom text-[5rem]")}>
-              😁️
+              {particles !== "sweat" && particles !== "heavy-sweat" && "😁️"}
+              {particles === "sweat" && "️😛"}
+              {particles === "heavy-sweat" && "️🥵"}
             </div>
             <div
               className={clsx(
@@ -177,7 +182,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           🌱
         </div>
       )}
-      {theme === "halloween" && (
+      {particles === "ghosts" && (
         <CSSParticles
           symbol={symbols.ghost}
           amount={10}
@@ -189,7 +194,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           floatSpeed={[5, 10]}
         />
       )}
-      {theme === "winter" && (
+      {particles === "snow" && (
         <CSSParticles
           symbol={symbols.snow}
           amount={30}
@@ -201,7 +206,33 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           floatSpeed={[5, 10]}
         />
       )}
-      {theme === "spring" && (
+      {particles === "sweat" && (
+        <CSSParticles
+          symbol={symbols.drop}
+          amount={10}
+          shift={100}
+          direction="down"
+          scale={[0.6, 1.0]}
+          opacity={[0.3, 0.6]}
+          speed={[90, 120]}
+          floatDistance={[0, 10]}
+          floatSpeed={[5, 10]}
+        />
+      )}
+      {particles === "heavy-sweat" && (
+        <CSSParticles
+          symbol={symbols.drop}
+          amount={20}
+          shift={100}
+          direction="down"
+          scale={[0.8, 1.2]}
+          opacity={[0.4, 0.7]}
+          speed={[70, 90]}
+          floatDistance={[0, 10]}
+          floatSpeed={[5, 10]}
+        />
+      )}
+      {particles === "pollen" && (
         <CSSParticles
           symbol={symbols.yellowCircle}
           amount={10}
@@ -213,7 +244,7 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           floatSpeed={[5, 10]}
         />
       )}
-      {theme === "summer" && (
+      {particles === "bubbles" && (
         <CSSParticles
           symbol={symbols.bubbles}
           amount={10}

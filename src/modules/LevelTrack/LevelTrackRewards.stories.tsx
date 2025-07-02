@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { PlayButton } from "@/ui/PlayButton";
 
@@ -8,7 +8,9 @@ import {
   getLevelTypesForStorybook,
   getUnlockableLevelTypes
 } from "@/game/level-types";
+import type { BlockTheme } from "@/game/themes";
 import { timesMap } from "@/support/timeMap";
+import { stringUnionToArray } from "@/support/unionToArray";
 
 import { DIFFICULTIES, DIFFICULTY_LEVELS } from "../GameModi/constants";
 
@@ -75,7 +77,13 @@ export const LevelTypeDistribution: Story = {
   },
   argTypes: {
     theme: {
-      options: ["default", "halloween", "winter", "spring", "summer"],
+      options: stringUnionToArray<BlockTheme>()(
+        "default",
+        "halloween",
+        "winter",
+        "spring",
+        "summer"
+      ),
       control: "select"
     }
   },
@@ -84,7 +92,7 @@ export const LevelTypeDistribution: Story = {
       <div>
         <h1 className="mb-2 text-xl font-bold">Level Track</h1>
         <div className="m-4 grid grid-cols-8 gap-4 pb-32">
-          {timesMap(300, (index) => {
+          {timesMap(2000, (index) => {
             const levelType = getLevelType(index, theme);
 
             return (

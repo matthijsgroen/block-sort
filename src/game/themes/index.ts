@@ -26,6 +26,15 @@ export type BlockTheme =
   | "spring"
   | "summer";
 
+export type Particles =
+  | "ghosts"
+  | "snow"
+  | "pollen"
+  | "bubbles"
+  | "heavy-sweat"
+  | "sweat"
+  | "none";
+
 export const getShapeMapping = (
   theme: BlockTheme
 ): Record<BlockType, string> => {
@@ -71,6 +80,7 @@ export const getColorMapping = (
 export type ThemeSchedule = RangedItem & {
   name: string;
   theme: BlockTheme;
+  particles?: Particles;
   levelModifiers?: (RangedItem & {
     modifiers: LevelModifiers;
   })[];
@@ -82,6 +92,7 @@ export const themeSchedule: ThemeSchedule[] = [
     end: { month: 11, day: 4 },
     name: "Fall/Halloween",
     theme: "halloween",
+    particles: "ghosts",
     levelModifiers: [
       {
         modifiers: { ghostMode: true },
@@ -95,6 +106,7 @@ export const themeSchedule: ThemeSchedule[] = [
     end: { month: 1, day: 6 },
     name: "Winter/Christmas",
     theme: "winter",
+    particles: "snow",
     levelModifiers: [
       {
         modifiers: { hideMode: "present", keepRevealed: true },
@@ -107,13 +119,15 @@ export const themeSchedule: ThemeSchedule[] = [
     begin: { month: 3, day: 15 },
     end: { month: 5, day: 15 },
     name: "Spring",
-    theme: "spring"
+    theme: "spring",
+    particles: "pollen"
   },
   {
     begin: { month: 6, day: 25 },
     end: { month: 8, day: 25 },
     name: "Summer",
     theme: "summer",
+    particles: "bubbles",
     levelModifiers: [
       {
         modifiers: { hideMode: "ice", keepRevealed: false },
@@ -133,3 +147,15 @@ export const getActiveModifiers = (date: Date) =>
   filterInRange(date, themeSchedule).flatMap((theme) =>
     theme.levelModifiers ? filterInRange(date, theme.levelModifiers) : []
   );
+
+export const getActiveParticles = (date: Date): Particles | undefined => {
+  const particleModifiers = getActiveModifiers(date).find(
+    (m) => m.modifiers.particles
+  );
+  if (particleModifiers) {
+    return particleModifiers.modifiers.particles;
+  }
+
+  const activeSchedule = filterInRange(date, themeSchedule)[0];
+  return activeSchedule?.particles;
+};

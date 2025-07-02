@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { dungeon } from "@/game/level-types/dungeon";
 import { easy } from "@/game/level-types/easy";
@@ -38,6 +38,10 @@ const meta = {
     },
     theme: {
       options: ["default", "halloween", "winter", "spring", "summer"],
+      control: "select"
+    },
+    particles: {
+      options: ["none", "bubbles", "ghosts", "snow", "pollen"],
       control: "select"
     },
     layout: {

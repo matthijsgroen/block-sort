@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { generateRandomLevel } from "@/game/level-creation/generateRandomLevel";
 import { LEVEL_SCALE } from "@/game/level-settings/levelSettings";

@@ -129,7 +129,7 @@ const createLevel = async (
   return level;
 };
 
-const isMultiStageLevel = (
+export const isMultiStageLevel = (
   settings: LevelSettings | MultiStageLevelSettings
 ): settings is MultiStageLevelSettings =>
   (settings as MultiStageLevelSettings).stages !== undefined;
@@ -182,7 +182,8 @@ export const LevelLoader: React.FC<Props> = ({
   }, [locked.seed, stageSettingsString, lockedStage]);
 
   const levelTypePlugin = getLevelTypeByType(levelType);
-  const { setThemeOverride, clearThemeOverride } = use(ThemeContext);
+  const { setThemeOverride, clearThemeOverride, clearParticleOverride } =
+    use(ThemeContext);
   const { setBackgroundClassName } = use(BackgroundContext);
   useEffect(() => {
     setBackgroundClassName(
@@ -195,8 +196,11 @@ export const LevelLoader: React.FC<Props> = ({
     }
   }, [stageData, levelTypePlugin]);
   const levelModifiers = getActiveModifiers(getToday()).map((m) => m.modifiers);
+  if (levelTypePlugin?.levelModifiers) {
+    levelModifiers.unshift(levelTypePlugin.levelModifiers);
+  }
   if (stageData?.levelModifiers) {
-    levelModifiers.push(stageData.levelModifiers);
+    levelModifiers.unshift(stageData.levelModifiers);
   }
 
   return (
@@ -207,6 +211,7 @@ export const LevelLoader: React.FC<Props> = ({
           stageNr={lockedStage}
           onBack={() => {
             clearThemeOverride();
+            clearParticleOverride();
             onComplete(false);
           }}
         />
@@ -238,6 +243,7 @@ export const LevelLoader: React.FC<Props> = ({
           }
           onComplete={async (won) => {
             clearThemeOverride();
+            clearParticleOverride();
             if (lockedStage >= maxStages - 1 && won) {
               deleteLevelType();
               deleteGameValue(
