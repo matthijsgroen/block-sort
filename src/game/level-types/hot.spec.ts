@@ -2,7 +2,7 @@ import { describe } from "vitest";
 
 import { testDifficulties } from "../level-settings/difficultyTester";
 
-import { getHotSettings, getHot2Settings, getHot3Settings } from "./hot";
+import { getHot2Settings, getHot3Settings, getHotSettings } from "./hot";
 
 describe(getHotSettings, () => {
   testDifficulties(getHotSettings);

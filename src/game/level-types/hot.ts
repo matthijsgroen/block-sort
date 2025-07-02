@@ -1,7 +1,11 @@
 import { getDifficultyLevel } from "../level-settings/levelSettings";
 import type { MultiStageLevelSettings, SettingsProducer } from "../types";
 
-import { getNormal3Settings, getNormal4Settings, getNormal5Settings } from "./normal";
+import {
+  getNormal3Settings,
+  getNormal4Settings,
+  getNormal5Settings
+} from "./normal";
 import type { LevelType } from "./types";
 
 export const getHotSettings: SettingsProducer = (difficulty) => ({
