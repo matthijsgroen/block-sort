@@ -31,6 +31,7 @@ export type Particles =
   | "snow"
   | "pollen"
   | "bubbles"
+  | "heavy-sweat"
   | "sweat"
   | "none";
 

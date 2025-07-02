@@ -65,7 +65,9 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           </div>
           <div className="absolute left-4 top-[30px] -rotate-12">
             <div className={clsx("absolute origin-bottom text-[5rem]")}>
-              😁️
+              {particles !== "sweat" && particles !== "heavy-sweat" && "😁️"}
+              {particles === "sweat" && "️😛"}
+              {particles === "heavy-sweat" && "️🥵"}
             </div>
             <div
               className={clsx(
@@ -205,6 +207,19 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
         />
       )}
       {particles === "sweat" && (
+        <CSSParticles
+          symbol={symbols.drop}
+          amount={10}
+          shift={100}
+          direction="down"
+          scale={[0.6, 1.0]}
+          opacity={[0.3, 0.6]}
+          speed={[90, 120]}
+          floatDistance={[0, 10]}
+          floatSpeed={[5, 10]}
+        />
+      )}
+      {particles === "heavy-sweat" && (
         <CSSParticles
           symbol={symbols.drop}
           amount={20}

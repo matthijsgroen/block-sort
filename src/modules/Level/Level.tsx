@@ -155,7 +155,6 @@ export const Level: React.FC<Props> = ({
   const getLevelModifier = <TModifier extends keyof LevelModifiers>(
     modifier: TModifier
   ): LevelModifiers[TModifier] =>
-    levelTypePlugin.levelModifiers?.[modifier] ??
     modifiers.find((m) => m[modifier])?.[modifier];
 
   const ghostMode = !!getLevelModifier("ghostMode");

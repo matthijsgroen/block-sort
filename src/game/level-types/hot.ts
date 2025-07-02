@@ -38,7 +38,7 @@ export const hot: LevelType<"hot"> = {
   levelModifiers: {
     hideMode: "glass"
   },
-  occurrence: (levelNr) => levelNr + 1 >= 1200 && (levelNr + 2) % 100 === 0,
+  occurrence: (levelNr) => levelNr + 1 >= 1000 && (levelNr + 2) % 50 === 0,
   getSettings(levelNr): MultiStageLevelSettings {
     const difficultyLevel = getDifficultyLevel(levelNr);
 
@@ -54,14 +54,14 @@ export const hot: LevelType<"hot"> = {
           settings: getHot2Settings(difficultyLevel),
           backgroundClassname: "bg-red-500/90",
           levelModifiers: {
-            particles: "none"
+            particles: "sweat"
           }
         },
         {
           settings: getHot3Settings(difficultyLevel),
           backgroundClassname: "bg-red-600/90",
           levelModifiers: {
-            particles: "sweat"
+            particles: "heavy-sweat"
           }
         }
       ]
@@ -79,14 +79,14 @@ export const hot: LevelType<"hot"> = {
         settings: getHot2Settings(difficultyLevel),
         backgroundClassname: "bg-red-700/50",
         levelModifiers: {
-          particles: "none"
+          particles: "sweat"
         }
       },
       {
         settings: getHot3Settings(difficultyLevel),
         backgroundClassname: "bg-red-800/70",
         levelModifiers: {
-          particles: "sweat"
+          particles: "heavy-sweat"
         }
       }
     ]

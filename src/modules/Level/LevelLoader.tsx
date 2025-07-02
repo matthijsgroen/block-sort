@@ -196,6 +196,9 @@ export const LevelLoader: React.FC<Props> = ({
     }
   }, [stageData, levelTypePlugin]);
   const levelModifiers = getActiveModifiers(getToday()).map((m) => m.modifiers);
+  if (levelTypePlugin?.levelModifiers) {
+    levelModifiers.unshift(levelTypePlugin.levelModifiers);
+  }
   if (stageData?.levelModifiers) {
     levelModifiers.unshift(stageData.levelModifiers);
   }
