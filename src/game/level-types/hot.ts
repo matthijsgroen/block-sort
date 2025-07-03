@@ -1,10 +1,7 @@
 import { getDifficultyLevel } from "../level-settings/levelSettings";
 import type { MultiStageLevelSettings, SettingsProducer } from "../types";
 
-import {
-  getNormal3Settings,
-  getNormal4Settings,
-} from "./normal";
+import { getNormal3Settings, getNormal4Settings } from "./normal";
 import type { LevelType } from "./types";
 
 export const getHotSettings: SettingsProducer = (difficulty) => ({
@@ -24,13 +21,13 @@ export const getHot3Settings: SettingsProducer = () => ({
   extraBuffers: [
     { size: 3, amount: 1, limit: 0 },
     { size: 1, amount: 1, limit: 0 },
-    { size: 2, amount: 1, limit: 0 },
+    { size: 2, amount: 1, limit: 0 }
     // { size: 1, amount: 1, limit: 0 }
   ],
   layoutMap: {
     columns: [
       { fromColumn: 17, toColumn: 1 },
-      { fromColumn: 16, toColumn: 4 },
+      { fromColumn: 16, toColumn: 4 }
     ]
   },
   hideBlockTypes: "all"

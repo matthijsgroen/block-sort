@@ -29,6 +29,7 @@ import {
   getSpringSettings
 } from "@/game/level-types/spring";
 import type { SettingsProducer } from "@/game/types";
+import { findLastIndex } from "@/support/findLastIndex";
 import { settingsHash } from "@/support/hash";
 
 export type Producer = {
@@ -82,7 +83,7 @@ export const levelProducers = producers
   )
   .filter(
     (seeder, index, seeders) =>
-      seeders.findLastIndex((s) => s.hash === seeder.hash) === index
+      findLastIndex(seeders, (s) => s.hash === seeder.hash) === index
   );
 
 export const getFilteredProducers = (

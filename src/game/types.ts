@@ -62,6 +62,7 @@ export type Block = {
    * @default true
    */
   revealed?: boolean;
+  spawned?: boolean;
 };
 
 export type BufferSettings = {
