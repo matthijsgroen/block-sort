@@ -57,7 +57,7 @@ const audioItems = {
   lock: createItem(Stream.effects, place, 1.0, { multipleInstances: true }),
   win: createItem(Stream.effects, win),
   stageWin: createItem(Stream.effects, stageWin),
-  pickup: createItem(Stream.effects, pickup, 2.0),
+  pickup: createItem(Stream.effects, pickup, 1.0),
   progress: createItem(Stream.effects, progress),
   match: createItem(Stream.effects, match)
 };
