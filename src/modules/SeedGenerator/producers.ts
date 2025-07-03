@@ -82,7 +82,7 @@ export const levelProducers = producers
   )
   .filter(
     (seeder, index, seeders) =>
-      seeders.findIndex((s) => s.hash === seeder.hash) === index
+      seeders.findLastIndex((s) => s.hash === seeder.hash) === index
   );
 
 export const getFilteredProducers = (
