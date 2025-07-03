@@ -135,7 +135,7 @@ export const BlockColumn: React.FC<Props> = ({
     if (locked) {
       const clear = setInterval(() => {
         setBlocksLocked((a) => {
-          if (blocksLocked > column.columnSize + 1) {
+          if (a > column.columnSize + 1) {
             clearInterval(clear);
           }
           return a + 1;
