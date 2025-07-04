@@ -127,8 +127,8 @@ export const Background: React.FC<PropsWithChildren<Props>> = ({
           </div>
         </>
       )}
-      {theme === "winter" && (
-        <div className="absolute right-0 top-3/4 translate-x-8 -rotate-45 text-8xl">
+      {theme === "winter" && particles !== "heavy-sweat" && (
+        <div className={clsx("absolute right-0 top-3/4 translate-x-8 -rotate-45 text-8xl", particles === "sweat" && "blur-[2px]")}>
           ⛄️
         </div>
       )}

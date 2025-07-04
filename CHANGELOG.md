@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.42.0 - 2025-07-05
+
+### Added
+
+- New level type! 🌶️ Hot levels!  
+  These levels are extra spicy! It's three stages of very challenging sorting,
+  and will start occurring from level **1025**!
+
 ## Version 1.41.0 - 2025-07-03
 
 ### Added
