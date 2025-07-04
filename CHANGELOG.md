@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Seeded more levels of higher difficulty levels to ensure more variation
+- Fade in animation for blocks spawning in dungeon levels
 
 ### Fixed
 
