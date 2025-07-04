@@ -101,7 +101,11 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
       )
     ) {
       while (endCol.blocks.length < endCol.columnSize) {
-        endCol.blocks.push({ blockType: moveColor, revealed: true });
+        endCol.blocks.unshift({
+          blockType: moveColor,
+          revealed: true,
+          spawned: true
+        });
       }
       endCol.blocks.forEach((b) => {
         b.revealed = true;

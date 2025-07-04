@@ -126,13 +126,13 @@ export const testSeeds = async (
   await updateSeeds(updatedSeeds);
 
   clearLine();
-  const summary: string[] = [];
+  const summary: string[] = [`${seedsChecked} seeds tested.`];
 
   if (totalRemovedSeeds === 0) {
     summary.push("No invalid seeds found.");
   } else {
     summary.push(
-      `Please run 'run' to regenerate the ${totalRemovedSeeds} removed seeds.`
+      `${totalRemovedSeeds} invalid seeds found. Use 'generate' to regenerate the removed seeds.`
     );
   }
   summary.push(`${replacedSeeds} were already replaced.`);

@@ -22,6 +22,7 @@ export type Props = {
   index?: number;
   locked?: boolean;
   blocked?: boolean;
+  spawned?: boolean;
   shape?: string;
   shapeColored?: boolean;
   shadow?: boolean;
@@ -51,6 +52,7 @@ export const Block: React.FC<Props> = ({
   onLock,
   onDrop,
   onPickUp,
+  spawned = false,
   selected = null,
   suggested = null,
   locked = false,
@@ -122,6 +124,7 @@ export const Block: React.FC<Props> = ({
           [styles.shadow]: shadow && !selected,
           "animate-locked": !selected && isLocked,
           "animate-blocked": blocked,
+          "animate-fadeIn": spawned,
           "animate-place": isPlacing && !blocked,
           "translate-y-4": !selected && !isLocked && !blocked && !isPlacing,
           [styles.selected]: selected && !isLocked
