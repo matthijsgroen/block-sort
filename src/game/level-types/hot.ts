@@ -22,7 +22,7 @@ export const getHot2Settings: SettingsProducer = () => ({
   layoutMap: {
     columns: [
       { fromColumn: 12, toColumn: 1 },
-      { fromColumn: 10, toColumn: 3 },
+      { fromColumn: 10, toColumn: 3 }
     ]
   },
   hideBlockTypes: "all"
