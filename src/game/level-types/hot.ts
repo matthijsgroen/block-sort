@@ -1,16 +1,30 @@
 import { getDifficultyLevel } from "../level-settings/levelSettings";
 import type { MultiStageLevelSettings, SettingsProducer } from "../types";
 
-import { getNormal3Settings, getNormal4Settings } from "./normal";
+import { getNormal3Settings } from "./normal";
 import type { LevelType } from "./types";
 
-export const getHotSettings: SettingsProducer = (difficulty) => ({
-  ...getNormal3Settings(difficulty),
+export const getHotSettings: SettingsProducer = () => ({
+  ...getNormal3Settings(11),
   hideBlockTypes: "checker"
 });
 
-export const getHot2Settings: SettingsProducer = (difficulty) => ({
-  ...getNormal4Settings(difficulty),
+export const getHot2Settings: SettingsProducer = () => ({
+  amountColors: 10,
+  stackSize: 7,
+  extraPlacementStacks: 0,
+  extraBuffers: [
+    { size: 3, amount: 1, limit: 0 },
+    { size: 3, amount: 1, limit: 0 },
+    { size: 2, amount: 1, limit: 0 },
+    { size: 1, amount: 1, limit: 0 }
+  ],
+  layoutMap: {
+    columns: [
+      { fromColumn: 12, toColumn: 1 },
+      { fromColumn: 10, toColumn: 3 }
+    ]
+  },
   hideBlockTypes: "all"
 });
 
@@ -22,7 +36,6 @@ export const getHot3Settings: SettingsProducer = () => ({
     { size: 3, amount: 1, limit: 0 },
     { size: 1, amount: 1, limit: 0 },
     { size: 2, amount: 1, limit: 0 }
-    // { size: 1, amount: 1, limit: 0 }
   ],
   layoutMap: {
     columns: [
@@ -36,7 +49,7 @@ export const getHot3Settings: SettingsProducer = () => ({
 export const hot: LevelType<"hot"> = {
   type: "hot",
   name: "Hot",
-  // unlocksAtLevel: 1500,
+  unlocksAtLevel: 2000,
   symbol: "🌶️",
   borderClassName: "border-2 border-red-400",
   textClassName: "text-red-400",
@@ -48,7 +61,7 @@ export const hot: LevelType<"hot"> = {
   levelModifiers: {
     hideMode: "glass"
   },
-  occurrence: (levelNr) => levelNr + 1 >= 1000 && (levelNr + 2) % 50 === 0,
+  occurrence: (levelNr) => levelNr + 1 >= 1000 && (levelNr + 26) % 50 === 0,
   getSettings(levelNr): MultiStageLevelSettings {
     const difficultyLevel = getDifficultyLevel(levelNr);
 
@@ -77,23 +90,23 @@ export const hot: LevelType<"hot"> = {
       ]
     };
   },
-  getZenSettings: (_zenLevel, difficultyLevel) => ({
+  getZenSettings: () => ({
     stages: [
       {
-        settings: getHotSettings(difficultyLevel),
+        settings: getHotSettings(11),
         levelModifiers: {
           keepRevealed: true
         }
       },
       {
-        settings: getHot2Settings(difficultyLevel),
+        settings: getHot2Settings(11),
         backgroundClassname: "bg-red-700/50",
         levelModifiers: {
           particles: "sweat"
         }
       },
       {
-        settings: getHot3Settings(difficultyLevel),
+        settings: getHot3Settings(11),
         backgroundClassname: "bg-red-800/70",
         levelModifiers: {
           particles: "heavy-sweat"
