@@ -27,9 +27,13 @@ export const useWakeLock = () => {
 
   useEffect(() => {
     return () => {
-      releaseWakeLock();
+      if (wakeLock.current) {
+        wakeLock.current.release();
+        wakeLock.current = null;
+      }
+      document.removeEventListener("visibilitychange", reAcquire);
     };
-  }, []);
+  }, [reAcquire]);
 
   return { requestWakeLock, releaseWakeLock };
 };

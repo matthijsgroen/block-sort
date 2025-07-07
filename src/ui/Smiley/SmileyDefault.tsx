@@ -4,7 +4,7 @@ type States = "grin" | "smile" | "think" | "yawn" | "sleep";
 
 export const SmileyDefault = () => {
   const [state, setState] = useState<States>("grin");
-  const [winkCount, setWinkCount] = useState(0);
+  const [, setWinkCount] = useState(0);
 
   const characters: Record<States, string> = {
     grin: "😀",
@@ -26,12 +26,15 @@ export const SmileyDefault = () => {
     }
     if (state === "think") {
       const cleanup = setTimeout(() => {
-        if (winkCount > 2) {
-          setState("smile");
-          setWinkCount(0);
-        } else {
-          setState("grin");
-        }
+        setWinkCount((wink) => {
+          if (wink > 2) {
+            setState("smile");
+            return 0;
+          } else {
+            setState("grin");
+          }
+          return wink;
+        });
       }, 1_000);
       return () => {
         clearTimeout(cleanup);
@@ -48,11 +51,15 @@ export const SmileyDefault = () => {
     }
     if (state === "yawn") {
       const cleanup = setTimeout(() => {
-        if (winkCount > 2) {
-          setState("sleep");
-        } else {
-          setState("smile");
-        }
+        setWinkCount((wink) => {
+          if (wink > 2) {
+            setState("sleep");
+            return 0;
+          } else {
+            setState("grin");
+          }
+          return wink;
+        });
       }, 1_000);
       return () => {
         clearTimeout(cleanup);

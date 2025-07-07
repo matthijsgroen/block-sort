@@ -74,7 +74,7 @@ export const LevelTrack: React.FC<Props> = ({
     return () => {
       cancellations.forEach((cancel) => cancel());
     };
-  }, [officialLevelNr, levelNr]);
+  }, [officialLevelNr, levelNr, setDisplayLevelNr]);
 
   const numberFrom = Math.max(Math.floor(levelNr - 2), 0);
 
@@ -82,7 +82,7 @@ export const LevelTrack: React.FC<Props> = ({
   useEffect(() => {
     setBackgroundClassName(undefined);
     setScreenLayout("levelTrack");
-  }, []);
+  }, [setBackgroundClassName, setScreenLayout]);
   const { setShowBeta, showBeta } = use(BetaContext);
   const [betaCounter, setBetaCounter] = useState(0);
 
@@ -97,7 +97,7 @@ export const LevelTrack: React.FC<Props> = ({
       }
       setBetaCounter(0);
     }
-  }, [betaCounter]);
+  }, [betaCounter, setShowBeta, showBeta]);
 
   return (
     <div className="flex h-full flex-col items-center">

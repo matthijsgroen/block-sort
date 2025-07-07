@@ -41,6 +41,7 @@ export const Default: Story = {
     selected: "easy"
   },
   render: (args) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [value, setValue] = useState(args.selected);
     return <Switch {...args} selected={value} onSelectionChange={setValue} />;
   }

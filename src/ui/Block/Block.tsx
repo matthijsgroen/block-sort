@@ -75,7 +75,7 @@ export const Block: React.FC<Props> = ({
     if (moved && !selected && !isLocked) {
       onDrop?.();
     }
-  }, []);
+  }, [moved, onDrop, selected, isLocked]);
 
   useEffect(() => {
     if (!blockRef.current) {
@@ -94,14 +94,14 @@ export const Block: React.FC<Props> = ({
         clearTimeout(timeoutId);
       };
     }
-  }, [selected]);
+  }, [selected, onDrop, onPickUp, isLocked]);
 
   const hiddenColor = hideFormatToColor[hideFormat];
   const showTopShape = revealed || hideFormat !== "present";
 
   const isPlacing = useMemo(
     () => !selected && !isLocked && blocked,
-    [selected]
+    [selected, isLocked, blocked]
   );
 
   return (

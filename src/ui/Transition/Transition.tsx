@@ -74,7 +74,7 @@ export const Transition: React.FC<PropsWithChildren<Props>> = ({
         { from: "exitStart", to: "exiting", duration: 10 },
         { from: "exiting", to: "exitEnd", duration: duration }
       ]),
-    [state]
+    [state, duration, startDelay]
   );
 
   useEffect(() => {

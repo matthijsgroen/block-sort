@@ -72,7 +72,7 @@ const Loader: React.FC<{ level: Promise<LevelState> }> = ({ level }) => {
     setLevelState(state);
     setItem(0);
     setSelection(undefined);
-  }, [level]);
+  }, [level, state]);
 
   useEffect(() => {
     if (isStuck(levelState)) {
@@ -100,7 +100,7 @@ const Loader: React.FC<{ level: Promise<LevelState> }> = ({ level }) => {
       clearTimeout(selectTimeoutId);
       clearTimeout(moveTimeoutId);
     };
-  }, [state, item]);
+  }, [state, item, levelState]);
 
   return (
     <div className="flex w-full min-w-96 flex-col">
@@ -188,7 +188,7 @@ const AnimatePlay: React.FC<{ level: LevelState; moves: Move[] }> = ({
       clearTimeout(selectTimeoutId);
       clearTimeout(moveTimeoutId);
     };
-  }, [levelState, item]);
+  }, [levelState, item, moves]);
 
   return (
     <div className="flex w-full min-w-96 flex-col">

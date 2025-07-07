@@ -44,7 +44,7 @@ export const ZenSelection: React.FC<Props> = ({
   useEffect(() => {
     setBackgroundClassName("bg-green-600/40");
     setScreenLayout("zenMode");
-  }, []);
+  }, [setBackgroundClassName, setScreenLayout]);
 
   const { showBeta } = use(BetaContext);
 

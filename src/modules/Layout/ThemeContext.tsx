@@ -60,13 +60,7 @@ export const ThemeProvider: React.FC<
       }, timeUntilMidnight);
       return () => clearTimeout(timeoutId);
     }
-  }, []);
-
-  useEffect(() => {
-    if (musicEnabled) {
-      sound.play(song);
-    }
-  }, [song]);
+  }, [themesEnabled]);
 
   useEffect(() => {
     sound.setStreamEnabled(Stream.music, musicEnabled);
@@ -75,7 +69,7 @@ export const ThemeProvider: React.FC<
     } else {
       sound.stopAllInStream(Stream.music);
     }
-  }, [musicEnabled]);
+  }, [musicEnabled, song]);
 
   return (
     <ThemeContext

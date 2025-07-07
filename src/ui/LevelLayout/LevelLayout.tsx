@@ -122,7 +122,7 @@ export const LevelLayout: React.FC<Props> = ({
     } else {
       setHoverColumnIndex(-1);
     }
-  }, [!!selection]);
+  }, [selection]);
 
   const handlePointerUp = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
@@ -159,14 +159,14 @@ export const LevelLayout: React.FC<Props> = ({
       pickup(top, rect);
       onPickUp?.();
     },
-    [onPickUp]
+    [onPickUp, pickup]
   );
 
   const handlePlacement = useCallback(
     ({ top, rect }: { top: number; rect: DOMRect }) => {
       animate(top, rect);
     },
-    []
+    [animate]
   );
 
   const maxColumnSize = levelState.columns.reduce(

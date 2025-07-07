@@ -30,7 +30,7 @@ export const StartAnimation: FC<Props> = ({
       onShow?.();
     }, delay);
     return () => clearTimeout(timeOut);
-  }, [delay]);
+  }, [delay, onShow]);
 
   useEffect(() => {
     if (started) {
@@ -39,7 +39,7 @@ export const StartAnimation: FC<Props> = ({
       }, 2000);
       return () => clearTimeout(timeOut);
     }
-  }, [started]);
+  }, [started, afterShow]);
 
   return started ? (
     <div

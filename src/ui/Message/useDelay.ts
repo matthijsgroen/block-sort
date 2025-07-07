@@ -13,7 +13,7 @@ export const useDelay = (
       onShow?.();
     }, delay);
     return () => clearTimeout(timeOut);
-  }, [delay]);
+  }, [delay, onShow]);
 
   useEffect(() => {
     if (started) {
@@ -22,7 +22,7 @@ export const useDelay = (
       }, duration);
       return () => clearTimeout(timeOut);
     }
-  }, [started]);
+  }, [started, afterShow, duration]);
 
   return started;
 };

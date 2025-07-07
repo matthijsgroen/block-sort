@@ -144,7 +144,7 @@ export const Level: React.FC<Props> = ({
       setPlayState("lost");
       setLostCounter((a) => a + 1);
     }
-  }, [levelState]);
+  }, [levelState, setLostCounter]);
 
   useEffect(() => {
     if (playState === "starting" && levelMoves.length > 0) {
@@ -166,7 +166,7 @@ export const Level: React.FC<Props> = ({
     } else {
       clearParticleOverride();
     }
-  }, [particles, setParticleOverride]);
+  }, [particles, setParticleOverride, clearParticleOverride]);
   const keepRevealed = getLevelModifier("keepRevealed");
   const hideEvery = getLevelModifier("hideEvery");
 
@@ -213,7 +213,17 @@ export const Level: React.FC<Props> = ({
         return updatedLevelState;
       });
     },
-    [levelMoves.length]
+    [
+      levelMoves.length,
+      hintMode,
+      keepRevealed,
+      setLevelState,
+      setLevelMoves,
+      setRevealed,
+      setStreak,
+      useStreak,
+      hideEvery
+    ]
   );
 
   const onColumnDown = useCallback(
@@ -233,7 +243,7 @@ export const Level: React.FC<Props> = ({
         });
       }
     },
-    [levelState, activeSelectStart]
+    [levelState, activeSelectStart, move, setUsedAutoMoves]
   );
   const onColumnUp = useCallback(
     (columnIndex: number) => {
@@ -245,7 +255,7 @@ export const Level: React.FC<Props> = ({
         setUsedAutoMoves(-1);
       }
     },
-    [activeSelectStart]
+    [activeSelectStart, move, setUsedAutoMoves]
   );
 
   const [clearKey, setClearKey] = useState(0);

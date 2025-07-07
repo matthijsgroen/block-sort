@@ -19,15 +19,16 @@ export const Dialog: React.FC<Props> = ({
   const dialogElement = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    dialogElement.current?.showModal();
+    const dialog = dialogElement.current;
+    dialog?.showModal();
     const listener = () => {
       onClose?.();
     };
-    dialogElement.current?.addEventListener("close", listener);
+    dialog?.addEventListener("close", listener);
     return () => {
-      dialogElement.current?.removeEventListener("close", listener);
+      dialog?.removeEventListener("close", listener);
     };
-  }, []);
+  }, [onClose]);
 
   return (
     <dialog

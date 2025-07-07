@@ -111,7 +111,7 @@ export const useOfflineStorage = <T>(
       }
     });
     return store.subscribe<T>(key, setLocalState);
-  }, []);
+  }, [initialValue, key, store]);
 
   const setValue = useCallback(
     async (value: SetStateAction<T>) => {
@@ -127,7 +127,7 @@ export const useOfflineStorage = <T>(
         setLocalState(value);
       }
     },
-    [key]
+    [key, localState, store]
   );
 
   const deleteValue = useCallback(
@@ -141,7 +141,7 @@ export const useOfflineStorage = <T>(
       }
       await store.removeItem(key);
     },
-    [key]
+    [key, initialValue, store]
   );
 
   return [localState, setValue, deleteValue];

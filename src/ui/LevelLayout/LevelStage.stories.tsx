@@ -90,6 +90,7 @@ const random = mulberry32(SEED);
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const LevelLayout: Story = {
   render: (args) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const level = useMemo(() => {
       const levelType =
         getLevelTypesForStorybook().find(
@@ -104,7 +105,7 @@ export const LevelLayout: Story = {
       }
 
       return generateRandomLevel(settings, random);
-    }, [args.levelType, args.levelNr, args.random, args.stage]);
+    }, [args.levelType, args.levelNr, args.stage]);
 
     const levelType =
       getLevelTypesForStorybook().find(

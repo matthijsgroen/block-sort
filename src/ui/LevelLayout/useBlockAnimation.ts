@@ -205,7 +205,7 @@ export const useBlockAnimation = (
         outline
       );
     }, 10); // delay to allow the DOM to update first
-  }, [levelState]);
+  }, [levelState, disabled, getScale, theme, transitionTime]);
 
   if (disabled) {
     return { animate: () => {}, pickup: () => {} };

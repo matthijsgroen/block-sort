@@ -35,7 +35,7 @@ export const useDelayedToggle = (
         return () => clearTimeout(clear);
       }
     }
-  }, [value]);
+  }, [value, delayedValue, onDelay, offDelay, onOn, onOff]);
 
   return delayedValue;
 };

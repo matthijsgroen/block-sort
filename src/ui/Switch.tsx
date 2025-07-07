@@ -29,7 +29,7 @@ export const Switch: React.FC<SwitchProps> = ({
       }
       selectionRef.current.style.transform = `translate(${offset}px, 0)`;
     }
-  }, [selectedItem]);
+  }, [selectedItem, items, selected]);
 
   useEffect(() => {
     if (itemRef.current && selectionRef.current) {
@@ -41,7 +41,7 @@ export const Switch: React.FC<SwitchProps> = ({
       }
       selectionRef.current.style.transform = `translate(${offset}px, 0)`;
     }
-  }, []);
+  }, [items, selected]);
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
@@ -61,7 +61,7 @@ export const Switch: React.FC<SwitchProps> = ({
         }
       }
     },
-    []
+    [items, onSelectionChange]
   );
 
   return (

@@ -116,7 +116,7 @@ export const BlockColumn: React.FC<Props> = ({
     } else {
       setColumn(columnProp);
     }
-  }, [columnProp, motionDuration]);
+  }, [columnProp, motionDuration, column.blocks, onMatch, onPlacement]);
 
   useEffect(() => {
     if (!column.locked) {
@@ -143,7 +143,7 @@ export const BlockColumn: React.FC<Props> = ({
       }, 50);
       return () => clearInterval(clear);
     }
-  }, [locked]);
+  }, [locked, column.columnSize]);
 
   const activeShapeMap = getShapeMapping(theme);
   const activeColorMap = getColorMapping(theme);

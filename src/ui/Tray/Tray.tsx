@@ -21,7 +21,7 @@ export const Tray: React.FC<Props> = ({ locked, onLock }) => {
     } else {
       setIsLocked(false);
     }
-  }, [locked]);
+  }, [locked, onLock]);
 
   return (
     <div

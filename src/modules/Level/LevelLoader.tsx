@@ -168,8 +168,6 @@ export const LevelLoader: React.FC<Props> = ({
     ? locked.levelSettings.stages.length
     : 1;
 
-  const stageSettingsString = JSON.stringify(stageSettings);
-
   const level = useMemo(() => {
     return createLevel(
       locked.seed,
@@ -179,7 +177,14 @@ export const LevelLoader: React.FC<Props> = ({
       levelType,
       lockedStage
     );
-  }, [locked.seed, stageSettingsString, lockedStage]);
+  }, [
+    locked.seed,
+    lockedStage,
+    locked.levelNr,
+    storagePrefix,
+    levelType,
+    stageSettings
+  ]);
 
   const levelTypePlugin = getLevelTypeByType(levelType);
   const { setThemeOverride, clearThemeOverride, clearParticleOverride } =
@@ -194,7 +199,7 @@ export const LevelLoader: React.FC<Props> = ({
     if (themeOverride) {
       setThemeOverride(themeOverride);
     }
-  }, [stageData, levelTypePlugin]);
+  }, [stageData, levelTypePlugin, setBackgroundClassName, setThemeOverride]);
   const levelModifiers = getActiveModifiers(getToday()).map((m) => m.modifiers);
   if (levelTypePlugin?.levelModifiers) {
     levelModifiers.unshift(levelTypePlugin.levelModifiers);
