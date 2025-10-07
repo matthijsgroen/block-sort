@@ -176,7 +176,7 @@ export const BlockColumn: React.FC<Props> = ({
         style={{ "--animation-delay": `${animationDelay}ms` }}
       >
         {suggested && (
-          <div className="pointer-events-none absolute w-block translate-y-1 animate-suggested bg-green-200 bg-clip-text text-center text-2xl text-transparent opacity-30">
+          <div className="pointer-events-none absolute z-10 w-block translate-y-1 animate-suggested bg-green-200 bg-clip-text text-center text-2xl text-transparent opacity-30">
             👇
           </div>
         )}
