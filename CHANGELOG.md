@@ -9,11 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-Display a Ghost if you followed your previous ghost till the end, and got blocked again
+- Display a Ghost if you followed your previous ghost till the end, and got blocked again
 
 ### Fixed
 
-Ghost suggestion hand was not displaying on buffers and key chests
+- Ghost suggestion hand was not displaying on buffers and key chests
+- Message alignment issues for small screens
 
 ## Version 1.42.0 - 2025-07-05
 
