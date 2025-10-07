@@ -2,16 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "LuckiestGuy";
-  src: url(./assets/LuckiestGuy-Regular.ttf) format("truetype");
-}
-
 body {
   background-color: #63462d;
   user-select: none;
   -webkit-user-select: none; /* prevent text selection on iOS */
   -webkit-touch-callout: none; /* prevent image selection on iOS */
+}
+
+@font-face {
+  font-family: "LuckiestGuy";
+  src: url(./assets/LuckiestGuy-Regular.ttf) format("truetype");
 }
 
 :root,

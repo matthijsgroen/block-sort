@@ -380,6 +380,17 @@ export const Level: React.FC<Props> = ({
           }}
         />
       )}
+      {playState === "lost" &&
+        ghostMode &&
+        previousLevelMoves.every(
+          (m, i) => levelMoves[i]?.from === m.from && levelMoves[i]?.to === m.to
+        ) && (
+          <div className="pointer-events-none absolute top-[45%] z-50 w-full text-center">
+            <span className="inline-block animate-zoomFade bg-green-300 bg-clip-text text-center text-2xl text-white/70">
+              👻
+            </span>
+          </div>
+        )}
       <div className="flex flex-row items-center gap-x-2 pl-safeLeft pr-safeRight pt-safeTop">
         <TopButton
           buttonType="back"
