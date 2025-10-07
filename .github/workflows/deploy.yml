@@ -80,7 +80,7 @@ jobs:
 
   deploy:
     needs: check-version-deploy
-    if: needs.check-version-deploy.outputs.version_changed == 'true'
+    if: github.event_name == 'workflow_dispatch' || needs.check-version-deploy.outputs.version_changed == 'true'
 
     environment:
       name: github-pages
