@@ -8,6 +8,7 @@ import styles from "./Message.module.css";
 
 type InvisibleMessageProps = {
   delay?: number;
+  duration?: number;
   afterShow?: VoidFunction;
   onShow?: VoidFunction;
 };
@@ -21,9 +22,10 @@ type MessageProps = {
 export const InvisibleMessage: React.FC<InvisibleMessageProps> = ({
   afterShow,
   onShow,
+  duration = 3000,
   delay = 0
 }) => {
-  useDelay(delay, 3000, onShow, afterShow);
+  useDelay(delay, duration, onShow, afterShow);
 
   return null;
 };
@@ -33,10 +35,11 @@ export const Message: React.FC<MessageProps> = ({
   afterShow,
   onShow,
   delay = 0,
+  duration = 3000,
   shape = "❤️",
   color = "green"
 }) => {
-  const started = useDelay(delay, 3000, onShow, afterShow);
+  const started = useDelay(delay, duration, onShow, afterShow);
 
   return started ? (
     <div

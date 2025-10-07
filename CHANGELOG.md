@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.43.0 - 2025-10-07
+
+### Added
+
+Display a Ghost if you followed your previous ghost till the end, and got blocked again
+
+### Fixed
+
+Ghost suggestion hand was not displaying on buffers and key chests
+
 ## Version 1.42.0 - 2025-07-05
 
 ### Added

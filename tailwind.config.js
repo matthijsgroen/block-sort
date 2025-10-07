@@ -53,6 +53,7 @@ export default {
         columnFadeOut: "columnFadeOut 0.5s ease-in-out forwards",
         popInOut: "popInOut 3s ease-in-out forwards",
         rotate: "rotate 2s linear infinite",
+        zoomFade: "zoomFade 1s ease-in forwards",
         flyTopLeft:
           "flyTopLeft 3s ease-in-out forwards, rotate 8s linear infinite, scale 3s ease-in-out infinite",
         flyTopRight:
@@ -70,6 +71,11 @@ export default {
         "intro-bg": "intro-bg 2s ease-in-out forwards"
       },
       keyframes: {
+        zoomFade: {
+          "0%": { scale: "0.25", opacity: "1", rotate: "20deg" },
+          "80%": { scale: "5", opacity: "1" },
+          "100%": { scale: "6", opacity: "0", rotate: "0deg" }
+        },
         "center-tl": {
           "0%": { translate: "-49dvw 0", fontSize: "4.5rem", scale: "0.3" },
           "10%": {
