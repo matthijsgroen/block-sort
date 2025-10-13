@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Version 1.44.0 - 2025-10-13
+
+### Changed
+
+- Settings dialog has now a separate pane to show theme information, and theme settings (if applicable)
+  Thanks to Laura for suggesting!
+
 ## Version 1.43.0 - 2025-10-07
 
 ### Added

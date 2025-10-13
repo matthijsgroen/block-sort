@@ -99,7 +99,10 @@ export const Message: React.FC<MessageProps> = ({
             "mx-auto w-1/2 max-w-[500px] rounded-full bg-block px-6 py-3 drop-shadow-xl"
           }
         >
-          <h1 className="break-all text-center text-2xl font-bold text-white">
+          <h1
+            className="hyphens-auto break-all text-center text-2xl font-bold text-white"
+            lang="en"
+          >
             {message}
           </h1>
         </div>

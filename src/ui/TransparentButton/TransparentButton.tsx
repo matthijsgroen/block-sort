@@ -2,10 +2,13 @@ import type { PropsWithChildren } from "react";
 import { Children } from "react";
 import clsx from "clsx";
 
+import Icon from "../Icon/Icon";
+
 type Props = PropsWithChildren<{
   onClick?: VoidFunction;
   href?: string;
   size?: "default" | "large";
+  rounded?: "full" | "large";
   icon?: string;
 }>;
 
@@ -14,10 +17,12 @@ export const TransparentButton: React.FC<Props> = ({
   href,
   children,
   icon,
+  rounded = "full",
   size = "default"
 }) => {
   const classNames = clsx(
-    "inline-block select-none rounded-full border border-black p-2 shadow-md",
+    rounded === "full" ? "rounded-full" : "rounded-lg",
+    "inline-block select-none border border-black p-2 shadow-md",
     "text-center align-middle text-black focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black",
     "transition-transform active:scale-90",
     {
@@ -26,11 +31,7 @@ export const TransparentButton: React.FC<Props> = ({
   );
   const hasChildren = Children.count(children) > 0;
   const iconElement = icon ? (
-    <span
-      className={`material-icons inline-block ${hasChildren ? "pr-1" : ""} align-middle !text-[0.9rem]`}
-    >
-      {icon}
-    </span>
+    <Icon icon={icon} className={hasChildren ? "pr-1" : ""} size="small" />
   ) : null;
 
   if (href) {

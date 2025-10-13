@@ -5,7 +5,6 @@ import { Checkbox } from "@/ui/Checkbox";
 import { Dialog } from "@/ui/Dialog/Dialog";
 import { DialogTitle } from "@/ui/Dialog/DialogTitle";
 import { Switch } from "@/ui/Switch";
-import { Transition } from "@/ui/Transition/Transition";
 import { TransparentButton } from "@/ui/TransparentButton/TransparentButton";
 
 import { version } from "@/../package.json";
@@ -17,6 +16,7 @@ import { Attribution } from "./Attribution";
 import { Changelog } from "./Changelog";
 import { EventCalendar } from "./EventCalendar";
 import { ShareGame } from "./ShareGame";
+import Themes from "./Themes";
 
 type Props = {
   soundEnabled?: boolean;
@@ -40,10 +40,15 @@ export const Settings: React.FC<Props> = ({
   onClose
 }) => {
   const [activeTab, setActiveTab] = useState<
-    "settings" | "changes" | "attribution" | "data" | "advanced" | "sharing"
+    | "settings"
+    | "changes"
+    | "attribution"
+    | "data"
+    | "advanced"
+    | "sharing"
+    | "themes"
   >("settings");
 
-  const [showThemes, setShowThemes] = useState(false);
   const [hintMode, setHintMode] = useGameStorage("hintMode", "standard");
   const [streak] = useGameStorage<number | null>("streak", null);
   const { releaseWakeLock, requestWakeLock } = useWakeLock();
@@ -69,33 +74,23 @@ export const Settings: React.FC<Props> = ({
             label="Music"
           />
           {THEMES && (
-            <div className="flex flex-row">
-              <Checkbox
-                value={themesEnabled}
-                onChange={(value) => onThemesChange?.(value)}
-                label="Seasonal Themes"
-                description="Automatically switch to themed content when available"
-              />
-              <div>
-                <TransparentButton
-                  onClick={() => setShowThemes((show) => !show)}
-                  icon="calendar_month"
-                ></TransparentButton>
-              </div>
-            </div>
+            <TransparentButton
+              onClick={() => setActiveTab("themes")}
+              rounded="large"
+            >
+              <span className="flex flex-row">
+                <span className="flex-1 flex-col">
+                  <span className="font-semibold">Seasonal Themes</span>
+                  <EventCalendar />
+                </span>
+                <span className="flex items-center text-xs italic">
+                  <span className={"material-icons inline-block align-middle"}>
+                    chevron_right
+                  </span>
+                </span>
+              </span>
+            </TransparentButton>
           )}
-          <Transition
-            active={showThemes}
-            enterStart={{ opacity: 0, height: "0rem" }}
-            enterEnd={{ opacity: 1, height: "2.5rem" }}
-            exitStart={{ opacity: 1, height: "2.5rem" }}
-            exitEnd={{ opacity: 0, height: "0rem" }}
-            duration={300}
-          >
-            <div className="pl-12">
-              <EventCalendar />
-            </div>
-          </Transition>
           <div className="flex flex-row items-center gap-2 text-sm">
             <span>Hint mode:</span>
             <Switch
@@ -225,6 +220,20 @@ export const Settings: React.FC<Props> = ({
           <Suspense fallback={<div>Loading...</div>}>
             <Changelog />
           </Suspense>
+        </div>
+      )}
+      {activeTab === "themes" && (
+        <div className="flex flex-col gap-3 pb-4">
+          <TransparentButton
+            onClick={() => setActiveTab("settings")}
+            icon="arrow_back"
+          >
+            Back
+          </TransparentButton>
+          <Themes
+            themesEnabled={themesEnabled}
+            onThemesChange={onThemesChange}
+          />
         </div>
       )}
       {activeTab === "attribution" && (
