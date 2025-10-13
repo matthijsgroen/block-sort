@@ -157,7 +157,9 @@ export const Level: React.FC<Props> = ({
   ): LevelModifiers[TModifier] =>
     modifiers.find((m) => m[modifier])?.[modifier];
 
-  const ghostMode = !!getLevelModifier("ghostMode");
+  const [disableGhostHand] = useGameStorage("disableGhostHand", false);
+  const ghostMode = !!getLevelModifier("ghostMode") && !disableGhostHand;
+
   const hideFormat = getLevelModifier("hideMode");
   const particles = getLevelModifier("particles");
   useEffect(() => {

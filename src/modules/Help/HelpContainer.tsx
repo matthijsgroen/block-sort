@@ -7,11 +7,11 @@ import styles from "../Settings/TextStyling.module.css";
 
 export const HelpContainer: FC<
   PropsWithChildren<{
-    title: string;
+    title?: string;
   }>
 > = ({ title, children }) => (
   <>
-    <DialogTitle>{title}</DialogTitle>
+    {title && <DialogTitle>{title}</DialogTitle>}
     <div
       className={clsx(
         styles.textStyling,
