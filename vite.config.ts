@@ -53,7 +53,7 @@ export default defineConfig({
         theme_color: "#63462d",
         background_color: "#63462d",
         orientation: "portrait",
-        display: "fullscreen",
+        display: "standalone",
         categories: [
           "puzzle",
           "game",
