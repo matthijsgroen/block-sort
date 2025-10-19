@@ -96,7 +96,7 @@ export const Message: React.FC<MessageProps> = ({
       <div className="absolute top-[45%] w-full animate-popInOut">
         <div
           className={
-            "mx-auto w-1/2 max-w-[500px] rounded-full bg-block px-6 py-3 drop-shadow-xl"
+            "min-w-1/2 mx-auto w-fit max-w-[calc(100vw_-_2rem)] rounded-full bg-block px-6 py-3 drop-shadow-xl"
           }
         >
           <h1
