@@ -8,6 +8,7 @@ import { getLevelSettings, getLevelType } from "@/game/level-types/index";
 import { getActiveTheme } from "@/game/themes";
 import { LevelLoader } from "@/modules/Level/LevelLoader";
 import { LevelTrack } from "@/modules/LevelTrack/LevelTrack";
+import { useStudy } from "@/study/StudyContext";
 import { levelForDevelopment } from "@/support/developmentSettings";
 import { generateNewSeed, mulberry32 } from "@/support/random";
 import { getToday } from "@/support/schedule";
@@ -55,6 +56,7 @@ export const NormalMode: React.FC<Props> = ({
   const { showBeta } = use(BetaContext);
 
   const { requestWakeLock, releaseWakeLock } = useWakeLock();
+  const { trackEvent } = useStudy();
 
   return (
     <>
@@ -72,6 +74,12 @@ export const NormalMode: React.FC<Props> = ({
           onLevelStart={() => {
             requestWakeLock();
             setInLevel(true);
+            trackEvent("level_start", {
+              level_id: `level-${levelNr + 1}`,
+              level_type: getLevelType(levelNr, theme).type,
+              difficulty: levelNr + 1,
+              seed: levelSeed
+            });
           }}
           onOpenSettings={onOpenSettings}
           onInstall={onInstall}
@@ -91,6 +99,13 @@ export const NormalMode: React.FC<Props> = ({
           onComplete={(won) => {
             releaseWakeLock();
             setInLevel(false);
+            trackEvent(won ? "level_complete" : "level_fail", {
+              level_id: `level-${levelNr + 1}`,
+              level_type: getLevelType(levelNr, theme).type,
+              difficulty: levelNr + 1,
+              seed: levelSeed,
+              result: won ? "won" : "stuck"
+            });
             if (won) {
               setLevelNr((nr) => nr + 1);
             }

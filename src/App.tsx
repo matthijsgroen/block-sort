@@ -12,11 +12,14 @@ import { ErrorBoundary } from "./modules/Layout/ErrorBoundary";
 import { ThemeProvider } from "./modules/Layout/ThemeContext";
 import { ScheduledActions } from "./modules/ScheduledActions";
 import { Settings } from "./modules/Settings";
+import { StudyProvider, useStudy } from "./study/StudyContext";
+import { StudyLockOverlay } from "./study/StudyLockOverlay";
+import { StudyStatusBar } from "./study/StudyStatusBar";
 import { AppCrashScreen } from "./AppCrashScreen";
 import { sound, Stream } from "./audio";
 import PWABadge from "./PWABadge";
 
-export const App: React.FC = () => {
+const AppContent: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [installPromptOpen, setInstallPromptOpen] = useState(false);
   const [manualOpen, setManualOpen] = useState(false);
@@ -28,6 +31,9 @@ export const App: React.FC = () => {
   );
 
   const [inZenMode, setInZenMode] = useGameStorage("inZenMode", false);
+  const [levelNr, setLevelNr] = useGameStorage("levelNr", 0);
+  const [inLevel, setInLevel] = useGameStorage("inLevel", false);
+  const { locked, setProgress, loadedProgress } = useStudy();
 
   const canInstall: boolean = "standalone" in window.navigator;
   const isInstalled: boolean =
@@ -38,6 +44,19 @@ export const App: React.FC = () => {
     sound.setStreamEnabled(Stream.effects, soundEnabled);
   }, [soundEnabled]);
 
+  useEffect(() => {
+    setProgress({ levelNr, inLevel, inZenMode });
+  }, [setProgress, levelNr, inLevel, inZenMode]);
+
+  useEffect(() => {
+    if (!loadedProgress) {
+      return;
+    }
+    setLevelNr(loadedProgress.levelNr);
+    setInLevel(loadedProgress.inLevel);
+    setInZenMode(loadedProgress.inZenMode);
+  }, [loadedProgress, setInLevel, setInZenMode, setLevelNr]);
+
   return (
     <ErrorBoundary fallback={<AppCrashScreen />}>
       <BetaProvider>
@@ -47,7 +66,7 @@ export const App: React.FC = () => {
         >
           <BackgroundProvider>
             <NormalMode
-              active={!inZenMode}
+              active={!inZenMode && !locked}
               showInstallButton={!isInstalled && canInstall}
               onInstall={() => setInstallPromptOpen(true)}
               onManual={() => setManualOpen(true)}
@@ -55,7 +74,7 @@ export const App: React.FC = () => {
               onZenModeStart={() => setInZenMode(true)}
             />
             <ZenMode
-              active={inZenMode}
+              active={inZenMode && !locked}
               onOpenSettings={() => setSettingsOpen(true)}
               onZenModeEnd={() => setInZenMode(false)}
             />
@@ -88,9 +107,19 @@ export const App: React.FC = () => {
             {manualOpen && <Help onClose={() => setManualOpen(false)} />}
             <ScheduledActions />
             <PWABadge />
+            <StudyStatusBar />
+            {locked && <StudyLockOverlay />}
           </BackgroundProvider>
         </ThemeProvider>
       </BetaProvider>
     </ErrorBoundary>
+  );
+};
+
+export const App: React.FC = () => {
+  return (
+    <StudyProvider>
+      <AppContent />
+    </StudyProvider>
   );
 };

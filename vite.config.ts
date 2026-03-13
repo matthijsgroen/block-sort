@@ -85,7 +85,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src")
     }
   },
-  base: "/block-sort/",
+  base: "/StudyGameLock/",
   optimizeDeps: {
     esbuildOptions: {
       target: "esnext"

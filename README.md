@@ -83,3 +83,83 @@ Seeding 198 more for "Dungeon" - 9... [██▀▀▀▀▀▀▀▀▀▀-----
 ```
 
 This project uses the [CC BY-NC-SA 4.0](./LICENSE) license.
+
+## Study Lock + Logging migration
+
+### Local development
+
+```bash
+yarn install
+yarn dev
+```
+
+Optional API override:
+
+```bash
+VITE_API_BASE="http://localhost:8787/api" yarn dev
+```
+
+### Base path and API resolution
+
+- Vite base path is configured for deployment at `/StudyGameLock/`.
+- API base resolution order in the client service:
+  1. `VITE_API_BASE` (if set)
+  2. `/api` in development
+  3. `${BASE_URL}api` in production (subpath-safe, so `/StudyGameLock/api` on target hosting)
+
+### Backend contract summary
+
+Client service expects:
+
+- `POST /api/save-progress` body: `{ "progress": { "levelNr": number, "inLevel": boolean, "inZenMode": boolean } }`
+- `GET /api/load-progress` response: `{ "progress": { "levelNr": number, "inLevel": boolean, "inZenMode": boolean } }`
+- `POST /api/log-session` body includes at least:
+  - `session_id`
+  - `event_type` (`session_start` / `session_end`)
+  - `timestamp`
+  - `user_key`
+  - optional `result`, `study_entry`
+- `POST /api/log-event` body includes gameplay/session JSONL event records.
+
+When a user key exists, requests include `X-Study-User: <normalized-user-key>`.
+
+### Event schema summary
+
+Event payload fields emitted by the study logger include:
+
+- `event_type`
+- `timestamp`
+- `session_id`
+- `user_key`
+- `elapsed_seconds`
+- `app_version`
+- optional context when available:
+  - `level_id`
+  - `level_type`
+  - `difficulty`
+  - `seed`
+  - `move_count`
+  - `board_signature`
+  - `action_source`
+  - `result`
+
+Events instrumented:
+
+- `session_start`, `resume`, `pause`, `session_end`
+- `level_start`, `level_complete`, `level_fail`
+- `move`, `invalid_move`, `hint`, `restart`
+
+> Note: this repository does not currently expose a dedicated in-game undo action, so no native `undo` trigger point was available without introducing new gameplay behavior.
+
+### Manual verification checklist
+
+- [ ] Initial load starts locked (overlay shown before gameplay)
+- [ ] Unlock requires study text length >= 3
+- [ ] Unlock starts randomized timer (60–180s)
+- [ ] Timer expiry relocks game and starts 45s cooldown
+- [ ] Cooldown blocks unlock submit until countdown reaches 0
+- [ ] `session_end` with `result: unload` emits on tab close/unload (beacon path)
+- [ ] Username persists and normalized user key is reused
+- [ ] Progress load/save calls retry and backup fallback is written when save fails
+- [ ] Logger status panel shows endpoint, enabled state, persisted count, last success/error
+- [ ] Gameplay/session payloads contain required fields and context where available

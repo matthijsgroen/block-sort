@@ -24,6 +24,7 @@ import type {
   Move
 } from "@/game/types";
 import { ThemeContext } from "@/modules/Layout/ThemeContext";
+import { useStudy } from "@/study/StudyContext";
 import { mulberry32, pick } from "@/support/random";
 import { useGameStorage, useLevelStateStorage } from "@/support/useGameStorage";
 
@@ -54,6 +55,7 @@ export const Level: React.FC<Props> = ({
   level,
   title,
   levelType,
+  levelSettings: _levelSettings,
   levelNr,
   currentStageNr,
   maxStages,
@@ -134,6 +136,16 @@ export const Level: React.FC<Props> = ({
 
   const { activeTheme, setParticleOverride, clearParticleOverride } =
     use(ThemeContext);
+  const { trackEvent } = useStudy();
+  const eventContext = {
+    level_id: `level-${levelNr + 1}`,
+    level_type: levelType,
+    difficulty: levelNr + 1,
+    seed: initialLevelState.generationInformation?.seed,
+    board_signature: JSON.stringify(
+      levelState.columns.map((column) => column.blocks.length)
+    )
+  };
 
   useEffect(() => {
     if (hasWon(levelState)) {
@@ -143,8 +155,13 @@ export const Level: React.FC<Props> = ({
     } else if (isStuck(levelState)) {
       setPlayState("lost");
       setLostCounter((a) => a + 1);
+      trackEvent("level_fail", {
+        ...eventContext,
+        result: "stuck",
+        move_count: levelMoves.length
+      });
     }
-  }, [levelState]);
+  }, [eventContext, levelMoves.length, levelState, trackEvent]);
 
   useEffect(() => {
     if (playState === "starting" && levelMoves.length > 0) {
@@ -179,7 +196,6 @@ export const Level: React.FC<Props> = ({
     levelMoves,
     { enabled: ghostMode }
   );
-
   const move = useCallback(
     (from: number, to: number) => {
       if (hintMode !== "off" && hintMode !== null && useStreak) {
@@ -201,6 +217,17 @@ export const Level: React.FC<Props> = ({
         const hasMoved = updatedLevelState !== levelState;
         if (hasMoved) {
           setLevelMoves((moves) => moves.concat({ from, to }));
+          trackEvent("move", {
+            ...eventContext,
+            action_source: "board",
+            move_count: levelMoves.length + 1
+          });
+        } else {
+          trackEvent("invalid_move", {
+            ...eventContext,
+            action_source: "board",
+            move_count: levelMoves.length
+          });
         }
         if (
           hasMoved &&
@@ -215,7 +242,7 @@ export const Level: React.FC<Props> = ({
         return updatedLevelState;
       });
     },
-    [levelMoves.length]
+    [eventContext, levelMoves.length, trackEvent]
   );
 
   const onColumnDown = useCallback(
@@ -261,7 +288,11 @@ export const Level: React.FC<Props> = ({
 
   const handleLock = useCallback(() => {
     sound.play("lock");
-  }, []);
+    trackEvent("invalid_move", {
+      ...eventContext,
+      action_source: "lock"
+    });
+  }, [eventContext, trackEvent]);
   const handleDrop = useCallback(() => {
     if (playState !== "starting") {
       sound.play("place");
@@ -405,6 +436,11 @@ export const Level: React.FC<Props> = ({
           <AutoMove
             onClick={() => {
               const moveIndex = autoMoveLimit - autoMoves;
+              trackEvent("hint", {
+                ...eventContext,
+                action_source: "auto_move",
+                move_count: levelMoves.length
+              });
               setUsedAutoMoves((a) => a + 1);
               const nextMove = initialLevelState.moves[moveIndex];
               if (nextMove) {
@@ -431,6 +467,11 @@ export const Level: React.FC<Props> = ({
         <TopButton
           buttonType="restart"
           onClick={() => {
+            trackEvent("restart", {
+              ...eventContext,
+              action_source: "button",
+              move_count: levelMoves.length
+            });
             setPlayState("restarting");
           }}
         />
