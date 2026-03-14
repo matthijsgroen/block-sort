@@ -163,7 +163,13 @@ Client service expects:
   - `event_type` (`session_start` / `session_end`)
   - `timestamp`
   - `user_key`
-  - optional `result`, `study_entry`
+  - additional study-session analytics fields:
+    - `username`, `study_entry`
+    - `session_started_at`, `session_ended_at`, `duration_seconds`
+    - `session_start_level`, `session_end_level`
+    - `session_start_in_level`, `session_end_in_level`
+    - `session_start_in_zen_mode`, `session_end_in_zen_mode`
+  - optional `result`
 - `POST /api/log-event` body includes gameplay/session JSONL event records.
 
 When a user key exists, requests include `X-Study-User: <normalized-user-key>`.
@@ -179,6 +185,13 @@ Event payload fields emitted by the study logger include:
 - `elapsed_seconds`
 - `app_version`
 - optional context when available:
+  - `username`
+  - `study_entry`
+  - `session_start_level`
+  - `session_start_in_level`
+  - `current_level`
+  - `current_in_level`
+  - `current_in_zen_mode`
   - `level_id`
   - `level_type`
   - `difficulty`

@@ -60,6 +60,10 @@ export const StudyProvider: React.FC<React.PropsWithChildren> = ({
   const [sessionId, setSessionId] = useState("");
   const [sessionActive, setSessionActive] = useState(false);
   const sessionStartRef = useRef<number | null>(null);
+  const sessionStartLevelRef = useRef<number | null>(null);
+  const sessionStartInLevelRef = useRef<boolean | null>(null);
+  const sessionStudyEntryRef = useRef<string>("");
+  const sessionUsernameRef = useRef<string>(storedUser.username);
   const previousRemainingRef = useRef(0);
   const progressRef = useRef<ProgressState>({
     levelNr: 0,
@@ -99,8 +103,14 @@ export const StudyProvider: React.FC<React.PropsWithChildren> = ({
         timestamp: new Date().toISOString(),
         session_id: sessionId,
         user_key: userKey,
+        username: sessionUsernameRef.current || null,
         elapsed_seconds: elapsed,
         app_version: appVersion,
+        session_start_level: sessionStartLevelRef.current,
+        session_start_in_level: sessionStartInLevelRef.current,
+        current_level: progressRef.current.levelNr,
+        current_in_level: progressRef.current.inLevel,
+        current_in_zen_mode: progressRef.current.inZenMode,
         ...payload
       };
     },
@@ -119,26 +129,50 @@ export const StudyProvider: React.FC<React.PropsWithChildren> = ({
   );
 
   const startSession = useCallback(
-    async (studyEntry: string) => {
+    async (studyEntry: string, nextUsername: string) => {
       const nextSessionId = crypto.randomUUID();
+      const startedAt = new Date().toISOString();
+      const startingProgress = progressRef.current;
       setSessionId(nextSessionId);
       sessionStartRef.current = Date.now();
+      sessionStartLevelRef.current = startingProgress.levelNr;
+      sessionStartInLevelRef.current = startingProgress.inLevel;
+      sessionStudyEntryRef.current = studyEntry;
+      sessionUsernameRef.current = nextUsername;
 
       const sessionPayload = {
         session_id: nextSessionId,
         event_type: "session_start",
-        timestamp: new Date().toISOString(),
+        timestamp: startedAt,
         user_key: userKey,
+        username: nextUsername,
         result: "unlocked",
-        study_entry: studyEntry
+        study_entry: studyEntry,
+        session_started_at: startedAt,
+        session_start_level: startingProgress.levelNr,
+        session_start_in_level: startingProgress.inLevel,
+        session_start_in_zen_mode: startingProgress.inZenMode,
+        current_level: startingProgress.levelNr,
+        current_in_level: startingProgress.inLevel,
+        current_in_zen_mode: startingProgress.inZenMode
       };
       void serverSync.logSession(sessionPayload);
       void serverSync.logEvent({
-        ...createEventPayload("session_start", { study_entry: studyEntry }),
+        ...createEventPayload("session_start", {
+          study_entry: studyEntry,
+          username: nextUsername,
+          session_started_at: startedAt,
+          session_start_level: startingProgress.levelNr,
+          session_start_in_level: startingProgress.inLevel,
+          session_start_in_zen_mode: startingProgress.inZenMode
+        }),
         session_id: nextSessionId
       });
       void serverSync.logEvent({
-        ...createEventPayload("resume", { study_entry: studyEntry }),
+        ...createEventPayload("resume", {
+          study_entry: studyEntry,
+          username: nextUsername
+        }),
         session_id: nextSessionId
       });
     },
@@ -150,15 +184,40 @@ export const StudyProvider: React.FC<React.PropsWithChildren> = ({
       if (!sessionId) {
         return;
       }
+      const endedAt = new Date().toISOString();
+      const elapsedSeconds = sessionStartRef.current
+        ? Math.floor((Date.now() - sessionStartRef.current) / 1000)
+        : 0;
       const sessionPayload = {
         session_id: sessionId,
         event_type: "session_end",
-        timestamp: new Date().toISOString(),
+        timestamp: endedAt,
         user_key: userKey,
-        result
+        username: sessionUsernameRef.current || null,
+        result,
+        study_entry: sessionStudyEntryRef.current || null,
+        session_started_at: sessionStartRef.current
+          ? new Date(sessionStartRef.current).toISOString()
+          : null,
+        session_ended_at: endedAt,
+        duration_seconds: elapsedSeconds,
+        session_start_level: sessionStartLevelRef.current,
+        session_start_in_level: sessionStartInLevelRef.current,
+        session_end_level: progressRef.current.levelNr,
+        session_end_in_level: progressRef.current.inLevel,
+        session_end_in_zen_mode: progressRef.current.inZenMode
       };
       void serverSync.logSession(sessionPayload);
-      trackEvent("session_end", { result });
+      trackEvent("session_end", {
+        result,
+        study_entry: sessionStudyEntryRef.current || null,
+        username: sessionUsernameRef.current || null,
+        session_ended_at: endedAt,
+        duration_seconds: elapsedSeconds,
+        session_end_level: progressRef.current.levelNr,
+        session_end_in_level: progressRef.current.inLevel,
+        session_end_in_zen_mode: progressRef.current.inZenMode
+      });
     },
     [serverSync, sessionId, trackEvent, userKey]
   );
@@ -181,7 +240,7 @@ export const StudyProvider: React.FC<React.PropsWithChildren> = ({
       timer.startTimer(assignedSeconds);
       setSessionActive(true);
       setLocked(false);
-      await startSession(trimmedStudyEntry);
+      await startSession(trimmedStudyEntry, trimmedName);
       return true;
     },
     [startSession, timer]
@@ -227,7 +286,17 @@ export const StudyProvider: React.FC<React.PropsWithChildren> = ({
         event_type: "session_end",
         timestamp: new Date().toISOString(),
         user_key: userKey,
-        result: "unload"
+        username: sessionUsernameRef.current || null,
+        result: "unload",
+        study_entry: sessionStudyEntryRef.current || null,
+        session_started_at: sessionStartRef.current
+          ? new Date(sessionStartRef.current).toISOString()
+          : null,
+        session_start_level: sessionStartLevelRef.current,
+        session_start_in_level: sessionStartInLevelRef.current,
+        session_end_level: progressRef.current.levelNr,
+        session_end_in_level: progressRef.current.inLevel,
+        session_end_in_zen_mode: progressRef.current.inZenMode
       };
       serverSync.sendBeaconSessionEnd(payload);
       serverSync.sendBeaconEvent({
