@@ -59,6 +59,7 @@ export const StudyProvider: React.FC<React.PropsWithChildren> = ({
   );
   const [sessionId, setSessionId] = useState("");
   const sessionStartRef = useRef<number | null>(null);
+  const previousRemainingRef = useRef(0);
   const progressRef = useRef<ProgressState>({
     levelNr: 0,
     inLevel: false,
@@ -184,9 +185,21 @@ export const StudyProvider: React.FC<React.PropsWithChildren> = ({
   );
 
   useEffect(() => {
-    if (timer.remainingSeconds > 0 || locked) {
+    if (locked) {
+      previousRemainingRef.current = timer.remainingSeconds;
       return;
     }
+
+    if (timer.remainingSeconds > 0) {
+      previousRemainingRef.current = timer.remainingSeconds;
+      return;
+    }
+
+    if (previousRemainingRef.current <= 0) {
+      return;
+    }
+
+    previousRemainingRef.current = 0;
     setLocked(true);
     timer.startCooldown(45);
     trackEvent("pause", { result: "timer_expired" });
