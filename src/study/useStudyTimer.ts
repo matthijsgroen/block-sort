@@ -38,7 +38,10 @@ export const useStudyTimer = () => {
       () => formatTimerText(remainingSeconds),
       [remainingSeconds]
     ),
-    startTimer: (seconds: number) => setRemainingSeconds(seconds),
+    startTimer: (seconds: number) => {
+      setCooldownSeconds(0);
+      setRemainingSeconds(Math.max(0, Math.floor(seconds)));
+    },
     stopTimer: () => setRemainingSeconds(0),
     startCooldown: (seconds: number) => setCooldownSeconds(seconds)
   };
