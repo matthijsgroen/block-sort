@@ -39,4 +39,7 @@ reports/
 og-image.xcf 
 
 # Data exports
-*.csv
+*.csvpublic/api/config.php
+public/api/config.php
+deploy_folder/
+dist/

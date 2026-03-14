@@ -122,7 +122,7 @@ export class ServerSync {
 
   async loadProgress() {
     const response = await this.retryFetch(
-      "/load-progress",
+      "/load-progress.php",
       { method: "GET" },
       false
     );
@@ -131,7 +131,7 @@ export class ServerSync {
 
   async saveProgress(progress: ProgressPayload) {
     try {
-      await this.retryFetch("/save-progress", {
+      await this.retryFetch("/save-progress.php", {
         method: "POST",
         body: JSON.stringify({ progress })
       });
@@ -143,7 +143,7 @@ export class ServerSync {
   }
 
   async logSession(session: SessionPayload) {
-    await this.retryFetch("/log-session", {
+    await this.retryFetch("/log-session.php", {
       method: "POST",
       body: JSON.stringify(session)
     });
@@ -151,7 +151,7 @@ export class ServerSync {
   }
 
   async logEvent(event: StudyEventPayload) {
-    await this.retryFetch("/log-event", {
+    await this.retryFetch("/log-event.php", {
       method: "POST",
       body: JSON.stringify(event)
     });
@@ -159,7 +159,7 @@ export class ServerSync {
   }
 
   sendBeaconEvent(payload: StudyEventPayload) {
-    const url = `${this.apiBase}/log-event`;
+    const url = `${this.apiBase}/log-event.php`;
     const headers = { type: "application/json" };
     if (!("sendBeacon" in navigator)) {
       return false;
@@ -171,7 +171,7 @@ export class ServerSync {
   }
 
   sendBeaconSessionEnd(payload: SessionPayload) {
-    const url = `${this.apiBase}/log-session`;
+    const url = `${this.apiBase}/log-session.php`;
     const headers = { type: "application/json" };
     if (!("sendBeacon" in navigator)) {
       return false;
