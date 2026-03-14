@@ -58,6 +58,7 @@ export const StudyProvider: React.FC<React.PropsWithChildren> = ({
     storedUser.userKey || null
   );
   const [sessionId, setSessionId] = useState("");
+  const [sessionActive, setSessionActive] = useState(false);
   const sessionStartRef = useRef<number | null>(null);
   const previousRemainingRef = useRef(0);
   const progressRef = useRef<ProgressState>({
@@ -176,7 +177,9 @@ export const StudyProvider: React.FC<React.PropsWithChildren> = ({
       const normalizedKey = persistUser(trimmedName);
       setUsername(trimmedName);
       setUserKey(normalizedKey);
-      timer.startTimer(60 + Math.floor(Math.random() * 121));
+      const assignedSeconds = 60 + Math.floor(Math.random() * 121);
+      timer.startTimer(assignedSeconds);
+      setSessionActive(true);
       setLocked(false);
       await startSession(trimmedStudyEntry);
       return true;
@@ -185,7 +188,7 @@ export const StudyProvider: React.FC<React.PropsWithChildren> = ({
   );
 
   useEffect(() => {
-    if (locked) {
+    if (locked || !sessionActive) {
       previousRemainingRef.current = timer.remainingSeconds;
       return;
     }
@@ -200,11 +203,19 @@ export const StudyProvider: React.FC<React.PropsWithChildren> = ({
     }
 
     previousRemainingRef.current = 0;
+    setSessionActive(false);
     setLocked(true);
     timer.startCooldown(45);
     trackEvent("pause", { result: "timer_expired" });
     endSession("timer_expired");
-  }, [timer.remainingSeconds, locked, timer, trackEvent, endSession]);
+  }, [
+    timer.remainingSeconds,
+    locked,
+    sessionActive,
+    timer,
+    trackEvent,
+    endSession
+  ]);
 
   useEffect(() => {
     const onUnload = () => {

@@ -31,9 +31,45 @@ To install on an iOS device:
 
 ## Development setup
 
-```
+### Run locally
+
+This repository uses `packageManager: "yarn@4.10.3"` and Vite 7. Before starting, ensure your Node.js version is compatible with Vite 7 (`20.19+` or `22.12+`).
+
+```bash
+node -v
+corepack enable
 yarn install
 yarn dev
+```
+
+To verify a production build locally:
+
+```bash
+node -v
+corepack enable
+yarn install
+yarn build
+yarn preview
+```
+
+If you use `nvm` and need a newer Node version:
+
+```bash
+nvm install 22
+nvm use 22
+corepack enable
+yarn install
+yarn build
+yarn preview
+```
+
+If install/build state is corrupted, do a clean reinstall:
+
+```bash
+rm -rf node_modules .yarn/install-state.gz .pnp.cjs .pnp.loader.mjs
+corepack enable
+yarn install
+yarn build
 ```
 
 > [!NOTE]
@@ -85,6 +121,15 @@ Seeding 198 more for "Dungeon" - 9... [██▀▀▀▀▀▀▀▀▀▀-----
 This project uses the [CC BY-NC-SA 4.0](./LICENSE) license.
 
 ## Study Lock + Logging migration
+
+### Added features
+
+- Study lock overlay that blocks gameplay until a valid study prompt answer is entered.
+- Unlock timer flow with randomized session duration and a post-expiry cooldown before re-unlock.
+- Progress persistence API integration (`load-progress` / `save-progress`) with retry + fallback behavior.
+- Session and gameplay telemetry logging (`log-session` / `log-event`) including study/user metadata and gameplay context.
+- User-key normalization and automatic `X-Study-User` request header injection.
+- Logger status/debug panel to inspect endpoint config, enablement, persisted queue state, and last request status.
 
 ### Local development
 
