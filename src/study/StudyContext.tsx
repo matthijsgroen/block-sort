@@ -163,15 +163,21 @@ export const StudyProvider: React.FC<React.PropsWithChildren> = ({
 
   const unlockWithStudy = useCallback(
     async (nextUsername: string, studyEntry: string) => {
-      if (studyEntry.trim().length < 3 || timer.cooldownSeconds > 0) {
+      const trimmedName = nextUsername.trim();
+      const trimmedStudyEntry = studyEntry.trim();
+      if (
+        trimmedName.length < 2 ||
+        trimmedStudyEntry.length < 3 ||
+        timer.cooldownSeconds > 0
+      ) {
         return false;
       }
-      const normalizedKey = persistUser(nextUsername);
-      setUsername(nextUsername);
+      const normalizedKey = persistUser(trimmedName);
+      setUsername(trimmedName);
       setUserKey(normalizedKey);
-      setLocked(false);
-      await startSession(studyEntry.trim());
       timer.startTimer(60 + Math.floor(Math.random() * 121));
+      setLocked(false);
+      await startSession(trimmedStudyEntry);
       return true;
     },
     [startSession, timer]
