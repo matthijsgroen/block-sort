@@ -5,7 +5,7 @@ export const StudyStatusBar: React.FC = () => {
   const danger = remainingSeconds > 0 && remainingSeconds < 10;
 
   return (
-    <div className="pointer-events-none fixed left-3 top-28 z-[90] flex flex-col gap-2">
+    <div className="pointer-events-none fixed left-3 top-8 z-[90] flex flex-col gap-2">
       {remainingSeconds > 0 && (
         <div
           className={`rounded-full px-3 py-1 text-sm font-bold text-white ${danger ? "animate-pulse bg-red-500" : "bg-emerald-600"}`}
