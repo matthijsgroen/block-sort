@@ -9,11 +9,15 @@ export const StudyLockOverlay: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   return (
-    <div className="absolute inset-0 z-[100] flex items-center justify-center bg-black/80 p-6 text-white">
+    <div className="absolute inset-0 z-[100] flex items-start justify-center bg-black/80 px-6 pb-6 pt-14 text-white">
       <form
         className="w-full max-w-lg space-y-3 rounded-xl bg-stone-900 p-5"
         onSubmit={(event) => {
           event.preventDefault();
+          if (nameInput.trim().length < 2) {
+            setError("Please enter your name (at least 2 characters).");
+            return;
+          }
           if (studyInput.trim().length < 3) {
             setError(
               "Please add at least 3 characters about what you studied."
@@ -35,7 +39,10 @@ export const StudyLockOverlay: React.FC = () => {
         <input
           className="w-full rounded bg-stone-700 p-2"
           value={nameInput}
-          onChange={(event) => setNameInput(event.target.value)}
+          onChange={(event) => {
+            setNameInput(event.target.value);
+            if (error) setError(null);
+          }}
           placeholder="Your name"
         />
         <label className="block text-sm">
@@ -44,7 +51,10 @@ export const StudyLockOverlay: React.FC = () => {
         <textarea
           className="h-24 w-full rounded bg-stone-700 p-2"
           value={studyInput}
-          onChange={(event) => setStudyInput(event.target.value)}
+          onChange={(event) => {
+            setStudyInput(event.target.value);
+            if (error) setError(null);
+          }}
         />
         {error && <p className="text-sm text-red-300">{error}</p>}
         {!canUnlock && (
