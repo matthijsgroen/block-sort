@@ -1,7 +1,5 @@
-import { pick } from "@/support/random";
-
 import { getDifficultyLevel } from "../level-settings/levelSettings";
-import type { SettingsProducer } from "../types";
+import type { LevelSettings, SettingsProducer } from "../types";
 
 import type { LevelType } from "./types";
 
@@ -10,14 +8,97 @@ import type { LevelType } from "./types";
  * Column order: [oversized(0), extra1(1), extra2(2), normal cols(3+)]
  * Use layoutMap with small positive indices to reposition if needed.
  */
-export const getOversized1Settings: SettingsProducer = (difficulty) => ({
-  amountColors: 5 + Math.min(Math.floor(difficulty / 3), 3),
-  stackSize: 4,
-  extraPlacementStacks: 0,
-  extraPlacementLimits: 0,
-  oversizedColumns: [{ multiplier: 2 }],
-  blockColorPick: "start"
-});
+export const getOversized1Settings: SettingsProducer = (
+  difficulty
+): LevelSettings => {
+  const amountColors = [4, 5, 6, 7, 8, 9, 6, 6, 8, 8, 13];
+  const stackSizes = [4, 4, 5, 5, 4, 4, 6, 7, 6, 4, 4];
+  const width = [4, 4, 5, 5, 6];
+
+  let oversizedColumns: Partial<LevelSettings> = {
+    oversizedColumns: [{ multiplier: 2 }],
+    layoutMap: {
+      width: width[Math.min(difficulty - 1, width.length - 1)],
+      columns: [{ fromColumn: 0, toColumn: 2 }]
+    }
+  };
+  if (difficulty >= 5) {
+    oversizedColumns = {
+      ...oversizedColumns,
+      oversizedColumns: [{ multiplier: 1.5 }, { multiplier: 1.5 }],
+      layoutMap: {
+        width: width[Math.min(difficulty - 1, width.length - 1)],
+        columns: [
+          { fromColumn: 2, toColumn: 0, paddingTop: 1 },
+          { fromColumn: 3, toColumn: 1, paddingTop: 1 },
+          { fromColumn: 4, paddingTop: 1 },
+          { fromColumn: 5, paddingTop: 1 }
+        ]
+      }
+    };
+  }
+  if (difficulty >= 7) {
+    oversizedColumns = {
+      ...oversizedColumns,
+      oversizedColumns: [{ multiplier: 2 }, { multiplier: 2 }],
+      layoutMap: {
+        width: width[Math.min(difficulty - 1, width.length - 1)],
+        columns: [
+          { fromColumn: 2, toColumn: 0 },
+          { fromColumn: 3, toColumn: 1 }
+        ]
+      }
+    };
+  }
+  if (difficulty >= 9) {
+    oversizedColumns = {
+      ...oversizedColumns,
+      oversizedColumns: [
+        { multiplier: 1.25 },
+        { multiplier: 1.25 },
+        { multiplier: 1.25 }
+      ],
+      layoutMap: {
+        width: width[Math.min(difficulty - 1, width.length - 1)],
+        columns: [
+          { fromColumn: 3, toColumn: 0 },
+          { fromColumn: 4, toColumn: 2 },
+          { fromColumn: 5, toColumn: 4 }
+        ]
+      }
+    };
+  }
+  if (difficulty >= 10) {
+    oversizedColumns = {
+      ...oversizedColumns,
+      oversizedColumns: [{ multiplier: 3 }, { multiplier: 3 }],
+      layoutMap: {
+        width: width[Math.min(difficulty - 1, width.length - 1)],
+        columns: [{ fromColumn: 3, toColumn: 0 }]
+      }
+    };
+  }
+  if (difficulty >= 11) {
+    oversizedColumns = {
+      ...oversizedColumns,
+      oversizedColumns: [{ multiplier: 3 }],
+      layoutMap: {
+        width: width[Math.min(difficulty - 1, width.length - 1)],
+        columns: [{ fromColumn: 0, toColumn: 3 }]
+      }
+    };
+  }
+
+  return {
+    amountColors:
+      amountColors[Math.min(difficulty - 1, amountColors.length - 1)],
+    stackSize: stackSizes[Math.min(difficulty - 1, stackSizes.length - 1)],
+    extraPlacementStacks: 0,
+    extraPlacementLimits: 0,
+    blockColorPick: "start",
+    ...oversizedColumns
+  };
+};
 
 /**
  * Two oversized columns (one with multiplier 2, one with multiplier 3).
@@ -49,17 +130,9 @@ export const oversized: LevelType<"oversized"> = {
   occurrence: () => false,
   getSettings(levelNr) {
     const difficulty = getDifficultyLevel(levelNr);
-    const templates: SettingsProducer[] = [
-      getOversized1Settings,
-      getOversized2Settings
-    ];
-    return pick(templates, Math.random)(difficulty);
+    return getOversized1Settings(difficulty);
   },
   getZenSettings(zenLevel, difficultyLevel) {
-    const templates: SettingsProducer[] = [
-      getOversized1Settings,
-      getOversized2Settings
-    ];
-    return templates[zenLevel % templates.length](difficultyLevel);
+    return getOversized1Settings(difficultyLevel);
   }
 };

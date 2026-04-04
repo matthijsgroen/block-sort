@@ -17,10 +17,7 @@ import {
   getNormal5Settings,
   getNormalSettings
 } from "@/game/level-types/normal";
-import {
-  getOversized1Settings,
-  getOversized2Settings
-} from "@/game/level-types/oversized";
+import { getOversized1Settings } from "@/game/level-types/oversized";
 import {
   getSpecial1Settings,
   getSpecial2Settings,
@@ -62,8 +59,7 @@ export const producers: Producer[] = [
   { name: "Dungeon", producer: getDungeonSettings },
   { name: "Dungeon2", producer: getDungeonSettings2 },
   { name: "Dungeon3", producer: getDungeonSettings3 },
-  { name: "Oversized1", producer: getOversized1Settings },
-  { name: "Oversized2", producer: getOversized2Settings }
+  { name: "Oversized1", producer: getOversized1Settings }
 ];
 
 const scale: number[] = [0, ...LEVEL_SCALE];
