@@ -113,6 +113,12 @@ export type Column = {
    */
   blocks: Block[];
   paddingTop?: number;
+  /**
+   * When true, this placement column is oversized — its columnSize exceeds the
+   * level's stackSize. Regular placement columns containing the same limitColor
+   * must NOT lock; only this column itself can lock for that colour.
+   */
+  oversized?: true;
 };
 
 /**
@@ -206,6 +212,18 @@ export type LevelSettings = {
    */
   amountLocks?: number;
   layoutMap?: LayoutMap;
+  /**
+   * Oversized placement columns to append after the regular placement columns.
+   * Each entry defines one column whose capacity is `multiplier × stackSize`.
+   * The generator auto-assigns a limitColor to each oversized column from the
+   * available colour pool, and automatically adds `(multiplier - 1)` extra empty
+   * placement columns so the total block count always balances exactly.
+   *
+   * Use `layoutMap` to reposition oversized columns visually; consider screen
+   * space when choosing multiplier values (a multiplier of 2 doubles the column
+   * height).
+   */
+  oversizedColumns?: { multiplier: number }[];
 };
 
 export type SettingsProducer = (difficulty: number) => LevelSettings;

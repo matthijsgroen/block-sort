@@ -272,6 +272,26 @@ export const getSpecial5Settings: SettingsProducer = (difficulty) => ({
       : undefined
 });
 
+/**
+ * Proof-of-concept oversized column template.
+ *
+ * Uses `amountColors` normal colors + 1 oversized colour. The oversized column
+ * has a `multiplier` of 2, meaning it must be filled with 2×stackSize blocks of
+ * a single colour to lock. The generator will automatically add 1 extra empty
+ * placement column (multiplier-1 = 1) to balance the block math.
+ *
+ * Screen fit: the level intentionally uses a modest colour count so the extra
+ * columns still fit on mobile screens without a layoutMap override.
+ */
+export const getSpecialOversizedSettings: SettingsProducer = (difficulty) => ({
+  amountColors: 3 + Math.min(Math.floor(difficulty / 3), 3),
+  stackSize: 4,
+  extraPlacementStacks: 1,
+  extraPlacementLimits: 0,
+  oversizedColumns: [{ multiplier: 2 }],
+  blockColorPick: "end"
+});
+
 export const special: LevelType<"special"> = {
   type: "special",
   name: "Special",
@@ -293,7 +313,8 @@ export const special: LevelType<"special"> = {
       getSpecial2Settings,
       getSpecial3Settings,
       getSpecial4Settings,
-      getSpecial5Settings
+      getSpecial5Settings,
+      getSpecialOversizedSettings
     ];
 
     return pick(templates, random)(difficulty);
@@ -304,7 +325,8 @@ export const special: LevelType<"special"> = {
       getSpecial2Settings,
       getSpecial3Settings,
       getSpecial4Settings,
-      getSpecial5Settings
+      getSpecial5Settings,
+      getSpecialOversizedSettings
     ];
     return templates[zenLevel % templates.length](difficultyLevel);
   }

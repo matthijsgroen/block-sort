@@ -12,6 +12,7 @@ import {
   createBufferColumn,
   createHiddenBlocks,
   createLevelState,
+  createOversizedColumn,
   createPlacementColumn
 } from "./factories";
 import { hasWon } from "./state";
@@ -502,6 +503,61 @@ describe(moveBlocks, () => {
 
       const result = moveBlocks(level, { from: 0, to: 1 });
       expect(result.columns).toEqual(expected.columns);
+    });
+  });
+
+  describe("oversized columns", () => {
+    it("does not lock a regular column when an oversized column owns that colour", () => {
+      // Oversized column owns "white" (limitColor = "white").
+      // Moving the last "white" block into a regular column that is now full of
+      // white must NOT lock it — the oversized column is the only allowed locker.
+      const level = createLevelState([
+        createPlacementColumn(4, createBlocks("white")), // source
+        createPlacementColumn(4, createBlocks("white", "white", "white")), // dest (3 whites, will be full after move)
+        createOversizedColumn(8, "white") // oversized owner of "white"
+      ]);
+
+      const result = moveBlocks(level, { from: 0, to: 1 });
+      // Column 1 is now full of white but must NOT be locked
+      expect(result.columns[1].locked).toBe(false);
+      expect(result.columns[1].blocks.length).toBe(4);
+    });
+
+    it("locks an oversized column when it is completely filled with its colour", () => {
+      // Oversized column (size 8) is already filled with 7 whites; we move one more white in.
+      const whiteBlocks = createBlocks(
+        "white",
+        "white",
+        "white",
+        "white",
+        "white",
+        "white",
+        "white"
+      );
+      const oversized = createOversizedColumn(8, "white");
+      oversized.blocks = whiteBlocks; // 7 whites already there
+
+      const level = createLevelState([
+        createPlacementColumn(4, createBlocks("white")), // source
+        oversized
+      ]);
+
+      const result = moveBlocks(level, { from: 0, to: 1 });
+      expect(result.columns[1].locked).toBe(true);
+      expect(result.columns[1].blocks.length).toBe(8);
+    });
+
+    it("still locks a regular column when no oversized column owns that colour", () => {
+      // There is an oversized column but it owns "blue", not "white".
+      // Moving the last "white" block into a full-white regular column SHOULD lock it.
+      const level = createLevelState([
+        createPlacementColumn(4, createBlocks("white")), // source
+        createPlacementColumn(4, createBlocks("white", "white", "white")), // dest
+        createOversizedColumn(8, "blue") // oversized owner, but of "blue"
+      ]);
+
+      const result = moveBlocks(level, { from: 0, to: 1 });
+      expect(result.columns[1].locked).toBe(true);
     });
   });
 });

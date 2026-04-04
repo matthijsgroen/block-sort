@@ -67,15 +67,17 @@ const lockedColumnReward = (state: LevelState): number => {
 };
 
 const balanceScore = (state: LevelState): number => {
+  // Exclude oversized columns: they start empty and would always score worst,
+  // skewing the balance metric against normal columns unfairly.
+  const normalPlacement = state.columns.filter(
+    (c) => c.type === "placement" && c.oversized !== true
+  );
+  if (normalPlacement.length === 0) return 0;
   const maxBlocks = Math.max(
-    ...state.columns
-      .filter((c) => c.type === "placement")
-      .map((col) => col.blocks.length)
+    ...normalPlacement.map((col) => col.blocks.length)
   );
   const minBlocks = Math.min(
-    ...state.columns
-      .filter((c) => c.type === "placement")
-      .map((col) => col.blocks.length)
+    ...normalPlacement.map((col) => col.blocks.length)
   );
   return (maxBlocks - minBlocks) * -1; // Negative score for imbalance
 };

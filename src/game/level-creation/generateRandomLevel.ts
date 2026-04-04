@@ -1,11 +1,12 @@
 import { shuffle } from "@/support/random";
 import { timesMap } from "@/support/timeMap";
 
-import { BLOCK_COLORS, type BlockType } from "../blocks";
+import { BLOCK_COLORS, type BlockColor, type BlockType } from "../blocks";
 import {
   createBlock,
   createBufferColumn,
   createLevelState,
+  createOversizedColumn,
   createPlacementColumn
 } from "../factories";
 import { allShuffled, isLockSolvable, isStuck } from "../state";
@@ -31,6 +32,7 @@ export const generateRandomLevel = (
     amountLockTypes = 0,
     amountLocks = 0,
     lockOffset = 0,
+    oversizedColumns = [],
     layoutMap
   }: LevelSettings,
   random: () => number
@@ -59,7 +61,19 @@ export const generateRandomLevel = (
     ] as Exclude<LevelSettings["extraBuffers"], undefined>
   ).concat(extraBuffers);
 
-  const blockColors = availableColors.slice(0, amountColors);
+  // The last N colors (one per oversized column entry) become oversized colors.
+  // The remaining colors go into normal placement columns.
+  const allBlockColors = availableColors.slice(0, amountColors) as BlockColor[];
+  const oversizedCount = oversizedColumns.length;
+  const normalColors = allBlockColors.slice(
+    0,
+    amountColors - oversizedCount
+  ) as BlockColor[];
+  const oversizedColors = allBlockColors.slice(
+    amountColors - oversizedCount
+  ) as BlockColor[];
+
+  const blockColors: BlockColor[] = normalColors;
   let stackLimit = blockColors.length - extraPlacementLimits;
   // 1. select lock type
 
@@ -77,7 +91,7 @@ export const generateRandomLevel = (
     lockKeyBlocks.push(...lockAndKeys);
   }
 
-  const amountBars = amountColors * stacksPerColor;
+  const amountBars = blockColors.length * stacksPerColor;
   const blocks: BlockType[] = [];
 
   const amountPerColor = Math.ceil(lockKeyBlocks.length / blockColors.length);
@@ -89,6 +103,19 @@ export const generateRandomLevel = (
     newColor.splice(0, locksOrKeys.length, ...locksOrKeys);
     blocks.push(...newColor);
   }
+
+  // Build oversized blocks: for each oversized column, create multiplier×stackSize blocks
+  // of its assigned colour and add them to the block pool (distributed via shuffle).
+  const oversizedBlocks: BlockType[] = [];
+  for (let i = 0; i < oversizedColors.length; i++) {
+    const color = oversizedColors[i];
+    const multiplier = oversizedColumns[i].multiplier;
+    for (let j = 0; j < stackSize * multiplier; j++) {
+      oversizedBlocks.push(color);
+    }
+  }
+  blocks.push(...oversizedBlocks);
+
   shuffle(blocks, random);
 
   const columns = timesMap<Column>(amountBars, (ci) =>
@@ -131,6 +158,19 @@ export const generateRandomLevel = (
             bufferType === "inventory" ? "inventory" : "buffer"
           )
         );
+      })
+    )
+    .concat(
+      // For each oversized column, also add (multiplier - 1) extra empty placement
+      // columns so the block math balances (the blocks that won't fit in normal
+      // columns have somewhere to go while the solver works toward the oversized col).
+      oversizedColors.flatMap((color, i) => {
+        const multiplier = oversizedColumns[i].multiplier;
+        const extraEmpties = multiplier - 1;
+        return [
+          createOversizedColumn(stackSize * multiplier, color),
+          ...timesMap(extraEmpties, () => createPlacementColumn(stackSize, []))
+        ];
       })
     );
 
