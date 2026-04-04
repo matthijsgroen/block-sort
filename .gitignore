@@ -34,6 +34,7 @@ dev-dist
 
 *storybook.log
 reports/
+storybook-static/
 
 # GIMP project file for open graph image
 og-image.xcf 

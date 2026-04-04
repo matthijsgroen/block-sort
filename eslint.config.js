@@ -1,3 +1,4 @@
+import { fixupPluginRules } from "@eslint/compat";
 import eslintConfigPrettier from "eslint-config-prettier";
 import * as importPlugin from "eslint-plugin-import";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
@@ -32,6 +33,9 @@ export default [
   ...tseslint.configs.recommended,
   {
     ...pluginReact.configs.flat?.recommended,
+    plugins: {
+      react: fixupPluginRules(pluginReact)
+    },
     settings: {
       react: {
         version: "detect"
@@ -40,7 +44,7 @@ export default [
   },
   {
     plugins: {
-      import: importPlugin
+      import: fixupPluginRules(importPlugin)
     },
     settings: {
       "import/resolver": {
