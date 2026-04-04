@@ -4,6 +4,7 @@ import { getDifficultyLevel } from "../level-settings/levelSettings";
 import type { LevelSettings } from "../types";
 import type { SettingsProducer } from "../types";
 
+import { getOversized1Settings } from "./oversized";
 import type { LevelType } from "./types";
 
 export const getNormalSettings: SettingsProducer = (difficulty) => ({
@@ -76,7 +77,10 @@ export const normal: LevelType<"normal"> = {
   occurrence: () => true,
   getSettings(levelNr, random = Math.random) {
     const difficulty = getDifficultyLevel(levelNr);
-    const templates: LevelSettings[] = [getNormalSettings(difficulty)];
+    const templates: LevelSettings[] = [
+      getNormalSettings(difficulty),
+      getOversized1Settings(difficulty)
+    ];
     if (levelNr > 160) {
       templates.push(
         getNormal2Settings(difficulty),
@@ -92,7 +96,10 @@ export const normal: LevelType<"normal"> = {
     return pick(templates, random);
   },
   getZenSettings: (zenLevel, difficultyLevel) => {
-    const templates: SettingsProducer[] = [getNormalSettings];
+    const templates: SettingsProducer[] = [
+      getNormalSettings,
+      getOversized1Settings
+    ];
     if (difficultyLevel >= 8) {
       templates.push(
         getNormal2Settings,
