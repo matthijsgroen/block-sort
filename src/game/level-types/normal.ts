@@ -79,7 +79,7 @@ export const normal: LevelType<"normal"> = {
     const difficulty = getDifficultyLevel(levelNr);
     const templates: LevelSettings[] = [getNormalSettings(difficulty)];
     if (levelNr > 20) {
-      templates.push(getOversized1Settings(Math.min(difficulty - 2, 0)));
+      templates.push(getOversized1Settings(getDifficultyLevel(levelNr - 20)));
     }
     if (levelNr > 160) {
       templates.push(
