@@ -218,7 +218,8 @@ describe(generateRandomLevel, () => {
     it("generates the correct total block count when oversized columns are present", () => {
       const random = mulberry32(TEST_SEED);
       // 2 normal colors (4 blocks each = 8) + 1 oversized color (2×4 = 8) = 16 total
-      // All blocks are distributed into 2 normal columns (4 each) + 2 extra empties + 1 oversized (empty) + 1 extra empty
+      // All 16 blocks are shuffled into: 2 normal cols (4 each) + 2 extra empties (4 each)
+      // The oversized column itself starts empty.
       const level = generateRandomLevel(
         {
           amountColors: 3,
@@ -233,11 +234,11 @@ describe(generateRandomLevel, () => {
         (sum, c) => sum + c.blocks.length,
         0
       );
-      // 2 normal cols × 4 blocks = 8 blocks (oversized colour distributed into normal cols)
-      expect(totalBlocks).toBe(8);
+      // 2 normal cols × 4 + 2 extra cols × 4 = 16 blocks (oversized column starts empty)
+      expect(totalBlocks).toBe(16);
     });
 
-    it("adds (multiplier - 1) extra empty placement columns per oversized column", () => {
+    it("adds multiplier extra filled placement columns per oversized column", () => {
       const random = mulberry32(TEST_SEED);
       const level = generateRandomLevel(
         {
@@ -249,18 +250,20 @@ describe(generateRandomLevel, () => {
         random
       );
 
-      // 2 normal cols + 0 extra placements + 1 oversized + 1 extra empty = 4 columns total
-      expect(level.columns).toHaveLength(4);
-      // exactly one oversized column
-      expect(level.columns.filter((c) => c.oversized === true)).toHaveLength(1);
-      // extra empty placement col: non-oversized, placement, empty
-      const emptyNonOversized = level.columns.filter(
-        (c) =>
-          c.type === "placement" &&
-          c.oversized !== true &&
-          c.blocks.length === 0
+      // 2 normal cols + 0 extra placements + 1 oversized + 2 extra filled cols = 5 columns total
+      expect(level.columns).toHaveLength(5);
+      // exactly one oversized column (starts empty)
+      const oversizedCols = level.columns.filter((c) => c.oversized === true);
+      expect(oversizedCols).toHaveLength(1);
+      expect(oversizedCols[0].blocks).toHaveLength(0);
+      // The 4 non-oversized placement columns are all filled with stackSize blocks
+      const placementCols = level.columns.filter(
+        (c) => c.type === "placement" && c.oversized !== true
       );
-      expect(emptyNonOversized.length).toBeGreaterThanOrEqual(1);
+      expect(placementCols).toHaveLength(4);
+      for (const col of placementCols) {
+        expect(col.blocks).toHaveLength(4);
+      }
     });
   });
 });

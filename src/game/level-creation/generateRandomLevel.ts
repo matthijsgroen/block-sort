@@ -161,15 +161,24 @@ export const generateRandomLevel = (
       })
     )
     .concat(
-      // For each oversized column, also add (multiplier - 1) extra empty placement
-      // columns so the block math balances (the blocks that won't fit in normal
-      // columns have somewhere to go while the solver works toward the oversized col).
+      // For each oversized column, add `multiplier` extra placement columns
+      // and fill them from the remaining block pool (the oversized-colour blocks
+      // have been shuffled into `blocks` together with the normal-colour blocks,
+      // so the distribution is random).
+      // Total block count = normalColors×stackSize + multiplier×stackSize
+      // Total slot count  = (normalColors + multiplier)×stackSize  ✓
       oversizedColors.flatMap((color, i) => {
         const multiplier = oversizedColumns[i].multiplier;
-        const extraEmpties = multiplier - 1;
         return [
           createOversizedColumn(stackSize * multiplier, color),
-          ...timesMap(extraEmpties, () => createPlacementColumn(stackSize, []))
+          ...timesMap(multiplier, () =>
+            createPlacementColumn(
+              stackSize,
+              new Array(stackSize)
+                .fill(0)
+                .map(() => createBlock(blocks.shift()!))
+            )
+          )
         ];
       })
     );
