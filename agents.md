@@ -7,6 +7,7 @@ This file provides AI coding agents with the context needed to work effectively 
 **Block Sort** is a mobile-first browser puzzle game distributed as a **Progressive Web App (PWA)**, live at `https://matthijsgroen.github.io/block-sort/`. Players sort stacked coloured blocks into columns so each column contains only one colour. A column is "locked" (completed) when it is full of a single colour.
 
 Key features:
+
 - **Normal Mode** – sequential levels with increasing difficulty
 - **Zen Mode** – free-play with user-chosen level type and difficulty
 - **7 level types**: Normal, Hard (hidden blocks), Special, Easy, Scrambled, Dungeon (locks & keys), Hot (multi-stage)
@@ -18,26 +19,26 @@ Key features:
 
 ## Tech Stack
 
-| Concern | Technology |
-|---|---|
-| UI Framework | React 19 (`use()` hook for context/promises) |
-| Language | TypeScript 5.6 (strict mode) |
-| Build tool | Vite 7 |
-| CSS | Tailwind CSS 3 + PostCSS + CSS Modules for animation-heavy components |
-| State | React `useState`/`useEffect` + custom `useOfflineStorage` backed by `localforage` (IndexedDB) |
-| Immutability | Immer (`produce`) for all game-state mutations |
-| PWA | `vite-plugin-pwa` (Workbox service worker) |
-| Testing | Vitest 2 + jsdom + @testing-library/react + @testing-library/jest-dom |
-| Component Explorer | Storybook 9 |
-| Linting | ESLint 9 (TypeScript-ESLint, react-compiler, simple-import-sort, unused-imports, prettier) |
-| Formatting | Prettier 3 + `prettier-plugin-tailwindcss` |
-| Package manager | Yarn 4 (PnP / Zero-installs) |
-| Persistence | `localforage` abstracted behind `useOfflineStorage` pub/sub hook |
-| PRNG | Custom `mulberry32` seeded PRNG (`src/support/random.ts`) |
-| Data encoding | BSON + pako (deflate) + AES-CTR (Web Crypto API) for game-save export/import |
-| QR codes | `qrcode` (generate) + `jsqr-es6` (scan) for sharing game saves |
-| Worker threads | Node.js `worker_threads` for parallel offline seed generation |
-| CLI tools | `commander` + `tsx` for bin scripts |
+| Concern            | Technology                                                                                    |
+| ------------------ | --------------------------------------------------------------------------------------------- |
+| UI Framework       | React 19 (`use()` hook for context/promises)                                                  |
+| Language           | TypeScript 5.6 (strict mode)                                                                  |
+| Build tool         | Vite 7                                                                                        |
+| CSS                | Tailwind CSS 3 + PostCSS + CSS Modules for animation-heavy components                         |
+| State              | React `useState`/`useEffect` + custom `useOfflineStorage` backed by `localforage` (IndexedDB) |
+| Immutability       | Immer (`produce`) for all game-state mutations                                                |
+| PWA                | `vite-plugin-pwa` (Workbox service worker)                                                    |
+| Testing            | Vitest 2 + jsdom + @testing-library/react + @testing-library/jest-dom                         |
+| Component Explorer | Storybook 9                                                                                   |
+| Linting            | ESLint 9 (TypeScript-ESLint, react-compiler, simple-import-sort, unused-imports, prettier)    |
+| Formatting         | Prettier 3 + `prettier-plugin-tailwindcss`                                                    |
+| Package manager    | Yarn 4 (PnP / Zero-installs)                                                                  |
+| Persistence        | `localforage` abstracted behind `useOfflineStorage` pub/sub hook                              |
+| PRNG               | Custom `mulberry32` seeded PRNG (`src/support/random.ts`)                                     |
+| Data encoding      | BSON + pako (deflate) + AES-CTR (Web Crypto API) for game-save export/import                  |
+| QR codes           | `qrcode` (generate) + `jsqr-es6` (scan) for sharing game saves                                |
+| Worker threads     | Node.js `worker_threads` for parallel offline seed generation                                 |
+| CLI tools          | `commander` + `tsx` for bin scripts                                                           |
 
 ---
 
@@ -53,7 +54,7 @@ Key features:
 │   │
 │   ├── game/                      # Pure game logic — NO React dependencies
 │   │   ├── types.ts               # ALL domain types; single source of truth
-│   │   ├── blocks.ts              # BLOCK_COLORS (16 colours) + BlockColor/BlockType types
+│   │   ├── blocks.ts              # BLOCK_COLORS (16 colors) + BlockColor/BlockType types
 │   │   ├── actions.ts             # Immutable state transitions (selectFromColumn, moveBlocks)
 │   │   ├── state.ts               # State queries (hasWon, isStuck, canPlace, lock/key matching)
 │   │   ├── factories.ts           # createBlock, createPlacementColumn, createLevelState, …
@@ -140,13 +141,15 @@ This separation is a strict rule: **`src/game/` must never import from React or 
 ### Seeded Determinism
 
 All random operations go through `mulberry32(seed)`. This guarantees:
+
 - Reproducible level generation from a seed number.
 - Pre-computed seed caches that let mobile devices skip the solver.
-- `colorHustle` remaps visual colours from a fixed puzzle structure for variety.
+- `colorHustle` remaps visual colors from a fixed puzzle structure for variety.
 
 ### Level Type Registration
 
 `src/game/level-types/index.ts` holds an ordered array of `LevelType` objects. `getLevelType(levelNr, theme)` scans it linearly using each type's `occurrence()` predicate. **Order matters** — `normal` is last as a catch-all. To add a new level type:
+
 1. Create a file in `level-types/`
 2. Import it in `index.ts` and insert it **before** `normal` in the array
 
@@ -161,55 +164,72 @@ Movement is handled by the Web Animations API, **not** CSS transitions on React 
 ```typescript
 // Running state of a level
 type LevelState = {
-  blockTypes: BlockType[];     // all block types in play
+  blockTypes: BlockType[]; // all block types in play
   columns: Column[];
-  moves: Move[];               // solver's solution path
+  moves: Move[]; // solver's solution path
   solver?: keyof typeof solvers;
-  generationInformation?: { cost, attempts, seed };
+  generationInformation?: { cost; attempts; seed };
 };
 
 // A column in the puzzle
 type Column = {
   type: "placement" | "buffer" | "inventory";
   locked: boolean;
-  columnSize: number;          // max capacity
-  blocks: Block[];             // index 0 = TOP (pickable) block
+  columnSize: number; // max capacity
+  blocks: Block[]; // index 0 = TOP (pickable) block
   limitColor?: LimitColor;
   paddingTop?: number;
 };
 
 // A single block
 type Block = {
-  blockType: BlockType;        // BlockColor | Lock | Key
-  revealed?: boolean;          // false = hidden (hard/hot mode)
-  spawned?: boolean;           // true = animated in (auto-complete)
+  blockType: BlockType; // BlockColor | Lock | Key
+  revealed?: boolean; // false = hidden (hard/hot mode)
+  spawned?: boolean; // true = animated in (auto-complete)
 };
 
 type Move = { from: number; to: number; tactic?: string };
 
 // Level generation parameters
 type LevelSettings = {
-  amountColors?, stackSize?, extraPlacementStacks?, extraPlacementLimits?,
-  buffers?, bufferSizes?, bufferPlacementLimits?, extraBuffers?,
-  hideBlockTypes?: "none" | "all" | "checker",
-  stacksPerColor?, blockColorPick?: "start" | "end",
-  amountLockTypes?, amountLocks?, lockOffset?,
-  playMoves?, layoutMap?, solver?
+  amountColors?;
+  stackSize?;
+  extraPlacementStacks?;
+  extraPlacementLimits?;
+  buffers?;
+  bufferSizes?;
+  bufferPlacementLimits?;
+  extraBuffers?;
+  hideBlockTypes?: "none" | "all" | "checker";
+  stacksPerColor?;
+  blockColorPick?: "start" | "end";
+  amountLockTypes?;
+  amountLocks?;
+  lockOffset?;
+  playMoves?;
+  layoutMap?;
+  solver?;
 };
 
 // Multi-stage level (Hot / Dungeon variants)
 type MultiStageLevelSettings = {
-  stages: { settings, levelModifiers?, backgroundClassname?, name? }[];
+  stages: { settings; levelModifiers?; backgroundClassname?; name? }[];
 };
 
 // Runtime visual modifiers
 type LevelModifiers = {
-  theme?, particles?, ghostMode?, hideMode?: HideFormat, keepRevealed?, hideEvery?
+  theme?;
+  particles?;
+  ghostMode?;
+  hideMode?: HideFormat;
+  keepRevealed?;
+  hideEvery?;
 };
 ```
 
 **Block taxonomy:**
-- **`BlockColor`** – 16 named colours (white, red, yellow, blue, purple, black, green, aqua, darkgreen, darkblue, brown, pink, turquoise, orange, lightyellow, gray)
+
+- **`BlockColor`** – 16 named colors (white, red, yellow, blue, purple, black, green, aqua, darkgreen, darkblue, brown, pink, turquoise, orange, lightyellow, gray)
 - **`Lock`** – 7 types (e.g., `ghost-lock`, `fire-lock`)
 - **`Key`** – 7 matching types (e.g., `flashlight`, `water`). A key placed on its matching lock removes both
 - **`LimitColor`** – `BlockColor | "rainbow"` (rainbow allows any colour)
@@ -219,20 +239,20 @@ type LevelModifiers = {
 
 ## Important Files (Read These First)
 
-| File | Why It Matters |
-|---|---|
-| `src/game/types.ts` | Authoritative domain model — all game logic flows through these types |
-| `src/game/actions.ts` | The two core state-mutation primitives: `moveBlocks`, `selectFromColumn` |
-| `src/game/state.ts` | Win/lose/stuck detection and lock-key matching — the rules engine |
-| `src/game/level-types/index.ts` | Registry controlling what level type appears at each level number |
-| `src/game/level-creation/tactics.ts` | `generatePlayableLevel` — entry point for level generation |
-| `src/game/level-creation/configurable-solver.ts` | AI solver engine with look-ahead tactic evaluation |
-| `src/modules/Level/LevelLoader.tsx` | Async level loading, seed lookup, storage caching, multi-stage handling |
-| `src/modules/Level/Level.tsx` | Main gameplay component; input handling and play-state machine |
-| `src/support/useOfflineStorage.ts` | Storage backbone — essential for any persistence work |
-| `src/data/levelSeeds.ts` | Auto-generated seed cache — **never edit manually** |
-| `vite.config.ts` | Configures PWA, MDX, `@/` alias, base path `/block-sort/` |
-| `bin/level-seeds.ts` | Primary CLI for seed database maintenance |
+| File                                             | Why It Matters                                                           |
+| ------------------------------------------------ | ------------------------------------------------------------------------ |
+| `src/game/types.ts`                              | Authoritative domain model — all game logic flows through these types    |
+| `src/game/actions.ts`                            | The two core state-mutation primitives: `moveBlocks`, `selectFromColumn` |
+| `src/game/state.ts`                              | Win/lose/stuck detection and lock-key matching — the rules engine        |
+| `src/game/level-types/index.ts`                  | Registry controlling what level type appears at each level number        |
+| `src/game/level-creation/tactics.ts`             | `generatePlayableLevel` — entry point for level generation               |
+| `src/game/level-creation/configurable-solver.ts` | AI solver engine with look-ahead tactic evaluation                       |
+| `src/modules/Level/LevelLoader.tsx`              | Async level loading, seed lookup, storage caching, multi-stage handling  |
+| `src/modules/Level/Level.tsx`                    | Main gameplay component; input handling and play-state machine           |
+| `src/support/useOfflineStorage.ts`               | Storage backbone — essential for any persistence work                    |
+| `src/data/levelSeeds.ts`                         | Auto-generated seed cache — **never edit manually**                      |
+| `vite.config.ts`                                 | Configures PWA, MDX, `@/` alias, base path `/block-sort/`                |
+| `bin/level-seeds.ts`                             | Primary CLI for seed database maintenance                                |
 
 ---
 
@@ -290,29 +310,34 @@ Run a single test file: `yarn test src/game/actions.spec.ts`
 ## Code Conventions
 
 ### File Naming
+
 - `PascalCase.tsx` for React components
 - `camelCase.ts` for utilities and hooks
 - `camelCase.spec.ts` / `.spec.tsx` for tests
 - `ComponentName.stories.tsx` for Storybook stories
 
 ### Imports
+
 - Use the `@/` alias (resolves to `src/`) for all internal imports — never use relative `../../` paths across module boundaries
 - Import order enforced by `eslint-plugin-simple-import-sort`: `react/*` → `@/ui/*` → other `@/*` → side-effects → relative
 - Use `import type` for type-only imports (`@typescript-eslint/consistent-type-imports` is enforced)
 
 ### TypeScript
+
 - Strict mode; `noUnusedLocals` and `noUnusedParameters` are active
 - `type` keyword preferred over `interface`
 - `SCREAMING_SNAKE_CASE` for top-level constants (`BLOCK_COLORS`, `LEVEL_SCALE`, `BASE_SEED`)
 - Prefix intentionally unused variables with `_`
 
 ### React
+
 - Functional components only
 - React 19 `use()` hook used for consuming Contexts and unwrapping Promises
 - `useCallback` used extensively in game components to avoid stale closures
 - The **React Compiler** is active — follow its rules (enforced by `eslint-plugin-react-compiler`)
 
 ### CSS / Tailwind
+
 - Tailwind utility classes for almost all styling
 - **CSS Modules** (`.module.css`) for complex animation-heavy styles (Block, BlockColumn)
 - CSS custom properties (`--cube-color`, `--levelScale`) set inline via React `style` prop
@@ -320,6 +345,7 @@ Run a single test file: `yarn test src/game/actions.spec.ts`
 - Prettier auto-sorts Tailwind classes — run `yarn lint` to normalise
 
 ### Game Logic
+
 - All state mutations must produce **new objects** via Immer `produce` — never mutate in place
 - `selectFromColumn` and `moveBlocks` are the canonical interaction primitives; prefer them over ad-hoc state changes
 - `blocks[0]` is always the **top** (pickable) block in a column
@@ -330,22 +356,22 @@ Run a single test file: `yarn test src/game/actions.spec.ts`
 
 ## Common Tasks & Where to Look
 
-| Task | Where to start |
-|---|---|
-| Add a new level type | `src/game/level-types/` — create a new file, add to `index.ts` before `normal` |
-| Change difficulty scaling | `src/game/level-settings/levelSettings.ts` |
-| Add a new lock/key pair | `src/game/level-creation/lock-n-key.ts` |
-| Add a new seasonal theme | `src/game/themes/index.ts` + `themeSchedule` |
-| Add a solver tactic | `src/game/level-creation/solver-tactics/` |
-| Change block colours/shapes | `src/game/blocks.ts` |
-| Change game UI layout | `src/ui/LevelLayout/LevelLayout.tsx` |
-| Change game loop / input | `src/modules/Level/Level.tsx` |
-| Change level loading logic | `src/modules/Level/LevelLoader.tsx` |
-| Change persistent storage | `src/support/useOfflineStorage.ts` + `src/support/useGameStorage.ts` |
-| Add a new storage migration | `src/support/migration/` + `src/support/migrateLevelState.ts` |
-| Regenerate seeds after logic change | `npx tsx bin/level-seeds.ts generate --all` |
-| Add a new UI component | `src/ui/` — keep it dumb (no game logic), use Tailwind |
-| Add a new settings option | `src/modules/Settings/` + `src/support/useGameStorage.ts` |
+| Task                                | Where to start                                                                 |
+| ----------------------------------- | ------------------------------------------------------------------------------ |
+| Add a new level type                | `src/game/level-types/` — create a new file, add to `index.ts` before `normal` |
+| Change difficulty scaling           | `src/game/level-settings/levelSettings.ts`                                     |
+| Add a new lock/key pair             | `src/game/level-creation/lock-n-key.ts`                                        |
+| Add a new seasonal theme            | `src/game/themes/index.ts` + `themeSchedule`                                   |
+| Add a solver tactic                 | `src/game/level-creation/solver-tactics/`                                      |
+| Change block colors/shapes          | `src/game/blocks.ts`                                                           |
+| Change game UI layout               | `src/ui/LevelLayout/LevelLayout.tsx`                                           |
+| Change game loop / input            | `src/modules/Level/Level.tsx`                                                  |
+| Change level loading logic          | `src/modules/Level/LevelLoader.tsx`                                            |
+| Change persistent storage           | `src/support/useOfflineStorage.ts` + `src/support/useGameStorage.ts`           |
+| Add a new storage migration         | `src/support/migration/` + `src/support/migrateLevelState.ts`                  |
+| Regenerate seeds after logic change | `npx tsx bin/level-seeds.ts generate --all`                                    |
+| Add a new UI component              | `src/ui/` — keep it dumb (no game logic), use Tailwind                         |
+| Add a new settings option           | `src/modules/Settings/` + `src/support/useGameStorage.ts`                      |
 
 ---
 
