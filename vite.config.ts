@@ -1,5 +1,4 @@
 import mdx from "@mdx-js/rollup";
-// @ts-expect-error no type declarations available
 import babel from "@rolldown/plugin-babel";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import * as path from "node:path";

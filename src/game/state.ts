@@ -47,13 +47,12 @@ export const canPlaceAmount = (
 export const hasWon = (level: LevelState): boolean =>
   level.columns.every((col) => {
     if (col.type !== "placement") return col.blocks.length === 0;
-    // Oversized columns must be fully filled and locked — they cannot count as
-    // "won" while empty (an empty oversized column means its colour is unsorted).
+    // Oversized columns only count as "won" when they are fully filled with a
+    // single colour; they cannot count as won while empty or partially filled.
     if (col.oversized === true) {
       return (
-        col.locked === true ||
-        (col.columnSize === col.blocks.length &&
-          col.blocks.every((b) => b.blockType === col.blocks[0].blockType))
+        col.columnSize === col.blocks.length &&
+        col.blocks.every((b) => b.blockType === col.blocks[0].blockType)
       );
     }
     return (
