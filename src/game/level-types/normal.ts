@@ -77,10 +77,10 @@ export const normal: LevelType<"normal"> = {
   occurrence: () => true,
   getSettings(levelNr, random = Math.random) {
     const difficulty = getDifficultyLevel(levelNr);
-    const templates: LevelSettings[] = [
-      getNormalSettings(difficulty),
-      getOversized1Settings(difficulty)
-    ];
+    const templates: LevelSettings[] = [getNormalSettings(difficulty)];
+    if (levelNr > 20) {
+      templates.push(getOversized1Settings(Math.min(difficulty - 2, 0)));
+    }
     if (levelNr > 160) {
       templates.push(
         getNormal2Settings(difficulty),
