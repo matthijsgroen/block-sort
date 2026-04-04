@@ -100,19 +100,6 @@ export const getOversized1Settings: SettingsProducer = (
   };
 };
 
-/**
- * Two oversized columns (one with multiplier 2, one with multiplier 3).
- * Only suitable at higher difficulties where the solver has enough room to work.
- */
-export const getOversized2Settings: SettingsProducer = (difficulty) => ({
-  amountColors: 4 + Math.min(Math.floor(difficulty / 4), 2),
-  stackSize: 4,
-  extraPlacementStacks: 1,
-  extraPlacementLimits: 0,
-  oversizedColumns: [{ multiplier: 2 }, { multiplier: 3 }],
-  blockColorPick: "end"
-});
-
 export const oversized: LevelType<"oversized"> = {
   type: "oversized",
   name: "Oversized",
@@ -132,7 +119,7 @@ export const oversized: LevelType<"oversized"> = {
     const difficulty = getDifficultyLevel(levelNr);
     return getOversized1Settings(difficulty);
   },
-  getZenSettings(zenLevel, difficultyLevel) {
+  getZenSettings(_zenLevel, difficultyLevel) {
     return getOversized1Settings(difficultyLevel);
   }
 };
