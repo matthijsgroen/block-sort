@@ -3,15 +3,28 @@ import { produce } from "immer";
 import { findLastIndex } from "@/support/findLastIndex";
 
 import type { BlockType } from "./blocks";
-import { canPlaceAmount, isKey, isLock, matchingLockFor } from "./state";
+import {
+  canPlaceAmount,
+  isColorType,
+  isKey,
+  isLock,
+  matchingLockFor
+} from "./state";
 import type { Block, Column, LevelState, Move } from "./types";
 
 /**
  * Returns true if there is an oversized placement column in the level whose
  * limitColor matches the given colour. When this is the case, regular columns
  * containing that colour must NOT lock — only the oversized column may lock.
+ *
+ * The parameter is typed as `NonNullable<Column["limitColor"]>` because oversized
+ * ownership only makes sense for block colours (locks/keys are never "owned" by
+ * an oversized column).
  */
-const hasOversizedOwner = (columns: Column[], color: BlockType): boolean =>
+const hasOversizedOwner = (
+  columns: Column[],
+  color: NonNullable<Column["limitColor"]>
+): boolean =>
   columns.some((c) => c.oversized === true && c.limitColor === color);
 
 export const selectFromColumn = (
@@ -109,7 +122,7 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
       endCol.oversized !== true &&
       endCol.blocks.length === endCol.columnSize &&
       endCol.blocks.every((b) => b.blockType === moveColor) &&
-      !hasOversizedOwner(draft.columns, moveColor)
+      (!isColorType(moveColor) || !hasOversizedOwner(draft.columns, moveColor))
     ) {
       endCol.blocks.forEach((b) => {
         b.revealed = true;
@@ -123,7 +136,8 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
       endCol.oversized !== true &&
       endCol.blocks.length < endCol.columnSize &&
       endCol.blocks.every((b) => b.blockType === moveColor) &&
-      !hasOversizedOwner(draft.columns, moveColor) &&
+      (!isColorType(moveColor) ||
+        !hasOversizedOwner(draft.columns, moveColor)) &&
       draft.columns.every(
         (c) => c === endCol || c.blocks.every((b) => b.blockType !== moveColor)
       )

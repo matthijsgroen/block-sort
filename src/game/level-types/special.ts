@@ -277,8 +277,9 @@ export const getSpecial5Settings: SettingsProducer = (difficulty) => ({
  *
  * Uses `amountColors` normal colors + 1 oversized colour. The oversized column
  * has a `multiplier` of 2, meaning it must be filled with 2×stackSize blocks of
- * a single colour to lock. The generator will automatically add 1 extra empty
- * placement column (multiplier-1 = 1) to balance the block math.
+ * a single colour to lock. The generator automatically adds extra *filled*
+ * placement columns (multiplier-1 = 1 extra column) to balance the block math;
+ * it is the oversized column itself that starts empty.
  *
  * Screen fit: the level intentionally uses a modest colour count so the extra
  * columns still fit on mobile screens without a layoutMap override.

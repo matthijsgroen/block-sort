@@ -4,9 +4,15 @@ import type { LevelSettings, SettingsProducer } from "../types";
 import type { LevelType } from "./types";
 
 /**
- * Oversized columns — one oversized column (multiplier 2).
- * Column order: [oversized(0), extra1(1), extra2(2), normal cols(3+)]
- * Use layoutMap with small positive indices to reposition if needed.
+ * Oversized columns template with difficulty-dependent oversized column counts,
+ * multipliers, and layout mappings.
+ *
+ * The effective column order is not fixed: different difficulty branches
+ * redefine `oversizedColumns` and `layoutMap`, and fractional multipliers can
+ * yield a variable number of extra columns. When authoring a `layoutMap`, use
+ * the indices produced by the active difficulty configuration instead of
+ * assuming a fixed ordering such as one oversized column followed by exactly
+ * two extras.
  */
 export const getOversized1Settings: SettingsProducer = (
   difficulty

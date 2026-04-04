@@ -195,6 +195,22 @@ describe(generateRandomLevel, () => {
   });
 
   describe("oversized columns", () => {
+    it("throws when oversizedColumns.length >= amountColors", () => {
+      const random = mulberry32(TEST_SEED);
+      // 2 oversized cols with 2 total colors → no normal color left
+      expect(() =>
+        generateRandomLevel(
+          {
+            amountColors: 2,
+            stackSize: 4,
+            extraPlacementStacks: 0,
+            oversizedColumns: [{ multiplier: 2 }, { multiplier: 2 }]
+          },
+          random
+        )
+      ).toThrow(/must be less than amountColors/);
+    });
+
     it("throws when combined oversized block total is not divisible by stackSize", () => {
       const random = mulberry32(TEST_SEED);
       // 1 × round(1.5 × 4) = 6, 6 % 4 = 2 ≠ 0 → invalid
@@ -250,7 +266,7 @@ describe(generateRandomLevel, () => {
     it("generates the correct total block count when oversized columns are present", () => {
       const random = mulberry32(TEST_SEED);
       // 2 normal colors (4 blocks each = 8) + 1 oversized color (2×4 = 8) = 16 total
-      // All 16 blocks are shuffled into: 2 normal cols (4 each) + 2 extra empties (4 each)
+      // All 16 blocks are shuffled into: 2 normal cols (4 each) + 2 extra placement cols (4 each)
       // The oversized column itself starts empty.
       const level = generateRandomLevel(
         {

@@ -21,18 +21,18 @@ Key features:
 
 | Concern            | Technology                                                                                    |
 | ------------------ | --------------------------------------------------------------------------------------------- |
-| UI Framework       | React 19 (`use()` hook for context/promises)                                                  |
-| Language           | TypeScript 5.6 (strict mode)                                                                  |
-| Build tool         | Vite 7                                                                                        |
-| CSS                | Tailwind CSS 3 + PostCSS + CSS Modules for animation-heavy components                         |
+| UI Framework       | React (`use()` hook for context/promises)                                                     |
+| Language           | TypeScript (strict mode)                                                                      |
+| Build tool         | Vite                                                                                          |
+| CSS                | Tailwind CSS + PostCSS + CSS Modules for animation-heavy components                           |
 | State              | React `useState`/`useEffect` + custom `useOfflineStorage` backed by `localforage` (IndexedDB) |
 | Immutability       | Immer (`produce`) for all game-state mutations                                                |
 | PWA                | `vite-plugin-pwa` (Workbox service worker)                                                    |
-| Testing            | Vitest 2 + jsdom + @testing-library/react + @testing-library/jest-dom                         |
-| Component Explorer | Storybook 9                                                                                   |
-| Linting            | ESLint 9 (TypeScript-ESLint, react-compiler, simple-import-sort, unused-imports, prettier)    |
-| Formatting         | Prettier 3 + `prettier-plugin-tailwindcss`                                                    |
-| Package manager    | Yarn 4 (PnP / Zero-installs)                                                                  |
+| Testing            | Vitest + jsdom + @testing-library/react + @testing-library/jest-dom                           |
+| Component Explorer | Storybook                                                                                     |
+| Linting            | ESLint (TypeScript-ESLint, react-compiler, simple-import-sort, unused-imports, prettier)      |
+| Formatting         | Prettier + `prettier-plugin-tailwindcss`                                                      |
+| Package manager    | Yarn (PnP / Zero-installs)                                                                    |
 | Persistence        | `localforage` abstracted behind `useOfflineStorage` pub/sub hook                              |
 | PRNG               | Custom `mulberry32` seeded PRNG (`src/support/random.ts`)                                     |
 | Data encoding      | BSON + pako (deflate) + AES-CTR (Web Crypto API) for game-save export/import                  |

@@ -45,13 +45,23 @@ export const canPlaceAmount = (
 };
 
 export const hasWon = (level: LevelState): boolean =>
-  level.columns.every(
-    (col) =>
-      (col.type === "placement" &&
-        col.columnSize === col.blocks.length &&
+  level.columns.every((col) => {
+    if (col.type !== "placement") return col.blocks.length === 0;
+    // Oversized columns must be fully filled and locked — they cannot count as
+    // "won" while empty (an empty oversized column means its colour is unsorted).
+    if (col.oversized === true) {
+      return (
+        col.locked === true ||
+        (col.columnSize === col.blocks.length &&
+          col.blocks.every((b) => b.blockType === col.blocks[0].blockType))
+      );
+    }
+    return (
+      (col.columnSize === col.blocks.length &&
         col.blocks.every((b) => b.blockType === col.blocks[0].blockType)) ||
       col.blocks.length === 0
-  );
+    );
+  });
 
 const createSignature = (level: LevelState) =>
   level.columns.map((c) => {

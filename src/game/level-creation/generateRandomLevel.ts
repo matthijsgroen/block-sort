@@ -37,9 +37,20 @@ export const generateRandomLevel = (
   }: LevelSettings,
   random: () => number
 ): LevelState => {
-  // Validate oversized columns: the combined total of all oversized block counts
-  // must be divisible by stackSize so the extra placement columns are filled exactly.
+  // Validate oversized columns.
   if (oversizedColumns.length > 0) {
+    // At least one normal colour must remain — otherwise normalColors is empty,
+    // causing division-by-zero in the lock/key distribution and making the
+    // oversized-column-to-colour mapping ambiguous.
+    if (oversizedColumns.length >= amountColors) {
+      throw new Error(
+        `oversizedColumns: oversizedColumns.length (${oversizedColumns.length}) must be less than amountColors (${amountColors}). ` +
+          `At least one normal colour is required.`
+      );
+    }
+
+    // The combined total of all oversized block counts must be divisible by
+    // stackSize so the extra placement columns are filled exactly.
     const totalOversizedBlocks = oversizedColumns.reduce(
       (sum, col) => sum + Math.round(stackSize * col.multiplier),
       0
@@ -142,8 +153,17 @@ export const generateRandomLevel = (
   // entries so that fractional multipliers work as long as the combined total is
   // divisible by stackSize.  e.g. two columns with multiplier 1.5 and stackSize 4:
   //   total oversized blocks = 2 × (1.5 × 4) = 12  →  12 / 4 = 3 extra columns ✓
-  const totalOversizedBlocks = oversizedColors.reduce(
-    (sum, _, i) => sum + Math.round(stackSize * oversizedColumns[i].multiplier),
+  //
+  // Compute totalOversizedBlocks from oversizedColumns (not oversizedColors) to
+  // ensure validation and generation are always in sync.
+  if (oversizedColors.length !== oversizedColumns.length) {
+    throw new Error(
+      `oversizedColors.length (${oversizedColors.length}) !== oversizedColumns.length (${oversizedColumns.length}). ` +
+        `This is an internal error — please report it.`
+    );
+  }
+  const totalOversizedBlocks = oversizedColumns.reduce(
+    (sum, col) => sum + Math.round(stackSize * col.multiplier),
     0
   );
   const extraColumnCount = totalOversizedBlocks / stackSize;
