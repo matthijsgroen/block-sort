@@ -213,11 +213,16 @@ export type LevelSettings = {
   amountLocks?: number;
   layoutMap?: LayoutMap;
   /**
-   * Oversized placement columns to append after the regular placement columns.
-   * Each entry defines one column whose capacity is `multiplier × stackSize`.
+   * Oversized placement columns that must be completely filled to win.
+   * Each entry defines one column whose capacity is `round(multiplier × stackSize)`.
    * The generator auto-assigns a limitColor to each oversized column from the
-   * available colour pool, and automatically adds `(multiplier - 1)` extra empty
-   * placement columns so the total block count always balances exactly.
+   * available colour pool, and automatically adds extra placement columns so the
+   * total block count always balances exactly.
+   *
+   * Fractional multipliers are supported as long as the *combined* total of all
+   * oversized block counts is divisible by stackSize.  For example, two columns
+   * with `multiplier: 1.5` and `stackSize: 4` produce 2 × 6 = 12 blocks,
+   * requiring 12 / 4 = 3 extra columns — clean with no remainder.
    *
    * Use `layoutMap` to reposition oversized columns visually; consider screen
    * space when choosing multiplier values (a multiplier of 2 doubles the column

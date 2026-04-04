@@ -37,6 +37,22 @@ export const generateRandomLevel = (
   }: LevelSettings,
   random: () => number
 ): LevelState => {
+  // Validate oversized columns: the combined total of all oversized block counts
+  // must be divisible by stackSize so the extra placement columns are filled exactly.
+  if (oversizedColumns.length > 0) {
+    const totalOversizedBlocks = oversizedColumns.reduce(
+      (sum, col) => sum + Math.round(stackSize * col.multiplier),
+      0
+    );
+    if (totalOversizedBlocks % stackSize !== 0) {
+      throw new Error(
+        `oversizedColumns: combined block total (${totalOversizedBlocks}) is not divisible by stackSize (${stackSize}). ` +
+          `Adjust multipliers so that sum(round(multiplier × stackSize)) % stackSize === 0. ` +
+          `e.g. two columns with multiplier 1.5 and stackSize 4: 2 × 6 = 12, 12 % 4 = 0 ✓`
+      );
+    }
+  }
+
   // This results in gradually reveal new colors as you progress
   const colorPool = Math.ceil(amountColors / 4) * 4;
   // Generate level, this should be extracted
@@ -104,13 +120,13 @@ export const generateRandomLevel = (
     blocks.push(...newColor);
   }
 
-  // Build oversized blocks: for each oversized column, create multiplier×stackSize blocks
-  // of its assigned colour and add them to the block pool (distributed via shuffle).
+  // Build oversized blocks: for each oversized column, create round(multiplier×stackSize)
+  // blocks of its assigned colour and add them to the block pool (distributed via shuffle).
   const oversizedBlocks: BlockType[] = [];
   for (let i = 0; i < oversizedColors.length; i++) {
     const color = oversizedColors[i];
-    const multiplier = oversizedColumns[i].multiplier;
-    for (let j = 0; j < stackSize * multiplier; j++) {
+    const blockCount = Math.round(stackSize * oversizedColumns[i].multiplier);
+    for (let j = 0; j < blockCount; j++) {
       oversizedBlocks.push(color);
     }
   }
@@ -118,21 +134,55 @@ export const generateRandomLevel = (
 
   shuffle(blocks, random);
 
-  const columns = timesMap<Column>(amountBars, (ci) =>
-    createPlacementColumn(
-      stackSize,
-      new Array(stackSize)
-        .fill(0)
-        .map((_, i) =>
-          createBlock(
-            blocks.shift()!,
-            (hideBlockTypes === "all" ||
-              (hideBlockTypes === "checker" && (i + (ci % 2)) % 2 === 0)) &&
-              i !== 0
-          )
-        )
+  // Oversized columns come first so layoutMap authors can reference them by
+  // small positive indices (0, 1, 2 …) rather than large negative ones.
+  // Structure: [oversizedCol0, oversizedCol1, …, extraCol0, extraCol1, …, normal cols…]
+  //
+  // Extra columns are computed from the *total* oversized block count across all
+  // entries so that fractional multipliers work as long as the combined total is
+  // divisible by stackSize.  e.g. two columns with multiplier 1.5 and stackSize 4:
+  //   total oversized blocks = 2 × (1.5 × 4) = 12  →  12 / 4 = 3 extra columns ✓
+  const totalOversizedBlocks = oversizedColors.reduce(
+    (sum, _, i) => sum + Math.round(stackSize * oversizedColumns[i].multiplier),
+    0
+  );
+  const extraColumnCount = totalOversizedBlocks / stackSize;
+
+  const oversizedColumnGroup: Column[] = [
+    // Empty oversized columns (one per entry)
+    ...oversizedColors.map((color, i) =>
+      createOversizedColumn(
+        Math.round(stackSize * oversizedColumns[i].multiplier),
+        color
+      )
+    ),
+    // Extra filled columns (shared pool, count = totalOversizedBlocks / stackSize)
+    ...timesMap(extraColumnCount, () =>
+      createPlacementColumn(
+        stackSize,
+        new Array(stackSize).fill(0).map(() => createBlock(blocks.shift()!))
+      )
     )
-  )
+  ];
+
+  const columns = oversizedColumnGroup
+    .concat(
+      timesMap<Column>(amountBars, (ci) =>
+        createPlacementColumn(
+          stackSize,
+          new Array(stackSize)
+            .fill(0)
+            .map((_, i) =>
+              createBlock(
+                blocks.shift()!,
+                (hideBlockTypes === "all" ||
+                  (hideBlockTypes === "checker" && (i + (ci % 2)) % 2 === 0)) &&
+                  i !== 0
+              )
+            )
+        )
+      )
+    )
     .concat(
       timesMap(extraPlacementStacks, (i) =>
         createPlacementColumn(
@@ -158,28 +208,6 @@ export const generateRandomLevel = (
             bufferType === "inventory" ? "inventory" : "buffer"
           )
         );
-      })
-    )
-    .concat(
-      // For each oversized column, add `multiplier` extra placement columns
-      // and fill them from the remaining block pool (the oversized-colour blocks
-      // have been shuffled into `blocks` together with the normal-colour blocks,
-      // so the distribution is random).
-      // Total block count = normalColors×stackSize + multiplier×stackSize
-      // Total slot count  = (normalColors + multiplier)×stackSize  ✓
-      oversizedColors.flatMap((color, i) => {
-        const multiplier = oversizedColumns[i].multiplier;
-        return [
-          createOversizedColumn(stackSize * multiplier, color),
-          ...timesMap(multiplier, () =>
-            createPlacementColumn(
-              stackSize,
-              new Array(stackSize)
-                .fill(0)
-                .map(() => createBlock(blocks.shift()!))
-            )
-          )
-        ];
       })
     );
 

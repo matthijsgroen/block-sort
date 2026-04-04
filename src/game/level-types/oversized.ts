@@ -6,16 +6,17 @@ import type { SettingsProducer } from "../types";
 import type { LevelType } from "./types";
 
 /**
- * Oversized columns — difficulty 1–4: one oversized column (multiplier 2).
- * Minimal colour count so the extra columns fit on screen without a layoutMap.
+ * Oversized columns — one oversized column (multiplier 2).
+ * Column order: [oversized(0), extra1(1), extra2(2), normal cols(3+)]
+ * Use layoutMap with small positive indices to reposition if needed.
  */
 export const getOversized1Settings: SettingsProducer = (difficulty) => ({
-  amountColors: 3 + Math.min(Math.floor(difficulty / 3), 3),
+  amountColors: 5 + Math.min(Math.floor(difficulty / 3), 3),
   stackSize: 4,
-  extraPlacementStacks: 1,
+  extraPlacementStacks: 0,
   extraPlacementLimits: 0,
   oversizedColumns: [{ multiplier: 2 }],
-  blockColorPick: "end"
+  blockColorPick: "start"
 });
 
 /**
