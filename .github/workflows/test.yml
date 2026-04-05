@@ -49,7 +49,7 @@ jobs:
           MAIN_VERSION: ${{ steps.main_version.outputs.version }}
 
       - uses: mshick/add-pr-comment@v2
-        if: steps.check_version.outputs.changed == 'true'
+        if: github.base_ref == 'main' && steps.check_version.outputs.changed == 'true'
         with:
           message: |
             After merge, a **new version** of the game will be published
@@ -57,12 +57,18 @@ jobs:
             (version ${{ steps.current_version.outputs.version }}, vs. main branch, ${{ steps.main_version.outputs.version }})
 
       - uses: mshick/add-pr-comment@v2
-        if: steps.check_version.outputs.changed == 'false'
+        if: github.base_ref == 'main' && steps.check_version.outputs.changed == 'false'
         with:
           message: |
             After merge, **no version** of the game will be published
 
             (version is the same as the main branch, ${{ steps.main_version.outputs.version }})
+
+      - uses: mshick/add-pr-comment@v2
+        if: github.base_ref != 'main' && github.base_ref != ''
+        with:
+          message: |
+            This PR does not target `main`, so **no version will be published** upon merge regardless of version changes.
 
   build:
     runs-on: ubuntu-latest
