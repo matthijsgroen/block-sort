@@ -3,11 +3,10 @@ import { fileURLToPath } from "url";
 import { Worker } from "worker_threads";
 
 import type { LevelSettings } from "@/game/types";
-
 import type {
   VerifyIdleMessage,
   VerifyResultMessage
-} from "../../workers/verifySeedWorkerTypes";
+} from "@/workers/verifySeedWorkerTypes";
 
 export type VerifyTask = {
   taskId: number;

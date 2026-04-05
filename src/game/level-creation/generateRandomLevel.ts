@@ -177,10 +177,19 @@ export const generateRandomLevel = (
       )
     ),
     // Extra filled columns (shared pool, count = totalOversizedBlocks / stackSize)
-    ...timesMap(extraColumnCount, () =>
+    ...timesMap(extraColumnCount, (ci) =>
       createPlacementColumn(
         stackSize,
-        new Array(stackSize).fill(0).map(() => createBlock(blocks.shift()!))
+        new Array(stackSize)
+          .fill(0)
+          .map((_, i) =>
+            createBlock(
+              blocks.shift()!,
+              (hideBlockTypes === "all" ||
+                (hideBlockTypes === "checker" && (i + (ci % 2)) % 2 === 0)) &&
+                i !== 0
+            )
+          )
       )
     )
   ];
