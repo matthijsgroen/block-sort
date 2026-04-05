@@ -20,6 +20,7 @@ import {
   showSeedStatistics
 } from "../src/modules/SeedGenerator/seedInformation";
 import { testSeeds } from "../src/modules/SeedGenerator/testSeeds";
+import { trimSeeds } from "../src/modules/SeedGenerator/trimSeeds";
 import { updateSeeds } from "../src/modules/SeedGenerator/updateSeeds";
 import { verifySeeds } from "../src/modules/SeedGenerator/verifySeeds";
 import { settingsHash } from "../src/support/hash";
@@ -193,6 +194,51 @@ program
       await testSeeds(options.type, threads);
     }
   );
+
+program
+  .command("trim")
+  .description(
+    "Trim excess seeds beyond MAX_LEVELS_PER_DIFFICULTY cap to reduce disk usage"
+  )
+  .option(
+    "-t, --type <levelTypes>",
+    "comma separated list of level types",
+    (value) =>
+      value.split(",").map((v) => {
+        const [name, ...levels] = v.trim().split(":");
+        return {
+          name,
+          levels: levels.map((l) => parseInt(l, 10))
+        };
+      })
+  )
+  .action(async (options: { type?: { name: string; levels: number[] }[] }) => {
+    if (options.type) {
+      const valid = options.type.every((t) => {
+        const producer = producers.find(
+          (p) => p.name.toLowerCase() === t.name.toLowerCase()
+        );
+        if (!producer) {
+          console.log(c.red(`Producer for ${t.name} not found`));
+          return false;
+        }
+        return t.levels.every((l) => {
+          if (isNaN(l) || l < 1 || l > 11) {
+            console.log(c.red(`Invalid difficulty: ${l} for ${t.name}`));
+            return false;
+          }
+          return true;
+        });
+      });
+      if (!valid) {
+        console.log(
+          `Available producers: ${producers.map((p) => p.name).join(", ")}`
+        );
+        process.exit(1);
+      }
+    }
+    await trimSeeds(options.type);
+  });
 
 program
   .command("info")
