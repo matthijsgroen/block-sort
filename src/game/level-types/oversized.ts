@@ -102,7 +102,9 @@ export const getOversized1Settings: SettingsProducer = (
     extraPlacementStacks: 0,
     extraPlacementLimits: 0,
     blockColorPick: "start",
-    ...oversizedColumns
+    ...oversizedColumns,
+    producerName: "Oversized1",
+    producerDifficulty: difficulty
   };
 };
 

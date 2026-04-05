@@ -27,5 +27,7 @@ export const settingsHash = (settings: LevelSettings): string => {
   };
   delete hashVersion.layoutMap;
   delete hashVersion.playMoves;
+  delete hashVersion.producerName;
+  delete hashVersion.producerDifficulty;
   return hash(JSON.stringify(hashVersion)).toString();
 };

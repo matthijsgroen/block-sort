@@ -229,6 +229,16 @@ export type LevelSettings = {
    * height).
    */
   oversizedColumns?: { multiplier: number }[];
+  /**
+   * Name of the settings producer that generated this settings object.
+   * Informational only — excluded from settingsHash.
+   */
+  producerName?: string;
+  /**
+   * Difficulty value that was passed to the producer.
+   * Informational only — excluded from settingsHash.
+   */
+  producerDifficulty?: number;
 };
 
 export type SettingsProducer = (difficulty: number) => LevelSettings;

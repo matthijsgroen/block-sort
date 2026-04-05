@@ -129,7 +129,9 @@ export const getSpringSettings: SettingsProducer = (difficulty) => {
         bufferType: "unlimited"
       }
     ],
-    layoutMap: getLayoutMap(difficulty)
+    layoutMap: getLayoutMap(difficulty),
+    producerName: "Spring",
+    producerDifficulty: difficulty
   };
 };
 
@@ -245,7 +247,9 @@ export const getEasySpringSettings: SettingsProducer = (difficulty) => {
         bufferType: "unlimited"
       }
     ],
-    layoutMap: getLayoutMap(difficulty)
+    layoutMap: getLayoutMap(difficulty),
+    producerName: "SpringEasy",
+    producerDifficulty: difficulty
   };
 };
 

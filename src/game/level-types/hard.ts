@@ -6,15 +6,25 @@ import type { SettingsProducer } from "../types";
 import { getNormalSettings } from "./normal";
 import type { LevelType } from "./types";
 
-export const getHardSettings: SettingsProducer = (difficulty) => ({
-  ...getNormalSettings(difficulty),
-  hideBlockTypes: "all"
-});
+export const getHardSettings: SettingsProducer = (difficulty) => {
+  const normalSettings = getNormalSettings(difficulty);
+  return {
+    ...normalSettings,
+    hideBlockTypes: "all",
+    producerName: `Hard-${normalSettings.producerName}`,
+    producerDifficulty: difficulty
+  };
+};
 
-export const getHard2Settings: SettingsProducer = (difficulty) => ({
-  ...getNormalSettings(difficulty),
-  hideBlockTypes: "checker"
-});
+export const getHard2Settings: SettingsProducer = (difficulty) => {
+  const normalSettings = getNormalSettings(difficulty);
+  return {
+    ...normalSettings,
+    hideBlockTypes: "checker",
+    producerName: `Hard2-${normalSettings.producerName}`,
+    producerDifficulty: difficulty
+  };
+};
 
 export const hard: LevelType<"hard"> = {
   type: "hard",

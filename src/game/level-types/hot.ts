@@ -4,12 +4,14 @@ import type { MultiStageLevelSettings, SettingsProducer } from "../types";
 import { getNormal3Settings } from "./normal";
 import type { LevelType } from "./types";
 
-export const getHotSettings: SettingsProducer = () => ({
+export const getHotSettings: SettingsProducer = (difficulty) => ({
   ...getNormal3Settings(11),
-  hideBlockTypes: "checker"
+  hideBlockTypes: "checker",
+  producerName: "Hot",
+  producerDifficulty: difficulty
 });
 
-export const getHot2Settings: SettingsProducer = () => ({
+export const getHot2Settings: SettingsProducer = (difficulty) => ({
   amountColors: 10,
   stackSize: 7,
   extraPlacementStacks: 0,
@@ -25,10 +27,12 @@ export const getHot2Settings: SettingsProducer = () => ({
       { fromColumn: 10, toColumn: 3 }
     ]
   },
-  hideBlockTypes: "all"
+  hideBlockTypes: "all",
+  producerName: "Hot2",
+  producerDifficulty: difficulty
 });
 
-export const getHot3Settings: SettingsProducer = () => ({
+export const getHot3Settings: SettingsProducer = (difficulty) => ({
   amountColors: 16,
   stackSize: 4,
   extraPlacementStacks: 0,
@@ -43,7 +47,9 @@ export const getHot3Settings: SettingsProducer = () => ({
       { fromColumn: 16, toColumn: 4 }
     ]
   },
-  hideBlockTypes: "all"
+  hideBlockTypes: "all",
+  producerName: "Hot3",
+  producerDifficulty: difficulty
 });
 
 export const hot: LevelType<"hot"> = {

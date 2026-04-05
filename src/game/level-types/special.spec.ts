@@ -35,7 +35,9 @@ describe(getSpecial1Settings, () => {
       ],
       extraPlacementStacks: 0,
       stackSize: 12,
-      blockColorPick: "end"
+      blockColorPick: "end",
+      producerName: "Special1",
+      producerDifficulty: 1
     });
 
     const hard = getSpecial1Settings(10);
@@ -58,7 +60,9 @@ describe(getSpecial1Settings, () => {
         }
       ],
       stackSize: 13,
-      blockColorPick: "end"
+      blockColorPick: "end",
+      producerName: "Special1",
+      producerDifficulty: 10
     });
 
     const veryHard = getSpecial1Settings(11);
@@ -81,7 +85,9 @@ describe(getSpecial1Settings, () => {
         }
       ],
       stackSize: 13,
-      blockColorPick: "end"
+      blockColorPick: "end",
+      producerName: "Special1",
+      producerDifficulty: 11
     });
   });
 
@@ -124,7 +130,9 @@ describe(special.getSettings, () => {
           { amount: 1, size: 4, limit: 0 },
           { amount: 1, size: 4, limit: 0 }
         ],
-        blockColorPick: "end"
+        blockColorPick: "end",
+        producerName: "Special1",
+        producerDifficulty: 1
       } satisfies LevelSettings);
 
       const hardResult = special.getSettings(LEVEL_SCALE.at(-1)!, random);
@@ -140,7 +148,9 @@ describe(special.getSettings, () => {
           { amount: 1, size: 3, limit: 0 },
           { amount: 1, size: 3, limit: 0 }
         ],
-        blockColorPick: "end"
+        blockColorPick: "end",
+        producerName: "Special1",
+        producerDifficulty: expect.any(Number)
       } satisfies LevelSettings);
     });
   });
@@ -156,7 +166,9 @@ describe(special.getSettings, () => {
         extraPlacementStacks: 3,
         extraPlacementLimits: 2,
         blockColorPick: "end",
-        layoutMap: expect.any(Object)
+        layoutMap: expect.any(Object),
+        producerName: "Special2",
+        producerDifficulty: expect.any(Number)
       } satisfies LevelSettings);
 
       const hardResult = special.getSettings(LEVEL_SCALE.at(-1)!, random);
@@ -167,7 +179,9 @@ describe(special.getSettings, () => {
         extraPlacementStacks: 2,
         extraPlacementLimits: 0,
         blockColorPick: "end",
-        layoutMap: expect.any(Object)
+        layoutMap: expect.any(Object),
+        producerName: "Special2",
+        producerDifficulty: expect.any(Number)
       } satisfies LevelSettings);
     });
   });
@@ -183,7 +197,9 @@ describe(special.getSettings, () => {
         extraPlacementStacks: 2,
         extraPlacementLimits: 0,
         blockColorPick: "end",
-        layoutMap: expect.any(Object)
+        layoutMap: expect.any(Object),
+        producerName: "Special3",
+        producerDifficulty: expect.any(Number)
       } satisfies LevelSettings);
 
       const hardResult = special.getSettings(LEVEL_SCALE.at(-1)!, random);
@@ -194,7 +210,9 @@ describe(special.getSettings, () => {
         extraPlacementStacks: 2,
         extraPlacementLimits: 2,
         blockColorPick: "end",
-        layoutMap: expect.any(Object)
+        layoutMap: expect.any(Object),
+        producerName: "Special3",
+        producerDifficulty: expect.any(Number)
       } satisfies LevelSettings);
     });
   });
@@ -213,7 +231,9 @@ describe(special.getSettings, () => {
         bufferSizes: 1,
         stacksPerColor: 2,
         blockColorPick: "end",
-        layoutMap: expect.any(Object)
+        layoutMap: expect.any(Object),
+        producerName: "Special4",
+        producerDifficulty: expect.any(Number)
       } satisfies LevelSettings);
 
       const hardResult = special.getSettings(LEVEL_SCALE.at(-1)!, random);
@@ -227,7 +247,9 @@ describe(special.getSettings, () => {
         bufferSizes: 1,
         stacksPerColor: 2,
         blockColorPick: "end",
-        layoutMap: expect.any(Object)
+        layoutMap: expect.any(Object),
+        producerName: "Special4",
+        producerDifficulty: expect.any(Number)
       } satisfies LevelSettings);
     });
   });
@@ -249,7 +271,9 @@ describe(special.getSettings, () => {
           { amount: 1, size: 3, limit: 1 },
           { amount: 1, size: 2, limit: 1 }
         ],
-        blockColorPick: "end"
+        blockColorPick: "end",
+        producerName: "Special5",
+        producerDifficulty: expect.any(Number)
       } satisfies LevelSettings);
 
       const hardResult = special.getSettings(LEVEL_SCALE.at(-1)!, random);
@@ -267,7 +291,9 @@ describe(special.getSettings, () => {
           { amount: 1, size: 2, limit: 1 }
         ],
         blockColorPick: "end",
-        layoutMap: expect.any(Object)
+        layoutMap: expect.any(Object),
+        producerName: "Special5",
+        producerDifficulty: expect.any(Number)
       } satisfies LevelSettings);
     });
   });

@@ -76,6 +76,30 @@ export const getLevelSettings = (
   return levelType.getSettings(levelNr, random);
 };
 
+export type LevelMeta = {
+  levelNr: number;
+  levelType: LevelType<string>;
+  producerName: string | undefined;
+  producerDifficulty: number | undefined;
+};
+
+export const getLevelMeta = (
+  levelNr: number,
+  theme: BlockTheme,
+  random = Math.random
+): LevelMeta => {
+  const levelType = getLevelType(levelNr, theme);
+  const settings = levelType.getSettings(levelNr, random);
+  const firstSettings =
+    "stages" in settings ? settings.stages[0].settings : settings;
+  return {
+    levelNr,
+    levelType,
+    producerName: firstSettings.producerName,
+    producerDifficulty: firstSettings.producerDifficulty
+  };
+};
+
 export const getLevelTypesForStorybook = (): Unlockable<LevelType<string>>[] =>
   (levelTypes as LevelType<string>[])
     .map<Unlockable<LevelType<string>>>((level) =>
