@@ -2,11 +2,23 @@ import commonjs from "rollup-plugin-commonjs";
 import resolve from "rollup-plugin-node-resolve";
 import typescript from "rollup-plugin-typescript2";
 
-export default {
-  input: "src/workers/generateSeedWorker.ts",
-  output: {
-    file: "src/workers/worker.js",
-    format: "esm"
+const plugins = [resolve({ preferBuiltins: true }), commonjs(), typescript()];
+
+export default [
+  {
+    input: "src/workers/generateSeedWorker.ts",
+    output: {
+      file: "src/workers/generate-worker.js",
+      format: "esm"
+    },
+    plugins
   },
-  plugins: [resolve({ preferBuiltins: true }), commonjs(), typescript()]
-};
+  {
+    input: "src/workers/verifySeedWorker.ts",
+    output: {
+      file: "src/workers/verify-worker.js",
+      format: "esm"
+    },
+    plugins
+  }
+];

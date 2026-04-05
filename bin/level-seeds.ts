@@ -52,16 +52,31 @@ program
     "amount of seeds to test per setting (default is 5)",
     (v) => parseInt(v, 10)
   )
+  .option("-p, --parallel <threads>", "amount of maximum parallel threads")
   .action(
     async (options: {
       all?: boolean;
       sample: number | undefined;
       type?: string[];
+      parallel?: string;
     }) => {
       const all = options.all;
       const sampleSize = options.sample;
+      const cpuCount = os.cpus().length;
+      const threads = options.parallel
+        ? Math.min(Math.max(1, cpuCount - 2), parseInt(options.parallel, 10))
+        : 1;
 
-      await verifySeeds(all ?? false, sampleSize, options.type);
+      if (threads > 1) {
+        console.log(
+          `Amount of CPUs: ${c.green(String(cpuCount))} Threads: ${c.bold(String(threads))}`
+        );
+        process.stdout.write("Compiling verify worker...");
+        await exec("rollup -c rollup.worker.config.js");
+        process.stdout.write(c.bold(" done\n"));
+      }
+
+      await verifySeeds(all ?? false, sampleSize, options.type, threads);
     }
   );
 
@@ -130,34 +145,54 @@ program
         };
       })
   )
-  .action(async (options: { type?: { name: string; levels: number[] }[] }) => {
-    if (options.type) {
-      const valid = options.type.every((t) => {
-        const producer = producers.find(
-          (p) => p.name.toLowerCase() === t.name.toLowerCase()
-        );
-        if (!producer) {
-          console.log(c.red(`Producer for ${t.name} not found`));
-          return false;
-        }
-        return t.levels.every((l) => {
-          if (isNaN(l) || l < 1 || l > 11) {
-            console.log(c.red(`Invalid difficulty: ${l} for ${t.name}`));
+  .option("-p, --parallel <threads>", "amount of maximum parallel threads")
+  .action(
+    async (options: {
+      type?: { name: string; levels: number[] }[];
+      parallel?: string;
+    }) => {
+      if (options.type) {
+        const valid = options.type.every((t) => {
+          const producer = producers.find(
+            (p) => p.name.toLowerCase() === t.name.toLowerCase()
+          );
+          if (!producer) {
+            console.log(c.red(`Producer for ${t.name} not found`));
             return false;
           }
-          return true;
+          return t.levels.every((l) => {
+            if (isNaN(l) || l < 1 || l > 11) {
+              console.log(c.red(`Invalid difficulty: ${l} for ${t.name}`));
+              return false;
+            }
+            return true;
+          });
         });
-      });
-      if (!valid) {
-        console.log(
-          `Available producers: ${producers.map((p) => p.name).join(", ")}`
-        );
-        process.exit(1);
+        if (!valid) {
+          console.log(
+            `Available producers: ${producers.map((p) => p.name).join(", ")}`
+          );
+          process.exit(1);
+        }
       }
-    }
 
-    await testSeeds(options.type);
-  });
+      const cpuCount = os.cpus().length;
+      const threads = options.parallel
+        ? Math.min(Math.max(1, cpuCount - 2), parseInt(options.parallel, 10))
+        : 1;
+
+      if (threads > 1) {
+        console.log(
+          `Amount of CPUs: ${c.green(String(cpuCount))} Threads: ${c.bold(String(threads))}`
+        );
+        process.stdout.write("Compiling verify worker...");
+        await exec("rollup -c rollup.worker.config.js");
+        process.stdout.write(c.bold(" done\n"));
+      }
+
+      await testSeeds(options.type, threads);
+    }
+  );
 
 program
   .command("info")
