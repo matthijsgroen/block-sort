@@ -123,9 +123,12 @@ export const verifySeeds = async (
 
     clearLine();
 
+    // Precompute a map for O(1) lookup during result processing
+    const existingKeysByHash = new Map(existingKeys.map((k) => [k.hash, k]));
+
     // Group failures by key for reporting
     for (const result of results) {
-      const key = existingKeys.find((k) => k.hash === result.hash);
+      const key = existingKeysByHash.get(result.hash);
       const keyLabel = key
         ? `"${key.name}" difficulty ${key.difficulty + 1}`
         : `hash ${result.hash}`;

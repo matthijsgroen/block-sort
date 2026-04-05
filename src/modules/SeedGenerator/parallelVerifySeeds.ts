@@ -96,10 +96,22 @@ export const parallelVerifySeeds = (
 
       worker.on("error", (err) => reject(err));
 
-      worker.on("exit", () => {
+      worker.on("exit", (code) => {
         activeWorkers--;
+        if (code !== 0) {
+          reject(new Error(`Verify worker exited with code ${code}`));
+          return;
+        }
         if (activeWorkers === 0) {
-          resolve(results);
+          if (results.length !== tasks.length) {
+            reject(
+              new Error(
+                `Verify workers completed but only ${results.length}/${tasks.length} tasks were processed`
+              )
+            );
+          } else {
+            resolve(results);
+          }
         }
       });
     }

@@ -94,12 +94,7 @@ export const testSeeds = async (
       threads,
       (completed, total) => {
         clearLine();
-        const key = keysToTest.find(
-          (k) => k.hash === allTasks[completed - 1]?.hash
-        );
-        process.stdout.write(
-          `Testing seeds (removed: ${removedSeeds}) for "${key?.name ?? "?"}" difficulty ${(key?.difficulty ?? 0) + 1}... `
-        );
+        process.stdout.write(`Testing seeds (removed: ${removedSeeds})... `);
         doubleProgressBar(completed, total, completed, total, 20);
       }
     );
