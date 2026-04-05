@@ -26,7 +26,8 @@ export default [
       ".pnp.*",
       "storybook-static/",
       "public/*",
-      "src/workers/worker.js"
+      "src/workers/generate-worker.js",
+      "src/workers/verify-worker.js"
     ]
   },
   { languageOptions: { globals: { ...globals.browser, ...globals.commonjs } } },

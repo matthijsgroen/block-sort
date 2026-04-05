@@ -84,14 +84,18 @@ export const normal: LevelType<"normal"> = {
     if (levelNr > 160) {
       templates.push(
         getNormal2Settings(difficulty),
-        getNormal3Settings(difficulty)
+        getNormal3Settings(difficulty),
+        getOversized1Settings(getDifficultyLevel(levelNr - 20) - 1)
       );
     }
     if (levelNr > 230) {
       templates.push(getNormal4Settings(difficulty));
     }
     if (levelNr > 300) {
-      templates.push(getNormal5Settings(difficulty));
+      templates.push(
+        getNormal5Settings(difficulty),
+        getOversized1Settings(getDifficultyLevel(levelNr - 20) - 2)
+      );
     }
     return pick(templates, random);
   },

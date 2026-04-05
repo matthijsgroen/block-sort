@@ -66,7 +66,10 @@ const produceExtraSeeds = async (
         Math.floor(Math.random() * 10_000);
       workerIndex++;
 
-      const workerPath = path.resolve(__dirname, "../../workers/worker.js");
+      const workerPath = path.resolve(
+        __dirname,
+        "../../workers/generate-worker.js"
+      );
       const worker = new Worker(workerPath, {
         workerData: {
           startSeed,
