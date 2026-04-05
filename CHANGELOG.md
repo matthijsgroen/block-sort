@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- New level template! Some levels will now have larger columns to fill.
+- New level templates! Some levels will have oversized columns to fill. Thanks for enjoying the game!
 
 ## Version 1.44.2 - 2025-10-19
 
