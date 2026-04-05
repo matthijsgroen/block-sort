@@ -43,8 +43,9 @@ jobs:
       - name: Find last merge commit
         id: last_merge_commit
         run: |
-          # Get the second-to-last merge commit hash
-          LAST_MERGE_COMMIT=$(git log --merges --format="%H" | sed -n 2p)
+          # Get the second-to-last merge commit on main using --first-parent to avoid
+          # picking up merge commits that were made inside feature branches before merging.
+          LAST_MERGE_COMMIT=$(git log --first-parent --merges --format="%H" | sed -n 2p)
           echo "merge_commit=$LAST_MERGE_COMMIT" >> $GITHUB_OUTPUT
           if [ -z "$LAST_MERGE_COMMIT" ]; then
             echo "No previous merge commit found."
