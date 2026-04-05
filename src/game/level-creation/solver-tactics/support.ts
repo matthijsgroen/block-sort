@@ -39,6 +39,10 @@ export const canPlaceBlock = (column: Column, block: Block): boolean => {
 
 export const isColumnCorrectlySorted = (column: Column): boolean => {
   if (column.blocks.length === 0) return false;
+  // An oversized column that isn't fully filled yet is not correctly sorted —
+  // the solver must keep adding blocks to it rather than treating it as done.
+  if (column.oversized === true && column.blocks.length < column.columnSize)
+    return false;
   const firstColor = column.blocks[0].blockType;
   return (
     column.blocks.every((block) => block.blockType === firstColor) &&

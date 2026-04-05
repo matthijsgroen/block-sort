@@ -31,7 +31,9 @@ export const getSpecial1Settings: SettingsProducer = (difficulty) => ({
       limit: 0
     }
   ],
-  blockColorPick: "end"
+  blockColorPick: "end",
+  producerName: "Special1",
+  producerDifficulty: difficulty
 });
 
 export const getSpecial2Settings: SettingsProducer = (difficulty) => {
@@ -165,7 +167,9 @@ export const getSpecial2Settings: SettingsProducer = (difficulty) => {
       0
     ),
     blockColorPick: "end",
-    layoutMap: getLayoutMap(difficulty)
+    layoutMap: getLayoutMap(difficulty),
+    producerName: "Special2",
+    producerDifficulty: difficulty
   };
 };
 
@@ -184,7 +188,9 @@ export const getSpecial3Settings: SettingsProducer = (difficulty) => ({
       { fromColumn: 2, paddingTop: 3 },
       { fromColumn: 4, paddingTop: 3 }
     ]
-  }
+  },
+  producerName: "Special3",
+  producerDifficulty: difficulty
 });
 
 export const getSpecial4Settings: SettingsProducer = (difficulty) => {
@@ -246,7 +252,9 @@ export const getSpecial4Settings: SettingsProducer = (difficulty) => {
     buffers: 1,
     bufferSizes: 1,
     blockColorPick: "end",
-    layoutMap: getLayoutMap(difficulty)
+    layoutMap: getLayoutMap(difficulty),
+    producerName: "Special4",
+    producerDifficulty: difficulty
   };
 };
 
@@ -269,7 +277,9 @@ export const getSpecial5Settings: SettingsProducer = (difficulty) => ({
           width: 5,
           columns: []
         }
-      : undefined
+      : undefined,
+  producerName: "Special5",
+  producerDifficulty: difficulty
 });
 
 export const special: LevelType<"special"> = {

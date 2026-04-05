@@ -1,1 +1,2 @@
-worker.js
+generate-worker.js
+verify-worker.js

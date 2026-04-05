@@ -3,8 +3,29 @@ import { produce } from "immer";
 import { findLastIndex } from "@/support/findLastIndex";
 
 import type { BlockType } from "./blocks";
-import { canPlaceAmount, isKey, isLock, matchingLockFor } from "./state";
+import {
+  canPlaceAmount,
+  isColorType,
+  isKey,
+  isLock,
+  matchingLockFor
+} from "./state";
 import type { Block, Column, LevelState, Move } from "./types";
+
+/**
+ * Returns true if there is an oversized placement column in the level whose
+ * limitColor matches the given colour. When this is the case, regular columns
+ * containing that colour must NOT lock — only the oversized column may lock.
+ *
+ * The parameter is typed as `NonNullable<Column["limitColor"]>` because oversized
+ * ownership only makes sense for block colours (locks/keys are never "owned" by
+ * an oversized column).
+ */
+const hasOversizedOwner = (
+  columns: Column[],
+  color: NonNullable<Column["limitColor"]>
+): boolean =>
+  columns.some((c) => c.oversized === true && c.limitColor === color);
 
 export const selectFromColumn = (
   level: LevelState,
@@ -82,8 +103,10 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
     endCol.blocks.unshift(...moving);
     const moveColor = moving[0].blockType;
 
+    // Case A: oversized column — locks only when completely full (no auto-fill)
     if (
       endCol.type === "placement" &&
+      endCol.oversized === true &&
       endCol.blocks.length === endCol.columnSize &&
       endCol.blocks.every((b) => b.blockType === moveColor)
     ) {
@@ -92,10 +115,29 @@ export const moveBlocks = (level: LevelState, move: Move): LevelState =>
       });
       endCol.locked = true;
     }
+
+    // Case B: regular column, full — lock only if no oversized column owns this colour
     if (
       endCol.type === "placement" &&
+      endCol.oversized !== true &&
+      endCol.blocks.length === endCol.columnSize &&
+      endCol.blocks.every((b) => b.blockType === moveColor) &&
+      (!isColorType(moveColor) || !hasOversizedOwner(draft.columns, moveColor))
+    ) {
+      endCol.blocks.forEach((b) => {
+        b.revealed = true;
+      });
+      endCol.locked = true;
+    }
+
+    // Case C: regular column, not full — auto-complete only if no oversized owner
+    if (
+      endCol.type === "placement" &&
+      endCol.oversized !== true &&
       endCol.blocks.length < endCol.columnSize &&
       endCol.blocks.every((b) => b.blockType === moveColor) &&
+      (!isColorType(moveColor) ||
+        !hasOversizedOwner(draft.columns, moveColor)) &&
       draft.columns.every(
         (c) => c === endCol || c.blocks.every((b) => b.blockType !== moveColor)
       )

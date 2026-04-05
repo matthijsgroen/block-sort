@@ -66,7 +66,10 @@ const produceExtraSeeds = async (
         Math.floor(Math.random() * 10_000);
       workerIndex++;
 
-      const workerPath = path.resolve(__dirname, "../../workers/worker.js");
+      const workerPath = path.resolve(
+        __dirname,
+        "../../workers/generate-worker.js"
+      );
       const worker = new Worker(workerPath, {
         workerData: {
           startSeed,
@@ -229,6 +232,11 @@ export const updateLevelSeeds = async (
     levelSeedsCopy[p.hash] = levelSeedsCopy[p.hash].filter(
       (s, i, a) => a.findIndex((t) => t[0] === s[0]) === i
     );
+    // trim excess seeds beyond the cap for this difficulty
+    const cap = MAX_LEVELS_PER_DIFFICULTY[p.difficulty];
+    if (levelSeedsCopy[p.hash].length > cap) {
+      levelSeedsCopy[p.hash] = levelSeedsCopy[p.hash].slice(0, cap);
+    }
   });
 
   const existingKeys = levelProducers.filter((h) => keys.includes(h.hash));

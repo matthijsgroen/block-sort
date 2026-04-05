@@ -1,5 +1,5 @@
 import type { solvers } from "./level-creation/solvers";
-import type { BlockType, LimitColor } from "./blocks";
+import type { BlockColor, BlockType, LimitColor } from "./blocks";
 import type { Block, Column, LevelState } from "./types";
 
 export const createLevelState = (
@@ -51,6 +51,23 @@ export const createBufferColumn = (
   columnSize: size,
   blocks,
   limitColor
+});
+
+/**
+ * Creates a single oversized placement column: empty, with a fixed limitColor
+ * and the oversized flag set. Its columnSize is `multiplier × stackSize`,
+ * which is typically larger than the level's regular stackSize.
+ */
+export const createOversizedColumn = (
+  size: number,
+  limitColor: BlockColor
+): Column => ({
+  type: "placement",
+  locked: false,
+  columnSize: size,
+  blocks: [],
+  limitColor,
+  oversized: true
 });
 
 export const createBlock = (blockType: BlockType, hidden?: boolean): Block => ({

@@ -7,6 +7,7 @@ import type { LevelSettings, LevelState } from "@/game/types";
 import { mulberry32 } from "@/support/random";
 
 import { clearLine, doubleProgressBar } from "./cliElements";
+import { parallelVerifySeeds, type VerifyTask } from "./parallelVerifySeeds";
 import type { Seeder } from "./producers";
 import { getFilteredProducers, levelProducers } from "./producers";
 import { updateSeeds } from "./updateSeeds";
@@ -28,7 +29,8 @@ export const verifySeed = async (
 };
 
 export const testSeeds = async (
-  types: { name: string; levels: number[] }[] | undefined = undefined
+  types: { name: string; levels: number[] }[] | undefined = undefined,
+  threads = 1
 ) => {
   let totalRemovedSeeds = 0;
   const updatedSeeds = levelSeeds;
@@ -39,10 +41,6 @@ export const testSeeds = async (
     (acc, key) => acc + (updatedSeeds[key.hash]?.length ?? 0),
     0
   );
-  let seedsChecked = 0;
-  let removedSeeds = 0;
-  let replacedSeeds = 0;
-  let replacedMoves = 0;
 
   let lastWrite = Date.now();
 
@@ -64,82 +62,181 @@ export const testSeeds = async (
     await updateSeeds(updatedSeeds);
   }
 
-  for (const key of keysToTest) {
-    let currentCheck = 0;
-    const seeds = updatedSeeds[`${key.hash}`] ?? [];
-    for (const seed of seeds) {
-      clearLine();
-      process.stdout.write(
-        `Testing seeds (removed: ${removedSeeds}) for "${key.name}" difficulty ${key.difficulty + 1}... `
+  if (threads > 1) {
+    // --- Parallel path ---
+    const allTasks: VerifyTask[] = [];
+    let taskId = 0;
+
+    for (const key of keysToTest) {
+      const seeds = updatedSeeds[`${key.hash}`] ?? [];
+      for (const seed of seeds) {
+        allTasks.push({
+          taskId: taskId++,
+          hash: key.hash,
+          seed: seed[0],
+          expectedMoves: seed[1],
+          settings: key.producer(key.difficulty + 1)
+        });
+      }
+    }
+
+    let seedsChecked = 0;
+    let removedSeeds = 0;
+    let replacedSeeds = 0;
+    let replacedMoves = 0;
+
+    process.stdout.write(
+      `Testing ${allTasks.length} seeds with ${threads} threads...\n`
+    );
+
+    const results = await parallelVerifySeeds(
+      allTasks,
+      threads,
+      (completed, total) => {
+        clearLine();
+        process.stdout.write(`Testing seeds (removed: ${removedSeeds})... `);
+        doubleProgressBar(completed, total, completed, total, 20);
+      }
+    );
+
+    // Apply mutations on the main thread (it owns the SeedMap)
+    for (const result of results) {
+      seedsChecked++;
+
+      if (result.error !== null || !result.valid) {
+        // Remove invalid seed
+        updatedSeeds[result.hash] = updatedSeeds[result.hash].filter(
+          (s) => s[0] !== result.seed
+        );
+        removedSeeds++;
+        totalRemovedSeeds++;
+      } else if (result.driftDetected) {
+        // Replace drifted seed
+        updatedSeeds[result.hash] = updatedSeeds[result.hash].filter(
+          (s) => s[0] !== result.seed
+        );
+        if (result.actualSeed !== null) {
+          updatedSeeds[result.hash].push([
+            result.actualSeed,
+            result.actualMoveCount
+          ]);
+        }
+        replacedSeeds++;
+      } else if (result.actualMoveCount !== result.expectedMoveCount) {
+        // Update move count in place
+        updatedSeeds[result.hash] = updatedSeeds[result.hash].map((s) =>
+          s[0] === result.seed ? [s[0], result.actualMoveCount] : s
+        );
+        replacedMoves++;
+      }
+
+      if (Date.now() - lastWrite > 60_000) {
+        await updateSeeds(updatedSeeds);
+        lastWrite = Date.now();
+      }
+    }
+
+    await updateSeeds(updatedSeeds);
+    clearLine();
+
+    const summary: string[] = [`${seedsChecked} seeds tested.`];
+    if (totalRemovedSeeds === 0) {
+      summary.push("No invalid seeds found.");
+    } else {
+      summary.push(
+        `${totalRemovedSeeds} invalid seeds found. Use 'generate' to regenerate the removed seeds.`
       );
-      doubleProgressBar(
-        seedsChecked,
-        totalSeeds,
-        currentCheck,
-        seeds.length,
-        20
-      );
-      const settings = key.producer(key.difficulty + 1);
-      try {
-        const [verified, level] = await verifySeed(settings, seed[0]);
-        if (!verified) {
+    }
+    summary.push(`${replacedSeeds} were already replaced.`);
+    if (replacedMoves > 0) {
+      summary.push(`Updated move counter for ${replacedMoves} seeds.`);
+    }
+    console.log(summary.join(" "));
+  } else {
+    // --- Serial path (unchanged) ---
+    let seedsChecked = 0;
+    let removedSeeds = 0;
+    let replacedSeeds = 0;
+    let replacedMoves = 0;
+
+    for (const key of keysToTest) {
+      let currentCheck = 0;
+      const seeds = updatedSeeds[`${key.hash}`] ?? [];
+      for (const seed of seeds) {
+        clearLine();
+        process.stdout.write(
+          `Testing seeds (removed: ${removedSeeds}) for "${key.name}" difficulty ${key.difficulty + 1}... `
+        );
+        doubleProgressBar(
+          seedsChecked,
+          totalSeeds,
+          currentCheck,
+          seeds.length,
+          20
+        );
+        const settings = key.producer(key.difficulty + 1);
+        try {
+          const [verified, level] = await verifySeed(settings, seed[0]);
+          if (!verified) {
+            updatedSeeds[key.hash] = updatedSeeds[key.hash].filter(
+              (s) => s[0] !== seed[0]
+            );
+            removedSeeds++;
+            totalRemovedSeeds++;
+            continue;
+          }
+          if (level.generationInformation?.seed !== seed[0]) {
+            updatedSeeds[key.hash] = updatedSeeds[key.hash].filter(
+              (s) => s[0] !== seed[0]
+            );
+            if (level.generationInformation?.seed) {
+              updatedSeeds[key.hash].push([
+                level.generationInformation?.seed,
+                level.moves.length
+              ]);
+            }
+            replacedSeeds++;
+          } else {
+            if (level.moves.length !== seed[1]) {
+              seed[1] = level.moves.length;
+              replacedMoves++;
+            }
+          }
+        } catch (ignoreError) {
           updatedSeeds[key.hash] = updatedSeeds[key.hash].filter(
             (s) => s[0] !== seed[0]
           );
           removedSeeds++;
           totalRemovedSeeds++;
-          continue;
         }
-        if (level.generationInformation?.seed !== seed[0]) {
-          updatedSeeds[key.hash] = updatedSeeds[key.hash].filter(
-            (s) => s[0] !== seed[0]
-          );
-          if (level.generationInformation?.seed) {
-            updatedSeeds[key.hash].push([
-              level.generationInformation?.seed,
-              level.moves.length
-            ]);
-          }
-          replacedSeeds++;
-        } else {
-          if (level.moves.length !== seed[1]) {
-            seed[1] = level.moves.length;
-            replacedMoves++;
-          }
+        if (Date.now() - lastWrite > 60_000) {
+          await updateSeeds(updatedSeeds);
+          lastWrite = Date.now();
         }
-      } catch (ignoreError) {
-        updatedSeeds[key.hash] = updatedSeeds[key.hash].filter(
-          (s) => s[0] !== seed[0]
-        );
-        removedSeeds++;
-        totalRemovedSeeds++;
-      }
-      if (Date.now() - lastWrite > 60_000) {
-        await updateSeeds(updatedSeeds);
-        lastWrite = Date.now();
-      }
 
-      currentCheck++;
-      seedsChecked++;
+        currentCheck++;
+        seedsChecked++;
+      }
     }
-  }
-  await updateSeeds(updatedSeeds);
+    await updateSeeds(updatedSeeds);
 
-  clearLine();
-  const summary: string[] = [`${seedsChecked} seeds tested.`];
+    clearLine();
+    const summary: string[] = [`${seedsChecked} seeds tested.`];
 
-  if (totalRemovedSeeds === 0) {
-    summary.push("No invalid seeds found.");
-  } else {
-    summary.push(
-      `${totalRemovedSeeds} invalid seeds found. Use 'generate' to regenerate the removed seeds.`
-    );
-  }
-  summary.push(`${replacedSeeds} were already replaced.`);
-  if (replacedMoves > 0) {
-    summary.push(`Updated move counter for ${replacedMoves} seeds.`);
+    if (totalRemovedSeeds === 0) {
+      summary.push("No invalid seeds found.");
+    } else {
+      summary.push(
+        `${totalRemovedSeeds} invalid seeds found. Use 'generate' to regenerate the removed seeds.`
+      );
+    }
+    summary.push(`${replacedSeeds} were already replaced.`);
+    if (replacedMoves > 0) {
+      summary.push(`Updated move counter for ${replacedMoves} seeds.`);
+    }
+
+    console.log(summary.join(" "));
   }
 
-  console.log(summary.join(" "));
   process.exit(0);
 };

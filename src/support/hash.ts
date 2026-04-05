@@ -18,9 +18,16 @@ export const settingsHash = (settings: LevelSettings): string => {
   const hashVersion: LevelSettings = {
     ...settings,
     hideBlockTypes: settings.hideBlockTypes ?? "none",
-    extraBuffers: (settings.extraBuffers ?? []).filter((b) => b.amount > 0)
+    extraBuffers: (settings.extraBuffers ?? []).filter((b) => b.amount > 0),
+    // Normalise empty oversizedColumns array so it doesn't break existing hashes
+    oversizedColumns:
+      (settings.oversizedColumns ?? []).length > 0
+        ? settings.oversizedColumns
+        : undefined
   };
   delete hashVersion.layoutMap;
   delete hashVersion.playMoves;
+  delete hashVersion.producerName;
+  delete hashVersion.producerDifficulty;
   return hash(JSON.stringify(hashVersion)).toString();
 };

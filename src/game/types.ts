@@ -113,6 +113,12 @@ export type Column = {
    */
   blocks: Block[];
   paddingTop?: number;
+  /**
+   * When true, this placement column is oversized — its columnSize exceeds the
+   * level's stackSize. Regular placement columns containing the same limitColor
+   * must NOT lock; only this column itself can lock for that colour.
+   */
+  oversized?: true;
 };
 
 /**
@@ -206,6 +212,33 @@ export type LevelSettings = {
    */
   amountLocks?: number;
   layoutMap?: LayoutMap;
+  /**
+   * Oversized placement columns that must be completely filled to win.
+   * Each entry defines one column whose capacity is `round(multiplier × stackSize)`.
+   * The generator auto-assigns a limitColor to each oversized column from the
+   * available colour pool, and automatically adds extra placement columns so the
+   * total block count always balances exactly.
+   *
+   * Fractional multipliers are supported as long as the *combined* total of all
+   * oversized block counts is divisible by stackSize.  For example, two columns
+   * with `multiplier: 1.5` and `stackSize: 4` produce 2 × 6 = 12 blocks,
+   * requiring 12 / 4 = 3 extra columns — clean with no remainder.
+   *
+   * Use `layoutMap` to reposition oversized columns visually; consider screen
+   * space when choosing multiplier values (a multiplier of 2 doubles the column
+   * height).
+   */
+  oversizedColumns?: { multiplier: number }[];
+  /**
+   * Name of the settings producer that generated this settings object.
+   * Informational only — excluded from settingsHash.
+   */
+  producerName?: string;
+  /**
+   * Difficulty value that was passed to the producer.
+   * Informational only — excluded from settingsHash.
+   */
+  producerDifficulty?: number;
 };
 
 export type SettingsProducer = (difficulty: number) => LevelSettings;

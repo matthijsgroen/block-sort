@@ -1,15 +1,12 @@
 import mdx from "@mdx-js/rollup";
-import react from "@vitejs/plugin-react";
+import babel from "@rolldown/plugin-babel";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import * as path from "node:path";
 import type { Plugin } from "vite";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 import info from "./package.json";
-
-const ReactCompilerConfig = {
-  /* ... */
-};
 
 const htmlPlugin = () => {
   return {
@@ -29,11 +26,8 @@ export default defineConfig({
         /* jsxImportSource: …, otherOptions… */
       }) as Plugin)
     },
-    react({
-      babel: {
-        plugins: [["babel-plugin-react-compiler", ReactCompilerConfig]]
-      }
-    }),
+    react(),
+    babel({ presets: [reactCompilerPreset()] }),
     htmlPlugin(),
     VitePWA({
       registerType: "prompt",
@@ -86,12 +80,8 @@ export default defineConfig({
     }
   },
   base: "/block-sort/",
-  optimizeDeps: {
-    esbuildOptions: {
-      target: "esnext"
-    }
-  },
   build: {
-    target: "esnext"
+    target: "esnext",
+    cssMinify: "esbuild"
   }
 });

@@ -1,6 +1,8 @@
 export const clearLine = () => {
-  process.stdout.clearLine(0);
-  process.stdout.cursorTo(0);
+  if (process.stdout.isTTY) {
+    process.stdout.clearLine(0);
+    process.stdout.cursorTo(0);
+  }
 };
 
 export const progressBar = (

@@ -6,6 +6,7 @@ import { easy } from "./easy";
 import { hard } from "./hard";
 import { hot } from "./hot";
 import { normal } from "./normal";
+import { oversized } from "./oversized";
 import { scrambled } from "./scrambled";
 import { special } from "./special";
 import { spring } from "./spring";
@@ -24,6 +25,7 @@ const levelTypes = [
   winter,
   spring,
   summer,
+  oversized,
   normal
 ] as const satisfies LevelType<string>[];
 
@@ -72,6 +74,30 @@ export const getLevelSettings = (
 ): LevelSettings | MultiStageLevelSettings => {
   const levelType = getLevelType(levelNr, theme);
   return levelType.getSettings(levelNr, random);
+};
+
+export type LevelMeta = {
+  levelNr: number;
+  levelType: LevelType<string>;
+  producerName: string | undefined;
+  producerDifficulty: number | undefined;
+};
+
+export const getLevelMeta = (
+  levelNr: number,
+  theme: BlockTheme,
+  random = Math.random
+): LevelMeta => {
+  const levelType = getLevelType(levelNr, theme);
+  const settings = levelType.getSettings(levelNr, random);
+  const firstSettings =
+    "stages" in settings ? settings.stages[0].settings : settings;
+  return {
+    levelNr,
+    levelType,
+    producerName: firstSettings.producerName,
+    producerDifficulty: firstSettings.producerDifficulty
+  };
 };
 
 export const getLevelTypesForStorybook = (): Unlockable<LevelType<string>>[] =>

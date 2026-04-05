@@ -20,7 +20,9 @@ describe(getNormalSettings, () => {
           amountColors: 2,
           extraPlacementStacks: 1,
           hideBlockTypes: "none",
-          stackSize: 4
+          stackSize: 4,
+          producerName: "Normal1",
+          producerDifficulty: 1
         }
       },
       {
@@ -29,7 +31,9 @@ describe(getNormalSettings, () => {
           amountColors: 3,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 4
+          stackSize: 4,
+          producerName: "Normal1",
+          producerDifficulty: 2
         }
       },
       {
@@ -38,7 +42,9 @@ describe(getNormalSettings, () => {
           amountColors: 4,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 4
+          stackSize: 4,
+          producerName: "Normal1",
+          producerDifficulty: 3
         }
       },
       {
@@ -47,7 +53,9 @@ describe(getNormalSettings, () => {
           amountColors: 5,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 4
+          stackSize: 4,
+          producerName: "Normal1",
+          producerDifficulty: 4
         }
       },
       {
@@ -56,7 +64,9 @@ describe(getNormalSettings, () => {
           amountColors: 6,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 4
+          stackSize: 4,
+          producerName: "Normal1",
+          producerDifficulty: 5
         }
       },
       {
@@ -65,7 +75,9 @@ describe(getNormalSettings, () => {
           amountColors: 7,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 5
+          stackSize: 5,
+          producerName: "Normal1",
+          producerDifficulty: 6
         }
       },
       {
@@ -74,7 +86,9 @@ describe(getNormalSettings, () => {
           amountColors: 8,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 5
+          stackSize: 5,
+          producerName: "Normal1",
+          producerDifficulty: 7
         }
       },
       {
@@ -83,7 +97,9 @@ describe(getNormalSettings, () => {
           amountColors: 9,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 6
+          stackSize: 6,
+          producerName: "Normal1",
+          producerDifficulty: 8
         }
       },
       {
@@ -92,7 +108,9 @@ describe(getNormalSettings, () => {
           amountColors: 10,
           extraPlacementStacks: 2,
           hideBlockTypes: "none",
-          stackSize: 6
+          stackSize: 6,
+          producerName: "Normal1",
+          producerDifficulty: 9
         }
       },
       {
@@ -102,7 +120,9 @@ describe(getNormalSettings, () => {
           extraPlacementStacks: 2,
           extraPlacementLimits: 1,
           hideBlockTypes: "none",
-          stackSize: 7
+          stackSize: 7,
+          producerName: "Normal1",
+          producerDifficulty: 10
         }
       },
       {
@@ -112,7 +132,9 @@ describe(getNormalSettings, () => {
           extraPlacementStacks: 2,
           extraPlacementLimits: 1,
           hideBlockTypes: "none",
-          stackSize: 7
+          stackSize: 7,
+          producerName: "Normal1",
+          producerDifficulty: 11
         }
       }
     ])("returns settings for level $difficulty", ({ difficulty, result }) => {
@@ -136,7 +158,9 @@ describe(getNormal2Settings, () => {
           buffers: 2,
           bufferSizes: 3,
           hideBlockTypes: "none",
-          stackSize: 7
+          stackSize: 7,
+          producerName: "Normal2",
+          producerDifficulty: 10
         }
       },
       {
@@ -148,7 +172,9 @@ describe(getNormal2Settings, () => {
           buffers: 2,
           bufferSizes: 2,
           hideBlockTypes: "none",
-          stackSize: 7
+          stackSize: 7,
+          producerName: "Normal2",
+          producerDifficulty: 11
         }
       }
     ])("returns settings for level $difficulty", ({ difficulty, result }) => {
@@ -173,7 +199,9 @@ describe(getNormal3Settings, () => {
           bufferSizes: 2,
           hideBlockTypes: "none",
           stackSize: 7,
-          extraBuffers: [{ size: 1, amount: 1, limit: 0 }]
+          extraBuffers: [{ size: 1, amount: 1, limit: 0 }],
+          producerName: "Normal3",
+          producerDifficulty: 10
         }
       },
       {
@@ -185,7 +213,9 @@ describe(getNormal3Settings, () => {
           buffers: 2,
           bufferSizes: 2,
           hideBlockTypes: "none",
-          stackSize: 7
+          stackSize: 7,
+          producerName: "Normal3",
+          producerDifficulty: 11
         }
       }
     ])("returns settings for level $difficulty", ({ difficulty, result }) => {

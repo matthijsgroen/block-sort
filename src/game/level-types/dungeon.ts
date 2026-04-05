@@ -52,7 +52,9 @@ export const getDungeonSettings: SettingsProducer = (difficulty) => ({
   amountLocks: 1 + Math.floor(difficulty / 2),
   amountLockTypes: Math.max(1, Math.floor(difficulty / 2)),
   hideBlockTypes: "none",
-  blockColorPick: "end"
+  blockColorPick: "end",
+  producerName: "Dungeon",
+  producerDifficulty: difficulty
 });
 
 export const getDungeonSettings2: SettingsProducer = (difficulty) => ({
@@ -90,7 +92,9 @@ export const getDungeonSettings2: SettingsProducer = (difficulty) => ({
       bufferType: "inventory",
       limit: 0
     }
-  ]
+  ],
+  producerName: "Dungeon2",
+  producerDifficulty: difficulty
 });
 
 export const getDungeonSettings3: SettingsProducer = (difficulty) => {
@@ -145,7 +149,9 @@ export const getDungeonSettings3: SettingsProducer = (difficulty) => {
             width: 6,
             columns: [{ fromColumn: 12, toColumn: 11 }]
           }
-        : undefined
+        : undefined,
+    producerName: "Dungeon3",
+    producerDifficulty: difficulty
   };
 };
 

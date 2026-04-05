@@ -4,6 +4,7 @@ import { getDifficultyLevel } from "../level-settings/levelSettings";
 import type { LevelSettings } from "../types";
 import type { SettingsProducer } from "../types";
 
+import { getOversized1Settings } from "./oversized";
 import type { LevelType } from "./types";
 
 export const getNormalSettings: SettingsProducer = (difficulty) => ({
@@ -11,7 +12,9 @@ export const getNormalSettings: SettingsProducer = (difficulty) => ({
   stackSize: Math.min(Math.max(Math.floor(3 + (difficulty - 2) / 2), 4), 7),
   extraPlacementStacks: difficulty < 2 ? 1 : 2,
   extraPlacementLimits: difficulty > 9 ? 1 : undefined,
-  hideBlockTypes: "none"
+  hideBlockTypes: "none",
+  producerName: "Normal1",
+  producerDifficulty: difficulty
 });
 
 export const getNormal2Settings: SettingsProducer = (difficulty) => ({
@@ -21,7 +24,9 @@ export const getNormal2Settings: SettingsProducer = (difficulty) => ({
   extraPlacementLimits: difficulty > 9 ? 1 : undefined,
   hideBlockTypes: "none",
   buffers: difficulty > 9 ? 2 : undefined,
-  bufferSizes: difficulty === 10 ? 3 : difficulty >= 11 ? 2 : undefined
+  bufferSizes: difficulty === 10 ? 3 : difficulty >= 11 ? 2 : undefined,
+  producerName: "Normal2",
+  producerDifficulty: difficulty
 });
 
 export const getNormal3Settings: SettingsProducer = (difficulty) => ({
@@ -33,7 +38,9 @@ export const getNormal3Settings: SettingsProducer = (difficulty) => ({
   buffers: difficulty > 9 ? 2 : undefined,
   bufferSizes: difficulty === 10 ? 2 : difficulty === 11 ? 2 : undefined,
   extraBuffers:
-    difficulty === 10 ? [{ size: 1, amount: 1, limit: 0 }] : undefined
+    difficulty === 10 ? [{ size: 1, amount: 1, limit: 0 }] : undefined,
+  producerName: "Normal3",
+  producerDifficulty: difficulty
 });
 
 export const getNormal4Settings: SettingsProducer = (difficulty) => ({
@@ -49,10 +56,12 @@ export const getNormal4Settings: SettingsProducer = (difficulty) => ({
           { size: difficulty === 10 ? 4 : 3, amount: 1, limit: 0 },
           { size: difficulty === 10 ? 3 : 2, amount: 1, limit: 0 }
         ]
-      : undefined
+      : undefined,
+  producerName: "Normal4",
+  producerDifficulty: difficulty
 });
 
-export const getNormal5Settings: SettingsProducer = () => ({
+export const getNormal5Settings: SettingsProducer = (difficulty) => ({
   amountColors: 16,
   stackSize: 4,
   extraPlacementStacks: 0,
@@ -62,7 +71,9 @@ export const getNormal5Settings: SettingsProducer = () => ({
     { size: 1, amount: 1, limit: 0 },
     { size: 2, amount: 1, limit: 0 },
     { size: 1, amount: 1, limit: 0 }
-  ]
+  ],
+  producerName: "Normal5",
+  producerDifficulty: difficulty
 });
 
 export const normal: LevelType<"normal"> = {
@@ -77,22 +88,32 @@ export const normal: LevelType<"normal"> = {
   getSettings(levelNr, random = Math.random) {
     const difficulty = getDifficultyLevel(levelNr);
     const templates: LevelSettings[] = [getNormalSettings(difficulty)];
+    if (levelNr > 20) {
+      templates.push(getOversized1Settings(getDifficultyLevel(levelNr - 20)));
+    }
     if (levelNr > 160) {
       templates.push(
         getNormal2Settings(difficulty),
-        getNormal3Settings(difficulty)
+        getNormal3Settings(difficulty),
+        getOversized1Settings(getDifficultyLevel(levelNr - 20) - 1)
       );
     }
     if (levelNr > 230) {
       templates.push(getNormal4Settings(difficulty));
     }
     if (levelNr > 300) {
-      templates.push(getNormal5Settings(difficulty));
+      templates.push(
+        getNormal5Settings(difficulty),
+        getOversized1Settings(getDifficultyLevel(levelNr - 20) - 2)
+      );
     }
     return pick(templates, random);
   },
   getZenSettings: (zenLevel, difficultyLevel) => {
-    const templates: SettingsProducer[] = [getNormalSettings];
+    const templates: SettingsProducer[] = [
+      getNormalSettings,
+      getOversized1Settings
+    ];
     if (difficultyLevel >= 8) {
       templates.push(
         getNormal2Settings,
