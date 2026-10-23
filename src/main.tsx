@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
+import "./ios-blur-patch";
 import "./ios-screen-height-patch";
 
 import { App } from "./App";
