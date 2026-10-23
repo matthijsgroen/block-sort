@@ -16,8 +16,6 @@
       height: 11px;
       pointer-events: none;
       background: #63462d;
-      -webkit-background-clip: text;
-      background-clip: text;
     }
   }
 }
