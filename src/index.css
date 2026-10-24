@@ -5,15 +5,17 @@
 @layer utilities {
   /**
    * iOS 27 workaround: standalone PWAs get a system blur over the top of the
-   * screen. A painted fixed element at the very top removes it.
+   * screen. An opaque sticky element at the very top removes it; the negative
+   * margin keeps it from pushing the content down.
    * https://tips.ojapp.app/en/ios-27-pwa-top-blur-workaround-2/
    */
   @media (display-mode: standalone) {
     .remove-blur {
-      position: fixed;
-      inset: 0 0 auto;
+      position: sticky;
+      top: 0;
       z-index: 9999;
-      height: 11px;
+      height: 2px;
+      margin-bottom: -2px;
       pointer-events: none;
       background: #63462d;
     }
